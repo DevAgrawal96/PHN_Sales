@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Sales</string>
+    <string name="enter_valid_email">Please enter valid email!</string>
+    <string name="no_internet_connection">No internet connection!</string>
+    <string name="something_went_wrong">Something went wrong!</string>
+    <string name="empty_">%s can\'t be empty</string>
+    <string name="name_length">Please enter full name</string>
+    <string name="mobile_number_length">Mobile number should be of 10 digits</string>
+    <string name="enter_valid_number">Please enter valid mobile number!</string>
+    <string name="mobile_verification">Mobile Verification</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="_91">+91</string>
+    <string name="sign_up_now">If your number isn\'t registered, Sign Up now!</string>
+    <string name="terms_and_conditions">By continuing you are agreeing to our \nTerms and Conditions and \nPrivacy and Policy</string>
+    <string name="verify_your_account">Please enter your  registered mobile \nnumber to verify your account</string>
+
+</resources>
