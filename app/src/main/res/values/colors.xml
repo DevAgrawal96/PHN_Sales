@@ -81,4 +81,9 @@
     <color name="md_theme_dark_outlineVariant">#41474D</color>
     <color name="md_theme_dark_scrim">#000000</color>
 
+
+    <color name="bgcolor">#EFF6FF</color>
+    <color name="chip_stroke">#79747E</color>
+    <color name="txt_main_color">#00005C</color>
+
 </resources>

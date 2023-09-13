@@ -13,5 +13,20 @@
     <string name="sign_up_now">If your number isn\'t registered, Sign Up now!</string>
     <string name="terms_and_conditions">By continuing you are agreeing to our \nTerms and Conditions and \nPrivacy and Policy</string>
     <string name="verify_your_account">Please enter your  registered mobile \nnumber to verify your account</string>
+    <string name="login">Log In</string>
+    <string name="email_id">Email ID</string>
+    <string name="password">Password</string>
+    <string name="home">Home</string>
+    <string name="followup">Follow Up</string>
+    <string name="pending">Pending</string>
+    <string name="profile">Profile</string>
+    <string name="all">All</string>
+    <string name="assigned">Assigned</string>
+    <string name="visited">Visited</string>
+    <string name="moa_negotiation">MOA Negotiation</string>
+    <string name="moa_signed">MOA Signed</string>
+    <string name="hot_status">Hot</string>
+    <string name="warm_status">Warm</string>
+    <string name="cool_status">Cool</string>
 
 </resources>
