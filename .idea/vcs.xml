@@ -3,20 +3,5 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/PHNConnect" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/PHNTechnoLab" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/QuestionTypes" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/admin-dashboard" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/android-kotlin-fundamentals-starter-apps" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/bano-skolar" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/examples" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/examples/newscholarshipproject" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/field-executive-phn-technolab" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/fieldexcutiveapplication" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/hrjobportal" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/manager_dashboard" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/newscholarshipproject" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/phncareer-android" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/trade" vcs="Git" />
   </component>
 </project>

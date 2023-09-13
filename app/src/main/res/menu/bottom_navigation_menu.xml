@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_home"
+        android:enabled="true"
+        android:icon="@drawable/home_icon"
+        android:title="@string/home"/>
+    <item
+        android:id="@+id/menu_followup"
+        android:enabled="true"
+        android:icon="@drawable/follow_up_icon"
+        android:title="@string/followup"/>
+    <item
+        android:id="@+id/menu_pending"
+        android:enabled="true"
+        android:icon="@drawable/pending_icon"
+        android:title="@string/pending"/>
+    <item
+        android:id="@+id/menu_profile"
+        android:enabled="true"
+        android:icon="@drawable/profile_icon"
+        android:title="@string/profile"/>
+
+</menu>

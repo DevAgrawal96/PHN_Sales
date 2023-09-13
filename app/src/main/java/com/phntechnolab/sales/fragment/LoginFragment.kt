@@ -7,22 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.phntechnolab.sales.model.LoginDetails
 import com.phntechnolab.sales.util.NetworkResult
-import com.phntechnolab.sales.util.NetworkUtils
-import com.phntechnolab.sales.util.disableScreen
-import com.phntechnolab.sales.util.hideKeyboard
 import com.phntechnolab.sales.viewmodel.LoginViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
-import com.phntechnolab.sales.databinding.LoginFragmentBinding
+import com.phntechnolab.sales.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
 class LoginFragment: Fragment() {
-    private var _binding: LoginFragmentBinding? = null
+    private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: LoginViewModel by viewModels()
@@ -35,7 +31,7 @@ class LoginFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding = LoginFragmentBinding.inflate(inflater, container, false)
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 
