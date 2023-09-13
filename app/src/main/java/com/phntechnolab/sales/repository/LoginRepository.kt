@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.api.RetrofitApi
@@ -34,11 +35,11 @@ class LoginRepository @Inject constructor(
         if (NetworkUtils.isInternetAvailable(application)) {
             Log.d("Timber 11", loginDetails.toString())
             try {
-                val result = retrofitApi.getDetails()
+                val result = retrofitApi.getLoginDetails(loginDetails)
                 Log.d("TImber 1", result.toString())
                 Log.d("TIMber 2", loginDetails.toString())
+                Log.e("RESULT DAAAA", result.errorBody()?.string()?.get(0).toString())
                 if (result.isSuccessful && result?.body() != null) {
-                    Log.e("RESULT DAAAA", result.body().toString())
                     result.body()?.status_code = result.code()
                     Log.e("RESULT DAAAA", result.body().toString())
                     Log.e("RESULT DAAAA2", result.code().toString())
@@ -47,7 +48,7 @@ class LoginRepository @Inject constructor(
                     loginMutableLiveData.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
-                            UserResponse(null, null, null, null, null, null)
+                            UserResponse(null, null, null, null, result.errorBody()?.string(), null)
                         )
                     )
                 } else {

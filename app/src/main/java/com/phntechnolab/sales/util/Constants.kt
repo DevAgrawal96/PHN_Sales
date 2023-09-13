@@ -5,7 +5,7 @@ object Constants
     const val BASE_URL = "https://www.phntechnology.info/phn_connect/"
 //    const val DEV_URL = "https://www.phntechnology.info/newphn/"
     const val TEST_URL = "https://www.phntechnology.info/phn_career_test/"
-    const val TEST_URL1 = "https://tempapi.proj.me/"
+    const val TEST_URL1 = "https://sales.paytmmoneey.com/"
 //    const val TEST_URL1 = "http://127.0.0.1:8000/"
     const val DEV_URL = "https://www.phntechnology.info/phn_career/"
     const val WHATSAPP_URL = "https://api.whatsapp.com/send?phone=91"

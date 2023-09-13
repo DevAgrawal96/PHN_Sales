@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         },3000)
 
         _binding = ActivityMainBinding.inflate(layoutInflater)
-
     }
 
     override fun onDestroy() {

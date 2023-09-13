@@ -50,8 +50,8 @@ class LoginFragment: Fragment() {
                 if (NetworkUtils.isInternetAvailable(it.context)){
                     val loginDetails = LoginDetails(binding.edtmono.text.toString(), password = binding.passwordText.text.toString())
 
-                    hideKeyboard()
-                    disableScreen()
+//                    hideKeyboard()
+//                    disableScreen()
                     viewModel.login(loginDetails, it.context)
                 }else{
                     Snackbar.make(requireActivity().findViewById(android.R.id.content), getString(R.string.no_internet_connection), Snackbar.LENGTH_SHORT).show()
