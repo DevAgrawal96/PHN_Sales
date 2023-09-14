@@ -1,7 +1,7 @@
 package com.phntechnolab.sales.di
 
 import android.content.Context
-import com.phntechnolab.sales.MainActivity
+import com.phntechnolab.sales.activity.MainActivity
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton

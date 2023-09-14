@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import com.phntechnolab.sales.DataStoreProvider
 import com.google.android.material.textfield.TextInputEditText
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.model.UserResponse
 import kotlinx.coroutines.flow.first
 
 
@@ -119,30 +120,6 @@ fun isValidMobileNumber(number: String, context: Context): String? {
         return context.getString(R.string.enter_valid_number)
     }
     return null
-}
-
-suspend fun setToken(
-    context: Context,
-    dataStoreProvider: DataStoreProvider,
-    key: String,
-    value: String
-) {
-    val dataStore = dataStoreProvider.getDataStoreInstance(context)
-    val dataStoreKey = stringPreferencesKey(key)
-    dataStore.edit { role ->
-        role[dataStoreKey] = value
-    }
-}
-
-suspend fun getToken(
-    context: Context,
-    dataStoreProvider: DataStoreProvider,
-    key: String
-): String? {
-    val dataStore = dataStoreProvider.getDataStoreInstance(context)
-    val dataStoreKey = stringPreferencesKey(key)
-    val preferences = dataStore.data.first()
-    return preferences[dataStoreKey]
 }
 
 fun Fragment.disableScreen(){
