@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.api.RetrofitApi
+import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.LoginDetails
 import com.phntechnolab.sales.model.UserResponse
 import com.phntechnolab.sales.util.NetworkResult
@@ -29,6 +30,11 @@ class LoginRepository @Inject constructor(
     val loginLiveData: LiveData<NetworkResult<UserResponse>>
         get() = loginMutableLiveData
 
+    private val _refereshToken = MutableLiveData<NetworkResult<CustomResponse>>()
+
+    val refereshToken: LiveData<NetworkResult<CustomResponse>>
+        get() = _refereshToken
+
     suspend fun login(loginDetails: LoginDetails, context: Context) {
         Log.d("Timber 10", loginDetails.toString())
 //        loginMutableLiveData.postValue(NetworkResult.Loading())
@@ -36,11 +42,8 @@ class LoginRepository @Inject constructor(
             Log.d("Timber 11", loginDetails.toString())
             try {
                 val result = retrofitApi.getLoginDetails(loginDetails)
-                Log.d("TImber 1", result.toString())
-                Log.d("TIMber 2", loginDetails.toString())
-                Log.e("RESULT DAAAA", result.errorBody()?.string()?.get(0).toString())
+                result.body()?.status_code = result.code()
                 if (result.isSuccessful && result?.body() != null) {
-                    result.body()?.status_code = result.code()
                     Log.e("RESULT DAAAA", result.body().toString())
                     Log.e("RESULT DAAAA2", result.code().toString())
                     loginMutableLiveData.postValue(NetworkResult.Success(result.body()))
@@ -48,18 +51,18 @@ class LoginRepository @Inject constructor(
                     loginMutableLiveData.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
-                            UserResponse(null, null, null, null, result.errorBody()?.string(), null)
+                            UserResponse(null, null, null, result.code(), result.errorBody()?.string(), null)
                         )
                     )
                 } else {
                     loginMutableLiveData.postValue(
                         NetworkResult.Error(
-                            "",
+                            application.getString(R.string.something_went_wrong),
                             UserResponse(
                                 null,
                                 null,
                                 null,
-                                null,
+                                result.code(),
                                 message = application.getString(R.string.something_went_wrong),
                                 null
                             )
@@ -90,6 +93,15 @@ class LoginRepository @Inject constructor(
                     )
                 )
             )
+        }
+    }
+
+    suspend fun refereshToken(){
+
+        if (NetworkUtils.isInternetAvailable(application)) {
+
+        }else{
+
         }
     }
 }

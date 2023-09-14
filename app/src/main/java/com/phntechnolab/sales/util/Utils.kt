@@ -11,12 +11,10 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
-import com.phntechnolab.sales.DataStoreProvider
 import com.google.android.material.textfield.TextInputEditText
+import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
-import com.phntechnolab.sales.model.UserResponse
 import kotlinx.coroutines.flow.first
 
 

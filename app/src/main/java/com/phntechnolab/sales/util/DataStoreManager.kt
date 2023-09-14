@@ -4,9 +4,13 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.google.gson.Gson
-import com.phntechnolab.sales.DataStoreProvider
+import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.model.UserResponse
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 object DataStoreManager {
 
@@ -31,7 +35,7 @@ object DataStoreManager {
         val dataStore = dataStoreProvider.getDataStoreInstance(context)
         val dataStoreKey = stringPreferencesKey(key)
         val preferences = dataStore.data.first()
-        return preferences[dataStoreKey]
+        return preferences?.get(dataStoreKey)
     }
 
     suspend fun setUser(

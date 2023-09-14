@@ -13,16 +13,18 @@ import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.viewmodel.LoginViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
-import com.phntechnolab.sales.DataStoreProvider
+import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentLoginBinding
 import com.phntechnolab.sales.model.LoginDetails
+import com.phntechnolab.sales.util.DataStoreManager.getToken
 import com.phntechnolab.sales.util.DataStoreManager.setToken
 import com.phntechnolab.sales.util.DataStoreManager.setUser
 import com.phntechnolab.sales.util.NetworkUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -51,6 +53,10 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val token = runBlocking {   getToken(view.context, dataStoreProvider, "authToken") }
+        if(token?.isNotBlank() == true && token.isNotEmpty()){
+
+        }
         binding.login.setOnClickListener {
             val email_id = binding.tilEmailId.helperText
             val password = binding.tilPassword.helperText
@@ -139,17 +145,17 @@ class LoginFragment : Fragment() {
 //                                isInternetAvailable = false, retryNow = false)
 //                        )
                     } else {
-                        if (!it.data?.message.isNullOrBlank()) {
+//                        if (!it.data?.message.isNullOrBlank()) {
 //                            showAllExceptNoInternet(
 //                                LoadingModel(isLoading = false, isCheck = false,
 //                                    isInternetAvailable = true, retryNow = false)
 //                            )
                             Snackbar.make(
                                 requireActivity().findViewById(android.R.id.content),
-                                "${it.data?.message}",
+                                "${it.message}",
                                 Snackbar.LENGTH_SHORT
                             ).show()
-                        }
+//                        }
                     }
                 }
 

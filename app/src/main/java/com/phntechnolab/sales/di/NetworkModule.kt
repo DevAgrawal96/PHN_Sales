@@ -15,11 +15,10 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-class NetworkModule
-{
+class NetworkModule {
     @Singleton
     @Provides
-    fun providesRetrofit() : Retrofit.Builder {
+    fun providesRetrofit(): Retrofit.Builder {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(NullOnEmptyConverterFactory())
@@ -34,8 +33,10 @@ class NetworkModule
 
     @Singleton
     @Provides
-        fun providesLoginAPI(retrofitBuilder: Retrofit.Builder, okHttpClient: OkHttpClient) : RetrofitApi {
-        return retrofitBuilder
-            .client(okHttpClient).build().create(RetrofitApi::class.java)
+    fun providesLoginAPI(
+        retrofitBuilder: Retrofit.Builder,
+        okHttpClient: OkHttpClient
+    ): RetrofitApi {
+        return retrofitBuilder.client(okHttpClient).build().create(RetrofitApi::class.java)
     }
 }

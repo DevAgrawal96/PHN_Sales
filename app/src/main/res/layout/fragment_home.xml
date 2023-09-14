@@ -16,40 +16,60 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:singleSelection="true">
+        app:singleSelection="true"
+        app:selectionRequired="true">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/all"
-            style="@style/Colors_Widget.MaterialComponents.Chip.Filter"
+            style="@style/CustomChipChoice"
+            app:chipCornerRadius="5dp"
+            app:chipStrokeWidth="2dp"
+            app:chipStrokeColor="#79747E"
+            android:textColor="#49454F"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/all"
-            app:chipBackgroundColor="@android:color/transparent"/>
+            android:text="@string/all"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/assigned"
-            style="@style/Colors_Widget.MaterialComponents.Chip.Filter"
+            style="@style/CustomChipChoice"
+            app:chipCornerRadius="5dp"
+            app:chipStrokeWidth="2dp"
+            app:chipStrokeColor="#79747E"
+            android:textColor="#49454F"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/assigned"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/visited"
-            style="@style/Colors_Widget.MaterialComponents.Chip.Filter"
+            style="@style/CustomChipChoice"
+            app:chipCornerRadius="5dp"
+            app:chipStrokeWidth="2dp"
+            app:chipStrokeColor="#79747E"
+            android:textColor="#49454F"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/visited"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/moa_negotiation"
-            style="@style/Colors_Widget.MaterialComponents.Chip.Filter"
+            style="@style/CustomChipChoice"
+            app:chipCornerRadius="5dp"
+            app:chipStrokeWidth="2dp"
+            app:chipStrokeColor="#79747E"
+            android:textColor="#49454F"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/moa_negotiation"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/moa_signed"
-            style="@style/Colors_Widget.MaterialComponents.Chip.Filter"
+            style="@style/CustomChipChoice"
+            app:chipCornerRadius="5dp"
+            app:chipStrokeWidth="2dp"
+            app:chipStrokeColor="#79747E"
+            android:textColor="#49454F"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/moa_signed"/>
@@ -63,10 +83,30 @@
         android:layout_marginStart="@dimen/dimen_8dp"
         android:layout_marginTop="@dimen/dimen_8dp"
         android:layout_marginEnd="@dimen/dimen_8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_marginBottom="@dimen/dimen_8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_school"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dimen_16dp"
+        android:layout_marginBottom="@dimen/dimen_16dp"
+        android:clickable="true"
+        android:text="Add School"
+        android:textColor="@color/white"
+        app:backgroundTint="#1D4ED8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        android:src="@drawable/ic_baseline_add_24"
+        app:tint="@android:color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
