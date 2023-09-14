@@ -85,5 +85,7 @@
     <color name="bgcolor">#EFF6FF</color>
     <color name="chip_stroke">#79747E</color>
     <color name="txt_main_color">#00005C</color>
+    <color name="steps_done_color">#1D4ED8</color>
+    <color name="steps_next_color">#D1D5DB</color>
 
 </resources>

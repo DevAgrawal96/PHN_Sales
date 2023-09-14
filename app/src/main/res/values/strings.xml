@@ -29,4 +29,35 @@
     <string name="warm_status">Warm</string>
     <string name="cool_status">Cool</string>
 
+    <array name="details">
+        <item>Basic Details</item>
+        <item>School Details</item>
+        <item>Follow up Details</item>
+    </array>
+
+    <string name="basic_details">Basic Details</string>
+    <string name="school_name">School Name</string>
+    <string name="school_address">School Address</string>
+    <string name="board">Board</string>
+    <string name="school_total_intake">School Total Intake</string>
+    <string name="total_no_of_classroom">Total No.of Classroom</string>
+    <string name="coordinator_name">Coordinator Name</string>
+    <string name="coordinator_phone_no">Coordinator Phone Number</string>
+    <string name="school_details">School Details</string>
+    <string name="next">Next</string>
+
+    <string name="director_dm_name">Director/DM Name</string>
+    <string name="director_dm_phone_no">Director/DM Phone Number</string>
+    <string name="avg_school_fee">Average School Fees</string>
+    <string name="existing_labs_in_school">Existing Labs In School</string>
+    <string name="expected_quoted_value">Expected Quoted Value Per Student</string>
+    <string name="upload_school_img">Upload School Image</string>
+    <string name="select_file">Select file</string>
+    <string name="update">Update</string>
+    <string name="follow_up_details">Follow up Details</string>
+    <string name="lead_type">Select Lead Type</string>
+    <string name="follow_date">Select Next Follow Up Date</string>
+    <string name="follow_up_type">Select Follow Up Type</string>
+    <string name="remark">Remark</string>
+
 </resources>
