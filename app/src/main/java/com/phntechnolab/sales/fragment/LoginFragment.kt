@@ -53,10 +53,8 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val token = runBlocking {   getToken(view.context, dataStoreProvider, "authToken") }
-        if(token?.isNotBlank() == true && token.isNotEmpty()){
+        viewModel.getToken()
 
-        }
         binding.login.setOnClickListener {
             val email_id = binding.tilEmailId.helperText
             val password = binding.tilPassword.helperText
@@ -82,6 +80,23 @@ class LoginFragment : Fragment() {
                     ).show()
                 }
             }
+        }
+
+        viewModel.refereshToken.observe(viewLifecycleOwner){
+            when(it){
+                is NetworkResult.Success ->{
+                    Timber.e("referesh token success")
+                    Timber.e(it.data.toString())
+                }
+                is NetworkResult.Error ->{
+                    Timber.e("referesh token error")
+                    Timber.e(it.toString())
+                }
+                else -> {
+
+                }
+            }
+
         }
 
         viewModel.loginLiveData.observe(viewLifecycleOwner, Observer {

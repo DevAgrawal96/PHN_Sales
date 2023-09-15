@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.LoginDetails
 import com.phntechnolab.sales.model.UserResponse
 import com.phntechnolab.sales.repository.LoginRepository
@@ -19,9 +20,18 @@ class LoginViewModel @Inject constructor(private val repositories: LoginReposito
     val loginLiveData : LiveData<NetworkResult<UserResponse>>
         get() = repositories.loginLiveData
 
+    val refereshToken: LiveData<NetworkResult<CustomResponse>>
+        get() = repositories.refereshToken
+
     fun login(login: LoginDetails, context: Context) {
         viewModelScope.launch {
             repositories.login(login, context)
+        }
+    }
+
+    fun getToken(){
+        viewModelScope.launch {
+            repositories.refereshToken()
         }
     }
 }

@@ -16,7 +16,7 @@ interface RetrofitApi {
     @GET("api/allschools")
     suspend fun getAllSchoolData():  Response<List<SchoolData>>
 
-    @GET("api/refresh")
+    @POST("api/refresh")
     suspend fun refereshToken():  Response<CustomResponse>
 
     @GET("api/kmZveAfXx")

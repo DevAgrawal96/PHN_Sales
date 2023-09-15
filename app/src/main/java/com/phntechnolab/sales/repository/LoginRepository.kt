@@ -100,6 +100,31 @@ class LoginRepository @Inject constructor(
 
         if (NetworkUtils.isInternetAvailable(application)) {
 
+            try{
+                val result = retrofitApi.refereshToken()
+                result.body()?.status_code = result.code()
+                if (result.isSuccessful && result.body() != null) {
+                    Log.e("RESULT DAAAA", result.body().toString())
+                    Log.e("RESULT DAAAA2", result.code().toString())
+                    _refereshToken.postValue(NetworkResult.Success(result.body()))
+                } else if (result.errorBody() != null) {
+                    _refereshToken.postValue(
+                        NetworkResult.Error(
+                            application.getString(R.string.something_went_wrong),
+                            CustomResponse( result.code(), result.errorBody()?.string())
+                        )
+                    )
+                } else {
+                    _refereshToken.postValue(
+                        NetworkResult.Error(
+                            application.getString(R.string.something_went_wrong),
+                            CustomResponse( result.code(), application.getString(R.string.something_went_wrong))
+                        )
+                    )
+                }
+            }catch (ex: Exception){
+                ex.printStackTrace()
+            }
         }else{
 
         }

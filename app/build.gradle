@@ -87,5 +87,8 @@ dependencies {
     implementation "com.jakewharton.timber:timber:4.7.1"
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
+
     implementation 'com.github.shuhart:stepview:1.5.1'
+
+//    implementation 'com.shuhart.stepview:stepview:1.5.1'
 }
