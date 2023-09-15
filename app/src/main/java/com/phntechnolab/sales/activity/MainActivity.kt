@@ -66,12 +66,12 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.homeFragment -> {
                     binding.bottomNavigation.visibility = View.VISIBLE
-                    binding.include.toolbar.visibility = View.VISIBLE
+                    //binding.include.toolbar.visibility = View.VISIBLE
                 }
 
                 else -> {
                     binding.bottomNavigation.visibility = View.GONE
-                    binding.include.toolbar.visibility = View.GONE
+                    //binding.include.toolbar.visibility = View.GONE
                 }
             }
         }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/cancelled_meeting"
+        android:enabled="true"
+        android:icon="@drawable/home_icon"
+        android:title="@string/cancelled_meeting" />
+
+</menu>
