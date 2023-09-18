@@ -21,8 +21,16 @@
         android:label="Home"
         tools:layout="@layout/fragment_home">
 
+        <action
+            android:id="@+id/action_homeFragment_to_addSchoolFragment"
+            app:destination="@id/addSchoolFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/addSchoolFragment"
+        android:name="com.phntechnolab.sales.fragment.AddSchoolFragment"
+        android:label="Add School"
+        tools:layout="@layout/fragment_assigned_schools_stepper">
 
-
+    </fragment>
 </navigation>
