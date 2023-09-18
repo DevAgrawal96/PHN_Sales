@@ -64,5 +64,37 @@
     <string name="select_next_meeting_date_hint">Select next meeting date</string>
     <string name="select_next_meeting_time_hint">Select next meeting time</string>
     <string name="cancelled_meeting">Cancelled Meeting</string>
+    <string name="price_pitch_per_student">Price Pitch per student</string>
+    <string name="quotation_validity">Quotation validity</string>
+    <string name="agreement_duration">Agreement Duration</string>
+    <string name="meeting_with_whom">Meeting with whom</string>
+    <string name="conversion_ratio">Conversion ratio</string>
+    <string name="next_meeting_date_time"><![CDATA[Next meeting date & time]]></string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="total_interested_intake">Total interested intake</string>
+    <string name="enter_final_costing_per_student">Enter final costing per student</string>
+    <string name="discussed_with_whom">discussed with whom</string>
+    <string name="select_designation">Select designation</string>
+    <string name="draft_moa_file">Draft MOA File</string>
+    <string name="select_installment">Select installment</string>
+    <string name="amount">Amount</string>
+    <string name="installment_date_time"><![CDATA[Installment date & time]]></string>
 
+    <!--    suraj-->
+    <string-array name="agreement_duration">
+        <item>item 1</item>
+        <item>item 2</item>
+    </string-array>
+
+    <string-array name="meeting_with_whom">
+        <item>item 1</item>
+        <item>item 2</item>
+    </string-array>
+    <string-array name="conversion_ratio">
+        <item>item 1</item>
+        <item>item 2</item>
+    </string-array>
 </resources>
