@@ -1,112 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".fragment.HomeFragment"
+    >
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup"
-        android:layout_width="@dimen/dimen_0dp"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dimen_16dp"
-        android:layout_marginTop="@dimen/dimen_16dp"
-        android:layout_marginEnd="@dimen/dimen_16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:singleSelection="true"
-        app:selectionRequired="true">
+        app:layout_constraintVertical_bias="0.0">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/all"
-            style="@style/CustomChipChoice"
-            app:chipCornerRadius="5dp"
-            app:chipStrokeWidth="2dp"
-            app:chipStrokeColor="#79747E"
-            android:textColor="#49454F"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/all"/>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/home_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/home_top_bar_menu"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+            app:title="Home"
+            app:titleTextAppearance="@style/NavigationStyle" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/assigned"
-            style="@style/CustomChipChoice"
-            app:chipCornerRadius="5dp"
-            app:chipStrokeWidth="2dp"
-            app:chipStrokeColor="#79747E"
-            android:textColor="#49454F"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/assigned"/>
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/visited"
-            style="@style/CustomChipChoice"
-            app:chipCornerRadius="5dp"
-            app:chipStrokeWidth="2dp"
-            app:chipStrokeColor="#79747E"
-            android:textColor="#49454F"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/visited"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/moa_negotiation"
-            style="@style/CustomChipChoice"
-            app:chipCornerRadius="5dp"
-            app:chipStrokeWidth="2dp"
-            app:chipStrokeColor="#79747E"
-            android:textColor="#49454F"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/moa_negotiation"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/moa_signed"
-            style="@style/CustomChipChoice"
-            app:chipCornerRadius="5dp"
-            app:chipStrokeWidth="2dp"
-            app:chipStrokeColor="#79747E"
-            android:textColor="#49454F"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/moa_signed"/>
-
-    </com.google.android.material.chip.ChipGroup>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/home_recyclerView"
-        android:layout_width="@dimen/dimen_0dp"
-        android:layout_height="@dimen/dimen_0dp"
-        android:layout_marginStart="@dimen/dimen_8dp"
-        android:layout_marginTop="@dimen/dimen_8dp"
-        android:layout_marginEnd="@dimen/dimen_8dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:layout_marginBottom="@dimen/dimen_8dp"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+        app:layout_constraintVertical_bias="0.5">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_school"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dimen_16dp"
-        android:layout_marginBottom="@dimen/dimen_16dp"
-        android:clickable="true"
-        android:text="Add School"
-        android:textColor="@color/white"
-        app:backgroundTint="#1D4ED8"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        android:src="@drawable/ic_baseline_add_24"
-        app:tint="@android:color/white" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:layout_marginEnd="@dimen/dimen_16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/all"
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/all"
+                    android:textColor="#49454F"
+                    app:chipCornerRadius="5dp"
+                    app:chipStrokeColor="#79747E"
+                    app:chipStrokeWidth="2dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/assigned"
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/assigned"
+                    android:textColor="#49454F"
+                    app:chipCornerRadius="5dp"
+                    app:chipStrokeColor="#79747E"
+                    app:chipStrokeWidth="2dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/visited"
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/visited"
+                    android:textColor="#49454F"
+                    app:chipCornerRadius="5dp"
+                    app:chipStrokeColor="#79747E"
+                    app:chipStrokeWidth="2dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/moa_negotiation"
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/moa_negotiation"
+                    android:textColor="#49454F"
+                    app:chipCornerRadius="5dp"
+                    app:chipStrokeColor="#79747E"
+                    app:chipStrokeWidth="2dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/moa_signed"
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/moa_signed"
+                    android:textColor="#49454F"
+                    app:chipCornerRadius="5dp"
+                    app:chipStrokeColor="#79747E"
+                    app:chipStrokeWidth="2dp" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/home_recyclerView"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="@dimen/dimen_0dp"
+                android:layout_marginStart="@dimen/dimen_8dp"
+                android:layout_marginTop="@dimen/dimen_8dp"
+                android:layout_marginEnd="@dimen/dimen_8dp"
+                android:layout_marginBottom="@dimen/dimen_8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chipGroup"
+                tools:listitem="@layout/adapter_home_inline" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add_school"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dimen_16dp"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:clickable="true"
+                android:src="@drawable/ic_baseline_add_24"
+                android:text="Add School"
+                android:textColor="@color/white"
+                app:backgroundTint="#1D4ED8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                app:tint="@android:color/white" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

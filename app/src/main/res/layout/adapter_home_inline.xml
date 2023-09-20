@@ -4,121 +4,100 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="@dimen/dimen_0dp"
         android:layout_height="wrap_content"
+        app:strokeWidth="0dp"
+        app:cardElevation="@dimen/dimen_3dp"
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" >
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/dimen_8dp">
+            android:padding="@dimen/dimen_8dp"
+            >
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/school_img"
-                android:layout_width="@dimen/dimen_100dp"
-                android:layout_height="@dimen/dimen_100dp"
+                android:layout_width="@dimen/dimen_110dp"
+                android:layout_height="@dimen/dimen_110dp"
+                android:src="@drawable/demo_img"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/flag_ind" />
+                app:shapeAppearanceOverlay="@style/roundedImage" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.3" />
+                app:layout_constraintGuide_percent="0.35" />
 
             <TextView
                 android:id="@+id/school_name"
+                style="@style/MainTitleTheme"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dimen_8dp"
                 android:layout_marginEnd="@dimen/dimen_8dp"
-                style="@style/MainTitleTheme"
-                android:layout_marginTop="@dimen/dimen_16dp"
-                android:text="St Jones School"
-                android:minLines="1"
-                android:maxLines="2"
                 android:ellipsize="end"
+                android:maxLines="2"
+                android:minLines="1"
+                android:text="St Jones School"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.00999999" />
+                app:layout_constraintVertical_bias="0.0" />
 
-            <ImageView
-                android:id="@+id/email_icon"
-                android:layout_width="@dimen/dimen_16dp"
-                android:layout_height="@dimen/dimen_16dp"
-                android:layout_marginStart="@dimen/dimen_8dp"
-                android:layout_marginTop="@dimen/dimen_16dp"
-                android:layout_marginEnd="@dimen/dimen_8dp"
-                android:padding="@dimen/dimen_2dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toBottomOf="@+id/school_name"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/email_icon" />
 
             <TextView
                 android:id="@+id/txt_email"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_8dp"
-                android:layout_marginTop="@dimen/dimen_14dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="@dimen/dimen_8dp"
-                android:text="a@gmail.com"
-                android:minLines="1"
-                android:maxLines="1"
+                android:drawablePadding="@dimen/dimen_8dp"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/email_icon"
-                app:layout_constraintTop_toBottomOf="@+id/school_name"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <ImageView
-                android:id="@+id/call_icon"
-                android:layout_width="@dimen/dimen_16dp"
-                android:layout_height="@dimen/dimen_16dp"
-                android:layout_marginStart="@dimen/dimen_8dp"
-                android:layout_marginTop="@dimen/dimen_16dp"
-                android:layout_marginEnd="@dimen/dimen_8dp"
+                android:maxLines="1"
+                android:minLines="1"
+                android:text="a@gmail.com"
+                app:drawableStartCompat="@drawable/email_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toBottomOf="@+id/email_icon"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/call_icon" />
+                app:layout_constraintTop_toBottomOf="@+id/school_name"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/txt_mono"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_8dp"
-                android:layout_marginTop="@dimen/dimen_14dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="@dimen/dimen_8dp"
-                android:minLines="1"
-                android:maxLines="1"
+                android:drawablePadding="@dimen/dimen_8dp"
                 android:ellipsize="end"
+                android:maxLines="1"
+                android:minLines="1"
                 android:text="+91 9730630055"
+                app:drawableStartCompat="@drawable/call_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/call_icon"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/txt_email"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -127,9 +106,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dimen_8dp"
-                android:layout_marginTop="@dimen/dimen_16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="@dimen/dimen_8dp"
                 android:text="@string/assigned"
+                android:textSize="@dimen/txt_12sp"
                 app:chipCornerRadius="@dimen/dimen_16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -141,11 +121,12 @@
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_lead_status"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginStart="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="@dimen/dimen_8dp"
                 android:text="@string/hot_status"
+                android:textSize="@dimen/txt_12sp"
                 app:chipCornerRadius="@dimen/dimen_16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -156,5 +137,5 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
