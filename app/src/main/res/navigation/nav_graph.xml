@@ -32,5 +32,10 @@
         android:label="Add School"
         tools:layout="@layout/fragment_assigned_schools_stepper">
 
+        <argument
+            android:name="schoolData"
+            app:argType="com.phntechnolab.sales.model.SchoolData"
+            app:nullable="true"/>
+
     </fragment>
 </navigation>

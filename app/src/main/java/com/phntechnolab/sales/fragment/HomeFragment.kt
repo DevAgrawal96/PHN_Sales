@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), MenuProvider {
+class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<HomeViewModel>()
@@ -84,7 +84,7 @@ class HomeFragment : Fragment(), MenuProvider {
         }
 
         binding.addSchool.setOnClickListener {
-            it.findNavController().navigate(R.id.action_homeFragment_to_addSchoolFragment)
+            it.findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(null))
         }
     }
 
@@ -95,14 +95,13 @@ class HomeFragment : Fragment(), MenuProvider {
     }
 
     private fun initializeAdapter() {
-        _adapter = SchoolDetailAdapter()
+        _adapter = SchoolDetailAdapter(this)
         binding.homeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.homeRecyclerView.adapter = _adapter
     }
 
     private fun getData() {
         lifecycleScope.launch(Dispatchers.IO) {
-            Timber.e("APi CALLED")
             viewModel.getAllSchools()
         }
     }
@@ -153,5 +152,9 @@ class HomeFragment : Fragment(), MenuProvider {
                 false
             }
         }
+    }
+
+    override fun openSchoolDetails(schoolData: SchoolData) {
+        TODO("Not yet implemented")
     }
 }

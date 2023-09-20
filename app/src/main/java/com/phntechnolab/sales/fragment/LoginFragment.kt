@@ -61,8 +61,6 @@ class LoginFragment : Fragment() {
             val email_id = binding.tilEmailId.helperText
             val password = binding.tilPassword.helperText
 
-            Timber.e("emailid print")
-            Timber.e(email_id.toString(), password.toString())
             if (email_id == null && password == null) {
                 if (NetworkUtils.isInternetAvailable(it.context)) {
                     val loginDetails = LoginDetails(
@@ -87,12 +85,9 @@ class LoginFragment : Fragment() {
         viewModel.refereshToken.observe(viewLifecycleOwner){
             when(it){
                 is NetworkResult.Success ->{
-                    Timber.e("referesh token success")
-                    Timber.e(it.data.toString())
                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 }
                 is NetworkResult.Error ->{
-                    Timber.e("referesh token error")
                     Timber.e(it.toString())
                 }
                 else -> {
@@ -115,8 +110,6 @@ class LoginFragment : Fragment() {
                     Timber.d("token-Tasks=${it}")
                     when (it.data?.status_code) {
                         200 -> {
-                            Timber.e("SUCCESSFULL DATA")
-                            Timber.d(Gson().toJson(it.data))
 
                             lifecycleScope.launch(Dispatchers.IO) {
                                 setToken(
