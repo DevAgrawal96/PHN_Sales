@@ -39,6 +39,9 @@ class LoginFragment : Fragment() {
     lateinit var dataStoreProvider: DataStoreProvider
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel.getToken()
+
     }
 
     override fun onCreateView(
@@ -53,7 +56,6 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getToken()
 
         binding.login.setOnClickListener {
             val email_id = binding.tilEmailId.helperText
@@ -87,6 +89,7 @@ class LoginFragment : Fragment() {
                 is NetworkResult.Success ->{
                     Timber.e("referesh token success")
                     Timber.e(it.data.toString())
+                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 }
                 is NetworkResult.Error ->{
                     Timber.e("referesh token error")

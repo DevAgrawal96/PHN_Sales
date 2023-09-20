@@ -103,9 +103,9 @@ class LoginRepository @Inject constructor(
             try{
                 val result = retrofitApi.refereshToken()
                 result.body()?.status_code = result.code()
+                Log.e("Login details body", result.body().toString())
+                Log.e("login details code", result.code().toString())
                 if (result.isSuccessful && result.body() != null) {
-                    Log.e("RESULT DAAAA", result.body().toString())
-                    Log.e("RESULT DAAAA2", result.code().toString())
                     _refereshToken.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
                     _refereshToken.postValue(

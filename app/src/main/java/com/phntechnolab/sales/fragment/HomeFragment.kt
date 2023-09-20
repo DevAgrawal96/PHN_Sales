@@ -14,9 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.chip.Chip
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.SchoolDetailAdapter
@@ -45,6 +43,9 @@ class HomeFragment : Fragment(), MenuProvider {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        getData()
+
     }
 
     override fun onCreateView(
@@ -64,7 +65,6 @@ class HomeFragment : Fragment(), MenuProvider {
         super.onViewCreated(view, savedInstanceState)
         setActionBar()
 
-        getData()
 
         observers()
 
