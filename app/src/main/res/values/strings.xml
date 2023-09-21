@@ -82,6 +82,7 @@
     <string name="select_installment">Select installment</string>
     <string name="amount">Amount</string>
     <string name="installment_date_time"><![CDATA[Installment date & time]]></string>
+    <string name="save">Save</string>
 
     <!--    suraj-->
     <string-array name="agreement_duration">

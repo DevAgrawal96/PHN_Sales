@@ -29,15 +29,10 @@ class HomeRepository @Inject constructor(
     suspend fun getSchoolData() {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
-                Timber.e("APi Call Start")
-//                val result = retrofitApi.getAllSchoolData()
                 val result = retrofitApi.getAllSchoolData()
                 if (result.isSuccessful && result?.body() != null) {
-                    Timber.e("api call end")
-                    Timber.e(result.toString())
                     schoolDataMutableLiveData.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
-                    Timber.e("api call end error body null")
 
                     schoolDataMutableLiveData.postValue(
                         NetworkResult.Error(
@@ -46,7 +41,6 @@ class HomeRepository @Inject constructor(
                         )
                     )
                 } else {
-                    Timber.e("api call end else wala part")
                     schoolDataMutableLiveData.postValue(
                         NetworkResult.Error(
                             "",
@@ -56,7 +50,6 @@ class HomeRepository @Inject constructor(
                 }
 
             } catch (e: Exception) {
-                Timber.d("Exception in SCReg${e.message}")
                 schoolDataMutableLiveData.postValue(
                     NetworkResult.Error(
                         "",
@@ -65,7 +58,6 @@ class HomeRepository @Inject constructor(
                 )
             }
         } else {
-            Timber.e("else wala ke bhi else")
             schoolDataMutableLiveData.postValue(
                 NetworkResult.Error(
                     "",

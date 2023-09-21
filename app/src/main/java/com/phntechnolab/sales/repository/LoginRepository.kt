@@ -36,16 +36,11 @@ class LoginRepository @Inject constructor(
         get() = _refereshToken
 
     suspend fun login(loginDetails: LoginDetails, context: Context) {
-        Log.d("Timber 10", loginDetails.toString())
-//        loginMutableLiveData.postValue(NetworkResult.Loading())
         if (NetworkUtils.isInternetAvailable(application)) {
-            Log.d("Timber 11", loginDetails.toString())
             try {
                 val result = retrofitApi.getLoginDetails(loginDetails)
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result?.body() != null) {
-                    Log.e("RESULT DAAAA", result.body().toString())
-                    Log.e("RESULT DAAAA2", result.code().toString())
                     loginMutableLiveData.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
                     loginMutableLiveData.postValue(
@@ -71,7 +66,6 @@ class LoginRepository @Inject constructor(
                 }
 
             } catch (e: Exception) {
-                Timber.d("Exception in SCReg${e.message}")
                 loginMutableLiveData.postValue(
                     NetworkResult.Error(
                         "",
@@ -101,11 +95,9 @@ class LoginRepository @Inject constructor(
         if (NetworkUtils.isInternetAvailable(application)) {
 
             try{
-                val result = retrofitApi.refereshToken()
+                val result = retrofitApi.tokenCheck()
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
-                    Log.e("RESULT DAAAA", result.body().toString())
-                    Log.e("RESULT DAAAA2", result.code().toString())
                     _refereshToken.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
                     _refereshToken.postValue(

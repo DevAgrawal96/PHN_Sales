@@ -13,6 +13,7 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
@@ -29,7 +30,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), MenuProvider {
+class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<HomeViewModel>()
@@ -42,6 +43,9 @@ class HomeFragment : Fragment(), MenuProvider {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        getData()
+
     }
 
     override fun onCreateView(
@@ -61,7 +65,6 @@ class HomeFragment : Fragment(), MenuProvider {
         super.onViewCreated(view, savedInstanceState)
         setActionBar()
 
-        getData()
 
         observers()
 
@@ -81,7 +84,7 @@ class HomeFragment : Fragment(), MenuProvider {
         }
 
         binding.addSchool.setOnClickListener {
-
+            it.findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(null))
         }
     }
 
@@ -92,14 +95,13 @@ class HomeFragment : Fragment(), MenuProvider {
     }
 
     private fun initializeAdapter() {
-        _adapter = SchoolDetailAdapter()
+        _adapter = SchoolDetailAdapter(this)
         binding.homeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.homeRecyclerView.adapter = _adapter
     }
 
     private fun getData() {
         lifecycleScope.launch(Dispatchers.IO) {
-            Timber.e("APi CALLED")
             viewModel.getAllSchools()
         }
     }
@@ -150,5 +152,9 @@ class HomeFragment : Fragment(), MenuProvider {
                 false
             }
         }
+    }
+
+    override fun openSchoolDetails(schoolData: SchoolData) {
+        TODO("Not yet implemented")
     }
 }

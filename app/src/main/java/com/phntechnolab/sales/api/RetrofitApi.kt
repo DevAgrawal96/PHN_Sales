@@ -19,7 +19,13 @@ interface RetrofitApi {
     @POST("api/refresh")
     suspend fun refereshToken():  Response<CustomResponse>
 
-    @GET("api/kmZveAfXx")
-    suspend fun getDetails():  Response<UserResponse>
+    @GET("api/token_validate")
+    suspend fun tokenCheck(): Response<CustomResponse>
+
+    @POST("api/addschool")
+    suspend fun addSchool(@Body schoolDetails: SchoolData): Response<CustomResponse>
+
+//    @PUT("api/addschool")
+//    suspend fun addSchool(@Body schoolDetails: SchoolData): Response<CustomResponse>
 
 }
