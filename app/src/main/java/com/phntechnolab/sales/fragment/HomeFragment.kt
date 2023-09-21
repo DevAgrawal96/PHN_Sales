@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
-import com.phntechnolab.sales.SchoolDetailAdapter
+import com.phntechnolab.sales.adapter.SchoolDetailAdapter
 import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentHomeBinding
 import com.phntechnolab.sales.model.SchoolData

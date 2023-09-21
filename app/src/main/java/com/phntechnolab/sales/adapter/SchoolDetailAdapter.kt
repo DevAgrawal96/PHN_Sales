@@ -1,4 +1,4 @@
-package com.phntechnolab.sales
+package com.phntechnolab.sales.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.phntechnolab.sales.databinding.AdapterHomeInlineBinding
+import com.phntechnolab.sales.R
 import com.phntechnolab.sales.fragment.HomeFragmentDirections
 import com.phntechnolab.sales.model.SchoolData
 
