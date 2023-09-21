@@ -85,6 +85,10 @@
     <string name="save">Save</string>
 
     <!--    suraj-->
+    <string name="my_account">My Account</string>
+
+
+
     <string-array name="agreement_duration">
         <item>item 1</item>
         <item>item 2</item>
