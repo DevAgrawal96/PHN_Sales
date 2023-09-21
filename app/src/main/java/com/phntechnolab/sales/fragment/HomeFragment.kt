@@ -86,7 +86,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                         "All" -> {
                             true
                         }
-                        "MOA Negotiation" -> {
+                        "Propose Costing" -> {
                             it.status ==  "MOANegotiation"
                         }
                         "MOA Signed" -> {

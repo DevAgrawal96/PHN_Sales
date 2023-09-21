@@ -83,6 +83,7 @@
     <string name="amount">Amount</string>
     <string name="installment_date_time"><![CDATA[Installment date & time]]></string>
     <string name="save">Save</string>
+    <string name="propose_costing">Propose Costing</string>
 
     <!--    suraj-->
     <string-array name="agreement_duration">
