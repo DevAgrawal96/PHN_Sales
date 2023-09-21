@@ -99,7 +99,7 @@
                     style="@style/CustomChipChoice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/moa_negotiation"
+                    android:text="@string/propose_costing"
                     android:textColor="#49454F"
                     app:chipCornerRadius="5dp"
                     app:chipStrokeColor="#79747E"

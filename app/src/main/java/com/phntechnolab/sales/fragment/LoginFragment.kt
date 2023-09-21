@@ -1,32 +1,34 @@
 package com.phntechnolab.sales.fragment
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.phntechnolab.sales.util.NetworkResult
-import com.phntechnolab.sales.viewmodel.LoginViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
+import com.google.android.material.textfield.TextInputEditText
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentLoginBinding
 import com.phntechnolab.sales.model.LoginDetails
-import com.phntechnolab.sales.util.DataStoreManager.getToken
 import com.phntechnolab.sales.util.DataStoreManager.setToken
 import com.phntechnolab.sales.util.DataStoreManager.setUser
+import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.NetworkUtils
+import com.phntechnolab.sales.util.TextValidator
+import com.phntechnolab.sales.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -58,26 +60,28 @@ class LoginFragment : Fragment() {
 
 
         binding.login.setOnClickListener {
-            val email_id = binding.tilEmailId.helperText
-            val password = binding.tilPassword.helperText
+            if(isValid()) {
+                val email_id = binding.tilEmailId.helperText
+                val password = binding.tilPassword.helperText
 
-            if (email_id == null && password == null) {
-                if (NetworkUtils.isInternetAvailable(it.context)) {
-                    val loginDetails = LoginDetails(
-                        binding.edtEmailId.text.toString(),
-                        password = binding.edtPassword.text.toString()
-                    )
+                if (email_id == null && password == null) {
+                    if (NetworkUtils.isInternetAvailable(it.context)) {
+                        val loginDetails = LoginDetails(
+                            binding.edtEmailId.text.toString(),
+                            password = binding.edtPassword.text.toString()
+                        )
 
 //                    hideKeyboard()
 //                    disableScreen()
-                    viewModel.login(loginDetails, it.context)
+                        viewModel.login(loginDetails, it.context)
 
-                } else {
-                    Snackbar.make(
-                        requireActivity().findViewById(android.R.id.content),
-                        getString(R.string.no_internet_connection),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    } else {
+                        Snackbar.make(
+                            requireActivity().findViewById(android.R.id.content),
+                            getString(R.string.no_internet_connection),
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
@@ -175,6 +179,27 @@ class LoginFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun isValid(): Boolean{
+        var isEmailValid = false
+        binding.edtEmailId.addTextChangedListener(object : TextValidator(binding.edtEmailId) {
+
+            override fun validate(textView: TextInputEditText?, text: String?) {
+                Timber.e("Validate method 1")
+                Timber.e(textView?.text.toString())
+                Timber.e(text)
+                if (android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches()) {
+                    isEmailValid =  true
+                    textView?.error = null
+                } else {
+                    isEmailValid =  false
+                    textView?.error = "Please enter valid email address"
+                }
+            }
+        })
+
+        return true;
     }
 
     override fun onDestroy() {

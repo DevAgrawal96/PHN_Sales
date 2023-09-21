@@ -22,7 +22,6 @@ import com.phntechnolab.sales.viewmodel.AddSchoolViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
-
 @AndroidEntryPoint
 class AddSchoolFragment : Fragment() {
 
@@ -158,7 +157,10 @@ class AddSchoolFragment : Fragment() {
             Timber.d("data binding data")
             Timber.d(Gson().toJson(viewModel.newSchoolData.value))
             if (viewModel.newSchoolData.value?.schoolId.isNullOrBlank()) {
-                viewModel.newSchoolData.value?.let { it1 -> viewModel.addNewSchool(it1) }
+                Timber.e("In if condition")
+                Timber.e(viewModel.newSchoolData.value.toString())
+                viewModel.newSchoolData.value?.let {
+                    it1 -> viewModel.addNewSchool(it1) }
             } else {
 
             }
@@ -174,8 +176,9 @@ class AddSchoolFragment : Fragment() {
         binding.followupDetails.btnSave.setOnClickListener {
             Timber.d("data binding data 3")
             Timber.d(Gson().toJson(viewModel.newSchoolData.value))
-
         }
+
+        binding.followupDetails
     }
 
     private fun setPositionView() {

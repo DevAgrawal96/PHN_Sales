@@ -9,6 +9,7 @@ import android.util.Patterns
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
@@ -88,6 +89,29 @@ fun TextInputEditText.validation(afterTextChanged: (String) -> Unit) {
     })
 }
 
+abstract class TextValidator(private val textView: TextInputEditText) : TextWatcher {
+    abstract fun validate(textView: TextInputEditText?, text: String?)
+    override fun afterTextChanged(s: Editable) {
+        val text = textView.text.toString()
+        validate(textView, text)
+    }
+
+    override fun beforeTextChanged(
+        s: CharSequence,
+        start: Int,
+        count: Int,
+        after: Int
+    ) { /* Don't care */
+    }
+
+    override fun onTextChanged(
+        s: CharSequence,
+        start: Int,
+        before: Int,
+        count: Int
+    ) { /* Don't care */
+    }
+}
 fun isValidName(name: String, context: Context): String? {
     if (name.isBlank()) {
         return context.getString(R.string.empty_,"name")

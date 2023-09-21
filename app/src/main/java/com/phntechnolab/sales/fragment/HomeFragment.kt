@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.chip.Chip
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.adapter.SchoolDetailAdapter
@@ -65,7 +66,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
         super.onViewCreated(view, savedInstanceState)
         setActionBar()
 
-
         observers()
 
         checkedChangeListener()
@@ -74,12 +74,29 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     private fun checkedChangeListener() {
         binding.chipGroup.setOnCheckedChangeListener { chipGroup, id ->
-            val chip = chipGroup.getChildAt(chipGroup.checkedChipId)
+            val chip = chipGroup.findViewById<Chip>(id)
+//            val chip = chipGroup.getChildAt(chipGroup.checkedChipId)
             if (chip != null) {
                 for (i in 0 until chipGroup.childCount) {
                     chipGroup.getChildAt(i).isClickable = true
                 }
                 chip.isClickable = false
+                adapter?.setData(viewModel.schoolLiveData.value?.data?.filter {
+                    when (chip.text) {
+                        "All" -> {
+                            true
+                        }
+                        "Propose Costing" -> {
+                            it.status ==  "MOANegotiation"
+                        }
+                        "MOA Signed" -> {
+                            it.status ==  "MOASigned"
+                        }
+                        else -> {
+                            it.status ==  chip.text
+                        }
+                    }
+                } as ArrayList<SchoolData>)
             }
         }
 
