@@ -11,6 +11,7 @@ import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.model.UserResponse
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.NetworkUtils
+import okhttp3.RequestBody
 import timber.log.Timber
 import java.sql.Time
 import javax.inject.Inject
@@ -25,7 +26,44 @@ class AddSchoolRepository @Inject constructor(
     val addSchoolResponse: LiveData<NetworkResult<CustomResponse>>
         get() = _addSchoolResponse
 
-    suspend fun addNewSchool(schoolData: SchoolData){
+    private val _updateSchoolResponse = MutableLiveData<NetworkResult<CustomResponse>>()
+
+    val updateSchoolResponse: LiveData<NetworkResult<CustomResponse>>
+        get() = _updateSchoolResponse
+
+    suspend fun updateSchoolData(id: String, schoolData: RequestBody){
+        if (NetworkUtils.isInternetAvailable(application)) {
+            try{
+                val result = retrofitApi.updateSchoolData(id, schoolData)
+                Timber.e("Result 1")
+                Timber.e(Gson().toJson(result.body()))
+                Timber.e(result.code().toString())
+                result.body()?.status_code = result.code()
+                if (result.isSuccessful && result.body() != null) {
+                    _updateSchoolResponse.postValue(NetworkResult.Success(result.body()))
+                } else if (result.errorBody() != null) {
+                    _updateSchoolResponse.postValue(
+                        NetworkResult.Error(
+                            application.getString(R.string.something_went_wrong),
+                            CustomResponse( result.code(), result.errorBody()?.string())
+                        )
+                    )
+                } else {
+                    _updateSchoolResponse.postValue(
+                        NetworkResult.Error(
+                            application.getString(R.string.something_went_wrong),
+                            CustomResponse( result.code(), application.getString(R.string.something_went_wrong))
+                        )
+                    )
+                }
+            }catch (ex: Exception){
+                ex.printStackTrace()
+            }
+        } else {
+        }
+    }
+
+    suspend fun addNewSchool(schoolData: RequestBody){
         if (NetworkUtils.isInternetAvailable(application)) {
             try{
                 val result = retrofitApi.addSchool(schoolData)

@@ -87,7 +87,14 @@
 
     <!--    suraj-->
     <string name="my_account">My Account</string>
-
+    <string name="please_enter_valid_email_address">Please enter valid email address!</string>
+    <string name="please_enter_valid_phone_no">Please enter valid phone number!</string>
+    <string name="some_fields_are_empty_or_not_valid">Some fields are empty or not valid!</string>
+    <string name="please_enter_valid_school_name">Please enter valid school name!\n</string>
+    <string name="please_enter_valid_school_address">Please enter valid school address!\n</string>
+    <string name="please_enter_valid_coordinator_name">Please enter valid coordinator name!</string>
+    <string name="please_enter_total_school_intake">Please enter total shcool intake!</string>
+    <string name="please_select_board">Please select board!</string>
 
 
     <string-array name="agreement_duration">

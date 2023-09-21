@@ -34,12 +34,13 @@ class SchoolDetailAdapter(var callBacks: CallBacks): RecyclerView.Adapter<School
     }
 
     override fun onBindViewHolder(holder: SchoolViewHolder, position: Int) {
-        val schoolDetail = data.get(position)
+        val schoolDetail = data[position]
         holder.schoolName.text = schoolDetail.schoolName
         holder.txtEmail.text = schoolDetail.email
         holder.txtMono.text = schoolDetail.avgSchoolFees
         holder.editIcon.setOnClickListener {
-            it.findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(schoolDetail))
+            if(it != null)
+                callBacks.openSchoolDetails(schoolDetail)
         }
     }
 
