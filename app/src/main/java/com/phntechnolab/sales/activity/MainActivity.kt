@@ -19,7 +19,8 @@ class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
-//    private var keepSplashOnScreen = true
+
+    //    private var keepSplashOnScreen = true
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,10 +54,17 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.homeFragment)
                     true
                 }
+
                 R.id.menu_profile -> {
                     navController.navigate(R.id.profileFragment)
                     true
                 }
+
+                R.id.menu_pending -> {
+                    navController.navigate(R.id.pendingFragment)
+                    true
+                }
+
                 else -> {
                     item.isCheckable = false
                     false
@@ -72,7 +80,13 @@ class MainActivity : AppCompatActivity() {
                     binding.bottomNavigation.visibility = View.VISIBLE
                     //binding.include.toolbar.visibility = View.VISIBLE
                 }
+
                 R.id.profileFragment -> {
+                    binding.bottomNavigation.visibility = View.VISIBLE
+                    //binding.include.toolbar.visibility = View.VISIBLE
+                }
+
+                R.id.pendingFragment -> {
                     binding.bottomNavigation.visibility = View.VISIBLE
                     //binding.include.toolbar.visibility = View.VISIBLE
                 }

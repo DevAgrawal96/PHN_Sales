@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/dimen_8dp"
                 android:maxLines="2"
-                android:text="Lorem Ipsum is simply dummy textLorem Ipsum is simply dummy text"
+                android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
                 app:drawableStartCompat="@drawable/ic_blue_dot"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

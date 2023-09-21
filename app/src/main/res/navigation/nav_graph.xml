@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_homeFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_pendingFragment"
+            app:destination="@id/pendingFragment" />
     </fragment>
 
     <fragment
@@ -67,4 +70,9 @@
         android:name="com.phntechnolab.sales.fragment.ActivitiesFragment"
         android:label="fragment_activities"
         tools:layout="@layout/fragment_activities" />
+    <fragment
+        android:id="@+id/pendingFragment"
+        android:name="com.phntechnolab.sales.fragment.PendingFragment"
+        android:label="fragment_pending"
+        tools:layout="@layout/fragment_pending" />
 </navigation>
