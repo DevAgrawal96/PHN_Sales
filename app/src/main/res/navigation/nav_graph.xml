@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <argument
+            android:name="suraj"
+            app:argType="string" />
     </fragment>
 
     <fragment
@@ -20,6 +23,7 @@
         android:name="com.phntechnolab.sales.fragment.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home">
+
 
     </fragment>
 
