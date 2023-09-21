@@ -85,7 +85,6 @@
     <string name="save">Save</string>
     <string name="propose_costing">Propose Costing</string>
 
-    <!--    suraj-->
     <string name="my_account">My Account</string>
     <string name="please_enter_valid_email_address">Please enter valid email address!</string>
     <string name="please_enter_valid_phone_no">Please enter valid phone number!</string>
@@ -95,6 +94,14 @@
     <string name="please_enter_valid_coordinator_name">Please enter valid coordinator name!</string>
     <string name="please_enter_total_school_intake">Please enter total shcool intake!</string>
     <string name="please_select_board">Please select board!</string>
+    <string name="activity">Activity</string>
+    <string name="revenue">Revenue</string>
+    <string name="change_password">Change Password</string>
+    <string name="chart_analysis">Chart Analysis</string>
+    <string name="log_out">Log out</string>
+
+    <string name="demo_text">Lorem Ipsum is simply dummy text</string>
+    <string name="pdf_file_demo_name">file Title.pdf</string>
 
 
     <string-array name="agreement_duration">

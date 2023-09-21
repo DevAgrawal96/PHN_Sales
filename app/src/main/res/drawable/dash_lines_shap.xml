@@ -7,7 +7,7 @@
         android:dashWidth="4dp"
         android:dashGap="6dp"
         />
-    <corners android:radius="@dimen/dimen_16dp"/>
+    <corners android:radius="@dimen/dimen_8dp"/>
     <solid android:color="@android:color/transparent"/>
 
 </shape>

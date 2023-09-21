@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.adapter.ProfileSettingAdapter
 import com.phntechnolab.sales.databinding.FragmentProfileBinding
@@ -15,7 +16,7 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
-    private var _adapter : ProfileSettingAdapter? = null
+    private var _adapter: ProfileSettingAdapter? = null
     private val adapter get() = _adapter!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +36,20 @@ class ProfileFragment : Fragment() {
     }
 
     private fun initializeAdapter() {
-        _adapter = ProfileSettingAdapter()
+        val callback = object : ProfileSettingAdapter.Callback {
+            override fun openSetting(position: Int) {
+                when (position) {
+                    1 -> {
+                        findNavController().navigate(R.id.action_profileFragment_to_activitiesFragment)
+                    }
+
+                    else -> {
+
+                    }
+                }
+            }
+        }
+        _adapter = ProfileSettingAdapter(callback)
         binding.settingRv.adapter = adapter
     }
 
@@ -46,11 +60,48 @@ class ProfileFragment : Fragment() {
 
     private fun setDataToAdapter() {
         adapter.setData(ArrayList<SettingModel>().apply {
-            add(SettingModel(R.drawable.my_account,resources.getString(R.string.my_account),""))
-            add(SettingModel(R.drawable.my_account,resources.getString(R.string.my_account),""))
-            add(SettingModel(R.drawable.my_account,resources.getString(R.string.my_account),""))
-            add(SettingModel(R.drawable.my_account,resources.getString(R.string.my_account),""))
-            add(SettingModel(R.drawable.my_account,resources.getString(R.string.my_account),""))
+            add(
+                SettingModel(
+                    R.drawable.my_account,
+                    resources.getString(R.string.my_account),
+                    resources.getString(R.string.demo_text)
+                )
+            )
+            add(
+                SettingModel(
+                    R.drawable.activity,
+                    resources.getString(R.string.activity),
+                    resources.getString(R.string.demo_text)
+                )
+            )
+            add(
+                SettingModel(
+                    R.drawable.revenue,
+                    resources.getString(R.string.revenue),
+                    resources.getString(R.string.demo_text)
+                )
+            )
+            add(
+                SettingModel(
+                    R.drawable.change_password,
+                    resources.getString(R.string.change_password),
+                    resources.getString(R.string.demo_text)
+                )
+            )
+            add(
+                SettingModel(
+                    R.drawable.chart_analysis,
+                    resources.getString(R.string.chart_analysis),
+                    resources.getString(R.string.demo_text)
+                )
+            )
+            add(
+                SettingModel(
+                    R.drawable.log_out,
+                    resources.getString(R.string.log_out),
+                    resources.getString(R.string.demo_text)
+                )
+            )
         })
     }
 
