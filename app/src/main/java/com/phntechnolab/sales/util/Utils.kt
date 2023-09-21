@@ -17,7 +17,6 @@ import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import kotlinx.coroutines.flow.first
 
-
 suspend fun saveData(
     context: Context,
     dataStoreProvider: DataStoreProvider,
