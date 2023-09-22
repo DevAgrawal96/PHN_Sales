@@ -134,9 +134,10 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
         }
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         _binding = null
-        super.onDestroy()
+        _adapter = null
+        super.onDestroyView()
     }
 
     private fun setOnBackPressed() {

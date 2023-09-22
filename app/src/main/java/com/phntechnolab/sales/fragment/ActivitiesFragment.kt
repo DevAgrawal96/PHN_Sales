@@ -57,4 +57,10 @@ class ActivitiesFragment : Fragment() {
             add(resources.getString(R.string.demo_text))
         })
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        _adapter = null
+    }
 }

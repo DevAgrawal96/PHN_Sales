@@ -494,4 +494,9 @@ class AddSchoolFragment : Fragment() {
                 resources.getString(com.phntechnolab.sales.R.string.save)
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

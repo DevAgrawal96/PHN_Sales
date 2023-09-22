@@ -67,4 +67,10 @@ class PendingFragment : Fragment() {
             add(PendingApprovalModel(R.drawable.pending_demo_img,resources.getString(R.string.demo_text)))
         })
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        _adapter = null
+    }
 }

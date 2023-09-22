@@ -89,5 +89,6 @@ class MeetingFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        _adapter = null
     }
 }
