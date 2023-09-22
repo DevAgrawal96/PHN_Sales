@@ -36,6 +36,8 @@ class AuthInterceptor @Inject constructor(@ApplicationContext val appContext: Co
             request.addHeader("Authorization", "Bearer $token")
         }
 
+        request.addHeader("Accept", "application/json")
+
 
 
         // add token here with the header

@@ -1,11 +1,13 @@
 package com.phntechnolab.sales.repository
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.api.RetrofitApi
+import com.phntechnolab.sales.model.AddSchoolSchema
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.model.UserResponse
@@ -31,11 +33,14 @@ class AddSchoolRepository @Inject constructor(
     val updateSchoolResponse: LiveData<NetworkResult<CustomResponse>>
         get() = _updateSchoolResponse
 
-    suspend fun updateSchoolData(id: String, schoolData: RequestBody){
+    suspend fun updateSchoolData(id: String, schoolData: SchoolData){
         if (NetworkUtils.isInternetAvailable(application)) {
             try{
+//                Log.e("Multipart body data", ""+ String(schoolData.toByte))
                 val result = retrofitApi.updateSchoolData(id, schoolData)
-                Timber.e("Result 1")
+                Timber.e("Result 1 update")
+                Timber.e(id.toString())
+                Timber.e(Gson().toJson(schoolData))
                 Timber.e(Gson().toJson(result.body()))
                 Timber.e(result.code().toString())
                 result.body()?.status_code = result.code()
@@ -63,11 +68,12 @@ class AddSchoolRepository @Inject constructor(
         }
     }
 
-    suspend fun addNewSchool(schoolData: RequestBody){
+    suspend fun addNewSchool(schoolData: AddSchoolSchema){
         if (NetworkUtils.isInternetAvailable(application)) {
             try{
                 val result = retrofitApi.addSchool(schoolData)
-                Timber.e("Result 1")
+                Timber.e("Result 1 add")
+                Timber.e(Gson().toJson(schoolData))
                 Timber.e(Gson().toJson(result.body()))
                 Timber.e(result.code().toString())
                 result.body()?.status_code = result.code()

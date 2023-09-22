@@ -1,13 +1,16 @@
 package com.phntechnolab.sales.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.fragment.HomeFragmentDirections
 import com.phntechnolab.sales.model.SchoolData
@@ -21,6 +24,7 @@ class SchoolDetailAdapter(var callBacks: CallBacks): RecyclerView.Adapter<School
         val txtEmail = view.findViewById<TextView>(R.id.txt_email)
         val txtMono = view.findViewById<TextView>(R.id.txt_mono)
         val editIcon = view.findViewById<ImageView>(R.id.edit_icon)
+        val cardView = view.findViewById<CardView>(R.id.cardView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SchoolViewHolder {
@@ -37,7 +41,10 @@ class SchoolDetailAdapter(var callBacks: CallBacks): RecyclerView.Adapter<School
         val schoolDetail = data[position]
         holder.schoolName.text = schoolDetail.schoolName
         holder.txtEmail.text = schoolDetail.email
-        holder.txtMono.text = schoolDetail.avgSchoolFees
+        holder.txtMono.text = schoolDetail.coMobileNo
+        holder.cardView.setOnClickListener {
+            callBacks.meetingNavigation()
+        }
         holder.editIcon.setOnClickListener {
             if(it != null)
                 callBacks.openSchoolDetails(schoolDetail)
@@ -45,6 +52,8 @@ class SchoolDetailAdapter(var callBacks: CallBacks): RecyclerView.Adapter<School
     }
 
     fun setData(newData: ArrayList<SchoolData>) {
+        Log.e("OldData", Gson().toJson(data))
+        Log.e("newData", Gson().toJson(newData))
         val detailsDiffUtil = SchoolsDataDiffUtil(data, newData)
         val detailsDiff = DiffUtil.calculateDiff(detailsDiffUtil)
         data.clear()
@@ -77,5 +86,7 @@ class SchoolDetailAdapter(var callBacks: CallBacks): RecyclerView.Adapter<School
 
     interface CallBacks{
         fun openSchoolDetails(schoolData: SchoolData)
+
+        fun meetingNavigation()
     }
 }

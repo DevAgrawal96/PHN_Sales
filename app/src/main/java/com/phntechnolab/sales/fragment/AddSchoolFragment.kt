@@ -216,10 +216,16 @@ class AddSchoolFragment : Fragment() {
 
                     var pattern: Pattern = Pattern.compile("")
 
-                    if (type == "phone") {
-                        pattern = Pattern.compile("^[0123456789]{15}\$")
-                    } else if (type == "email") {
-                        pattern = Pattern.compile("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+\$")
+                    when (type) {
+                        "phone" -> {
+                            pattern = Pattern.compile("^[0123456789]{15}\$")
+                        }
+                        "email" -> {
+                            pattern = Pattern.compile("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+\$")
+                        }
+                        else -> {
+
+                        }
                     }
 
                     if (pattern.matcher(text).matches())
@@ -417,7 +423,7 @@ class AddSchoolFragment : Fragment() {
             binding.basicDetails.tilCoordinatorMono.error = null
 
         val isEmailValid =
-            android.util.Patterns.EMAIL_ADDRESS.matcher(binding.basicDetails.edtEmailId.text.toString())
+            Pattern.compile("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+\$").matcher(binding.basicDetails.edtEmailId.text.toString())
                 .matches()
         if (isEmailValid)
             binding.basicDetails.tilEmailId.error =
@@ -469,7 +475,6 @@ class AddSchoolFragment : Fragment() {
         binding.schoolDetails.edtAvgSchoolFee.setText(viewModel.newSchoolData.value?.avgSchoolFees)
         binding.schoolDetails.existingLabs.setText(viewModel.newSchoolData.value?.existingLab)
         binding.schoolDetails.edtValuePerStudent.setText(viewModel.newSchoolData.value?.expQuatedValue)
-
     }
 
     fun setButtonName(schoolData: SchoolData?) {

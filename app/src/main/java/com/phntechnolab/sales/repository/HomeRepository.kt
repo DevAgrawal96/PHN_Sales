@@ -31,6 +31,7 @@ class HomeRepository @Inject constructor(
             try {
                 val result = retrofitApi.getAllSchoolData()
                 if (result.isSuccessful && result?.body() != null) {
+
                     schoolDataMutableLiveData.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
 

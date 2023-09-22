@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentMeetingBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,6 +24,7 @@ class MeetingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMeetingBinding.inflate(inflater, container, false)
+        setOnBackPressed()
         return binding.root
     }
 
@@ -33,5 +35,14 @@ class MeetingFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun setOnBackPressed() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finishAffinity()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(callback)
     }
 }

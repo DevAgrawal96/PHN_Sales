@@ -35,6 +35,10 @@
         <action
             android:id="@+id/action_homeFragment_to_pendingFragment"
             app:destination="@id/pendingFragment" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_meetingFragment"
+            app:destination="@id/meetingFragment" />
     </fragment>
 
     <fragment
@@ -77,4 +81,10 @@
         android:name="com.phntechnolab.sales.fragment.PendingFragment"
         android:label="fragment_pending"
         tools:layout="@layout/fragment_pending" />
+
+    <fragment
+        android:id="@+id/meetingFragment"
+        android:name="com.phntechnolab.sales.fragment.MeetingFragment"
+        android:label="Meetings"
+        tools:layout="@layout/fragment_meeting" />
 </navigation>

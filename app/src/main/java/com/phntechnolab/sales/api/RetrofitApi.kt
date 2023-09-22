@@ -1,5 +1,6 @@
 package com.phntechnolab.sales.api
 
+import com.phntechnolab.sales.model.AddSchoolSchema
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.LoginDetails
 import com.phntechnolab.sales.model.SchoolData
@@ -27,9 +28,9 @@ interface RetrofitApi {
     suspend fun tokenCheck(): Response<CustomResponse>
 
     @POST("api/addschool")
-    suspend fun addSchool(@Body schoolDetails: RequestBody): Response<CustomResponse>
+    suspend fun addSchool(@Body schoolDetails: AddSchoolSchema): Response<CustomResponse>
 
     @PUT("api/updateschool/{id} ")
-    suspend fun updateSchoolData(@Path(value = "id") id: String, @Body schoolDetails: RequestBody): Response<CustomResponse>
+    suspend fun updateSchoolData(@Path(value = "id") id: String, @Body schoolDetails: SchoolData): Response<CustomResponse>
 
 }

@@ -1,6 +1,8 @@
 package com.phntechnolab.sales.fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -14,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.phntechnolab.sales.Modules.DataStoreProvider
@@ -44,8 +47,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onResume() {
@@ -92,14 +93,17 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                         "All" -> {
                             true
                         }
+
                         "Propose Costing" -> {
-                            it.status ==  "MOANegotiation"
+                            it.status == "MOANegotiation"
                         }
+
                         "MOA Signed" -> {
-                            it.status ==  "MOASigned"
+                            it.status == "MOASigned"
                         }
+
                         else -> {
-                            it.status ==  chip.text
+                            it.status == chip.text
                         }
                     }
                 } as ArrayList<SchoolData>)
@@ -107,7 +111,8 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
         }
 
         binding.addSchool.setOnClickListener {
-            it.findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(null))
+            it.findNavController()
+                .navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(null))
         }
     }
 
@@ -161,12 +166,12 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.menu_search -> {
-                Toast.makeText(requireContext(),"search",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "search", Toast.LENGTH_SHORT).show()
                 true
             }
 
             R.id.menu_notification -> {
-                Toast.makeText(requireContext(),"notification",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "notification", Toast.LENGTH_SHORT).show()
                 true
             }
 
@@ -178,6 +183,11 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     override fun openSchoolDetails(schoolData: SchoolData) {
 
-        requireView()?.findNavController()?.navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(schoolData))
+        requireView()?.findNavController()
+            ?.navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(schoolData))
+    }
+
+    override fun meetingNavigation() {
+        requireView().findNavController().navigate(R.id.action_homeFragment_to_meetingFragment)
     }
 }

@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.phntechnolab.sales.model.AddSchoolSchema
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.repository.AddSchoolRepository
@@ -12,6 +14,7 @@ import com.phntechnolab.sales.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,8 +46,9 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
 
         val multiPartBody: MultipartBody = returnJsonData()
 
+        val addSchoolData: AddSchoolSchema = returnSchoolSchema()
         viewModelScope.launch {
-            repositories.addNewSchool(multiPartBody)
+            repositories.addNewSchool(addSchoolData)
         }
     }
 
@@ -53,7 +57,8 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
         val multiPartBody: MultipartBody = returnJsonData()
 
         viewModelScope.launch {
-            repositories.updateSchoolData(newSchoolData.value?.id.toString()?:"", multiPartBody)
+            Timber.e(Gson().toJson(newSchoolData.value))
+            repositories.updateSchoolData(newSchoolData.value?.id.toString()?:"", newSchoolData.value?: SchoolData())
         }
     }
 
@@ -77,5 +82,26 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
             .addFormDataPart("followup_type", newSchoolData.value?.followupType?:"")
             .addFormDataPart("upload_img", newSchoolData.value?.uploadImg?:"")
             .addFormDataPart("remark", newSchoolData.value?.remark?:"").build()
+    }
+
+    private fun returnSchoolSchema(): AddSchoolSchema{
+        return AddSchoolSchema().apply {
+            this.schoolName =  newSchoolData.value?.schoolName?: ""
+            this.schoolAddress = newSchoolData.value?.schoolAddress?:""
+            this.board = newSchoolData.value?.board?:""
+            this.intake = newSchoolData.value?.intake?:0
+            this.totalClassRoom = newSchoolData.value?.totalClassRoom?:0
+            this.email = newSchoolData.value?.email?:""
+            this.coMobileNo = newSchoolData.value?.coMobileNo?:""
+            this.coName = newSchoolData.value?.coName?:""
+            this.directorName = newSchoolData.value?.directorName?:""
+            this.directorMobNo = newSchoolData.value?.directorMobNo?:""
+            this.avgSchoolFees = newSchoolData.value?.avgSchoolFees?:""
+            this.existingLab = newSchoolData.value?.existingLab?:""
+            this.expQuatedValue = newSchoolData.value?.expQuatedValue?:""
+            this.leadType = newSchoolData.value?.leadType?:""
+            this.nextFollowup = newSchoolData.value?.nextFollowup?:""
+            this.followupType = newSchoolData.value?.followupType?:""
+        }
     }
 }
