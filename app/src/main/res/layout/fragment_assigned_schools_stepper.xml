@@ -46,14 +46,14 @@
         <include
             android:id="@+id/basic_details"
             layout="@layout/fragment_assigned_schools"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/dimen_0dp"
             android:layout_height="match_parent"
-            bind:viewModel="@={viewModel}"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginVertical="32dp"
+            android:layout_marginHorizontal="@dimen/dimen_12dp"
+            android:layout_marginVertical="@dimen/dimen_32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/step_view" />
+            app:layout_constraintTop_toBottomOf="@+id/step_view"
+            bind:viewModel="@={viewModel}" />
 
         <include
             android:id="@+id/school_details"

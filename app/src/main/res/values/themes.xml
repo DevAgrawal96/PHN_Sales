@@ -107,6 +107,7 @@
         <item name="cornerRadius">@dimen/dimen_8dp</item>
         <item name="backgroundTint">@color/toggle_button_bg_color_state</item>
         <item name="android:textColor">@color/text_color_chip_state_list</item>
+        <item name="android:textSize">@dimen/txt_12sp</item>
     </style>
 
     <style name="BottomNavigationIconStyle" parent="Widget.MaterialComponents.BottomNavigationView">

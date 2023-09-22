@@ -112,6 +112,18 @@
     <string name="tomorrow">Tomorrow</string>
     <string name="upcoming">Upcoming</string>
     <string name="meeting">Meeting</string>
+    <string name="successful_password_reset">Successful Password Reset!</string>
+    <string name="you_can_use_your_new_password_to_login_to_your_account">You can use your new password to login \nto your account</string>
+    <string name="confirm_logout">Confirm Logout?</string>
+    <string name="are_you_sure_you_want_to_log_out">Are you sure you want to log out?</string>
+    <string name="cancel_meeting">Cancel Meeting?</string>
+    <string name="are_you_sure_you_want_to_cancel_the_meeting">Are you sure you want to cancel the meeting?</string>
+    <string name="reason_for_cancelation">Reason for cancelation</string>
+    <string name="reschedule_meeting">Reschedule Meeting</string>
+    <string name="select_next_meeting_time">Select next meeting time</string>
+    <string name="write_remark">Write remark</string>
+    <string name="great">Great!</string>
+    <string name="the_school_has_been_added_to_your_visited_school_list">The school has been added to your visited school list</string>
 
 
     <string-array name="agreement_duration">
