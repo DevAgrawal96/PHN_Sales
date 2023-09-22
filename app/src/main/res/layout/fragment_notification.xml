@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.ActivitiesFragment"
+    tools:context=".fragment.NotificationFragment"
     android:background="@color/screen_bg">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -24,7 +24,7 @@
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_back"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-            app:title="Activities"
+            app:title="Notification"
             app:titleTextAppearance="@style/NavigationStyle" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -46,15 +46,16 @@
             android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/activities_rv"
-                android:layout_width="@dimen/dimen_0dp"
+                android:id="@+id/notification_rv"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                tools:listitem="@layout/activityes_item"
                 android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/activityes_item"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
@@ -63,4 +64,3 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

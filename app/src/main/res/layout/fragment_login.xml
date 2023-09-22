@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bgcolor">
+    android:background="@color/bgcolor"
+    tools:context=".fragment.LoginFragment"
+    >
 
     <ImageView
         android:layout_width="@dimen/dimen_0dp"
@@ -129,6 +131,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_16dp"
         android:layout_marginEnd="@dimen/dimen_16dp"
+        android:backgroundTint="@color/regular_blue"
         android:text="@string/login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

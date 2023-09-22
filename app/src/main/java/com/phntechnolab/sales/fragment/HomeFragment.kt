@@ -171,7 +171,8 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
             }
 
             R.id.menu_notification -> {
-                Toast.makeText(requireContext(), "notification", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
+                Toast.makeText(requireContext(),"notification",Toast.LENGTH_SHORT).show()
                 true
             }
 

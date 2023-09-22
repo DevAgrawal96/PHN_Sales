@@ -43,6 +43,7 @@
 
     </style>
 
+
     <style name="AppBarTheme" parent="Widget.Material3.Toolbar">
         <item name="navigationIconTint">@color/md_theme_light_primary</item>
     </style>
@@ -93,13 +94,25 @@
             <!--    suraj   -->
     <style name="roundedImage" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">16dp</item>
+        <item name="cornerSize">8dp</item>
     </style>
 
     <style name="NavigationStyle" parent="Widget.Material3.Toolbar">
         <item name="navigationIconTint">@color/dark_blue</item>
         <item name="android:textSize">@dimen/txt_20sp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ToggleButtonStyle" parent="@style/Widget.Material3.Button.OutlinedButton">
+        <item name="cornerRadius">@dimen/dimen_8dp</item>
+        <item name="backgroundTint">@color/toggle_button_bg_color_state</item>
+        <item name="android:textColor">@color/text_color_chip_state_list</item>
+        <item name="android:textSize">@dimen/txt_12sp</item>
+    </style>
+
+    <style name="BottomNavigationIconStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconTint">@color/bottom_navigation_icon_color_state</item>
+        <item name="itemTextColor">@color/bottom_navigation_icon_color_state</item>
     </style>
 
 

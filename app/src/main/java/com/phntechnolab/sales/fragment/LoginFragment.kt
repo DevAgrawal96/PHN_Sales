@@ -84,20 +84,19 @@ class LoginFragment : Fragment() {
             }
         }
 
-        viewModel.refereshToken.observe(viewLifecycleOwner){
-            when(it){
-                is NetworkResult.Success ->{
-                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-                }
-                is NetworkResult.Error ->{
-                    Timber.e(it.toString())
-                }
-                else -> {
-
-                }
-            }
-
-        }
+//        viewModel.refereshToken.observe(viewLifecycleOwner){
+//            when(it){
+//                is NetworkResult.Success ->{
+//                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+//                }
+//                is NetworkResult.Error ->{
+//                    Timber.e(it.toString())
+//                }
+//                else -> {
+//                }
+//            }
+//
+//        }
 
         viewModel.loginLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {

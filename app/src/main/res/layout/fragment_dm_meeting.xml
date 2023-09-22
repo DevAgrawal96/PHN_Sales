@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.StagingFragment"
+    tools:context=".fragment.DMMeetingFragment"
     android:background="@color/screen_bg">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -25,7 +25,7 @@
             app:menu="@menu/meeting_topbar_menu"
             app:navigationIcon="@drawable/ic_back"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-            app:title="Propose Costing Stage"
+            app:title="Teacher/Principal Meeting"
             app:titleTextAppearance="@style/NavigationStyle" />
 
         <ProgressBar
@@ -34,12 +34,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:progress="40"
-            android:progressTint="@color/regular_blue" />
+            android:progressTint="@color/regular_blue"
+            />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_0dp"
+        android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -49,11 +50,9 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         app:layout_constraintVertical_bias="0.5">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
 
             <TextView
                 android:id="@+id/textView"
@@ -62,8 +61,8 @@
                 android:layout_marginStart="@dimen/dimen_16dp"
                 android:layout_marginTop="@dimen/dimen_16dp"
                 android:layout_marginEnd="@dimen/dimen_16dp"
-                android:text="Price discussed inclusive GST?"
-                android:textSize="@dimen/txt_16sp"
+                android:text="Teacher/Principal attended the meet?"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -89,35 +88,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:text="@string/yes" />
+                    android:text="Yes" />
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no" />
+                    android:text="No" />
             </RadioGroup>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_email_id"
-                android:layout_width="@dimen/dimen_0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_16dp"
-                android:layout_marginEnd="@dimen/dimen_16dp"
-                android:hint="@string/price_pitch_per_student"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/radioGroup"
-                app:layout_constraintVertical_bias="0.0">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_email_id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/textView2"
@@ -126,17 +103,17 @@
                 android:layout_marginStart="@dimen/dimen_16dp"
                 android:layout_marginTop="@dimen/dimen_16dp"
                 android:layout_marginEnd="@dimen/dimen_16dp"
-                android:text="Quotation shared?"
-                android:textSize="@dimen/txt_16sp"
+                android:text="Product demo happned?"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_email_id"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroup"
                 app:layout_constraintVertical_bias="0.0" />
 
             <RadioGroup
-                android:id="@+id/radioGroup1"
+                android:id="@+id/radioGroup2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dimen_16dp"
@@ -153,40 +130,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:text="@string/yes" />
+                    android:text="Yes" />
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no" />
+                    android:text="No" />
             </RadioGroup>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_quotation_validity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_16dp"
-                android:layout_marginEnd="@dimen/dimen_16dp"
-                android:hint="@string/quotation_validity"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/radioGroup1"
-                app:layout_constraintVertical_bias="0.0">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_quotation_validity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:cursorVisible="false"
-                    android:drawableEnd="@drawable/ic_calendar"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:inputType="none" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/textView3"
@@ -195,17 +145,17 @@
                 android:layout_marginStart="@dimen/dimen_16dp"
                 android:layout_marginTop="@dimen/dimen_16dp"
                 android:layout_marginEnd="@dimen/dimen_16dp"
-                android:text="Payment scheduled locked?"
-                android:textSize="@dimen/txt_16sp"
+                android:text="Next follow up meeting scheduled?"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_quotation_validity"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroup2"
                 app:layout_constraintVertical_bias="0.0" />
 
             <RadioGroup
-                android:id="@+id/radioGroup2"
+                android:id="@+id/radioGroup3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dimen_16dp"
@@ -222,82 +172,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:text="@string/yes" />
+                    android:text="Yes" />
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no" />
+                    android:text="No" />
             </RadioGroup>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_agreement_duration"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_16dp"
-                android:layout_marginEnd="@dimen/dimen_16dp"
-                android:hint="@string/agreement_duration"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/radioGroup2"
-                app:layout_constraintVertical_bias="0.0">
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/auto_agreement_duration"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_meeting_with_whom"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_16dp"
-                android:layout_marginEnd="@dimen/dimen_16dp"
-                android:hint="@string/meeting_with_whom"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_agreement_duration"
-                app:layout_constraintVertical_bias="0.0">
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/auto_meeting_with_whom"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_conversion_ratio"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_16dp"
-                android:layout_marginEnd="@dimen/dimen_16dp"
-                android:hint="@string/conversion_ratio"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_meeting_with_whom"
-                app:layout_constraintVertical_bias="0.0">
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/auto_conversion_ratio"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/textView4"
@@ -306,17 +187,43 @@
                 android:layout_marginStart="@dimen/dimen_16dp"
                 android:layout_marginTop="@dimen/dimen_16dp"
                 android:layout_marginEnd="@dimen/dimen_16dp"
-                android:text="@string/next_meeting_date_time"
-                android:textSize="@dimen/txt_16sp"
+                android:text="Interested in lab set up?"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_conversion_ratio"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroup3"
                 app:layout_constraintVertical_bias="0.0" />
 
+            <RadioGroup
+                android:id="@+id/radioGroup4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/dimen_8dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4"
+                app:layout_constraintVertical_bias="0.0">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dimen_16dp"
+                    android:text="Yes" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No" />
+            </RadioGroup>
+
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_date"
+                android:id="@+id/til_next_meeting_date"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dimen_16dp"
@@ -324,15 +231,14 @@
                 android:layout_marginEnd="@dimen/dimen_8dp"
                 android:hint="@string/date"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintHorizontal_weight="5"
+                app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroup4"
                 app:layout_constraintVertical_bias="0.0">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_date"
+                    android:id="@+id/edt_next_meeting_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
@@ -344,7 +250,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_time"
+                android:id="@+id/til_next_meeting_time"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dimen_8dp"
@@ -353,14 +259,13 @@
                 android:hint="@string/time"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintHorizontal_weight="5"
-                app:layout_constraintStart_toStartOf="@+id/guideline3"
-                app:layout_constraintTop_toBottomOf="@+id/textView4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/guideline4"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroup4"
                 app:layout_constraintVertical_bias="0.0">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_time"
+                    android:id="@+id/edt_next_meeting_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
@@ -371,51 +276,27 @@
                     android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" />
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_remark"
+            <Button
+                android:id="@+id/button"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dimen_16dp"
                 android:layout_marginTop="@dimen/dimen_16dp"
                 android:layout_marginEnd="@dimen/dimen_16dp"
-                android:hint="@string/remark"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_date"
-                app:layout_constraintVertical_bias="0.0">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_remark"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/update_btn"
-                android:layout_width="@dimen/dimen_0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_16dp"
-                android:layout_marginEnd="@dimen/dimen_16dp"
-                android:layout_marginBottom="@dimen/dimen_16dp"
                 android:text="@string/update"
                 android:backgroundTint="@color/regular_blue"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_remark"
+                app:layout_constraintTop_toBottomOf="@+id/til_next_meeting_time"
                 app:layout_constraintVertical_bias="0.0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

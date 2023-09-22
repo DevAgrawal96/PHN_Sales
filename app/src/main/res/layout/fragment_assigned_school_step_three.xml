@@ -10,7 +10,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/screen_bg">
 
         <TextView
             android:id="@+id/txt_title"
@@ -119,14 +120,14 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_16dp"
             android:layout_marginEnd="@dimen/dimen_16dp"
             android:layout_marginBottom="@dimen/dimen_16dp"
-            android:background="@color/steps_done_color"
+            android:backgroundTint="@color/regular_blue"
             android:text="@string/update"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.adapter.ProfileSettingAdapter
@@ -31,7 +32,7 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         initializeAdapter()
-
+        setOnBackPressed()
         return binding.root
     }
 
@@ -39,8 +40,16 @@ class ProfileFragment : Fragment() {
         val callback = object : ProfileSettingAdapter.Callback {
             override fun openSetting(position: Int) {
                 when (position) {
+                    0 -> {
+                        findNavController().navigate(R.id.action_profileFragment_to_myAccountFragment)
+                    }
+
                     1 -> {
                         findNavController().navigate(R.id.action_profileFragment_to_activitiesFragment)
+                    }
+
+                    3 -> {
+                        findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
                     }
 
                     else -> {
@@ -51,6 +60,15 @@ class ProfileFragment : Fragment() {
         }
         _adapter = ProfileSettingAdapter(callback)
         binding.settingRv.adapter = adapter
+    }
+
+    private fun setOnBackPressed() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.homeFragment)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(callback)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

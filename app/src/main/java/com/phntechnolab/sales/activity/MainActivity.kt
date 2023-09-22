@@ -51,17 +51,26 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_home -> {
+                    item.isCheckable = true
                     navController.navigate(R.id.homeFragment)
                     true
                 }
 
                 R.id.menu_profile -> {
+                    item.isCheckable = true
                     navController.navigate(R.id.profileFragment)
                     true
                 }
 
                 R.id.menu_pending -> {
+                    item.isCheckable = true
                     navController.navigate(R.id.pendingFragment)
+                    true
+                }
+
+                R.id.menu_meeting -> {
+                    item.isCheckable = true
+                    navController.navigate(R.id.meetingFragment)
                     true
                 }
 
@@ -77,22 +86,33 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.homeFragment -> {
+                    binding.bottomNavigation.menu.findItem(R.id.menu_home).isChecked = true
                     binding.bottomNavigation.visibility = View.VISIBLE
+                    binding.customElevation.visibility = View.VISIBLE
                     //binding.include.toolbar.visibility = View.VISIBLE
                 }
 
                 R.id.profileFragment -> {
                     binding.bottomNavigation.visibility = View.VISIBLE
+                    binding.customElevation.visibility = View.VISIBLE
                     //binding.include.toolbar.visibility = View.VISIBLE
                 }
 
                 R.id.pendingFragment -> {
                     binding.bottomNavigation.visibility = View.VISIBLE
+                    binding.customElevation.visibility = View.VISIBLE
+                    //binding.include.toolbar.visibility = View.VISIBLE
+                }
+
+                R.id.meetingFragment -> {
+                    binding.bottomNavigation.visibility = View.VISIBLE
+                    binding.customElevation.visibility = View.VISIBLE
                     //binding.include.toolbar.visibility = View.VISIBLE
                 }
 
                 else -> {
                     binding.bottomNavigation.visibility = View.GONE
+                    binding.customElevation.visibility = View.GONE
                     //binding.include.toolbar.visibility = View.GONE
                 }
             }
