@@ -1,11 +1,9 @@
 package com.phntechnolab.sales.fragment
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -60,7 +58,7 @@ class LoginFragment : Fragment() {
 
 
         binding.login.setOnClickListener {
-            if(isValid()) {
+            if(android.util.Patterns.EMAIL_ADDRESS.matcher(binding.edtEmailId.text.toString()).matches()) {
                 val email_id = binding.tilEmailId.helperText
                 val password = binding.tilPassword.helperText
 
@@ -178,10 +176,11 @@ class LoginFragment : Fragment() {
                 }
             }
         })
+
+        addEmailValidation()
     }
 
-    private fun isValid(): Boolean{
-        var isEmailValid = false
+    private fun addEmailValidation() {
         binding.edtEmailId.addTextChangedListener(object : TextValidator(binding.edtEmailId) {
 
             override fun validate(textView: TextInputEditText?, text: String?) {
@@ -189,16 +188,12 @@ class LoginFragment : Fragment() {
                 Timber.e(textView?.text.toString())
                 Timber.e(text)
                 if (android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches()) {
-                    isEmailValid =  true
-                    textView?.error = null
+                    binding.emailErrorMsg.visibility = View.GONE
                 } else {
-                    isEmailValid =  false
-                    textView?.error = "Please enter valid email address"
+                    binding.emailErrorMsg.visibility = View.VISIBLE
                 }
             }
         })
-
-        return true;
     }
 
     override fun onDestroy() {

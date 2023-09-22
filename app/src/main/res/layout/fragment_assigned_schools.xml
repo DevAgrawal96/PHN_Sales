@@ -183,7 +183,6 @@
                         android:id="@+id/edt_email_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:text="@={viewModel.newSchoolData.email}"/>
                 </com.google.android.material.textfield.TextInputLayout>

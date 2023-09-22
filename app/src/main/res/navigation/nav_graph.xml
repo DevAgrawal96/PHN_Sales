@@ -26,7 +26,9 @@
 
         <action
             android:id="@+id/action_homeFragment_to_addSchoolFragment"
-            app:destination="@id/addSchoolFragment" />
+            app:destination="@id/addSchoolFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left" />
         <action
             android:id="@+id/action_homeFragment_to_profileFragment"
             app:destination="@id/profileFragment" />

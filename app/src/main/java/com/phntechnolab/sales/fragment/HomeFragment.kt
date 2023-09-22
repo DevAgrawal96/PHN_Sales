@@ -46,6 +46,12 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
         getData()
 
     }
@@ -125,10 +131,9 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         _binding = null
+        super.onDestroy()
     }
-
 
     private fun setOnBackPressed() {
         val callback = object : OnBackPressedCallback(true) {
@@ -175,5 +180,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     override fun openSchoolDetails(schoolData: SchoolData) {
 
+        requireView()?.findNavController()?.navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(schoolData))
     }
 }
