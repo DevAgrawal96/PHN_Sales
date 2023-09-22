@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.StagingFragment">
+    tools:context=".fragment.StagingFragment"
+    android:background="@color/screen_bg">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -409,6 +410,7 @@
                 android:layout_marginEnd="@dimen/dimen_16dp"
                 android:layout_marginBottom="@dimen/dimen_16dp"
                 android:text="@string/update"
+                android:backgroundTint="@color/regular_blue"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

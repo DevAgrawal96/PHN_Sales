@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.MeetingFragment"
+    tools:context=".fragment.NotificationFragment"
     android:background="@color/screen_bg">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -19,18 +19,17 @@
         app:layout_constraintVertical_bias="0.0">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/home_top_bar"
+            android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/home_top_bar_menu"
+            app:navigationIcon="@drawable/ic_back"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-            app:title="Meeting"
+            app:title="Notification"
             app:titleTextAppearance="@style/NavigationStyle" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_0dp"
         android:fillViewport="true"
@@ -40,62 +39,26 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.5">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/materialButtonToggleGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:singleSelection="true"
-                app:checkedButton="@+id/today_btn"
-                >
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/today_btn"
-                    style="@style/ToggleButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/today" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/tomorrow_btn"
-                    style="@style/ToggleButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tomorrow" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/upcoming_btn"
-                    style="@style/ToggleButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/upcoming" />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
-
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/meeting_rv"
-                android:layout_width="@dimen/dimen_0dp"
+                android:id="@+id/notification_rv"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/activityes_item"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/materialButtonToggleGroup"
-                app:layout_constraintVertical_bias="0.0"
-                tools:listitem="@layout/activityes_item" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

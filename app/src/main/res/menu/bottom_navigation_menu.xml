@@ -4,12 +4,13 @@
         android:id="@+id/menu_home"
         android:enabled="true"
         android:icon="@drawable/home_icon"
-        android:title="@string/home" />
+        android:title="@string/home"
+        android:checkable="true"/>
     <item
-        android:id="@+id/menu_followup"
+        android:id="@+id/menu_meeting"
         android:enabled="true"
         android:icon="@drawable/follow_up_icon"
-        android:title="@string/followup"/>
+        android:title="@string/meeting"/>
     <item
         android:id="@+id/menu_pending"
         android:enabled="true"

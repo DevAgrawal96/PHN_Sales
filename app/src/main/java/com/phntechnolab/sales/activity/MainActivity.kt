@@ -65,6 +65,11 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.menu_meeting -> {
+                    navController.navigate(R.id.meetingFragment)
+                    true
+                }
+
                 else -> {
                     item.isCheckable = false
                     false
@@ -78,21 +83,31 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.homeFragment -> {
                     binding.bottomNavigation.visibility = View.VISIBLE
+                    binding.customElevation.visibility = View.VISIBLE
                     //binding.include.toolbar.visibility = View.VISIBLE
                 }
 
                 R.id.profileFragment -> {
                     binding.bottomNavigation.visibility = View.VISIBLE
+                    binding.customElevation.visibility = View.VISIBLE
                     //binding.include.toolbar.visibility = View.VISIBLE
                 }
 
                 R.id.pendingFragment -> {
                     binding.bottomNavigation.visibility = View.VISIBLE
+                    binding.customElevation.visibility = View.VISIBLE
+                    //binding.include.toolbar.visibility = View.VISIBLE
+                }
+
+                R.id.meetingFragment -> {
+                    binding.bottomNavigation.visibility = View.VISIBLE
+                    binding.customElevation.visibility = View.VISIBLE
                     //binding.include.toolbar.visibility = View.VISIBLE
                 }
 
                 else -> {
                     binding.bottomNavigation.visibility = View.GONE
+                    binding.customElevation.visibility = View.GONE
                     //binding.include.toolbar.visibility = View.GONE
                 }
             }

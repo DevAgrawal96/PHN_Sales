@@ -95,6 +95,16 @@
 
     <string name="demo_text">Lorem Ipsum is simply dummy text</string>
     <string name="pdf_file_demo_name">file Title.pdf</string>
+    <string name="name">Name</string>
+    <string name="mobile_no">Mobile No.</string>
+    <string name="address">Address</string>
+    <string name="old_password">Old password</string>
+    <string name="new_password">New password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="meeting">Meeting</string>
 
 
     <string-array name="agreement_duration">

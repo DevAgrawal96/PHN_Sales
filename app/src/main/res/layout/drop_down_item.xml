@@ -3,7 +3,7 @@
     android:id="@+id/textView5"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="TextView"
+    android:text="@string/demo_text"
     android:padding="@dimen/dimen_8dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"

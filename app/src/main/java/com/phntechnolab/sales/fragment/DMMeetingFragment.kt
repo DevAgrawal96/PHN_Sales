@@ -5,13 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
-import com.phntechnolab.sales.R
-import com.phntechnolab.sales.databinding.FragmentDocumentBinding
+import com.phntechnolab.sales.databinding.FragmentDmMeetingBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
-class DocumentFragment : Fragment() {
-    private var _binding: FragmentDocumentBinding? = null
+@AndroidEntryPoint
+class DMMeetingFragment : Fragment() {
+    private var _binding: FragmentDmMeetingBinding? = null
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,19 +21,12 @@ class DocumentFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentDocumentBinding.inflate(inflater, container, false)
+        _binding = FragmentDmMeetingBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initializeListener()
-    }
-
-    private fun initializeListener() {
-        binding.topAppBar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
     }
 
     override fun onDestroy() {

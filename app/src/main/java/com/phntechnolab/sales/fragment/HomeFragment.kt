@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.phntechnolab.sales.Modules.DataStoreProvider
@@ -161,6 +162,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
             }
 
             R.id.menu_notification -> {
+                findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
                 Toast.makeText(requireContext(),"notification",Toast.LENGTH_SHORT).show()
                 true
             }
@@ -172,6 +174,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     }
 
     override fun openSchoolDetails(schoolData: SchoolData) {
-        TODO("Not yet implemented")
+
     }
 }

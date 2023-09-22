@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.R
-import com.phntechnolab.sales.databinding.FragmentDocumentBinding
+import com.phntechnolab.sales.databinding.FragmentMyAccountBinding
 
 
-class DocumentFragment : Fragment() {
-    private var _binding: FragmentDocumentBinding? = null
+class MyAccountFragment : Fragment() {
+    private var _binding: FragmentMyAccountBinding? = null
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +22,7 @@ class DocumentFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentDocumentBinding.inflate(inflater, container, false)
+        _binding = FragmentMyAccountBinding.inflate(inflater, container, false)
         return binding.root
     }
 

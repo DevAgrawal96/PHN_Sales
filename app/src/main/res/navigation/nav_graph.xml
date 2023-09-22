@@ -33,6 +33,12 @@
         <action
             android:id="@+id/action_homeFragment_to_pendingFragment"
             app:destination="@id/pendingFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_meetingFragment"
+            app:destination="@id/meetingFragment" />
     </fragment>
 
     <fragment
@@ -55,6 +61,12 @@
         <action
             android:id="@+id/action_profileFragment_to_activitiesFragment"
             app:destination="@id/activitiesFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_myAccountFragment"
+            app:destination="@id/myAccountFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashScreenFragment"
@@ -64,6 +76,9 @@
         <action
             android:id="@+id/action_splashScreenFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_splashScreenFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/activitiesFragment"
@@ -75,4 +90,24 @@
         android:name="com.phntechnolab.sales.fragment.PendingFragment"
         android:label="fragment_pending"
         tools:layout="@layout/fragment_pending" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.phntechnolab.sales.fragment.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/myAccountFragment"
+        android:name="com.phntechnolab.sales.fragment.MyAccountFragment"
+        android:label="fragment_my_account"
+        tools:layout="@layout/fragment_my_account" />
+    <fragment
+        android:id="@+id/meetingFragment"
+        android:name="com.phntechnolab.sales.fragment.MeetingFragment"
+        android:label="fragment_meeting"
+        tools:layout="@layout/fragment_meeting" />
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.phntechnolab.sales.fragment.ChangePasswordFragment"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" />
 </navigation>

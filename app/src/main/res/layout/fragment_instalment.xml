@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.InstalmentFragment">
+    tools:context=".fragment.InstalmentFragment"
+    android:background="@color/screen_bg">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -89,7 +90,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/dark_blue"
+                    android:background="@color/dark_blue1"
                     android:padding="@dimen/dimen_8dp">
 
                     <ImageView
@@ -337,6 +338,7 @@
                 android:layout_marginStart="@dimen/dimen_16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="@dimen/dimen_16dp"
+                android:backgroundTint="@color/regular_blue"
                 android:text="@string/update"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

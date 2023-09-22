@@ -11,7 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/screen_bg">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -244,7 +245,7 @@
                     android:layout_marginTop="@dimen/dimen_8dp"
                     android:layout_marginEnd="@dimen/dimen_8dp"
                     android:layout_marginBottom="@dimen/dimen_8dp"
-                    android:background="@color/steps_done_color"
+                    android:backgroundTint="@color/regular_blue"
                     android:text="@string/next"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -8,15 +8,16 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.adapter.ActivitiesAdapter
-import com.phntechnolab.sales.databinding.FragmentActivitiesBinding
+import com.phntechnolab.sales.databinding.FragmentNotificationBinding
 
 
-class ActivitiesFragment : Fragment() {
-    private var _binding: FragmentActivitiesBinding? = null
+class NotificationFragment : Fragment() {
+    private var _binding: FragmentNotificationBinding? = null
     private val binding get() = _binding!!
 
-    private var _adapter: ActivitiesAdapter? = null
+    private var _adapter : ActivitiesAdapter? = null
     private val adapter get() = _adapter!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -26,14 +27,14 @@ class ActivitiesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentActivitiesBinding.inflate(inflater, container, false)
+        _binding = FragmentNotificationBinding.inflate(inflater, container, false)
         initializeAdapter()
         return binding.root
     }
 
     private fun initializeAdapter() {
         _adapter = ActivitiesAdapter()
-        binding.activitiesRv.adapter = adapter
+        binding.notificationRv.adapter = adapter
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,11 +51,18 @@ class ActivitiesFragment : Fragment() {
 
     private fun setDataToAdapter() {
         adapter.setData(ArrayList<String>().apply {
-            add(resources.getString(R.string.demo_text))
-            add(resources.getString(R.string.demo_text))
-            add(resources.getString(R.string.demo_text))
-            add(resources.getString(R.string.demo_text))
-            add(resources.getString(R.string.demo_text))
+            add(getString(R.string.demo_text))
+            add(getString(R.string.demo_text))
+            add(getString(R.string.demo_text))
+            add(getString(R.string.demo_text))
+            add(getString(R.string.demo_text))
+            add(getString(R.string.demo_text))
+            add(getString(R.string.demo_text))
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
