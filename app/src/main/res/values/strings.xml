@@ -124,6 +124,18 @@
     <string name="write_remark">Write remark</string>
     <string name="great">Great!</string>
     <string name="the_school_has_been_added_to_your_visited_school_list">The school has been added to your visited school list</string>
+    <string name="meeting_date_time"><![CDATA[Next meeting date & time]]></string>
+    <string name="teacher_principal_meeting">Teacher/Principal Meeting</string>
+    <string name="teacher_principal_attended_the_meet">Teacher/Principal attended the meet?</string>
+    <string name="product_demo_happned">Product demo happned?</string>
+    <string name="do_you_want_to_reschedule_meeting_with_teacher_principal">Do you want to reschedule meeting with Teacher/Principal ?</string>
+    <string name="interested_in_lab_set_up">Interested in lab set up?</string>
+    <string name="propose_costing_stage">Propose Costing Stage</string>
+    <string name="dm_attended_the_meet">DM attended the meet?</string>
+    <string name="next_follow_up_meeting_scheduled">Next follow up meeting scheduled?</string>
+    <string name="price_discussed_inclusive_gst">Price discussed inclusive GST?</string>
+    <string name="quotation_shared">Quotation shared?</string>
+    <string name="payment_scheduled_locked">Payment scheduled locked?</string>
 
 
     <string-array name="agreement_duration">

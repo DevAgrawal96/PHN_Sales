@@ -43,7 +43,7 @@ class SchoolDetailAdapter(var callBacks: CallBacks): RecyclerView.Adapter<School
         holder.txtEmail.text = schoolDetail.email
         holder.txtMono.text = schoolDetail.coMobileNo
         holder.cardView.setOnClickListener {
-            callBacks.meetingNavigation()
+            callBacks.meetingNavigation(schoolDetail)
         }
         holder.editIcon.setOnClickListener {
             if(it != null)
@@ -87,6 +87,6 @@ class SchoolDetailAdapter(var callBacks: CallBacks): RecyclerView.Adapter<School
     interface CallBacks{
         fun openSchoolDetails(schoolData: SchoolData)
 
-        fun meetingNavigation()
+        fun meetingNavigation(schoolData: SchoolData)
     }
 }

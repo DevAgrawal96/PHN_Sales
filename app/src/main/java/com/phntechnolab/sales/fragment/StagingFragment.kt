@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.phntechnolab.sales.R
-import com.phntechnolab.sales.databinding.FragmentStagingBinding
+import com.phntechnolab.sales.databinding.FragmentProposeCostingStageBinding
 
 class StagingFragment : Fragment() {
-    private var _binding: FragmentStagingBinding? = null
+    private var _binding: FragmentProposeCostingStageBinding? = null
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +21,7 @@ class StagingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentStagingBinding.inflate(inflater, container, false)
+        _binding = FragmentProposeCostingStageBinding.inflate(inflater, container, false)
 
         setDataToDropDown()
 

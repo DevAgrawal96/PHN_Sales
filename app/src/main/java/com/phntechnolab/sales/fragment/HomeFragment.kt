@@ -24,6 +24,8 @@ import com.phntechnolab.sales.R
 import com.phntechnolab.sales.adapter.SchoolDetailAdapter
 import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentHomeBinding
+import com.phntechnolab.sales.model.CoordinatorData
+import com.phntechnolab.sales.model.DMData
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,7 +97,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                         }
 
                         "Propose Costing" -> {
-                            it.status == "MOANegotiation"
+                            it.status == "Propose Costing"
                         }
 
                         "MOA Signed" -> {
@@ -189,7 +191,13 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
             ?.navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(schoolData))
     }
 
-    override fun meetingNavigation() {
-        requireView().findNavController().navigate(R.id.action_homeFragment_to_meetingFragment)
+    override fun meetingNavigation(schoolData: SchoolData) {
+//        requireView().findNavController().navigate(R.id.action_homeFragment_to_meetingFragment)
+        if(schoolData.status == "Visited"){
+            requireView().findNavController()
+                .navigate(HomeFragmentDirections.actionHomeFragmentToMeetingFragment(schoolData.coordinator?: CoordinatorData(schoolId = schoolData.schoolId), schoolData.director?: DMData(schoolId = schoolData.schoolId)))
+        }else if(schoolData.status == "Propose Costing"){
+            requireView().findNavController().navigate(R.id.action_homeFragment_to_costingMoaDocumentFragment)
+        }
     }
 }

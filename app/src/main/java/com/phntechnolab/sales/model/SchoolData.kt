@@ -120,11 +120,71 @@ class SchoolData : Parcelable{
             field = value ?: ""
         }
 
-    @SerializedName("updated_at") var updatedAt : String = ""
+    @SerializedName("coordinator") var coordinator : CoordinatorData = CoordinatorData()
         set(value){
-            field = value ?: ""
+            field = value
+        }
+
+    @SerializedName("director") var director : DMData = DMData()
+        set(value){
+            field = value
         }
 }
+
+@Parcelize
+data class CoordinatorData(
+    @SerializedName("id") var id : String? = null,
+    @SerializedName("school_id") var schoolId : String? = "",
+    @SerializedName("co_attend_meet") var coAttendMeet : String? = "",
+    @SerializedName("product_demo_happen") var productDemoHappen : String? = "",
+    @SerializedName("next_followup_dm") var nextFollowupDm : String? = "",
+    @SerializedName("interested") var interested : String? = "",
+    @SerializedName("next_meet_date_dm") var nextMeetDateDm : String? = "",
+    @SerializedName("reschedule_coordinator") var rescheduleWithCoordinator : String? = "",
+    @SerializedName("meet_date_coordinator") var meetDateCoordinator : String? = ""
+): Parcelable
+
+
+@Parcelize
+data class DMData(
+    @SerializedName("id") var id : String? = null,
+    @SerializedName("school_id") var schoolId : String? = "",
+    @SerializedName("co_attend_meet") var coAttendMeet : String? = "",
+    @SerializedName("product_demo_happen") var productDemoHappen : String? = "",
+    @SerializedName("next_followup_dm") var nextFollowupDm : String? = "",
+    @SerializedName("interested") var interested : String? = "",
+    @SerializedName("next_meet_date_dm") var nextMeetDateDm : String? = "",
+):Parcelable
+
+@Parcelize
+data class ProposeCostingData(
+    @SerializedName("id") var id : String? = null,
+    @SerializedName("school_id") var schoolId : String? = "",
+    @SerializedName("price_discussed") var priceDiscussed : String? = "",
+    @SerializedName("price_per_student") var pricePerStudent : String? = "",
+    @SerializedName("quotation_shared") var quotationShared : String? = "",
+    @SerializedName("quotation_validity") var quotationValidity : String? = "",
+    @SerializedName("payment_shedule") var paymentShedule : String? = "",
+    @SerializedName("agreement_duration") var agreementDuration : String? = "",
+    @SerializedName("meeting_with_whoom") var meetingWithWhoom : String? = "",
+    @SerializedName("conversation_ratio") var conversationRatio : String? = "",
+    @SerializedName("next_meet") var nextMeet : String? = "",
+    @SerializedName("remark") var remark : String? = ""
+): Parcelable
+
+@Parcelize
+data class MOADocumentData(
+    @SerializedName("id") var id : String? = null,
+    @SerializedName("school_id") var schoolId : String? = "",
+    @SerializedName("interested_intake") var interestedIntake : String? = "",
+    @SerializedName("final_costing") var finalCosting : String? = "",
+    @SerializedName("agreement_duration") var agreementDuration : String? = "",
+    @SerializedName("disscussed_with_whom") var disscussedWithWhom : String? = "",
+    @SerializedName("designation") var designation : String? = "",
+    @SerializedName("moa_file") var moaFile : String? = "",
+    @SerializedName("remark") var remark : String? = "",
+): Parcelable
+
 //data class SchoolData (
 //    @SerializedName("id") var id : Int = 0,
 //    @SerializedName("school_id") var schoolId : String = "",
