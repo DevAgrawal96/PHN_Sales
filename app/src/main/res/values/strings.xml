@@ -139,6 +139,12 @@
     <string name="other">\Other</string>
     <string name="_1st_installment_details">1st Installment Details</string>
     <string name="date_and_time">Date and Time</string>
+    <string name="_2nd_installment">2nd Installment</string>
+    <string name="_3rd_installment">3rd Installment</string>
+    <string name="upload_file">Upload File</string>
+    <string name="_4th_installment">4th Installment</string>
+    <string name="upload_receipt">Upload Receipt</string>
+    <string name="number_of_installment">Number of Installment</string>
 
 
     <string-array name="agreement_duration">
