@@ -137,6 +137,8 @@
     <string name="quotation_shared">Quotation shared?</string>
     <string name="payment_scheduled_locked">Payment scheduled locked?</string>
     <string name="other">\Other</string>
+    <string name="_1st_installment_details">1st Installment Details</string>
+    <string name="date_and_time">Date and Time</string>
 
 
     <string-array name="agreement_duration">
