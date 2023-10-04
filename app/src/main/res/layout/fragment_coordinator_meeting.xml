@@ -355,10 +355,8 @@
     <Button
         android:id="@+id/button"
         android:layout_width="@dimen/dimen_0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dimen_16dp"
+        style="@style/buttonStyle"
         android:layout_marginTop="@dimen/dimen_16dp"
-        android:layout_marginEnd="@dimen/dimen_16dp"
         android:text="@string/update"
         android:backgroundTint="@color/regular_blue"
         app:layout_constraintBottom_toBottomOf="parent"

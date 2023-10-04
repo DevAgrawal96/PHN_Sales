@@ -125,7 +125,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     private fun initializeAdapter() {
         _adapter = SchoolDetailAdapter(this)
-        binding.homeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.homeRecyclerView.adapter = _adapter
     }
 
@@ -174,7 +173,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
             R.id.menu_notification -> {
                 findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
-                Toast.makeText(requireContext(),"notification",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "notification", Toast.LENGTH_SHORT).show()
                 true
             }
 
@@ -185,21 +184,34 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     }
 
     override fun openSchoolDetails(schoolData: SchoolData) {
-        requireView().findNavController()
-            ?.navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(schoolData))
+        findNavController()
+            .navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(schoolData))
     }
 
     override fun meetingNavigation(schoolData: SchoolData) {
-        if(schoolData.status == "Visited"){
+        if (schoolData.status == "Visited") {
 
             requireView().findNavController()
-                .navigate(HomeFragmentDirections.actionHomeFragmentToMeetingFragment(schoolData.coordinator?: CoordinatorData(schoolId = schoolData.schoolId), schoolData.director?: DMData(schoolId = schoolData.schoolId)))
-        }else if(schoolData.status == "Propose Costing"){
+                .navigate(
+                    HomeFragmentDirections.actionHomeFragmentToMeetingFragment(
+                        schoolData.coordinator ?: CoordinatorData(schoolId = schoolData.schoolId),
+                        schoolData.director ?: DMData(schoolId = schoolData.schoolId)
+                    )
+                )
+        } else if (schoolData.status == "Propose Costing") {
 
             requireView().findNavController()
-                .navigate(HomeFragmentDirections.actionHomeFragmentToCostingMoaDocumentFragment(schoolData.proposeCostingData?: ProposeCostingData(schoolId = schoolData.schoolId), schoolData.moaDocumentData?: MOADocumentData(schoolId = schoolData.schoolId)))
-        }else if(schoolData.status == "MOASigned"){
-            requireView().findNavController().navigate(R.id.action_homeFragment_to_moaSignedFragment)
+                .navigate(
+                    HomeFragmentDirections.actionHomeFragmentToCostingMoaDocumentFragment(
+                        schoolData.proposeCostingData
+                            ?: ProposeCostingData(schoolId = schoolData.schoolId),
+                        schoolData.moaDocumentData
+                            ?: MOADocumentData(schoolId = schoolData.schoolId)
+                    )
+                )
+        } else if (schoolData.status == "MOASigned") {
+            requireView().findNavController()
+                .navigate(R.id.action_homeFragment_to_moaSignedFragment)
         }
     }
 }

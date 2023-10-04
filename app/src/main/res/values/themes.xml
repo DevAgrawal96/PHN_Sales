@@ -117,6 +117,9 @@
         <item name="android:textSize">@dimen/txt_16sp</item>
         <item name="android:layout_height">64dp</item>
     </style>
+    <style name="radioButtonStyle" parent="">
+        <item name="tint">@color/regular_blue</item>
+    </style>
 
     <style name="BottomNavigationIconStyle" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="itemIconTint">@color/bottom_navigation_icon_color_state</item>
