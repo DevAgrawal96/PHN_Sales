@@ -408,7 +408,7 @@
                     android:padding="@dimen/dimen_16dp">
 
                     <TextView
-                        android:id="@+id/_2nd_installment_txt"
+                        android:id="@+id/installment2_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/_2nd_installment"
@@ -430,7 +430,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/_2nd_installment_txt"
+                        app:layout_constraintTop_toBottomOf="@+id/installment2_txt"
                         app:layout_constraintVertical_bias="0.0">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -632,7 +632,7 @@
                     android:padding="@dimen/dimen_16dp">
 
                     <TextView
-                        android:id="@+id/_3nd_installment_txt"
+                        android:id="@+id/installment3_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/_3rd_installment"
@@ -654,7 +654,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/_3nd_installment_txt"
+                        app:layout_constraintTop_toBottomOf="@+id/installment3_txt"
                         app:layout_constraintVertical_bias="0.0">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -775,7 +775,7 @@
                     android:padding="@dimen/dimen_16dp">
 
                     <TextView
-                        android:id="@+id/_4nd_installment_txt"
+                        android:id="@+id/installment4_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/_4th_installment"
@@ -797,7 +797,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/_4nd_installment_txt"
+                        app:layout_constraintTop_toBottomOf="@+id/installment4_txt"
                         app:layout_constraintVertical_bias="0.0">
 
                         <com.google.android.material.textfield.TextInputEditText
