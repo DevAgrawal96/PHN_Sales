@@ -3,22 +3,39 @@ package com.phntechnolab.sales.fragment
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.MenuProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.adapter.ProfileSettingAdapter
 import com.phntechnolab.sales.databinding.FragmentProfileBinding
 import com.phntechnolab.sales.model.SettingModel
+import com.phntechnolab.sales.model.UserDataModel
+import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.viewmodel.ProfileViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
-
-class ProfileFragment : Fragment() {
+@AndroidEntryPoint
+class ProfileFragment : Fragment(), MenuProvider {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
     private var _adapter: ProfileSettingAdapter? = null
     private val adapter get() = _adapter!!
+
+    private val viewModel: ProfileViewModel by viewModels()
+
+    private var _userProfileData: UserDataModel? = null
+    private val userProfileData get() = _userProfileData!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,10 +47,15 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-
+        fetchUserProfileData()
+        userProfileDataObservable()
         initializeAdapter()
         setOnBackPressed()
         return binding.root
+    }
+
+    private fun fetchUserProfileData() {
+        viewModel.userProfileData()
     }
 
     private fun initializeAdapter() {
@@ -41,7 +63,19 @@ class ProfileFragment : Fragment() {
             override fun openSetting(position: Int) {
                 when (position) {
                     0 -> {
-                        findNavController().navigate(R.id.action_profileFragment_to_myAccountFragment)
+                        findNavController().navigate(
+                            ProfileFragmentDirections.actionProfileFragmentToMyAccountFragment(
+                                UserDataModel(
+                                    userProfileData.userId,
+                                    userProfileData.id,
+                                    userProfileData.name,
+                                    userProfileData.email,
+                                    userProfileData.mobile_no,
+                                    userProfileData.password ?: "null",
+                                    userProfileData.role
+                                )
+                            )
+                        )
                     }
 
                     1 -> {
@@ -73,7 +107,29 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setActionBar()
         setDataToAdapter()
+
+    }
+
+    private fun userProfileDataObservable() {
+        viewModel.userProfile.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    _userProfileData = it.data
+                    binding.executiveName.text = userProfileData.name
+                    binding.executiveRole.text = userProfileData.role
+                }
+
+                is NetworkResult.Error -> {
+
+                }
+
+                else -> {
+
+                }
+            }
+        }
     }
 
     private fun setDataToAdapter() {
@@ -121,6 +177,40 @@ class ProfileFragment : Fragment() {
                 )
             )
         })
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (requireActivity() as MainActivity).removeMenuProvider(this)
+        activity?.removeMenuProvider(this)
+    }
+
+    private fun setActionBar() {
+        (requireActivity() as MainActivity).setSupportActionBar(binding.homeTopBar)
+        activity?.addMenuProvider(this)
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.home_top_bar_menu, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return when (menuItem.itemId) {
+            R.id.menu_search -> {
+                Toast.makeText(requireContext(), "search", Toast.LENGTH_SHORT).show()
+                true
+            }
+
+            R.id.menu_notification -> {
+                findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
+                Toast.makeText(requireContext(), "notification", Toast.LENGTH_SHORT).show()
+                true
+            }
+
+            else -> {
+                false
+            }
+        }
     }
 
     override fun onDestroyView() {

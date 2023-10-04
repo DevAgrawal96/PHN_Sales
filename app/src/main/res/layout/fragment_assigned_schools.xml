@@ -35,7 +35,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_8dp"
                     android:layout_marginTop="@dimen/dimen_16dp"
-                    android:layout_marginEnd="@dimen/dimen_8dp"
                     android:text="@string/basic_details"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -237,12 +236,11 @@
 
                 <Button
                     android:id="@+id/btn_save"
+                    style="@style/buttonStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_8dp"
                     android:layout_marginTop="@dimen/dimen_8dp"
                     android:layout_marginEnd="@dimen/dimen_8dp"
-                    android:layout_marginBottom="@dimen/dimen_8dp"
                     android:backgroundTint="@color/regular_blue"
                     android:text="@string/next"
                     app:layout_constraintBottom_toBottomOf="parent"

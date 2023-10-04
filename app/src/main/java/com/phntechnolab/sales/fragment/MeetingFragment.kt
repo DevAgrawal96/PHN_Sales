@@ -3,17 +3,22 @@ package com.phntechnolab.sales.fragment
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.MenuProvider
 import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.adapter.ActivitiesAdapter
 import com.phntechnolab.sales.databinding.FragmentMeetingBinding
 
 
-class MeetingFragment : Fragment() {
+class MeetingFragment : Fragment(), MenuProvider {
     private var _binding: FragmentMeetingBinding? = null
     private val binding get() = _binding!!
 
@@ -41,9 +46,11 @@ class MeetingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setActionBar()
         setDataToAdapter()
         initializeListener()
     }
+
     private fun setOnBackPressed() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -82,6 +89,40 @@ class MeetingFragment : Fragment() {
                             .show()
                     }
                 }
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (requireActivity() as MainActivity).removeMenuProvider(this)
+        activity?.removeMenuProvider(this)
+    }
+
+    private fun setActionBar() {
+        (requireActivity() as MainActivity).setSupportActionBar(binding.homeTopBar)
+        activity?.addMenuProvider(this)
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.home_top_bar_menu, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return when (menuItem.itemId) {
+            R.id.menu_search -> {
+                Toast.makeText(requireContext(), "search", Toast.LENGTH_SHORT).show()
+                true
+            }
+
+            R.id.menu_notification -> {
+                findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
+                Toast.makeText(requireContext(), "notification", Toast.LENGTH_SHORT).show()
+                true
+            }
+
+            else -> {
+                false
             }
         }
     }
