@@ -12,24 +12,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.databinding.AdapterHomeInlineBinding
 import com.phntechnolab.sales.fragment.HomeFragmentDirections
 import com.phntechnolab.sales.model.SchoolData
 
-class SchoolDetailAdapter(var callBacks: CallBacks): RecyclerView.Adapter<SchoolDetailAdapter.SchoolViewHolder>() {
+class SchoolDetailAdapter(private var callBacks: CallBacks) :
+    RecyclerView.Adapter<SchoolDetailAdapter.SchoolViewHolder>() {
 
     private var data = ArrayList<SchoolData>()
 
-    class SchoolViewHolder(view: View): RecyclerView.ViewHolder(view){
-        val schoolName = view.findViewById<TextView>(R.id.school_name)
-        val txtEmail = view.findViewById<TextView>(R.id.txt_email)
-        val txtMono = view.findViewById<TextView>(R.id.txt_mono)
-        val editIcon = view.findViewById<ImageView>(R.id.edit_icon)
-        val cardView = view.findViewById<CardView>(R.id.cardView)
-    }
+    class SchoolViewHolder(val binding: AdapterHomeInlineBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SchoolViewHolder {
-        val binding =
-            LayoutInflater.from(parent.context).inflate(R.layout.adapter_home_inline, parent, false)
+        val binding = AdapterHomeInlineBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return SchoolViewHolder(binding)
     }
 
@@ -39,14 +35,14 @@ class SchoolDetailAdapter(var callBacks: CallBacks): RecyclerView.Adapter<School
 
     override fun onBindViewHolder(holder: SchoolViewHolder, position: Int) {
         val schoolDetail = data[position]
-        holder.schoolName.text = schoolDetail.schoolName
-        holder.txtEmail.text = schoolDetail.email
-        holder.txtMono.text = schoolDetail.coMobileNo
-        holder.cardView.setOnClickListener {
+        holder.binding.schoolName.text = schoolDetail.schoolName
+        holder.binding.txtEmail.text = schoolDetail.email
+        holder.binding.txtMono.text = schoolDetail.coMobileNo
+        holder.binding.cardView.setOnClickListener {
             callBacks.meetingNavigation(schoolDetail)
         }
-        holder.editIcon.setOnClickListener {
-            if(it != null)
+        holder.binding.editIcon.setOnClickListener {
+            if (it != null)
                 callBacks.openSchoolDetails(schoolDetail)
         }
     }
@@ -84,7 +80,7 @@ class SchoolDetailAdapter(var callBacks: CallBacks): RecyclerView.Adapter<School
 
     }
 
-    interface CallBacks{
+    interface CallBacks {
         fun openSchoolDetails(schoolData: SchoolData)
 
         fun meetingNavigation(schoolData: SchoolData)

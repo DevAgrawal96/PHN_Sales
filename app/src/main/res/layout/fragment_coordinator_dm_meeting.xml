@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/tools">
+    >
 
     <data>
 
@@ -12,7 +12,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/screen_bg">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -37,9 +38,9 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/dimen_0dp"
             android:fillViewport="true"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -49,75 +50,88 @@
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
             app:layout_constraintVertical_bias="0.5">
 
-
-            <com.shuhart.stepview.StepView
-                android:id="@+id/step_view"
-                android:layout_width="@dimen/dimen_0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_8dp"
-                android:layout_marginTop="@dimen/dimen_16dp"
-                android:layout_marginEnd="@dimen/dimen_8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:sv_animationType="Circle"
-                app:sv_doneCircleColor="@color/steps_done_color"
-                app:sv_doneCircleRadius="@dimen/dimen_12dp"
-                app:sv_doneStepLineColor="@color/steps_done_color"
-                app:sv_doneStepMarkColor="@color/steps_done_color"
-                app:sv_nextStepLineColor="@color/steps_done_color"
-                app:sv_nextTextColor="@color/steps_done_color"
-                app:sv_selectedCircleColor="@color/steps_done_color"
-                app:sv_selectedCircleRadius="@dimen/dimen_12dp"
-                app:sv_selectedStepNumberColor="@color/steps_done_color"
-                app:sv_selectedTextColor="@color/steps_done_color"
-                app:sv_stepLineWidth="@dimen/dimen_1dp"
-                app:sv_stepNumberTextSize="@dimen/txt_12sp"
-                app:sv_stepPadding="@dimen/dimen_4dp"
-                app:sv_stepViewStyle="@style/StepView"
-                app:sv_stepsNumber="2" />
-
-            <include
-                android:id="@+id/stepper"
-                layout="@layout/stepper_layout"
-                android:visibility="gone"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+                app:layout_constraintVertical_bias="0.5">
 
-            <include
-                android:id="@+id/coordinator_meeting"
-                layout="@layout/fragment_coordinator_meeting"
-                android:layout_width="@dimen/dimen_0dp"
-                android:layout_height="0dp"
-                android:layout_marginHorizontal="@dimen/dimen_12dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="@dimen/dimen_16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/step_view"
-                app:layout_constraintVertical_bias="0.77" />
 
-            <include
-                android:id="@+id/dm_meeting"
-                layout="@layout/fragment_dm_meeting"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/step_view" />
+                <com.shuhart.stepview.StepView
+                    android:id="@+id/step_view"
+                    android:layout_width="@dimen/dimen_0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_8dp"
+                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:layout_marginEnd="@dimen/dimen_8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:sv_animationType="Circle"
+                    app:sv_doneCircleColor="@color/steps_done_color"
+                    app:sv_doneCircleRadius="@dimen/dimen_12dp"
+                    app:sv_doneStepLineColor="@color/steps_done_color"
+                    app:sv_doneStepMarkColor="@color/steps_done_color"
+                    app:sv_nextStepLineColor="@color/steps_done_color"
+                    app:sv_nextTextColor="@color/steps_done_color"
+                    app:sv_selectedCircleColor="@color/steps_done_color"
+                    app:sv_selectedCircleRadius="@dimen/dimen_12dp"
+                    app:sv_selectedStepNumberColor="@color/steps_done_color"
+                    app:sv_selectedTextColor="@color/steps_done_color"
+                    app:sv_stepLineWidth="@dimen/dimen_1dp"
+                    app:sv_stepNumberTextSize="@dimen/txt_12sp"
+                    app:sv_stepPadding="@dimen/dimen_4dp"
+                    app:sv_stepViewStyle="@style/StepView"
+                    app:sv_stepsNumber="2" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <include
+                    android:id="@+id/stepper"
+                    layout="@layout/stepper_layout"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <include
+                    android:id="@+id/coordinator_meeting"
+                    layout="@layout/fragment_coordinator_meeting"
+                    android:layout_width="@dimen/dimen_0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginHorizontal="@dimen/dimen_12dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="@dimen/dimen_16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/step_view"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <include
+                    android:id="@+id/dm_meeting"
+                    layout="@layout/fragment_dm_meeting"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_marginTop="24dp"
+                    android:visibility="gone"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/step_view"
+                    app:layout_constraintVertical_bias="0.0" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

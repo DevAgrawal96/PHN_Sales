@@ -215,9 +215,12 @@ class AddSchoolFragment : Fragment() {
                         "phone" -> {
                             pattern = Pattern.compile("[0123456789]{10,15}")
                         }
+
                         "email" -> {
-                            pattern = Pattern.compile("[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+")
+                            pattern =
+                                Pattern.compile("[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+")
                         }
+
                         else -> {
 
                         }
@@ -237,14 +240,14 @@ class AddSchoolFragment : Fragment() {
 
         val dropdown: AutoCompleteTextView = binding.basicDetails.boardSpinner
         val items = ArrayList<String>()
-        if(_schoolData?.board != null && !_schoolData.board.isNullOrBlank()){
+        if (_schoolData?.board != null && !_schoolData.board.isNullOrBlank()) {
             items.add(_schoolData.board)
         }
 
         arrayOf("State Board", "CBSE", "ICSE", "NIOS", "IB", "CIE").forEach {
-            if(!items.any { itemName -> itemName.contains(it) }){
+            if (!items.any { itemName -> itemName.contains(it) }) {
                 items.add(it)
-            }else{
+            } else {
                 binding.basicDetails.boardSpinner.setText(it)
             }
         }
@@ -262,7 +265,7 @@ class AddSchoolFragment : Fragment() {
         val labsDropdown: AutoCompleteTextView = binding.schoolDetails.existingLabs
         val labsItem = ArrayList<String>()
 
-        if(_schoolData?.existingLab != null && !_schoolData.existingLab.isNullOrBlank()){
+        if (_schoolData?.existingLab != null && !_schoolData.existingLab.isNullOrBlank()) {
             labsItem.add(_schoolData.existingLab)
         }
 
@@ -277,9 +280,9 @@ class AddSchoolFragment : Fragment() {
             "Chemistry Lab",
             "Biology Lab"
         ).forEach {
-            if(!labsItem.any { itemName -> itemName.contains(it) }){
+            if (!labsItem.any { itemName -> itemName.contains(it) }) {
                 labsItem.add(it)
-            }else{
+            } else {
                 binding.schoolDetails.existingLabs.setText(it)
             }
         }
@@ -296,7 +299,7 @@ class AddSchoolFragment : Fragment() {
         val leadTypeDropdown: AutoCompleteTextView = binding.followupDetails.edtLeadType
         val leadTypes = ArrayList<String>()
 
-        if(_schoolData?.leadType != null && !_schoolData.leadType.isNullOrBlank()){
+        if (_schoolData?.leadType != null && !_schoolData.leadType.isNullOrBlank()) {
             leadTypes.add(_schoolData.leadType)
         }
 
@@ -306,9 +309,9 @@ class AddSchoolFragment : Fragment() {
             "Warm",
             "Dead",
         ).forEach {
-            if(!leadTypes.any { itemName -> itemName.contains(it) }){
+            if (!leadTypes.any { itemName -> itemName.contains(it) }) {
                 leadTypes.add(it)
-            }else{
+            } else {
                 binding.followupDetails.edtLeadType.setText(it)
             }
         }
@@ -322,7 +325,7 @@ class AddSchoolFragment : Fragment() {
     }
 
     private fun observers() {
-        viewModel.newSchoolData.observe(viewLifecycleOwner){ _schoolData ->
+        viewModel.newSchoolData.observe(viewLifecycleOwner) { _schoolData ->
             setSchoolDetails()
 
             setDropdowns(_schoolData)
@@ -367,6 +370,11 @@ class AddSchoolFragment : Fragment() {
     }
 
     private fun oncClickListener() {
+
+        binding.topBar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.basicDetails.btnSave.setOnClickListener {
             Timber.d("data binding data")
             Timber.d(Gson().toJson(viewModel.newSchoolData.value))
@@ -412,10 +420,10 @@ class AddSchoolFragment : Fragment() {
             var year = c.get(Calendar.YEAR)
             var month = c.get(Calendar.MONTH)
             var day = c.get(Calendar.DAY_OF_MONTH)
-            if(!viewModel.newSchoolData.value?.nextFollowup.isNullOrEmpty()){
-                viewModel.newSchoolData.value?.nextFollowup?.split(" ")?.let {_dateAndTime ->
+            if (!viewModel.newSchoolData.value?.nextFollowup.isNullOrEmpty()) {
+                viewModel.newSchoolData.value?.nextFollowup?.split(" ")?.let { _dateAndTime ->
                     binding.followupDetails.edtSchoolDate.setText(_dateAndTime[0])
-                    _dateAndTime[0].split("/").let {_dateArray ->
+                    _dateAndTime[0].split("/").let { _dateArray ->
                         day = _dateArray[0].toInt()
                         month = _dateArray[1].toInt()
                         year = _dateArray[2].toInt()
@@ -426,13 +434,15 @@ class AddSchoolFragment : Fragment() {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime = dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    val updatedDateAndTime =
+                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                     binding.followupDetails.edtSchoolDate.setText(updatedDateAndTime)
-                    viewModel.newSchoolData.value?.nextFollowup?.let{_nextFollowUpDate ->
-                        if(_nextFollowUpDate.contains(" ")){
+                    viewModel.newSchoolData.value?.nextFollowup?.let { _nextFollowUpDate ->
+                        if (_nextFollowUpDate.contains(" ")) {
                             val dateAndTime = _nextFollowUpDate.split(" ")
-                            viewModel.newSchoolData.value?.nextFollowup = "$updatedDateAndTime ${dateAndTime[1]}"
-                        }else{
+                            viewModel.newSchoolData.value?.nextFollowup =
+                                "$updatedDateAndTime ${dateAndTime[1]}"
+                        } else {
                             viewModel.newSchoolData.value?.nextFollowup = updatedDateAndTime
                         }
 
@@ -449,7 +459,7 @@ class AddSchoolFragment : Fragment() {
                 this.set(Calendar.DAY_OF_MONTH, day)
                 this.set(Calendar.MONTH, month)
                 this.set(Calendar.YEAR, year)
-            }.timeInMillis- 1000
+            }.timeInMillis - 1000
             datePickerDialog.show()
         }
 
@@ -458,9 +468,9 @@ class AddSchoolFragment : Fragment() {
 
             var hour = c.get(Calendar.HOUR_OF_DAY)
             var minute = c.get(Calendar.MINUTE)
-            if(!viewModel.newSchoolData.value?.nextFollowup.isNullOrEmpty()){
-                viewModel.newSchoolData.value?.nextFollowup?.split(" ")?.let {_dateAndTime ->
-                    if(_dateAndTime.size >1) {
+            if (!viewModel.newSchoolData.value?.nextFollowup.isNullOrEmpty()) {
+                viewModel.newSchoolData.value?.nextFollowup?.split(" ")?.let { _dateAndTime ->
+                    if (_dateAndTime.size > 1) {
                         binding.followupDetails.edtSchoolTime.setText(_dateAndTime[1])
                         _dateAndTime[1].split(":").let { _timeArray ->
                             hour = _timeArray[0].toInt()
@@ -473,14 +483,16 @@ class AddSchoolFragment : Fragment() {
             val timePickerDialog = TimePickerDialog(
                 requireContext(),
                 { view, hourOfDay, minute ->
-                    val updatedTime =  "$hourOfDay:$minute"
+                    val updatedTime = "$hourOfDay:$minute"
                     binding.followupDetails.edtSchoolTime.setText(updatedTime)
-                    viewModel.newSchoolData.value?.nextFollowup?.let{_nextFollowUpDate ->
-                        if(_nextFollowUpDate.contains(" ")){
+                    viewModel.newSchoolData.value?.nextFollowup?.let { _nextFollowUpDate ->
+                        if (_nextFollowUpDate.contains(" ")) {
                             val dateAndTime = _nextFollowUpDate.split(" ")
-                            viewModel.newSchoolData.value?.nextFollowup = "${dateAndTime[0]} $updatedTime"
-                        }else{
-                            viewModel.newSchoolData.value?.nextFollowup = "$_nextFollowUpDate $updatedTime"
+                            viewModel.newSchoolData.value?.nextFollowup =
+                                "${dateAndTime[0]} $updatedTime"
+                        } else {
+                            viewModel.newSchoolData.value?.nextFollowup =
+                                "$_nextFollowUpDate $updatedTime"
                         }
 
                         Timber.e("Time")
@@ -512,7 +524,7 @@ class AddSchoolFragment : Fragment() {
                         Snackbar.LENGTH_LONG
                     ).show()
                 }
-            } else if( stepCount == 2) {
+            } else if (stepCount == 2) {
                 setPositionView()
             } else {
                 viewModel.addNewSchool()
@@ -529,7 +541,7 @@ class AddSchoolFragment : Fragment() {
                         Snackbar.LENGTH_LONG
                     ).show()
                 }
-            } else if( stepCount == 2) {
+            } else if (stepCount == 2) {
                 setPositionView()
             } else {
                 viewModel.updateSchoolDetails()
@@ -563,7 +575,8 @@ class AddSchoolFragment : Fragment() {
             binding.basicDetails.tilBoard.error = null
 
         val isSchoolIntakeEmpty = binding.basicDetails.edtSchoolTotalIntake.text.toString()
-            .isNullOrEmpty() || binding.basicDetails.edtSchoolTotalIntake.text.toString().trim() == "0"
+            .isNullOrEmpty() || binding.basicDetails.edtSchoolTotalIntake.text.toString()
+            .trim() == "0"
         if (isSchoolIntakeEmpty)
             binding.basicDetails.tilSchoolTotalIntake.error =
                 resources.getString(R.string.please_enter_total_school_intake)
@@ -588,7 +601,8 @@ class AddSchoolFragment : Fragment() {
             binding.basicDetails.tilCoordinatorMono.error = null
 
         val isEmailValid =
-            Pattern.compile("[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+").matcher(binding.basicDetails.edtEmailId.text.toString())
+            Pattern.compile("[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+")
+                .matcher(binding.basicDetails.edtEmailId.text.toString())
                 .matches()
         if (!isEmailValid)
             binding.basicDetails.tilEmailId.error =
@@ -643,8 +657,9 @@ class AddSchoolFragment : Fragment() {
         viewModel.newSchoolData.value?.nextFollowup.let {
             val dateAndTime = it?.split(" ")
             binding.followupDetails.edtSchoolDate.setText(
-                dateAndTime?.get(0))
-            if((dateAndTime?.size ?: 0) > 1)
+                dateAndTime?.get(0)
+            )
+            if ((dateAndTime?.size ?: 0) > 1)
                 binding.followupDetails.edtSchoolTime.setText(dateAndTime?.get(1) ?: "")
         }
     }
