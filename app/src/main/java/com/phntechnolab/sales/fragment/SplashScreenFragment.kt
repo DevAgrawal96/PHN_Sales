@@ -49,7 +49,6 @@ class SplashScreenFragment : Fragment() {
         viewModel.refereshToken.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
-                    Toast.makeText(requireContext(),"Token result success",Toast.LENGTH_SHORT).show()
                     Handler(Looper.getMainLooper()).postDelayed({
                         findNavController().navigate(R.id.action_splashScreenFragment_to_homeFragment)
                     }, 3000)

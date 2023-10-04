@@ -6,6 +6,7 @@ import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.DMData
 import com.phntechnolab.sales.model.LoginDetails
 import com.phntechnolab.sales.model.SchoolData
+import com.phntechnolab.sales.model.UserDataModel
 import com.phntechnolab.sales.model.UserResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -26,6 +27,9 @@ interface RetrofitApi {
 
     @GET("api/token_validate")
     suspend fun tokenCheck(): Response<CustomResponse>
+
+    @GET("api/user-profile")
+    suspend fun getUserProfileData(): Response<UserDataModel>
 
     @POST("api/addschool")
     suspend fun addSchool(@Body schoolDetails: AddSchoolSchema): Response<CustomResponse>

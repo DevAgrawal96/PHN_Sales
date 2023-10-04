@@ -103,11 +103,19 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+
+
     <style name="ToggleButtonStyle" parent="@style/Widget.Material3.Button.OutlinedButton">
         <item name="cornerRadius">@dimen/dimen_8dp</item>
         <item name="backgroundTint">@color/toggle_button_bg_color_state</item>
         <item name="android:textColor">@color/text_color_chip_state_list</item>
         <item name="android:textSize">@dimen/txt_12sp</item>
+    </style>
+
+    <style name="buttonStyle" parent="">
+        <item name="cornerRadius">@dimen/dimen_8dp</item>
+        <item name="android:textSize">@dimen/txt_16sp</item>
+        <item name="android:layout_height">64dp</item>
     </style>
 
     <style name="BottomNavigationIconStyle" parent="Widget.MaterialComponents.BottomNavigationView">

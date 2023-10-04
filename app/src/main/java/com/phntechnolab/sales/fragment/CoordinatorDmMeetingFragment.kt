@@ -261,6 +261,7 @@ class CoordinatorDmMeetingFragment: Fragment() {
 
         when (position) {
             0 -> {
+                Timber.e("0")
                 binding.coordinatorMeeting.root.visibility = View.GONE
                 binding.dmMeeting.root.visibility = View.VISIBLE
                 position = 1
@@ -269,6 +270,7 @@ class CoordinatorDmMeetingFragment: Fragment() {
             }
 
             1 -> {
+                Timber.e("1")
                 binding.coordinatorMeeting.root.visibility = View.GONE
                 binding.dmMeeting.root.visibility = View.VISIBLE
                 position = 2
@@ -277,6 +279,7 @@ class CoordinatorDmMeetingFragment: Fragment() {
             }
 
             else -> {
+                Timber.e("else")
                 position = 0
                 binding.stepView.done(true)
                 binding.stepView.go(0, true)
