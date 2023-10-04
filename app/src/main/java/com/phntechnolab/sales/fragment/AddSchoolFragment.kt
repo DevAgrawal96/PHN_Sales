@@ -117,8 +117,6 @@ class AddSchoolFragment : Fragment() {
         oncClickListener()
 
         observers()
-
-        addValidationWatchers()
     }
 
     private fun addValidationWatchers() {
@@ -372,6 +370,7 @@ class AddSchoolFragment : Fragment() {
         binding.basicDetails.btnSave.setOnClickListener {
             Timber.d("data binding data")
             Timber.d(Gson().toJson(viewModel.newSchoolData.value))
+            addValidationWatchers()
             checkValidationsAndApiCall(1)
         }
 
