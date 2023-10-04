@@ -5,6 +5,8 @@ import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.DMData
 import com.phntechnolab.sales.model.LoginDetails
+import com.phntechnolab.sales.model.MOADocumentData
+import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.model.UserResponse
 import retrofit2.Response
@@ -38,5 +40,11 @@ interface RetrofitApi {
 
     @POST("api/directormeet")
     suspend fun updateDMMeet(@Body dmMeetDetails: DMData):  Response<CustomResponse>
+
+    @POST("api/propsecosting")
+    suspend fun proposeCostingApi(@Body proposeCostingData: ProposeCostingData):  Response<CustomResponse>
+
+    @POST("api/moadocument")
+    suspend fun moaDocumentApi(@Body moaDocumentData: MOADocumentData):  Response<CustomResponse>
 
 }

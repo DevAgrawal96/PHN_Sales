@@ -5,12 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.phntechnolab.sales.R
-import com.phntechnolab.sales.databinding.FragmentDocumentBinding
 import com.phntechnolab.sales.databinding.FragmentInstalmentBinding
 
 
-class InstalmentFragment : Fragment() {
+class InstallmentFragment : Fragment() {
     private var _binding: FragmentInstalmentBinding? = null
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {

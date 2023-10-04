@@ -1,8 +1,6 @@
 package com.phntechnolab.sales.fragment
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -26,12 +24,13 @@ import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentHomeBinding
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.DMData
+import com.phntechnolab.sales.model.MOADocumentData
+import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -186,18 +185,21 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     }
 
     override fun openSchoolDetails(schoolData: SchoolData) {
-
-        requireView()?.findNavController()
+        requireView().findNavController()
             ?.navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(schoolData))
     }
 
     override fun meetingNavigation(schoolData: SchoolData) {
-//        requireView().findNavController().navigate(R.id.action_homeFragment_to_meetingFragment)
         if(schoolData.status == "Visited"){
+
             requireView().findNavController()
                 .navigate(HomeFragmentDirections.actionHomeFragmentToMeetingFragment(schoolData.coordinator?: CoordinatorData(schoolId = schoolData.schoolId), schoolData.director?: DMData(schoolId = schoolData.schoolId)))
         }else if(schoolData.status == "Propose Costing"){
-            requireView().findNavController().navigate(R.id.action_homeFragment_to_costingMoaDocumentFragment)
+
+            requireView().findNavController()
+                .navigate(HomeFragmentDirections.actionHomeFragmentToCostingMoaDocumentFragment(schoolData.proposeCostingData?: ProposeCostingData(schoolId = schoolData.schoolId), schoolData.moaDocumentData?: MOADocumentData(schoolId = schoolData.schoolId)))
+        }else if(schoolData.status == "MOASigned"){
+            requireView().findNavController().navigate(R.id.action_homeFragment_to_moaSignedFragment)
         }
     }
 }

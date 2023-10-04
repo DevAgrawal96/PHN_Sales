@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.phntechnolab.sales.viewmodel.CoordinatorDmMeetingViewModel" />
+            type="com.phntechnolab.sales.viewmodel.CostingMoaDocumentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -85,6 +85,7 @@
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="@dimen/dimen_12dp"
                 android:layout_marginBottom="@dimen/dimen_16dp"
+                bind:viewModel="@={viewModel}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -98,6 +99,7 @@
                 android:layout_marginHorizontal="12dp"
                 android:layout_marginBottom="16dp"
                 android:visibility="gone"
+                bind:viewModel="@={viewModel}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

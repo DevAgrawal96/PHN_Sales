@@ -136,6 +136,7 @@
     <string name="price_discussed_inclusive_gst">Price discussed inclusive GST?</string>
     <string name="quotation_shared">Quotation shared?</string>
     <string name="payment_scheduled_locked">Payment scheduled locked?</string>
+    <string name="other">\Other</string>
 
 
     <string-array name="agreement_duration">

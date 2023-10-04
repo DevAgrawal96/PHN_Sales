@@ -129,6 +129,16 @@ class SchoolData : Parcelable{
         set(value){
             field = value
         }
+
+    @SerializedName("proposecosting") var proposeCostingData : ProposeCostingData = ProposeCostingData()
+        set(value){
+            field = value
+        }
+
+    @SerializedName("moadocument") var moaDocumentData : MOADocumentData = MOADocumentData()
+        set(value){
+            field = value
+        }
 }
 
 @Parcelize
@@ -183,6 +193,7 @@ data class MOADocumentData(
     @SerializedName("designation") var designation : String? = "",
     @SerializedName("moa_file") var moaFile : String? = "",
     @SerializedName("remark") var remark : String? = "",
+    @SerializedName("status") var status : String? = ""
 ): Parcelable
 
 //data class SchoolData (

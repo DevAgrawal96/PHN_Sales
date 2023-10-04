@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
-        <argument
-            android:name="suraj"
-            app:argType="string" />
     </fragment>
 
     <fragment
@@ -46,6 +43,11 @@
         <action
             android:id="@+id/action_homeFragment_to_costingMoaDocumentFragment"
             app:destination="@id/costingMoaDocumentFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"/>
+        <action
+            android:id="@+id/action_homeFragment_to_moaSignedFragment"
+            app:destination="@id/installmentFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"/>
     </fragment>
@@ -120,6 +122,11 @@
         android:label="fragment_change_password"
         tools:layout="@layout/fragment_change_password" />
     <fragment
+        android:id="@+id/installmentFragment"
+        android:name="com.phntechnolab.sales.fragment.InstallmentFragment"
+        android:label="Installment"
+        tools:layout="@layout/fragment_instalment" />
+    <fragment
         android:id="@+id/coordinatorDmMeeting"
         android:name="com.phntechnolab.sales.fragment.CoordinatorDmMeetingFragment"
         android:label="Coordinator Meeting"
@@ -138,5 +145,17 @@
     <fragment
         android:id="@+id/costingMoaDocumentFragment"
         android:name="com.phntechnolab.sales.fragment.CostingMOADocumentFragment"
-        android:label="Propose Costing Stage" />
+        android:label="Propose Costing Stage" >
+
+        <argument
+            android:name="proposeCostingDetails"
+            app:argType="com.phntechnolab.sales.model.ProposeCostingData"
+            app:nullable="true"/>
+
+        <argument
+            android:name="moaDocumentDetails"
+            app:argType="com.phntechnolab.sales.model.MOADocumentData"
+            app:nullable="true"/>
+
+    </fragment>
 </navigation>
