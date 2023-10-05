@@ -418,7 +418,7 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/update_btn"
                     android:layout_width="@dimen/dimen_0dp"
-                    android:layout_height="wrap_content"
+                    style="@style/buttonStyle"
                     android:layout_marginStart="@dimen/dimen_16dp"
                     android:layout_marginTop="@dimen/dimen_16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"

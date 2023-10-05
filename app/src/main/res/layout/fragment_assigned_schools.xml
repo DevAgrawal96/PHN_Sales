@@ -239,14 +239,16 @@
                     style="@style/buttonStyle"
                     android:layout_width="match_parent"
                     android:layout_marginStart="@dimen/dimen_8dp"
-                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="@dimen/dimen_8dp"
+                    android:layout_marginBottom="16dp"
                     android:backgroundTint="@color/regular_blue"
                     android:text="@string/next"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/til_coordinator_mono" />
+                    app:layout_constraintTop_toBottomOf="@+id/til_coordinator_mono"
+                    app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

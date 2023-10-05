@@ -89,8 +89,8 @@
     <string name="please_enter_valid_email_address">Please enter valid email address!</string>
     <string name="please_enter_valid_phone_no">Please enter valid phone number!</string>
     <string name="some_fields_are_empty_or_not_valid">Some fields are empty or not valid!</string>
-    <string name="please_enter_valid_school_name">Please enter valid school name!\n</string>
-    <string name="please_enter_valid_school_address">Please enter valid school address!\n</string>
+    <string name="please_enter_valid_school_name">Please enter valid school name!</string>
+    <string name="please_enter_valid_school_address">Please enter valid school address!</string>
     <string name="please_enter_valid_coordinator_name">Please enter valid coordinator name!</string>
     <string name="please_enter_total_school_intake">Please enter total shcool intake!</string>
     <string name="please_select_board">Please select board!</string>
@@ -126,6 +126,7 @@
     <string name="the_school_has_been_added_to_your_visited_school_list">The school has been added to your visited school list</string>
     <string name="meeting_date_time"><![CDATA[Next meeting date & time]]></string>
     <string name="teacher_principal_meeting">Teacher/Principal Meeting</string>
+    <string name="dm_level_meeting">DM Level Meeting</string>
     <string name="teacher_principal_attended_the_meet">Teacher/Principal attended the meet?</string>
     <string name="product_demo_happned">Product demo happned?</string>
     <string name="do_you_want_to_reschedule_meeting_with_teacher_principal">Do you want to reschedule meeting with Teacher/Principal ?</string>
@@ -145,6 +146,10 @@
     <string name="_4th_installment">4th Installment</string>
     <string name="upload_receipt">Upload Receipt</string>
     <string name="number_of_installment">Number of Installment</string>
+
+    <string name="well_done">Well Done!</string>
+
+    <string name="dm_meeting_dialog_details">You have successfully done two steps and the school has been added to your MOA Negotiation list</string>
 
 
     <string-array name="agreement_duration">
