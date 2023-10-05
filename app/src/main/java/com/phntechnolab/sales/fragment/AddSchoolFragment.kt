@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -219,7 +220,7 @@ class AddSchoolFragment : Fragment() {
 
                     when (type) {
                         "phone" -> {
-                            pattern = Pattern.compile("[0123456789]{10,15}")
+                            pattern = Pattern.compile("[0123456789]{10}")
                         }
 
                         "email" -> {
@@ -341,6 +342,7 @@ class AddSchoolFragment : Fragment() {
         viewModel.addSchoolResponse.observe(viewLifecycleOwner) {
             Timber.e("Response dd")
             Timber.e(Gson().toJson(it))
+            binding.progressBar.visibility = View.GONE
             when (it) {
                 is NetworkResult.Success -> {
                     showDialog()
@@ -348,10 +350,11 @@ class AddSchoolFragment : Fragment() {
 
                 is NetworkResult.Error -> {
                     Timber.e(it.toString())
+                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
 
                 else -> {
-
+                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -360,6 +363,7 @@ class AddSchoolFragment : Fragment() {
         viewModel.updateSchoolResponse.observe(viewLifecycleOwner) {
             Timber.e("Response dd")
             Timber.e(Gson().toJson(it))
+            binding.progressBar.visibility = View.GONE
             when (it) {
                 is NetworkResult.Success -> {
                     findNavController().popBackStack()
@@ -367,10 +371,11 @@ class AddSchoolFragment : Fragment() {
 
                 is NetworkResult.Error -> {
                     Timber.e(it.toString())
+                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
 
                 else -> {
-
+                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -548,6 +553,7 @@ class AddSchoolFragment : Fragment() {
             } else if (stepCount == 2) {
                 setPositionView()
             } else {
+                binding.progressBar.visibility = View.VISIBLE
                 viewModel.addNewSchool()
             }
         } else {
@@ -565,7 +571,17 @@ class AddSchoolFragment : Fragment() {
             } else if (stepCount == 2) {
                 setPositionView()
             } else {
-                viewModel.updateSchoolDetails()
+
+                val isLeadTypeEmpty =
+                    binding.followupDetails.edtLeadType.text.toString().isNullOrEmpty()
+                if (isLeadTypeEmpty)
+                    binding.followupDetails.tilLeadType.error =
+                        resources.getString(R.string.please_select_the_lead_type)
+                else{
+                    binding.followupDetails.tilLeadType.error = null
+                    binding.progressBar.visibility = View.VISIBLE
+                    viewModel.updateSchoolDetails()
+                }
             }
         }
     }
@@ -624,7 +640,7 @@ class AddSchoolFragment : Fragment() {
         else
             binding.basicDetails.tilCoordinatorName.error = null
 
-        val mPhonePattern = Pattern.compile("[0123456789]{10,15}")
+        val mPhonePattern = Pattern.compile("[0123456789]{10}")
         val isCoordinatorPhoneValid =
             mPhonePattern.matcher(binding.basicDetails.edtCoordinatorMono.text.toString()).matches()
         if (!isCoordinatorPhoneValid)

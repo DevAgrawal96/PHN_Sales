@@ -119,6 +119,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     private fun observers() {
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
+            binding.progressBar.visibility = View.GONE
             adapter?.setData(it.data as ArrayList<SchoolData>)
         }
     }
@@ -129,6 +130,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     }
 
     private fun getData() {
+        binding.progressBar.visibility = View.VISIBLE
         lifecycleScope.launch(Dispatchers.IO) {
             viewModel.getAllSchools()
         }

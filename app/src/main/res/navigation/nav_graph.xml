@@ -62,7 +62,6 @@
             android:name="schoolData"
             app:argType="com.phntechnolab.sales.model.SchoolData"
             app:nullable="true"/>
-
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -147,6 +146,13 @@
             android:name="dmMeetingDetails"
             app:argType="com.phntechnolab.sales.model.DMData"
             app:nullable="true"/>
+
+
+        <action
+            android:id="@+id/action_coordinatordmmeeting_to_costingMoaDocumentFragment"
+            app:destination="@id/costingMoaDocumentFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"/>
     </fragment>
     <fragment
         android:id="@+id/costingMoaDocumentFragment"

@@ -3,6 +3,7 @@
     <string name="enter_valid_email">Please enter valid email!</string>
     <string name="no_internet_connection">No internet connection!</string>
     <string name="something_went_wrong">Something went wrong!</string>
+    <string name="something_went_wrong_please">Something went wrong! Please try again later.</string>
     <string name="empty_">%s can\'t be empty</string>
     <string name="name_length">Please enter full name</string>
     <string name="mobile_number_length">Mobile number should be of 10 digits</string>
@@ -87,6 +88,7 @@
 
     <string name="my_account">My Account</string>
     <string name="please_enter_valid_email_address">Please enter valid email address!</string>
+    <string name="please_select_the_lead_type">Please select the lead type!</string>
     <string name="please_enter_number_of_classrooms">Please enter number of classrooms!</string>
     <string name="please_enter_valid_phone_no">Please enter valid phone number!</string>
     <string name="some_fields_are_empty_or_not_valid">Some fields are empty or not valid!</string>
@@ -140,7 +142,7 @@
     <string name="price_discussed_inclusive_gst">Price discussed inclusive GST?</string>
     <string name="quotation_shared">Quotation shared?</string>
     <string name="payment_scheduled_locked">Payment scheduled locked?</string>
-    <string name="principal_meeting_details_updated_successfully">Principal meeting details updated successfully.</string>
+    <string name="coordinator_meeting_details_updated_successfully">Coordinator meeting details updated successfully.</string>
     <string name="other">\Other</string>
     <string name="_1st_installment_details">1st Installment Details</string>
     <string name="date_and_time">Date and Time</string>

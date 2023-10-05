@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.gson.Gson
@@ -22,6 +23,8 @@ import com.phntechnolab.sales.databinding.FragmentCoordinatorDmMeetingBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.DMData
+import com.phntechnolab.sales.model.MOADocumentData
+import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.viewmodel.CoordinatorDmMeetingViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -244,10 +247,11 @@ class CoordinatorDmMeetingFragment : Fragment() {
 
                 is NetworkResult.Error -> {
                     Timber.e(it.toString())
+                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
 
                 else -> {
-
+                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -262,10 +266,11 @@ class CoordinatorDmMeetingFragment : Fragment() {
 
                 is NetworkResult.Error -> {
                     Timber.e(it.toString())
+                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
 
                 else -> {
-
+                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -291,7 +296,14 @@ class CoordinatorDmMeetingFragment : Fragment() {
         dialog.show()
         Handler(Looper.getMainLooper()).postDelayed({
             dialog.dismiss()
-            findNavController().popBackStack()
+
+            requireView().findNavController()
+                .navigate(
+                    CoordinatorDmMeetingFragmentDirections.actionCoordinatordmmeetingToCostingMoaDocumentFragment (
+                        ProposeCostingData(schoolId = viewModel._coordinatorMeetData.value?.schoolId),
+                        MOADocumentData(schoolId = viewModel._coordinatorMeetData.value?.schoolId)
+                    )
+                )
         }, 3000)
 
     }
