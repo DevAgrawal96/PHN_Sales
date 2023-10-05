@@ -10,6 +10,11 @@ import com.phntechnolab.sales.model.DMData
 import com.phntechnolab.sales.repository.CoordinatoreDmMeetingRepository
 import com.phntechnolab.sales.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelFutureOnCompletion
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,18 +35,27 @@ class CoordinatorDmMeetingViewModel @Inject constructor(private val repositories
     val updateDMLevelMeetDetails: LiveData<NetworkResult<CustomResponse>>
         get() = repositories.updateDMLevelMeetDetails
 
+
+    val job = Job()
+    val defaultScope = CoroutineScope(Dispatchers.Default + job)
+
     fun updateCoordinatorDetails(){
 
-        viewModelScope.launch {
+        defaultScope.launch {
             repositories.updateCoordinatorData(_coordinatorMeetData.value?: CoordinatorData())
         }
     }
 
     fun updatedMDetails(){
 
-        viewModelScope.launch {
+        defaultScope.launch {
             repositories.updateDMData(_dmMeetData.value?: DMData())
         }
     }
 
+    override fun onCleared() {
+        defaultScope.cancel()
+        job.cancel()
+        super.onCleared()
+    }
 }

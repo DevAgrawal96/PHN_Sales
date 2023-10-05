@@ -53,6 +53,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     override fun onResume() {
         super.onResume()
 
+        binding.all.isChecked = true
         getData()
 
     }

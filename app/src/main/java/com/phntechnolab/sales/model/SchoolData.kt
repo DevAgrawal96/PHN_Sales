@@ -164,6 +164,7 @@ data class DMData(
     @SerializedName("next_followup_dm") var nextFollowupDm : String? = "",
     @SerializedName("interested") var interested : String? = "",
     @SerializedName("next_meet_date_dm") var nextMeetDateDm : String? = "",
+    @SerializedName("meeting_status") var meetingStatus : String? = "",
 ):Parcelable
 
 @Parcelize

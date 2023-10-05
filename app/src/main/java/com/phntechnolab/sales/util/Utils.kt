@@ -3,6 +3,8 @@ package com.phntechnolab.sales.util
 import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
@@ -149,4 +151,14 @@ fun Fragment.disableScreen(){
     activity!!.window.setFlags(
         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+}
+
+fun View.disable() {
+    background.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY)
+    isClickable = false
+}
+
+fun View.enabled() {
+    background.colorFilter = null
+    isClickable = true
 }
