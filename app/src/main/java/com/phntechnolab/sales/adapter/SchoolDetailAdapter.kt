@@ -38,6 +38,13 @@ class SchoolDetailAdapter(private var callBacks: CallBacks) :
         holder.binding.schoolName.text = schoolDetail.schoolName
         holder.binding.txtEmail.text = schoolDetail.email
         holder.binding.txtMono.text = schoolDetail.coMobileNo
+        holder.binding.chipStatus.text = schoolDetail.status
+        if(schoolDetail.leadType?.isNotBlank() == true && schoolDetail.leadType?.isNotEmpty() == true) {
+            holder.binding.chipLeadStatus.text = schoolDetail.leadType
+            holder.binding.chipLeadStatus.visibility = View.VISIBLE
+        }else{
+            holder.binding.chipLeadStatus.visibility = View.GONE
+        }
         holder.binding.cardView.setOnClickListener {
             callBacks.meetingNavigation(schoolDetail)
         }

@@ -179,11 +179,11 @@ class ProfileFragment : Fragment(), MenuProvider {
                 }
 
                 is NetworkResult.Error -> {
-
+                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
 
                 else -> {
-
+                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
             }
         }

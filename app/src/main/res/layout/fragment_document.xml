@@ -48,7 +48,7 @@
                         android:id="@+id/edt_total_interested_intake"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
+                        android:inputType="number"
                         android:text="@={viewModel._moaDocumentData.interestedIntake}"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -71,7 +71,7 @@
                         android:id="@+id/edt_enter_final_costing_per_student"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
+                        android:inputType="number"
                         android:text="@={viewModel._moaDocumentData.finalCosting}"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
