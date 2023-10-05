@@ -1,8 +1,11 @@
 package com.phntechnolab.sales.fragment
 
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +25,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentAssignedSchoolsStepperBinding
+import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.TextValidator
@@ -95,8 +99,10 @@ class AddSchoolFragment : Fragment() {
         viewModel.setOldSchoolData(args.schoolData)
 
         if (args.schoolData == null) {
+            binding.topBar.title = "Add School"
             viewModel.setNewSchoolData(SchoolData())
         } else {
+            binding.topBar.title = args.schoolData?.schoolName
             viewModel.setNewSchoolData(args.schoolData)
         }
 
@@ -337,7 +343,7 @@ class AddSchoolFragment : Fragment() {
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
-                    findNavController().popBackStack()
+                    showDialog()
                 }
 
                 is NetworkResult.Error -> {
@@ -349,6 +355,7 @@ class AddSchoolFragment : Fragment() {
                 }
             }
         }
+
 
         viewModel.updateSchoolResponse.observe(viewLifecycleOwner) {
             Timber.e("Response dd")
@@ -367,6 +374,20 @@ class AddSchoolFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.setCancelable(false)
+        val dialogBinding = VisitedSuccessDialogBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
+        Handler(Looper.getMainLooper()).postDelayed({
+            dialog.dismiss()
+            findNavController().popBackStack()
+        }, 3000)
+
     }
 
     private fun oncClickListener() {

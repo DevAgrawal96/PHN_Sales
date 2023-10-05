@@ -27,6 +27,9 @@ interface RetrofitApi {
     @POST("api/refresh")
     suspend fun refereshToken():  Response<CustomResponse>
 
+    @POST("api/logout")
+    suspend fun logout():  Response<CustomResponse>
+
     @GET("api/token_validate")
     suspend fun tokenCheck(): Response<CustomResponse>
 

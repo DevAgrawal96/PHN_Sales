@@ -1,8 +1,11 @@
 package com.phntechnolab.sales.fragment
 
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +19,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentCoordinatorDmMeetingBinding
+import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.DMData
 import com.phntechnolab.sales.util.NetworkResult
@@ -25,7 +29,7 @@ import timber.log.Timber
 import java.util.Calendar
 
 @AndroidEntryPoint
-class CoordinatorDmMeetingFragment: Fragment() {
+class CoordinatorDmMeetingFragment : Fragment() {
 
     private var _binding: FragmentCoordinatorDmMeetingBinding? = null
     private val binding get() = _binding!!
@@ -108,22 +112,24 @@ class CoordinatorDmMeetingFragment: Fragment() {
         //coordinator check box listener
         binding.coordinatorMeeting.attendedMeetGroup.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
-            viewModel._coordinatorMeetData.value?.coAttendMeet = if(checkedRadioButtonText == "Yes") "yes" else  "no"
+            viewModel._coordinatorMeetData.value?.coAttendMeet =
+                if (checkedRadioButtonText == "Yes") "yes" else "no"
         }
 
         binding.coordinatorMeeting.demoHappenedGroup.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
-            viewModel._coordinatorMeetData.value?.productDemoHappen = if(checkedRadioButtonText == "Yes") "yes" else  "no"
+            viewModel._coordinatorMeetData.value?.productDemoHappen =
+                if (checkedRadioButtonText == "Yes") "yes" else "no"
         }
 
         binding.coordinatorMeeting.rescheduleMeetingGroup.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
-            if(checkedRadioButtonText == "Yes"){
+            if (checkedRadioButtonText == "Yes") {
                 viewModel._coordinatorMeetData.value?.rescheduleWithCoordinator = "yes"
                 binding.coordinatorMeeting.meetingDateAndTimeHeading.visibility = View.VISIBLE
                 binding.coordinatorMeeting.tilRescheduleMeetingDate.visibility = View.VISIBLE
                 binding.coordinatorMeeting.tilRescheduleMeetingTime.visibility = View.VISIBLE
-            }else{
+            } else {
                 viewModel._coordinatorMeetData.value?.rescheduleWithCoordinator = "no"
                 binding.coordinatorMeeting.meetingDateAndTimeHeading.visibility = View.GONE
                 binding.coordinatorMeeting.tilRescheduleMeetingDate.visibility = View.GONE
@@ -133,90 +139,106 @@ class CoordinatorDmMeetingFragment: Fragment() {
 
         binding.coordinatorMeeting.labSetupGroup.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
-            viewModel._coordinatorMeetData.value?.interested = if(checkedRadioButtonText == "Yes") "yes" else  "no"
+            viewModel._coordinatorMeetData.value?.interested =
+                if (checkedRadioButtonText == "Yes") "yes" else "no"
         }
 
         //director check box listener
         binding.dmMeeting.attendedMeetGroup.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
-            viewModel._dmMeetData.value?.coAttendMeet = if(checkedRadioButtonText == "Yes") "yes" else  "no"
+            viewModel._dmMeetData.value?.coAttendMeet =
+                if (checkedRadioButtonText == "Yes") "yes" else "no"
         }
 
         binding.dmMeeting.demoHappenedGroup.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
-            viewModel._dmMeetData.value?.productDemoHappen = if(checkedRadioButtonText == "Yes") "yes" else  "no"
+            viewModel._dmMeetData.value?.productDemoHappen =
+                if (checkedRadioButtonText == "Yes") "yes" else "no"
         }
 
         binding.dmMeeting.nextMeetingGroup.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
-            viewModel._dmMeetData.value?.nextFollowupDm = if(checkedRadioButtonText == "Yes") "yes" else  "no"
+            viewModel._dmMeetData.value?.nextFollowupDm =
+                if (checkedRadioButtonText == "Yes") "yes" else "no"
         }
 
         binding.dmMeeting.labSetupGroup.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
-            viewModel._dmMeetData.value?.interested = if(checkedRadioButtonText == "Yes") "yes" else  "no"
+            viewModel._dmMeetData.value?.interested =
+                if (checkedRadioButtonText == "Yes") "yes" else "no"
         }
     }
 
     private fun initializeCoordinatorData(_coordinatorData: CoordinatorData?) {
-        if(_coordinatorData?.coAttendMeet == "yes") binding.coordinatorMeeting.attendedMeetGroup.check(R.id.attendedMeetYes)
+        if (_coordinatorData?.coAttendMeet == "yes") binding.coordinatorMeeting.attendedMeetGroup.check(
+            R.id.attendedMeetYes
+        )
         else binding.coordinatorMeeting.attendedMeetGroup.check(R.id.attendedMeetNo)
 
-        if(_coordinatorData?.productDemoHappen == "yes") binding.coordinatorMeeting.demoHappenedGroup.check(R.id.demoHappenedYes)
+        if (_coordinatorData?.productDemoHappen == "yes") binding.coordinatorMeeting.demoHappenedGroup.check(
+            R.id.demoHappenedYes
+        )
         else binding.coordinatorMeeting.demoHappenedGroup.check(R.id.demoHappenedNo)
 
-        if(_coordinatorData?.rescheduleWithCoordinator == "yes") binding.coordinatorMeeting.rescheduleMeetingGroup.check(R.id.rescheduleMeetingYes)
+        if (_coordinatorData?.rescheduleWithCoordinator == "yes") binding.coordinatorMeeting.rescheduleMeetingGroup.check(
+            R.id.rescheduleMeetingYes
+        )
         else binding.coordinatorMeeting.rescheduleMeetingGroup.check(R.id.rescheduleMeetingNo)
 
-        if(_coordinatorData?.interested == "yes") binding.coordinatorMeeting.labSetupGroup.check(R.id.labSetupYes)
+        if (_coordinatorData?.interested == "yes") binding.coordinatorMeeting.labSetupGroup.check(R.id.labSetupYes)
         else binding.coordinatorMeeting.labSetupGroup.check(R.id.labSetupNo)
 
         viewModel._coordinatorMeetData.value?.meetDateCoordinator.let {
             val dateAndTime = it?.split(" ")
             binding.coordinatorMeeting.edtRescheduleMeetingDate.setText(
-                dateAndTime?.get(0))
-            if((dateAndTime?.size ?: 0) > 1)
-                binding.coordinatorMeeting.edtRescheduleMeetingTime.setText(dateAndTime?.get(1) ?: "")
+                dateAndTime?.get(0)
+            )
+            if ((dateAndTime?.size ?: 0) > 1)
+                binding.coordinatorMeeting.edtRescheduleMeetingTime.setText(
+                    dateAndTime?.get(1) ?: ""
+                )
         }
 
         viewModel._coordinatorMeetData.value?.nextMeetDateDm.let {
             val dateAndTime = it?.split(" ")
             binding.coordinatorMeeting.edtNextMeetingDate.setText(
-                dateAndTime?.get(0))
-            if((dateAndTime?.size ?: 0) > 1)
+                dateAndTime?.get(0)
+            )
+            if ((dateAndTime?.size ?: 0) > 1)
                 binding.coordinatorMeeting.edtNextMeetingTime.setText(dateAndTime?.get(1) ?: "")
         }
     }
 
     private fun initializeDmData(_dmData: DMData?) {
-        if(_dmData?.coAttendMeet == "yes") binding.dmMeeting.attendedMeetGroup.check(R.id.attendedMeetYes)
+        if (_dmData?.coAttendMeet == "yes") binding.dmMeeting.attendedMeetGroup.check(R.id.attendedMeetYes)
         else binding.dmMeeting.attendedMeetGroup.check(R.id.attendedMeetNo)
 
-        if(_dmData?.productDemoHappen == "yes") binding.dmMeeting.demoHappenedGroup.check(R.id.demoHappenedYes)
+        if (_dmData?.productDemoHappen == "yes") binding.dmMeeting.demoHappenedGroup.check(R.id.demoHappenedYes)
         else binding.dmMeeting.demoHappenedGroup.check(R.id.demoHappenedNo)
 
-        if(_dmData?.nextFollowupDm == "yes") binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingYes)
+        if (_dmData?.nextFollowupDm == "yes") binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingYes)
         else binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingNo)
 
-        if(_dmData?.interested == "yes") binding.dmMeeting.labSetupGroup.check(R.id.labSetupYes)
+        if (_dmData?.interested == "yes") binding.dmMeeting.labSetupGroup.check(R.id.labSetupYes)
         else binding.dmMeeting.labSetupGroup.check(R.id.labSetupNo)
 
         viewModel._dmMeetData.value?.nextMeetDateDm.let {
             val dateAndTime = it?.split(" ")
             binding.dmMeeting.edtNextMeetingDate.setText(
-                dateAndTime?.get(0))
-            if((dateAndTime?.size ?: 0) > 1)
+                dateAndTime?.get(0)
+            )
+            if ((dateAndTime?.size ?: 0) > 1)
                 binding.dmMeeting.edtNextMeetingTime.setText(dateAndTime?.get(1) ?: "")
         }
     }
 
     private fun observers() {
-        viewModel.updateCoordinatorLevelMeetDetails.observe(viewLifecycleOwner){
+        viewModel.updateCoordinatorLevelMeetDetails.observe(viewLifecycleOwner) {
             Timber.e("Response dd")
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
-                    Toast.makeText(requireContext(), getString(R.string.principal_meeting_details_updated_successfully), Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), getString(R.string.coordinator_meeting_details_updated_successfully), Toast.LENGTH_LONG).show()
                     setPositionView()
                 }
 
@@ -230,12 +252,12 @@ class CoordinatorDmMeetingFragment: Fragment() {
             }
         }
 
-        viewModel.updateDMLevelMeetDetails.observe(viewLifecycleOwner){
+        viewModel.updateDMLevelMeetDetails.observe(viewLifecycleOwner) {
             Timber.e("Response dd")
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
-                    findNavController().popBackStack()
+                    showDialog()
                 }
 
                 is NetworkResult.Error -> {
@@ -248,14 +270,30 @@ class CoordinatorDmMeetingFragment: Fragment() {
             }
         }
 
-        viewModel.coordinatorMeetData.observe(viewLifecycleOwner){_coordinatorData ->
+        viewModel.coordinatorMeetData.observe(viewLifecycleOwner) { _coordinatorData ->
             initializeCoordinatorData(_coordinatorData)
         }
 
-        viewModel.dmMeetData.observe(viewLifecycleOwner){_dmData ->
+        viewModel.dmMeetData.observe(viewLifecycleOwner) { _dmData ->
             initializeDmData(_dmData)
 
         }
+    }
+
+    private fun showDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.setCancelable(false)
+        val dialogBinding = VisitedSuccessDialogBinding.inflate(layoutInflater)
+        dialogBinding.title.text = getString(R.string.well_done)
+        dialogBinding.details.text = getString(R.string.dm_meeting_dialog_details)
+        dialog.setContentView(dialogBinding.root)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
+        Handler(Looper.getMainLooper()).postDelayed({
+            dialog.dismiss()
+            findNavController().popBackStack()
+        }, 3000)
+
     }
 
     private fun setPositionView() {
@@ -263,6 +301,7 @@ class CoordinatorDmMeetingFragment: Fragment() {
 
         when (position) {
             0 -> {
+                binding.topAppBar.title = getString(R.string.teacher_principal_meeting)
                 Timber.e("0")
                 binding.coordinatorMeeting.root.visibility = View.GONE
                 binding.dmMeeting.root.visibility = View.VISIBLE
@@ -272,6 +311,7 @@ class CoordinatorDmMeetingFragment: Fragment() {
             }
 
             1 -> {
+                binding.topAppBar.title = getString(R.string.dm_level_meeting)
                 Timber.e("1")
                 binding.coordinatorMeeting.root.visibility = View.GONE
                 binding.dmMeeting.root.visibility = View.VISIBLE
@@ -281,6 +321,7 @@ class CoordinatorDmMeetingFragment: Fragment() {
             }
 
             else -> {
+                binding.topAppBar.title = getString(R.string.teacher_principal_meeting)
                 Timber.e("else")
                 position = 0
                 binding.stepView.done(true)
@@ -295,28 +336,32 @@ class CoordinatorDmMeetingFragment: Fragment() {
             var year = c.get(Calendar.YEAR)
             var month = c.get(Calendar.MONTH)
             var day = c.get(Calendar.DAY_OF_MONTH)
-            if(!viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrEmpty()){
-                viewModel._coordinatorMeetData.value?.meetDateCoordinator?.split(" ")?.let {_dateAndTime ->
-                    binding.coordinatorMeeting.edtRescheduleMeetingDate.setText(_dateAndTime[0])
-                    _dateAndTime[0].split("/").let {_dateArray ->
-                        day = _dateArray[0].toInt()
-                        month = _dateArray[1].toInt()
-                        year = _dateArray[2].toInt()
+            if (!viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrEmpty()) {
+                viewModel._coordinatorMeetData.value?.meetDateCoordinator?.split(" ")
+                    ?.let { _dateAndTime ->
+                        binding.coordinatorMeeting.edtRescheduleMeetingDate.setText(_dateAndTime[0])
+                        _dateAndTime[0].split("/").let { _dateArray ->
+                            day = _dateArray[0].toInt()
+                            month = _dateArray[1].toInt()
+                            year = _dateArray[2].toInt()
+                        }
                     }
-                }
             }
 
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime = dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    val updatedDateAndTime =
+                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                     binding.coordinatorMeeting.edtRescheduleMeetingDate.setText(updatedDateAndTime)
-                    viewModel._coordinatorMeetData.value?.meetDateCoordinator.let{_nextFollowUpDate ->
-                        if((_nextFollowUpDate?:"").contains(" ")){
-                            val dateAndTime = (_nextFollowUpDate?:"").split(" ")
-                            viewModel._coordinatorMeetData.value?.meetDateCoordinator = "$updatedDateAndTime ${dateAndTime[1]}"
-                        }else{
-                            viewModel._coordinatorMeetData.value?.meetDateCoordinator = updatedDateAndTime
+                    viewModel._coordinatorMeetData.value?.meetDateCoordinator.let { _nextFollowUpDate ->
+                        if ((_nextFollowUpDate ?: "").contains(" ")) {
+                            val dateAndTime = (_nextFollowUpDate ?: "").split(" ")
+                            viewModel._coordinatorMeetData.value?.meetDateCoordinator =
+                                "$updatedDateAndTime ${dateAndTime[1]}"
+                        } else {
+                            viewModel._coordinatorMeetData.value?.meetDateCoordinator =
+                                updatedDateAndTime
                         }
 
                         Timber.e("Date")
@@ -332,7 +377,7 @@ class CoordinatorDmMeetingFragment: Fragment() {
                 this.set(Calendar.DAY_OF_MONTH, day)
                 this.set(Calendar.MONTH, month)
                 this.set(Calendar.YEAR, year)
-            }.timeInMillis- 1000
+            }.timeInMillis - 1000
             datePickerDialog.show()
         }
 
@@ -341,29 +386,32 @@ class CoordinatorDmMeetingFragment: Fragment() {
 
             var hour = c.get(Calendar.HOUR_OF_DAY)
             var minute = c.get(Calendar.MINUTE)
-            if(!viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrEmpty()){
-                viewModel._coordinatorMeetData.value?.meetDateCoordinator?.split(" ")?.let {_dateAndTime ->
-                    if(_dateAndTime.size >1) {
-                        binding.coordinatorMeeting.edtRescheduleMeetingTime.setText(_dateAndTime[1])
-                        _dateAndTime[1].split(":").let { _timeArray ->
-                            hour = _timeArray[0].toInt()
-                            minute = _timeArray[1].toInt()
+            if (!viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrEmpty()) {
+                viewModel._coordinatorMeetData.value?.meetDateCoordinator?.split(" ")
+                    ?.let { _dateAndTime ->
+                        if (_dateAndTime.size > 1) {
+                            binding.coordinatorMeeting.edtRescheduleMeetingTime.setText(_dateAndTime[1])
+                            _dateAndTime[1].split(":").let { _timeArray ->
+                                hour = _timeArray[0].toInt()
+                                minute = _timeArray[1].toInt()
+                            }
                         }
                     }
-                }
             }
 
             val timePickerDialog = TimePickerDialog(
                 requireContext(),
                 { view, hourOfDay, minute ->
-                    val updatedTime =  "$hourOfDay:$minute"
+                    val updatedTime = "$hourOfDay:$minute"
                     binding.coordinatorMeeting.edtRescheduleMeetingTime.setText(updatedTime)
-                    viewModel._coordinatorMeetData.value?.meetDateCoordinator?.let{_nextFollowUpDate ->
-                        if(_nextFollowUpDate.contains(" ")){
+                    viewModel._coordinatorMeetData.value?.meetDateCoordinator?.let { _nextFollowUpDate ->
+                        if (_nextFollowUpDate.contains(" ")) {
                             val dateAndTime = _nextFollowUpDate.split(" ")
-                            viewModel._coordinatorMeetData.value?.meetDateCoordinator = "${dateAndTime[0]} $updatedTime"
-                        }else{
-                            viewModel._coordinatorMeetData.value?.meetDateCoordinator = "$_nextFollowUpDate $updatedTime"
+                            viewModel._coordinatorMeetData.value?.meetDateCoordinator =
+                                "${dateAndTime[0]} $updatedTime"
+                        } else {
+                            viewModel._coordinatorMeetData.value?.meetDateCoordinator =
+                                "$_nextFollowUpDate $updatedTime"
                         }
 
                         Timber.e("Time")
@@ -385,28 +433,32 @@ class CoordinatorDmMeetingFragment: Fragment() {
             var year = c.get(Calendar.YEAR)
             var month = c.get(Calendar.MONTH)
             var day = c.get(Calendar.DAY_OF_MONTH)
-            if(!viewModel._coordinatorMeetData.value?.nextMeetDateDm.isNullOrEmpty()){
-                viewModel._coordinatorMeetData.value?.nextMeetDateDm?.split(" ")?.let {_dateAndTime ->
-                    binding.coordinatorMeeting.edtNextMeetingDate.setText(_dateAndTime[0])
-                    _dateAndTime[0].split("/").let {_dateArray ->
-                        day = _dateArray[0].toInt()
-                        month = _dateArray[1].toInt()
-                        year = _dateArray[2].toInt()
+            if (!viewModel._coordinatorMeetData.value?.nextMeetDateDm.isNullOrEmpty()) {
+                viewModel._coordinatorMeetData.value?.nextMeetDateDm?.split(" ")
+                    ?.let { _dateAndTime ->
+                        binding.coordinatorMeeting.edtNextMeetingDate.setText(_dateAndTime[0])
+                        _dateAndTime[0].split("/").let { _dateArray ->
+                            day = _dateArray[0].toInt()
+                            month = _dateArray[1].toInt()
+                            year = _dateArray[2].toInt()
+                        }
                     }
-                }
             }
 
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime = dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    val updatedDateAndTime =
+                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                     binding.coordinatorMeeting.edtNextMeetingDate.setText(updatedDateAndTime)
-                    viewModel._coordinatorMeetData.value?.nextMeetDateDm.let{_nextFollowUpDate ->
-                        if((_nextFollowUpDate?:"").contains(" ")){
-                            val dateAndTime = (_nextFollowUpDate?:"").split(" ")
-                            viewModel._coordinatorMeetData.value?.nextMeetDateDm = "$updatedDateAndTime ${dateAndTime[1]}"
-                        }else{
-                            viewModel._coordinatorMeetData.value?.nextMeetDateDm = updatedDateAndTime
+                    viewModel._coordinatorMeetData.value?.nextMeetDateDm.let { _nextFollowUpDate ->
+                        if ((_nextFollowUpDate ?: "").contains(" ")) {
+                            val dateAndTime = (_nextFollowUpDate ?: "").split(" ")
+                            viewModel._coordinatorMeetData.value?.nextMeetDateDm =
+                                "$updatedDateAndTime ${dateAndTime[1]}"
+                        } else {
+                            viewModel._coordinatorMeetData.value?.nextMeetDateDm =
+                                updatedDateAndTime
                         }
 
                         Timber.e("Date")
@@ -422,7 +474,7 @@ class CoordinatorDmMeetingFragment: Fragment() {
                 this.set(Calendar.DAY_OF_MONTH, day)
                 this.set(Calendar.MONTH, month)
                 this.set(Calendar.YEAR, year)
-            }.timeInMillis- 1000
+            }.timeInMillis - 1000
             datePickerDialog.show()
         }
 
@@ -431,29 +483,32 @@ class CoordinatorDmMeetingFragment: Fragment() {
 
             var hour = c.get(Calendar.HOUR_OF_DAY)
             var minute = c.get(Calendar.MINUTE)
-            if(!viewModel._coordinatorMeetData.value?.nextMeetDateDm.isNullOrEmpty()){
-                viewModel._coordinatorMeetData.value?.nextMeetDateDm?.split(" ")?.let {_dateAndTime ->
-                    if(_dateAndTime.size >1) {
-                        binding.coordinatorMeeting.edtNextMeetingTime.setText(_dateAndTime[1])
-                        _dateAndTime[1].split(":").let { _timeArray ->
-                            hour = _timeArray[0].toInt()
-                            minute = _timeArray[1].toInt()
+            if (!viewModel._coordinatorMeetData.value?.nextMeetDateDm.isNullOrEmpty()) {
+                viewModel._coordinatorMeetData.value?.nextMeetDateDm?.split(" ")
+                    ?.let { _dateAndTime ->
+                        if (_dateAndTime.size > 1) {
+                            binding.coordinatorMeeting.edtNextMeetingTime.setText(_dateAndTime[1])
+                            _dateAndTime[1].split(":").let { _timeArray ->
+                                hour = _timeArray[0].toInt()
+                                minute = _timeArray[1].toInt()
+                            }
                         }
                     }
-                }
             }
 
             val timePickerDialog = TimePickerDialog(
                 requireContext(),
                 { view, hourOfDay, minute ->
-                    val updatedTime =  "$hourOfDay:$minute"
+                    val updatedTime = "$hourOfDay:$minute"
                     binding.coordinatorMeeting.edtNextMeetingTime.setText(updatedTime)
-                    viewModel._coordinatorMeetData.value?.nextMeetDateDm?.let{_nextFollowUpDate ->
-                        if(_nextFollowUpDate.contains(" ")){
+                    viewModel._coordinatorMeetData.value?.nextMeetDateDm?.let { _nextFollowUpDate ->
+                        if (_nextFollowUpDate.contains(" ")) {
                             val dateAndTime = _nextFollowUpDate.split(" ")
-                            viewModel._coordinatorMeetData.value?.nextMeetDateDm = "${dateAndTime[0]} $updatedTime"
-                        }else{
-                            viewModel._coordinatorMeetData.value?.nextMeetDateDm = "$_nextFollowUpDate $updatedTime"
+                            viewModel._coordinatorMeetData.value?.nextMeetDateDm =
+                                "${dateAndTime[0]} $updatedTime"
+                        } else {
+                            viewModel._coordinatorMeetData.value?.nextMeetDateDm =
+                                "$_nextFollowUpDate $updatedTime"
                         }
 
                         Timber.e("Time")
@@ -475,10 +530,10 @@ class CoordinatorDmMeetingFragment: Fragment() {
             var year = c.get(Calendar.YEAR)
             var month = c.get(Calendar.MONTH)
             var day = c.get(Calendar.DAY_OF_MONTH)
-            if(!viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrEmpty()){
-                viewModel._dmMeetData.value?.nextMeetDateDm?.split(" ")?.let {_dateAndTime ->
+            if (!viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrEmpty()) {
+                viewModel._dmMeetData.value?.nextMeetDateDm?.split(" ")?.let { _dateAndTime ->
                     binding.dmMeeting.edtNextMeetingDate.setText(_dateAndTime[0])
-                    _dateAndTime[0].split("/").let {_dateArray ->
+                    _dateAndTime[0].split("/").let { _dateArray ->
                         day = _dateArray[0].toInt()
                         month = _dateArray[1].toInt()
                         year = _dateArray[2].toInt()
@@ -489,13 +544,15 @@ class CoordinatorDmMeetingFragment: Fragment() {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime = dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    val updatedDateAndTime =
+                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                     binding.dmMeeting.edtNextMeetingDate.setText(updatedDateAndTime)
-                    viewModel._dmMeetData.value?.nextMeetDateDm.let{_nextFollowUpDate ->
-                        if((_nextFollowUpDate?:"").contains(" ")){
-                            val dateAndTime = (_nextFollowUpDate?:"").split(" ")
-                            viewModel._dmMeetData.value?.nextMeetDateDm = "$updatedDateAndTime ${dateAndTime[1]}"
-                        }else{
+                    viewModel._dmMeetData.value?.nextMeetDateDm.let { _nextFollowUpDate ->
+                        if ((_nextFollowUpDate ?: "").contains(" ")) {
+                            val dateAndTime = (_nextFollowUpDate ?: "").split(" ")
+                            viewModel._dmMeetData.value?.nextMeetDateDm =
+                                "$updatedDateAndTime ${dateAndTime[1]}"
+                        } else {
                             viewModel._dmMeetData.value?.nextMeetDateDm = updatedDateAndTime
                         }
 
@@ -512,7 +569,7 @@ class CoordinatorDmMeetingFragment: Fragment() {
                 this.set(Calendar.DAY_OF_MONTH, day)
                 this.set(Calendar.MONTH, month)
                 this.set(Calendar.YEAR, year)
-            }.timeInMillis- 1000
+            }.timeInMillis - 1000
             datePickerDialog.show()
         }
 
@@ -521,9 +578,9 @@ class CoordinatorDmMeetingFragment: Fragment() {
 
             var hour = c.get(Calendar.HOUR_OF_DAY)
             var minute = c.get(Calendar.MINUTE)
-            if(!viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrEmpty()){
-                viewModel._dmMeetData.value?.nextMeetDateDm?.split(" ")?.let {_dateAndTime ->
-                    if(_dateAndTime.size >1) {
+            if (!viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrEmpty()) {
+                viewModel._dmMeetData.value?.nextMeetDateDm?.split(" ")?.let { _dateAndTime ->
+                    if (_dateAndTime.size > 1) {
                         binding.dmMeeting.edtNextMeetingTime.setText(_dateAndTime[1])
                         _dateAndTime[1].split(":").let { _timeArray ->
                             hour = _timeArray[0].toInt()
@@ -536,14 +593,16 @@ class CoordinatorDmMeetingFragment: Fragment() {
             val timePickerDialog = TimePickerDialog(
                 requireContext(),
                 { view, hourOfDay, minute ->
-                    val updatedTime =  "$hourOfDay:$minute"
+                    val updatedTime = "$hourOfDay:$minute"
                     binding.dmMeeting.edtNextMeetingTime.setText(updatedTime)
-                    viewModel._dmMeetData.value?.nextMeetDateDm?.let{_nextFollowUpDate ->
-                        if(_nextFollowUpDate.contains(" ")){
+                    viewModel._dmMeetData.value?.nextMeetDateDm?.let { _nextFollowUpDate ->
+                        if (_nextFollowUpDate.contains(" ")) {
                             val dateAndTime = _nextFollowUpDate.split(" ")
-                            viewModel._dmMeetData.value?.nextMeetDateDm = "${dateAndTime[0]} $updatedTime"
-                        }else{
-                            viewModel._dmMeetData.value?.nextMeetDateDm = "$_nextFollowUpDate $updatedTime"
+                            viewModel._dmMeetData.value?.nextMeetDateDm =
+                                "${dateAndTime[0]} $updatedTime"
+                        } else {
+                            viewModel._dmMeetData.value?.nextMeetDateDm =
+                                "$_nextFollowUpDate $updatedTime"
                         }
 
                         Timber.e("Time")

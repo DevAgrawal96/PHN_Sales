@@ -3,6 +3,7 @@
     <style name="Base.Theme.Sales" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
     </style>
 
     <style name="CustomChipChoice" parent="@style/Widget.Material3.Chip.Filter">
@@ -11,7 +12,7 @@
         <item name="android:strokeColor">@color/chips_stroke_state</item>
     </style>
 
-    <style name="Theme.Sales" parent="Theme.Material3.Light.NoActionBar" >
+    <style name="Theme.Sales" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
@@ -65,10 +66,10 @@
         <item name="colorOnSurface">@android:color/transparent</item>
         <item name="helperTextTextColor">@android:color/holo_red_dark</item>
         <item name="android:maxLines">1</item>
-<!--        <item name="boxStrokeColor">@color/text_input_box_stroke</item>-->
-<!--        <item name="hintTextColor">@color/otp_button_color</item>-->
-<!--        <item name="android:textColorHint">@color/otp_button_color</item>-->
-<!--        <item name="android:textColor">@color/otp_button_color</item>-->
+        <!--        <item name="boxStrokeColor">@color/text_input_box_stroke</item>-->
+        <!--        <item name="hintTextColor">@color/otp_button_color</item>-->
+        <!--        <item name="android:textColorHint">@color/otp_button_color</item>-->
+        <!--        <item name="android:textColor">@color/otp_button_color</item>-->
     </style>
 
     <style name="Colors_Widget.MaterialComponents.Chip.Filter" parent="Widget.MaterialComponents.Chip.Filter">
@@ -84,14 +85,14 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-        <style name="StepsTitle" parent="TextAppearance.AppCompat">
+    <style name="StepsTitle" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/txt_main_color</item>
         <item name="android:textSize">@dimen/txt_18sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
 
-            <!--    suraj   -->
+    <!--    suraj   -->
     <style name="roundedImage" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
@@ -104,7 +105,6 @@
     </style>
 
 
-
     <style name="ToggleButtonStyle" parent="@style/Widget.Material3.Button.OutlinedButton">
         <item name="cornerRadius">@dimen/dimen_8dp</item>
         <item name="backgroundTint">@color/toggle_button_bg_color_state</item>
@@ -112,22 +112,36 @@
         <item name="android:textSize">@dimen/txt_12sp</item>
     </style>
 
+    <style name="outlineButtonStyle" parent="@style/Widget.Material3.Button.OutlinedButton">
+        <item name="cornerRadius">@dimen/dimen_8dp</item>
+        <item name="backgroundTint">@color/toggle_button_bg_color_state</item>
+        <item name="android:textColor">@color/text_color_chip_state_list</item>
+        <item name="android:textSize">@dimen/txt_12sp</item>
+        <item name="icon">@drawable/ic_file_upload</item>
+        <item name="iconGravity">textStart</item>
+    </style>
+
     <style name="buttonStyle" parent="">
         <item name="cornerRadius">@dimen/dimen_8dp</item>
         <item name="android:textSize">@dimen/txt_16sp</item>
         <item name="android:layout_height">64dp</item>
     </style>
-    <style name="radioButtonStyle" parent="">
-        <item name="tint">@color/regular_blue</item>
+
+
+    <style name="radioButtonStyle" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="materialThemeOverlay">@style/ThemeOverlayRadioButton</item>
+        <item name="android:buttonTint">@color/regular_blue</item>
+    </style>
+
+    <style name="ThemeOverlayRadioButton" parent="">
+        <item name="colorOnSurface">@color/screen_bg</item>
+        <item name="colorPrimary">@color/regular_blue</item>
     </style>
 
     <style name="BottomNavigationIconStyle" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="itemIconTint">@color/bottom_navigation_icon_color_state</item>
         <item name="itemTextColor">@color/bottom_navigation_icon_color_state</item>
     </style>
-
-
-
 
 
 </resources>
