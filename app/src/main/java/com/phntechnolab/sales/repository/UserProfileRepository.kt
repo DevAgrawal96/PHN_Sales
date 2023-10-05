@@ -2,6 +2,7 @@ package com.phntechnolab.sales.repository
 
 import android.app.Application
 import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.phntechnolab.sales.R
@@ -34,21 +35,25 @@ class UserProfileRepository @Inject constructor(
                 if (result.isSuccessful && result.body() != null) {
                     logoutMutableLiveData.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
+//                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     logoutMutableLiveData.postValue(
                         NetworkResult.Error(application.getString(R.string.something_went_wrong))
                     )
                 } else {
+//                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     logoutMutableLiveData.postValue(
                         NetworkResult.Error(application.getString(R.string.something_went_wrong))
                     )
                 }
 
             } catch (e: Exception) {
+//                Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 logoutMutableLiveData.postValue(
                     NetworkResult.Error(application.getString(R.string.something_went_wrong))
                 )
             }
         } else {
+//            Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
             logoutMutableLiveData.postValue(
                 NetworkResult.Error(application.getString(R.string.something_went_wrong))
             )
@@ -62,6 +67,7 @@ class UserProfileRepository @Inject constructor(
                 if (result.isSuccessful && result.body() != null) {
                     userProfileMutableLiveData.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
+//                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     userProfileMutableLiveData.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -69,6 +75,7 @@ class UserProfileRepository @Inject constructor(
                         )
                     )
                 } else {
+//                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     userProfileMutableLiveData.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -77,6 +84,7 @@ class UserProfileRepository @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
+//                Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 userProfileMutableLiveData.postValue(
                     NetworkResult.Error(
                         "",
@@ -85,6 +93,7 @@ class UserProfileRepository @Inject constructor(
                 )
             }
         } else {
+//            Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
             userProfileMutableLiveData.postValue(
                 NetworkResult.Error(
                     "",

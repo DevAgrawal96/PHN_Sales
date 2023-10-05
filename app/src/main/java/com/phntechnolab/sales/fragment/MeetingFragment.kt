@@ -116,7 +116,7 @@ class MeetingFragment : Fragment(), MenuProvider {
             }
 
             R.id.menu_notification -> {
-                findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
+                findNavController().navigate(R.id.notificationFragment)
                 Toast.makeText(requireContext(), "notification", Toast.LENGTH_SHORT).show()
                 true
             }

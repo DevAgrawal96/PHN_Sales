@@ -65,6 +65,9 @@ class MyAccountFragment : Fragment() {
         binding.topAppBar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+        binding.topAppBar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun onDestroyView() {

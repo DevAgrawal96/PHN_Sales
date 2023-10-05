@@ -139,7 +139,6 @@ class ProfileFragment : Fragment(), MenuProvider {
                         }
 
                         is NetworkResult.Error -> {
-
                         }
 
                         else -> {
@@ -179,7 +178,6 @@ class ProfileFragment : Fragment(), MenuProvider {
                 }
 
                 is NetworkResult.Error -> {
-                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
 
                 else -> {
@@ -259,7 +257,7 @@ class ProfileFragment : Fragment(), MenuProvider {
             }
 
             R.id.menu_notification -> {
-                findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
+                findNavController().navigate(R.id.notificationFragment)
                 Toast.makeText(requireContext(), "notification", Toast.LENGTH_SHORT).show()
                 true
             }

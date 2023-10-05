@@ -342,8 +342,8 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 }
 
                 is NetworkResult.Error -> {
+                    Toast.makeText(requireContext(), resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     Timber.e(it.toString())
-                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
 
                 else -> {
@@ -363,8 +363,8 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 }
 
                 is NetworkResult.Error -> {
+                    Toast.makeText(requireContext(), resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     Timber.e(it.toString())
-                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
 
                 else -> {

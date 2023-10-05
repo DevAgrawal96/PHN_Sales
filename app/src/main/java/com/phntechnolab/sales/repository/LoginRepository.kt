@@ -3,6 +3,8 @@ package com.phntechnolab.sales.repository
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
@@ -45,6 +47,7 @@ class LoginRepository @Inject constructor(
                 if (result.isSuccessful && result?.body() != null) {
                     loginMutableLiveData.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
+                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     loginMutableLiveData.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -59,6 +62,7 @@ class LoginRepository @Inject constructor(
                         )
                     )
                 } else {
+                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     loginMutableLiveData.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -75,6 +79,7 @@ class LoginRepository @Inject constructor(
                 }
 
             } catch (e: Exception) {
+                Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 loginMutableLiveData.postValue(
                     NetworkResult.Error(
                         "",
@@ -83,6 +88,7 @@ class LoginRepository @Inject constructor(
                 )
             }
         } else {
+            Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
             loginMutableLiveData.postValue(
                 NetworkResult.Error(
                     "",
@@ -112,6 +118,7 @@ class LoginRepository @Inject constructor(
                 if (result.isSuccessful && result.body() != null) {
                     _refereshToken.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
+                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     _refereshToken.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -119,6 +126,7 @@ class LoginRepository @Inject constructor(
                         )
                     )
                 } else {
+                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     _refereshToken.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),

@@ -120,8 +120,17 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     private fun observers() {
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
-            binding.progressBar.visibility = View.GONE
-            adapter?.setData(it.data as ArrayList<SchoolData>)
+            if (it.data?.isEmpty()!!) {
+                binding.noDataLottie.visibility = View.VISIBLE
+                binding.homeRecyclerView.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
+            } else {
+                binding.homeRecyclerView.visibility = View.VISIBLE
+                binding.noDataLottie.visibility = View.GONE
+                binding.progressIndicator.visibility = View.GONE
+                adapter?.setData(it.data as ArrayList<SchoolData>)
+                binding.progressBar.visibility = View.GONE
+            }
         }
     }
 
@@ -131,7 +140,8 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     }
 
     private fun getData() {
-        binding.progressBar.visibility = View.VISIBLE
+//        binding.progressBar.visibility = View.VISIBLE
+        binding.progressIndicator.visibility = View.VISIBLE
         lifecycleScope.launch(Dispatchers.IO) {
             viewModel.getAllSchools()
         }
@@ -195,18 +205,25 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
         when (schoolData.status) {
             "Assigned" -> {
                 findNavController()
-                    .navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(schoolData))
+                    .navigate(
+                        HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(
+                            schoolData
+                        )
+                    )
             }
+
             "Visited" -> {
 
                 requireView().findNavController()
                     .navigate(
                         HomeFragmentDirections.actionHomeFragmentToMeetingFragment(
-                            schoolData.coordinator ?: CoordinatorData(schoolId = schoolData.schoolId),
+                            schoolData.coordinator
+                                ?: CoordinatorData(schoolId = schoolData.schoolId),
                             schoolData.director ?: DMData(schoolId = schoolData.schoolId)
                         )
                     )
             }
+
             "Propose Costing" -> {
 
                 requireView().findNavController()
@@ -219,6 +236,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                         )
                     )
             }
+
             "MOASigned" -> {
                 requireView().findNavController()
                     .navigate(R.id.action_homeFragment_to_moaSignedFragment)

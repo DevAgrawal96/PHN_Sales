@@ -349,12 +349,20 @@ class AddSchoolFragment : Fragment() {
                 }
 
                 is NetworkResult.Error -> {
+                    Toast.makeText(
+                        requireContext(),
+                        resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                     Timber.e(it.toString())
-                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
 
                 else -> {
-                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -370,12 +378,20 @@ class AddSchoolFragment : Fragment() {
                 }
 
                 is NetworkResult.Error -> {
+                    Toast.makeText(
+                        requireContext(),
+                        resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                     Timber.e(it.toString())
-                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
 
                 else -> {
-                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -577,7 +593,7 @@ class AddSchoolFragment : Fragment() {
                 if (isLeadTypeEmpty)
                     binding.followupDetails.tilLeadType.error =
                         resources.getString(R.string.please_select_the_lead_type)
-                else{
+                else {
                     binding.followupDetails.tilLeadType.error = null
                     binding.progressBar.visibility = View.VISIBLE
                     viewModel.updateSchoolDetails()
@@ -617,7 +633,7 @@ class AddSchoolFragment : Fragment() {
         if (isSchoolIntakeEmpty)
             binding.basicDetails.tilSchoolTotalIntake.error =
                 resources.getString(R.string.please_enter_total_school_intake)
-        else if(binding.basicDetails.edtSchoolTotalIntake.text.toString().trim().toInt() >= 20000)
+        else if (binding.basicDetails.edtSchoolTotalIntake.text.toString().trim().toInt() >= 20000)
             binding.basicDetails.tilSchoolTotalIntake.error =
                 resources.getString(R.string.total_school_intake_less_than)
         else binding.basicDetails.tilSchoolTotalIntake.error = null
@@ -627,7 +643,7 @@ class AddSchoolFragment : Fragment() {
         if (isNumberOfClassroomsEmpty)
             binding.basicDetails.tilSchoolTotalIntake.error =
                 resources.getString(R.string.please_enter_number_of_classrooms)
-        else if(binding.basicDetails.edtTotalNoOfClassroom.text.toString().trim().toInt() >= 100)
+        else if (binding.basicDetails.edtTotalNoOfClassroom.text.toString().trim().toInt() >= 100)
             binding.basicDetails.tilSchoolTotalIntake.error =
                 resources.getString(R.string.total_no_of_classrooms_less_than)
         else binding.basicDetails.tilSchoolTotalIntake.error = null
