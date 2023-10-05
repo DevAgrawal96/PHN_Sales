@@ -87,12 +87,15 @@
 
     <string name="my_account">My Account</string>
     <string name="please_enter_valid_email_address">Please enter valid email address!</string>
+    <string name="please_enter_number_of_classrooms">Please enter number of classrooms!</string>
     <string name="please_enter_valid_phone_no">Please enter valid phone number!</string>
     <string name="some_fields_are_empty_or_not_valid">Some fields are empty or not valid!</string>
     <string name="please_enter_valid_school_name">Please enter valid school name!\n</string>
     <string name="please_enter_valid_school_address">Please enter valid school address!\n</string>
     <string name="please_enter_valid_coordinator_name">Please enter valid coordinator name!</string>
     <string name="please_enter_total_school_intake">Please enter total shcool intake!</string>
+    <string name="total_school_intake_less_than">Please enter total shcool intake less than 20000!</string>
+    <string name="total_no_of_classrooms_less_than">Please enter total number of classrooms less than 20000!</string>
     <string name="please_select_board">Please select board!</string>
     <string name="activity">Activity</string>
     <string name="revenue">Revenue</string>
@@ -136,6 +139,7 @@
     <string name="price_discussed_inclusive_gst">Price discussed inclusive GST?</string>
     <string name="quotation_shared">Quotation shared?</string>
     <string name="payment_scheduled_locked">Payment scheduled locked?</string>
+    <string name="principal_meeting_details_updated_successfully">Principal meeting details updated successfully.</string>
     <string name="other">\Other</string>
 
 

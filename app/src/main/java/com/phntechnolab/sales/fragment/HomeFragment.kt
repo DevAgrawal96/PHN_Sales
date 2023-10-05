@@ -189,29 +189,37 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     }
 
     override fun meetingNavigation(schoolData: SchoolData) {
-        if (schoolData.status == "Visited") {
+        when (schoolData.status) {
+            "Assigned" -> {
+                findNavController()
+                    .navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(schoolData))
+            }
+            "Visited" -> {
 
-            requireView().findNavController()
-                .navigate(
-                    HomeFragmentDirections.actionHomeFragmentToMeetingFragment(
-                        schoolData.coordinator ?: CoordinatorData(schoolId = schoolData.schoolId),
-                        schoolData.director ?: DMData(schoolId = schoolData.schoolId)
+                requireView().findNavController()
+                    .navigate(
+                        HomeFragmentDirections.actionHomeFragmentToMeetingFragment(
+                            schoolData.coordinator ?: CoordinatorData(schoolId = schoolData.schoolId),
+                            schoolData.director ?: DMData(schoolId = schoolData.schoolId)
+                        )
                     )
-                )
-        } else if (schoolData.status == "Propose Costing") {
+            }
+            "Propose Costing" -> {
 
-            requireView().findNavController()
-                .navigate(
-                    HomeFragmentDirections.actionHomeFragmentToCostingMoaDocumentFragment(
-                        schoolData.proposeCostingData
-                            ?: ProposeCostingData(schoolId = schoolData.schoolId),
-                        schoolData.moaDocumentData
-                            ?: MOADocumentData(schoolId = schoolData.schoolId)
+                requireView().findNavController()
+                    .navigate(
+                        HomeFragmentDirections.actionHomeFragmentToCostingMoaDocumentFragment(
+                            schoolData.proposeCostingData
+                                ?: ProposeCostingData(schoolId = schoolData.schoolId),
+                            schoolData.moaDocumentData
+                                ?: MOADocumentData(schoolId = schoolData.schoolId)
+                        )
                     )
-                )
-        } else if (schoolData.status == "MOASigned") {
-            requireView().findNavController()
-                .navigate(R.id.action_homeFragment_to_moaSignedFragment)
+            }
+            "MOASigned" -> {
+                requireView().findNavController()
+                    .navigate(R.id.action_homeFragment_to_moaSignedFragment)
+            }
         }
     }
 }
