@@ -1,6 +1,7 @@
 package com.phntechnolab.sales.repository
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.phntechnolab.sales.R
@@ -34,6 +35,7 @@ class CostingMOADocumentRepository @Inject constructor(
                 if (result.isSuccessful && result.body() != null) {
                     _proposeCostingDetails.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
+                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     _proposeCostingDetails.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -41,6 +43,7 @@ class CostingMOADocumentRepository @Inject constructor(
                         )
                     )
                 } else {
+                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     _proposeCostingDetails.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -63,6 +66,7 @@ class CostingMOADocumentRepository @Inject constructor(
                 if (result.isSuccessful && result.body() != null) {
                     _moaDocumentDetails.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
+                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     _moaDocumentDetails.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -70,6 +74,7 @@ class CostingMOADocumentRepository @Inject constructor(
                         )
                     )
                 } else {
+                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     _moaDocumentDetails.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),

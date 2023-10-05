@@ -266,7 +266,6 @@ class CostingMOADocumentFragment : Fragment() {
 
                 is NetworkResult.Error -> {
                     Timber.e(it.toString())
-                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
 
                 else -> {
@@ -286,7 +285,6 @@ class CostingMOADocumentFragment : Fragment() {
 
                 is NetworkResult.Error -> {
                     Timber.e(it.toString())
-                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
 
                 else -> {
