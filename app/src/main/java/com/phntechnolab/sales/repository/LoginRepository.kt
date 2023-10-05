@@ -30,6 +30,8 @@ class LoginRepository @Inject constructor(
     val loginLiveData: LiveData<NetworkResult<UserResponse>>
         get() = loginMutableLiveData
 
+
+
     private val _refereshToken = MutableLiveData<NetworkResult<CustomResponse>>()
 
     val refereshToken: LiveData<NetworkResult<CustomResponse>>
@@ -46,7 +48,14 @@ class LoginRepository @Inject constructor(
                     loginMutableLiveData.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
-                            UserResponse(null, null, null, result.code(), result.errorBody()?.string(), null)
+                            UserResponse(
+                                null,
+                                null,
+                                null,
+                                result.code(),
+                                result.errorBody()?.string(),
+                                null
+                            )
                         )
                     )
                 } else {
@@ -90,67 +99,14 @@ class LoginRepository @Inject constructor(
         }
     }
 
-//    suspend fun logout(context: Context) {
-//        if (NetworkUtils.isInternetAvailable(application)) {
-//            try {
-//                val result = retrofitApi.getLoginDetails(loginDetails)
-//                result.body()?.status_code = result.code()
-//                if (result.isSuccessful && result?.body() != null) {
-//                    loginMutableLiveData.postValue(NetworkResult.Success(result.body()))
-//                } else if (result.errorBody() != null) {
-//                    loginMutableLiveData.postValue(
-//                        NetworkResult.Error(
-//                            application.getString(R.string.something_went_wrong),
-//                            UserResponse(null, null, null, result.code(), result.errorBody()?.string(), null)
-//                        )
-//                    )
-//                } else {
-//                    loginMutableLiveData.postValue(
-//                        NetworkResult.Error(
-//                            application.getString(R.string.something_went_wrong),
-//                            UserResponse(
-//                                null,
-//                                null,
-//                                null,
-//                                result.code(),
-//                                message = application.getString(R.string.something_went_wrong),
-//                                null
-//                            )
-//                        )
-//                    )
-//                }
-//
-//            } catch (e: Exception) {
-//                loginMutableLiveData.postValue(
-//                    NetworkResult.Error(
-//                        "",
-//                        UserResponse(null, null, null, null, message = e.message, null)
-//                    )
-//                )
-//            }
-//        } else {
-//            loginMutableLiveData.postValue(
-//                NetworkResult.Error(
-//                    "",
-//                    UserResponse(
-//                        null,
-//                        null,
-//                        null,
-//                        null,
-//                        message = application.getString(R.string.no_internet_connection),
-//                        null
-//                    )
-//                )
-//            )
-//        }
-//    }
 
 
-    suspend fun refereshToken(){
+
+    suspend fun refereshToken() {
 
         if (NetworkUtils.isInternetAvailable(application)) {
 
-            try{
+            try {
                 val result = retrofitApi.tokenCheck()
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
@@ -159,21 +115,24 @@ class LoginRepository @Inject constructor(
                     _refereshToken.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
-                            CustomResponse( result.code(), result.errorBody()?.string())
+                            CustomResponse(result.code(), result.errorBody()?.string())
                         )
                     )
                 } else {
                     _refereshToken.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
-                            CustomResponse( result.code(), application.getString(R.string.something_went_wrong))
+                            CustomResponse(
+                                result.code(),
+                                application.getString(R.string.something_went_wrong)
+                            )
                         )
                     )
                 }
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 ex.printStackTrace()
             }
-        }else{
+        } else {
 
         }
     }

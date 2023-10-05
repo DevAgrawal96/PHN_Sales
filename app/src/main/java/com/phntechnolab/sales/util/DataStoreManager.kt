@@ -51,6 +51,16 @@ object DataStoreManager {
         }
     }
 
+    suspend fun clearDataStore(
+        context: Context,
+        dataStoreProvider: DataStoreProvider
+    ) {
+        val dataStore = dataStoreProvider.getDataStoreInstance(context)
+        dataStore.edit {
+            it.clear()
+        }
+    }
+
     suspend fun getUser(
         context: Context,
         dataStoreProvider: DataStoreProvider,

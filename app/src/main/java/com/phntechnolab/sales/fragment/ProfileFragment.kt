@@ -1,6 +1,9 @@
 package com.phntechnolab.sales.fragment
 
+import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -12,17 +15,25 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.adapter.ProfileSettingAdapter
 import com.phntechnolab.sales.databinding.FragmentProfileBinding
+import com.phntechnolab.sales.databinding.LogoutDialogBinding
+import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.SettingModel
 import com.phntechnolab.sales.model.UserDataModel
+import com.phntechnolab.sales.util.DataStoreManager.clearDataStore
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.viewmodel.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment(), MenuProvider {
@@ -36,6 +47,9 @@ class ProfileFragment : Fragment(), MenuProvider {
 
     private var _userProfileData: UserDataModel? = null
     private val userProfileData get() = _userProfileData!!
+
+    @Inject
+    lateinit var dataStoreProvider: DataStoreProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +100,10 @@ class ProfileFragment : Fragment(), MenuProvider {
                         findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
                     }
 
+                    5 -> {
+                        showDialog()
+                    }
+
                     else -> {
 
                     }
@@ -94,6 +112,45 @@ class ProfileFragment : Fragment(), MenuProvider {
         }
         _adapter = ProfileSettingAdapter(callback)
         binding.settingRv.adapter = adapter
+    }
+
+    private fun showDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.setCancelable(false)
+        val dialogBinding = LogoutDialogBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+        dialogBinding.logoutNo.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialogBinding.logoutYes.setOnClickListener {
+            Handler(Looper.getMainLooper()).postDelayed({
+                dialog.dismiss()
+                viewModel.logout(requireContext())
+                viewModel.logoutLiveData.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is NetworkResult.Success -> {
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                clearDataStore(requireContext(), dataStoreProvider)
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
+                                }
+                            }
+
+                        }
+
+                        is NetworkResult.Error -> {
+
+                        }
+
+                        else -> {
+
+                        }
+                    }
+                }
+            }, 3000)
+        }
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
     }
 
     private fun setOnBackPressed() {

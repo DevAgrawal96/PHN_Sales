@@ -14,10 +14,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val repositories: LoginRepository): ViewModel() {
+class LoginViewModel @Inject constructor(private val repositories: LoginRepository) : ViewModel() {
 
 
-    val loginLiveData : LiveData<NetworkResult<UserResponse>>
+    val loginLiveData: LiveData<NetworkResult<UserResponse>>
         get() = repositories.loginLiveData
 
     val refereshToken: LiveData<NetworkResult<CustomResponse>>
@@ -29,7 +29,9 @@ class LoginViewModel @Inject constructor(private val repositories: LoginReposito
         }
     }
 
-    fun getToken(){
+
+
+    fun getToken() {
         viewModelScope.launch {
             repositories.refereshToken()
         }

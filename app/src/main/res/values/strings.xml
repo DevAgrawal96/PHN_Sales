@@ -99,6 +99,8 @@
     <string name="change_password">Change Password</string>
     <string name="chart_analysis">Chart Analysis</string>
     <string name="log_out">Log out</string>
+    <string name="great_work_title">Great Work!</string>
+    <string name="moa_success_dialog_message">The school has been added to your Pending for approval list</string>
 
     <string name="demo_text">Lorem Ipsum is simply dummy text</string>
     <string name="pdf_file_demo_name">file Title.pdf</string>
