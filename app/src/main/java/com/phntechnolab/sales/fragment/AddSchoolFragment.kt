@@ -3,10 +3,12 @@ package com.phntechnolab.sales.fragment
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +17,11 @@ import android.widget.AutoCompleteTextView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
@@ -32,7 +36,14 @@ import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.TextValidator
 import com.phntechnolab.sales.viewmodel.AddSchoolViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import timber.log.Timber
+import java.io.File
+import java.io.FileOutputStream
 import java.util.Calendar
 import java.util.regex.Pattern
 
@@ -47,6 +58,8 @@ class AddSchoolFragment : Fragment() {
     private val args: AddSchoolFragmentArgs by navArgs()
 
     var position = 0
+
+    private lateinit var image: Uri
 
     private val backPressHandler = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -332,6 +345,36 @@ class AddSchoolFragment : Fragment() {
     }
 
     private fun observers() {
+        viewModel.uploadImgResponse.observe(viewLifecycleOwner){
+            when(it){
+                is NetworkResult.Success -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "File Upload successfully",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    Timber.e(it.toString())
+                }
+
+                is NetworkResult.Error -> {
+                    Toast.makeText(
+                        requireContext(),
+                        resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    Timber.e(it.toString())
+                }
+
+                else -> {
+                    Toast.makeText(
+                        requireContext(),
+                        requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+
         viewModel.newSchoolData.observe(viewLifecycleOwner) { _schoolData ->
             setSchoolDetails()
 
@@ -411,7 +454,41 @@ class AddSchoolFragment : Fragment() {
 
     }
 
+    private var contract = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        image = it!!
+        Timber.e(image.toString())
+        viewModel.uploadImage(it, requireContext())
+    }
+
+//    private fun uploadImage() {
+//        val fileDir = requireContext().filesDir
+//        val file = File(fileDir, "schoolImage.png")
+//        val inputStream = requireContext().contentResolver.openInputStream(image)
+//        val fileOutputStream = FileOutputStream(file)
+//        inputStream?.copyTo(fileOutputStream)
+
+//        val requestFile = RequestBody.create(
+//            MediaType.parse("image/jpg"),
+//            file
+//        )
+
+//        val part = MultipartBody.Part.createFormData("profile", file.name, requestFile)
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            val responce = retroInstance.uploadImg(part)
+//
+//            Toast.makeText(requireContext(), "file successfully uploaded!", Toast.LENGTH_SHORT)
+//                .show()
+//            Log.e("responce", responce.toString())
+//        }
+
+//    }
+
     private fun oncClickListener() {
+
+        binding.schoolDetails.selectFileContainer.setOnClickListener {
+            contract.launch("image/*")
+//            uploadImage()
+        }
 
         binding.topBar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -424,7 +501,7 @@ class AddSchoolFragment : Fragment() {
             checkValidationsAndApiCall(1)
         }
 
-        binding.schoolDetails.btnSave.setOnClickListener {
+        binding.schoolDetails.btnNext.setOnClickListener {
             Timber.d("data binding data 2")
             Timber.d(Gson().toJson(viewModel.newSchoolData.value))
             checkValidationsAndApiCall(2)
@@ -733,14 +810,14 @@ class AddSchoolFragment : Fragment() {
         if (schoolData == null) {
             binding.basicDetails.btnSave.text =
                 resources.getString(com.phntechnolab.sales.R.string.next)
-            binding.schoolDetails.btnSave.text =
+            binding.schoolDetails.btnNext.text =
                 resources.getString(com.phntechnolab.sales.R.string.next)
             binding.followupDetails.btnSave.text =
                 resources.getString(com.phntechnolab.sales.R.string.save)
         } else {
             binding.basicDetails.btnSave.text =
                 resources.getString(com.phntechnolab.sales.R.string.save)
-            binding.schoolDetails.btnSave.text =
+            binding.schoolDetails.btnNext.text =
                 resources.getString(com.phntechnolab.sales.R.string.save)
             binding.followupDetails.btnSave.text =
                 resources.getString(com.phntechnolab.sales.R.string.save)

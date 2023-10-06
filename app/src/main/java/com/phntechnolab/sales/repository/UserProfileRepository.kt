@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.api.RetrofitApi
+import com.phntechnolab.sales.model.ChangePasswordModel
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.UserDataModel
 import com.phntechnolab.sales.model.UserResponse
@@ -21,6 +22,9 @@ class UserProfileRepository @Inject constructor(
 
     private var userProfileMutableLiveData = MutableLiveData<NetworkResult<UserDataModel>>()
     val userProfileLiveData: LiveData<NetworkResult<UserDataModel>> get() = userProfileMutableLiveData
+
+    private var _changePasswordMutableLiveData = MutableLiveData<NetworkResult<CustomResponse>>()
+    val changePasswordLiveData: LiveData<NetworkResult<CustomResponse>> get() = _changePasswordMutableLiveData
 
     private val logoutMutableLiveData = MutableLiveData<NetworkResult<CustomResponse>>()
 
@@ -55,6 +59,39 @@ class UserProfileRepository @Inject constructor(
         } else {
 //            Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
             logoutMutableLiveData.postValue(
+                NetworkResult.Error(application.getString(R.string.something_went_wrong))
+            )
+        }
+    }
+
+    suspend fun changePassword(context: Context, changePasswordModel: ChangePasswordModel) {
+        if (NetworkUtils.isInternetAvailable(application)) {
+            try {
+                val result = retrofitApi.changePassword(changePasswordModel)
+                result.body()?.status_code = result.code()
+                if (result.isSuccessful && result.body() != null) {
+                    _changePasswordMutableLiveData.postValue(NetworkResult.Success(result.body()))
+                } else if (result.errorBody() != null) {
+//                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    _changePasswordMutableLiveData.postValue(
+                        NetworkResult.Error(application.getString(R.string.something_went_wrong))
+                    )
+                } else {
+//                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    _changePasswordMutableLiveData.postValue(
+                        NetworkResult.Error(application.getString(R.string.something_went_wrong))
+                    )
+                }
+
+            } catch (e: Exception) {
+//                Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                _changePasswordMutableLiveData.postValue(
+                    NetworkResult.Error(application.getString(R.string.something_went_wrong))
+                )
+            }
+        } else {
+//            Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+            _changePasswordMutableLiveData.postValue(
                 NetworkResult.Error(application.getString(R.string.something_went_wrong))
             )
         }

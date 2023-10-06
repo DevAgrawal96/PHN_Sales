@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.phntechnolab.sales.viewmodel.AddSchoolViewModel" />
@@ -62,6 +62,7 @@
                         android:id="@+id/edt_school_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
                         android:inputType="text"
                         android:maxLines="1"
                         android:text="@={viewModel.newSchoolData.schoolName}" />
@@ -86,9 +87,10 @@
                         android:id="@+id/edt_school_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:text="@={viewModel.newSchoolData.schoolAddress}"/>
+                        android:text="@={viewModel.newSchoolData.schoolAddress}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -110,7 +112,7 @@
                         android:id="@+id/boardSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none"/>
+                        android:inputType="none" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -133,9 +135,11 @@
                         android:id="@+id/edt_school_total_intake"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
                         android:inputType="number"
+                        android:maxLength="5"
                         android:maxLines="1"
-                        android:text="@={``+ viewModel.newSchoolData.intake}"/>
+                        android:text="@={``+ viewModel.newSchoolData.intake}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -157,9 +161,11 @@
                         android:id="@+id/edt_total_no_of_classroom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
                         android:inputType="number"
+                        android:maxLength="4"
                         android:maxLines="1"
-                        android:text="@={``+ viewModel.newSchoolData.totalClassRoom}"/>
+                        android:text="@={``+ viewModel.newSchoolData.totalClassRoom}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -181,9 +187,10 @@
                         android:id="@+id/edt_email_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLines="1"
+                        android:imeOptions="actionNext"
                         android:inputType="text"
-                        android:text="@={viewModel.newSchoolData.email}"/>
+                        android:maxLines="1"
+                        android:text="@={viewModel.newSchoolData.email}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -205,9 +212,10 @@
                         android:id="@+id/edt_coordinator_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:text="@={viewModel.newSchoolData.coName}"/>
+                        android:text="@={viewModel.newSchoolData.coName}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -229,9 +237,10 @@
                         android:id="@+id/edt_coordinator_mono"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
                         android:inputType="number"
-                        android:maxLength="15"
-                        android:text="@={viewModel.newSchoolData.coMobileNo}"/>
+                        android:maxLength="10"
+                        android:text="@={viewModel.newSchoolData.coMobileNo}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 

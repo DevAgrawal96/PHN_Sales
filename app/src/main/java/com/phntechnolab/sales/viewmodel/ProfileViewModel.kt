@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.phntechnolab.sales.model.ChangePasswordModel
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.UserDataModel
 import com.phntechnolab.sales.model.UserResponse
@@ -23,6 +24,9 @@ class ProfileViewModel @Inject constructor(private var userProfileRepository: Us
     val logoutLiveData: LiveData<NetworkResult<CustomResponse>>
         get() = userProfileRepository.logoutLiveData
 
+    val changePasswordLiveData: LiveData<NetworkResult<CustomResponse>>
+        get() = userProfileRepository.changePasswordLiveData
+
     fun userProfileData() {
         viewModelScope.launch {
             userProfileRepository.userProfileData()
@@ -32,6 +36,12 @@ class ProfileViewModel @Inject constructor(private var userProfileRepository: Us
     fun logout(context: Context) {
         viewModelScope.launch {
             userProfileRepository.logout(context)
+        }
+    }
+
+    fun changePassword(context: Context, changePasswordModel: ChangePasswordModel) {
+        viewModelScope.launch {
+            userProfileRepository.changePassword(context, changePasswordModel)
         }
     }
 }

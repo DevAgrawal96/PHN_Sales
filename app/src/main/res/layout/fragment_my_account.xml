@@ -74,8 +74,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
-                        android:text="@{viewModel.newUserData.name}"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:text="@{viewModel.newUserData.name}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -97,8 +97,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
-                        android:text="@{viewModel.newUserData.email}"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:text="@{viewModel.newUserData.email}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -120,8 +120,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
-                        android:text="@{viewModel.newUserData.mobile_no}"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:text="@{viewModel.newUserData.mobile_no}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -151,13 +151,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/update_btn"
-            android:layout_width="@dimen/dimen_0dp"
             style="@style/buttonStyle"
+            android:layout_width="@dimen/dimen_0dp"
             android:layout_marginStart="@dimen/dimen_16dp"
             android:layout_marginEnd="@dimen/dimen_16dp"
             android:layout_marginBottom="@dimen/dimen_16dp"
             android:backgroundTint="@color/regular_blue"
             android:text="@string/update"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

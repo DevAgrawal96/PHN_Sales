@@ -126,26 +126,7 @@ class ProfileFragment : Fragment(), MenuProvider {
             Handler(Looper.getMainLooper()).postDelayed({
                 dialog.dismiss()
                 viewModel.logout(requireContext())
-                viewModel.logoutLiveData.observe(viewLifecycleOwner) {
-                    when (it) {
-                        is NetworkResult.Success -> {
-                            lifecycleScope.launch(Dispatchers.IO) {
-                                clearDataStore(requireContext(), dataStoreProvider)
-                                lifecycleScope.launch(Dispatchers.Main) {
-                                    findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
-                                }
-                            }
 
-                        }
-
-                        is NetworkResult.Error -> {
-                        }
-
-                        else -> {
-
-                        }
-                    }
-                }
             }, 3000)
         }
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
@@ -165,7 +146,30 @@ class ProfileFragment : Fragment(), MenuProvider {
         super.onViewCreated(view, savedInstanceState)
         setActionBar()
         setDataToAdapter()
+        observable()
+    }
 
+    private fun observable() {
+        viewModel.logoutLiveData.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        clearDataStore(requireContext(), dataStoreProvider)
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
+                        }
+                    }
+
+                }
+
+                is NetworkResult.Error -> {
+                }
+
+                else -> {
+
+                }
+            }
+        }
     }
 
     private fun userProfileDataObservable() {

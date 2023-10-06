@@ -5,15 +5,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentChangePasswordBinding
+import com.phntechnolab.sales.model.ChangePasswordModel
+import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.viewmodel.ProfileViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class ChangePasswordFragment : Fragment() {
     private var _binding: FragmentChangePasswordBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: ProfileViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -48,6 +57,53 @@ class ChangePasswordFragment : Fragment() {
         }
         binding.topAppBar.setNavigationOnClickListener {
             findNavController().popBackStack()
+        }
+        binding.changePasswordButton.setOnClickListener {
+            if (binding.edtOldPassword.text?.isNotBlank()!! &&
+                binding.edtNewPassword.text?.isNotBlank()!! &&
+                binding.edtConfirmPassword.text?.isNotBlank()!!
+            ) {
+                viewModel.changePassword(
+                    requireContext(),
+                    ChangePasswordModel(
+                        binding.edtConfirmPassword.text.toString(),
+                        binding.edtNewPassword.text.toString(),
+                        binding.edtOldPassword.text.toString()
+                    )
+                )
+                viewModel.changePasswordLiveData.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is NetworkResult.Success -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "Password change successfully!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            findNavController().popBackStack()
+                        }
+
+                        is NetworkResult.Error -> {
+//                            Toast.makeText(
+//                                requireContext(),
+//                                "Password change successfully!",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+                        }
+
+                        is NetworkResult.Loading -> {
+
+                        }
+
+                        else -> {
+
+                        }
+                    }
+                }
+            } else {
+                Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
         }
     }
 

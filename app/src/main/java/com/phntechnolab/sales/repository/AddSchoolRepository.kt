@@ -10,10 +10,13 @@ import com.phntechnolab.sales.R
 import com.phntechnolab.sales.api.RetrofitApi
 import com.phntechnolab.sales.model.AddSchoolSchema
 import com.phntechnolab.sales.model.CustomResponse
+import com.phntechnolab.sales.model.ImageDataModel
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.model.UserResponse
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.NetworkUtils
+import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import timber.log.Timber
 import java.sql.Time
@@ -22,7 +25,7 @@ import javax.inject.Inject
 class AddSchoolRepository @Inject constructor(
     private val application: Application,
     private val retrofitApi: RetrofitApi
-)  {
+) {
 
     private val _addSchoolResponse = MutableLiveData<NetworkResult<CustomResponse>>()
 
@@ -34,9 +37,14 @@ class AddSchoolRepository @Inject constructor(
     val updateSchoolResponse: LiveData<NetworkResult<CustomResponse>>
         get() = _updateSchoolResponse
 
-    suspend fun updateSchoolData(id: String, schoolData: SchoolData){
+    private val _imageUploadResponse = MutableLiveData<NetworkResult<CustomResponse>>()
+
+    val imageUploadResponse: LiveData<NetworkResult<CustomResponse>>
+        get() = _imageUploadResponse
+
+    suspend fun updateSchoolData(id: String, schoolData: SchoolData) {
         if (NetworkUtils.isInternetAvailable(application)) {
-            try{
+            try {
 //                Log.e("Multipart body data", ""+ String(schoolData.toByte))
                 val result = retrofitApi.updateSchoolData(id, schoolData)
                 Timber.e("Result 1 update")
@@ -51,27 +59,30 @@ class AddSchoolRepository @Inject constructor(
                     _updateSchoolResponse.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
-                            CustomResponse( result.code(), result.errorBody()?.string())
+                            CustomResponse(result.code(), result.errorBody()?.string())
                         )
                     )
                 } else {
                     _updateSchoolResponse.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
-                            CustomResponse( result.code(), application.getString(R.string.something_went_wrong))
+                            CustomResponse(
+                                result.code(),
+                                application.getString(R.string.something_went_wrong)
+                            )
                         )
                     )
                 }
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 ex.printStackTrace()
             }
         } else {
         }
     }
 
-    suspend fun addNewSchool(schoolData: AddSchoolSchema){
+    suspend fun addNewSchool(schoolData: MultipartBody) {
         if (NetworkUtils.isInternetAvailable(application)) {
-            try{
+            try {
                 val result = retrofitApi.addSchool(schoolData)
                 Timber.e("Result 1 add")
                 Timber.e(Gson().toJson(schoolData))
@@ -84,21 +95,70 @@ class AddSchoolRepository @Inject constructor(
                     _addSchoolResponse.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
-                            CustomResponse( result.code(), result.errorBody()?.string())
+                            CustomResponse(result.code(), result.errorBody()?.string())
                         )
                     )
                 } else {
                     _addSchoolResponse.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
-                            CustomResponse( result.code(), application.getString(R.string.something_went_wrong))
+                            CustomResponse(
+                                result.code(),
+                                application.getString(R.string.something_went_wrong)
+                            )
                         )
                     )
                 }
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 ex.printStackTrace()
             }
         } else {
+        }
+    }
+
+    suspend fun uploadImage(imageData: ImageDataModel) {
+        if (NetworkUtils.isInternetAvailable(application)) {
+            try {
+                val result = retrofitApi.uploadImg(
+                    MultipartBody.Part.createFormData(
+                        "image",
+                        imageData.image_name,
+                        imageData.image.body()
+                    ), imageData.image_name
+                )
+                result.body()?.status_code = result.code()
+                if (result.isSuccessful && result.body() != null) {
+                    _imageUploadResponse.postValue(NetworkResult.Success(result.body()))
+                } else if (result.errorBody() != null) {
+                    _imageUploadResponse.postValue(
+                        NetworkResult.Error(
+                            application.getString(R.string.something_went_wrong),
+                            CustomResponse(result.code(), result.errorBody()?.string())
+                        )
+                    )
+                } else {
+                    _imageUploadResponse.postValue(
+                        NetworkResult.Error(
+                            application.getString(R.string.something_went_wrong),
+                            CustomResponse(
+                                result.code(),
+                                application.getString(R.string.something_went_wrong)
+                            )
+                        )
+                    )
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+                NetworkResult.Error(
+                    application.getString(R.string.something_went_wrong),
+                    null
+                )
+            }
+        } else {
+            NetworkResult.Error(
+                application.getString(R.string.something_went_wrong),
+                null
+            )
         }
     }
 }
