@@ -54,6 +54,7 @@ class CostingMOADocumentFragment : Fragment() {
                 1 -> {
                     binding.proposeCostingStage.root.visibility = View.VISIBLE
                     binding.moaDocument.root.visibility = View.GONE
+                    binding.topAppBar.title = requireActivity().getString(com.phntechnolab.sales.R.string.propose_costing_stage)
                     position = 0
                     binding.stepView.done(false)
                     binding.stepView.go(position, true)
