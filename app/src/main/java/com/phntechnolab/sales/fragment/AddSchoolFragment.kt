@@ -1,5 +1,6 @@
 package com.phntechnolab.sales.fragment
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -14,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -46,6 +46,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.Calendar
 import java.util.regex.Pattern
+
 
 @AndroidEntryPoint
 class AddSchoolFragment : Fragment() {
@@ -282,37 +283,38 @@ class AddSchoolFragment : Fragment() {
 
         //Labs dropdown set
 
-        val labsDropdown: AutoCompleteTextView = binding.schoolDetails.existingLabs
-        val labsItem = ArrayList<String>()
-
-        if (_schoolData?.existingLab != null && !_schoolData.existingLab.isNullOrBlank()) {
-            labsItem.add(_schoolData.existingLab)
-        }
-
-        arrayOf(
-            "Science Lab",
-            "Computer Lab",
-            "Engineering and Robotics Lab",
-            "Art and Creativity Lab",
-            "Environmental Science Lab",
-            "Music and Audio Lab",
-            "Physics and Electronics Lab",
-            "Chemistry Lab",
-            "Biology Lab"
-        ).forEach {
-            if (!labsItem.any { itemName -> itemName.contains(it) }) {
-                labsItem.add(it)
-            } else {
-                binding.schoolDetails.existingLabs.setText(it)
-            }
-        }
-        val labsAdapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(
-                requireContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                labsItem
-            )
-        labsDropdown.setAdapter(labsAdapter)
+        setLabsDialog()
+//        val labsDropdown: AutoCompleteTextView = binding.schoolDetails.existingLabs
+//        val labsItem = ArrayList<String>()
+//
+//        if (_schoolData?.existingLab != null && !_schoolData.existingLab.isNullOrBlank()) {
+//            labsItem.add(_schoolData.existingLab)
+//        }
+//
+//        arrayOf(
+//            "Science Lab",
+//            "Computer Lab",
+//            "Engineering and Robotics Lab",
+//            "Art and Creativity Lab",
+//            "Environmental Science Lab",
+//            "Music and Audio Lab",
+//            "Physics and Electronics Lab",
+//            "Chemistry Lab",
+//            "Biology Lab"
+//        ).forEach {
+//            if (!labsItem.any { itemName -> itemName.contains(it) }) {
+//                labsItem.add(it)
+//            } else {
+//                binding.schoolDetails.existingLabs.setText(it)
+//            }
+//        }
+//        val labsAdapter: ArrayAdapter<String> =
+//            ArrayAdapter<String>(
+//                requireContext(),
+//                android.R.layout.simple_spinner_dropdown_item,
+//                labsItem
+//            )
+//        labsDropdown.setAdapter(labsAdapter)
 
         //set lead type dropdown
 
@@ -342,6 +344,103 @@ class AddSchoolFragment : Fragment() {
                 leadTypes
             )
         leadTypeDropdown.setAdapter(leadsAdapter)
+    }
+
+    private fun setLabsDialog() {
+
+        val labsData = arrayOf(
+            "Science Lab",
+            "Computer Lab",
+            "Engineering and Robotics Lab",
+            "Art and Creativity Lab",
+            "Environmental Science Lab",
+            "Music and Audio Lab",
+            "Physics and Electronics Lab",
+            "Chemistry Lab",
+            "Biology Lab"
+        )
+        val selectedLabs = BooleanArray(labsData.size)
+
+        val labList = ArrayList<Int>()
+
+        labsData.forEachIndexed { index, s ->
+            if(viewModel.newSchoolData.value?.existingLab?.contains(s) == true){
+                selectedLabs[index] = true
+                labList.add(index)
+
+            }else{
+                selectedLabs[index] = false
+            }
+        }
+
+        binding.schoolDetails.existingLabs.setOnClickListener {
+            // Initialize alert dialog
+            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+
+            // set title
+            builder.setTitle("Select existing labs in school")
+
+            // set dialog non cancelable
+            builder.setCancelable(false)
+
+            builder.setMultiChoiceItems(labsData, selectedLabs
+            ) { dialogInterface, i, b ->
+                // check condition
+                if (b) {
+                    // Add position  in lang list
+                    labList.add(i)
+                    // Sort array list
+                    labList.sort()
+                } else {
+                    // when checkbox unselected
+                    // Remove position from langList
+                    labList.remove(Integer.valueOf(i))
+                }
+            }
+
+            builder.setPositiveButton(
+                "OK"
+            ) { dialogInterface, i -> // Initialize string builder
+                val stringBuilder = StringBuilder()
+                // use for loop
+                for (j in 0 until labList.size) {
+                    // concat array value
+                    stringBuilder.append(labsData[labList[j]])
+                    // check condition
+                    if (j != labList.size - 1) {
+                        // When j value  not equal
+                        // to lang list size - 1
+                        // add comma
+                        stringBuilder.append(", ")
+                    }
+                }
+                // set text on textView
+                binding.schoolDetails.existingLabs.setText(stringBuilder.toString())
+                viewModel._newSchoolData.value?.existingLab = stringBuilder.toString()
+            }
+
+            builder.setNegativeButton(
+                "Cancel"
+            ) { dialogInterface, i -> // dismiss dialog
+                dialogInterface.dismiss()
+            }
+
+            builder.setNeutralButton(
+                "Clear All"
+            ) { dialogInterface, i ->
+                // use for loop
+                for (j in selectedLabs.indices) {
+                    // remove all selection
+                    selectedLabs[j] = false
+                    // clear language list
+                    labList.clear()
+                    // clear text view value
+                    binding.schoolDetails.existingLabs.setText("")
+                }
+            }
+            // show dialog
+            builder.show()
+        }
     }
 
     private fun observers() {

@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -25,8 +24,6 @@ import com.phntechnolab.sales.databinding.FragmentCoordinatorDmMeetingBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.DMData
-import com.phntechnolab.sales.model.MOADocumentData
-import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.viewmodel.CoordinatorDmMeetingViewModel
 import dagger.hilt.android.AndroidEntryPoint

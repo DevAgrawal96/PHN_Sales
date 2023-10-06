@@ -54,6 +54,8 @@ class CostingMOADocumentFragment : Fragment() {
                 1 -> {
                     binding.proposeCostingStage.root.visibility = View.VISIBLE
                     binding.moaDocument.root.visibility = View.GONE
+                    binding.topAppBar.title =
+                        requireActivity().getString(com.phntechnolab.sales.R.string.propose_costing_stage)
                     position = 0
                     binding.stepView.done(false)
                     binding.stepView.go(position, true)
@@ -110,13 +112,16 @@ class CostingMOADocumentFragment : Fragment() {
         binding.proposeCostingStage.updateBtn.setOnClickListener {
             Timber.e("DATA POST")
             Timber.e(Gson().toJson(viewModel._proposeCostingData.value))
-            viewModel.updateProposeCostingDetails()
+            if (isProposeCostingFieldsValid()) {
+                viewModel.updateProposeCostingDetails()
+            }
         }
 
         binding.moaDocument.updateBtn.setOnClickListener {
             Timber.e("MOA DATA POST")
             Timber.e(Gson().toJson(viewModel._moaDocumentData.value))
-            viewModel.updateMoaDocumentDetails()
+            if (isMOADocumentFieldsValid())
+                viewModel.updateMoaDocumentDetails()
         }
 
         binding.proposeCostingStage.autoAgreementDuration.setOnItemClickListener { parent, view, position, id ->
@@ -152,6 +157,84 @@ class CostingMOADocumentFragment : Fragment() {
         binding.moaDocument.autoSelectDesignation.setOnItemClickListener { parent, view, position, id ->
             val designation = parent.adapter.getItem(position) as String
             viewModel._moaDocumentData.value?.designation = designation
+        }
+    }
+
+    private fun isProposeCostingFieldsValid(): Boolean {
+        val isPriceDiscussedPending = viewModel._proposeCostingData.value?.priceDiscussed != "yes"
+
+        val isPricepPerStudentPending =
+            viewModel._proposeCostingData.value?.pricePerStudent.isNullOrBlank()
+
+        val isQuotationSharedPending = viewModel._proposeCostingData.value?.quotationShared != "yes"
+
+        val isPaymentScheduledPending = viewModel._proposeCostingData.value?.paymentShedule != "yes"
+
+        val isAgreementDurationNotSelected =
+            viewModel._proposeCostingData.value?.agreementDuration.isNullOrBlank()
+
+        val isMeetingWithWhoomNotSelected =
+            viewModel._proposeCostingData.value?.meetingWithWhoom.isNullOrBlank()
+
+        val isConversationRatioNotSelected =
+            viewModel._proposeCostingData.value?.conversationRatio.isNullOrBlank()
+
+        val isNextMeetingDateNotSelected =
+            viewModel._proposeCostingData.value?.nextMeet.isNullOrBlank()
+
+
+        return if (isPriceDiscussedPending ||
+            isPricepPerStudentPending ||
+            isQuotationSharedPending ||
+            isPaymentScheduledPending ||
+            isAgreementDurationNotSelected ||
+            isMeetingWithWhoomNotSelected ||
+            isConversationRatioNotSelected ||
+            isNextMeetingDateNotSelected
+        ) {
+            Toast.makeText(
+                requireContext(),
+                requireActivity().getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_details),
+                Toast.LENGTH_LONG
+            ).show()
+            false
+        } else {
+            true
+        }
+    }
+
+    private fun isMOADocumentFieldsValid(): Boolean {
+
+        val isTotalInterestedIntakeNotFilled =
+            viewModel._moaDocumentData.value?.interestedIntake.isNullOrBlank()
+
+        val isCostingPerStudentNotFilled =
+            viewModel._moaDocumentData.value?.finalCosting.isNullOrBlank()
+
+        val isAgreementDurationNotSelected =
+            viewModel._moaDocumentData.value?.agreementDuration.isNullOrBlank()
+
+        val isDiscussedWithWhoomNotSelected =
+            viewModel._moaDocumentData.value?.disscussedWithWhom.isNullOrBlank()
+
+        val isDesignationNotSelected =
+            viewModel._moaDocumentData.value?.designation.isNullOrBlank()
+
+
+        return if (isTotalInterestedIntakeNotFilled ||
+            isCostingPerStudentNotFilled ||
+            isDiscussedWithWhoomNotSelected ||
+            isDesignationNotSelected ||
+            isAgreementDurationNotSelected
+        ) {
+            Toast.makeText(
+                requireContext(),
+                requireActivity().getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_details),
+                Toast.LENGTH_LONG
+            ).show()
+            false
+        } else {
+            true
         }
     }
 
@@ -269,7 +352,11 @@ class CostingMOADocumentFragment : Fragment() {
                 }
 
                 else -> {
-                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -280,7 +367,7 @@ class CostingMOADocumentFragment : Fragment() {
             when (it) {
                 is NetworkResult.Success -> {
                     showDialog()
-                    setPositionView()
+//                    setPositionView()
                 }
 
                 is NetworkResult.Error -> {
@@ -288,7 +375,11 @@ class CostingMOADocumentFragment : Fragment() {
                 }
 
                 else -> {
-                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -314,6 +405,10 @@ class CostingMOADocumentFragment : Fragment() {
         dialog.setContentView(dialogBinding.root)
         dialog.window?.setBackgroundDrawableResource(R.color.transparent)
         dialog.show()
+        Handler(Looper.getMainLooper()).postDelayed({
+            findNavController().popBackStack()
+            dialog.dismiss()
+        }, 3000)
     }
 
     private fun initializeProposeCostingData(proposeCostingData: ProposeCostingData?) {
