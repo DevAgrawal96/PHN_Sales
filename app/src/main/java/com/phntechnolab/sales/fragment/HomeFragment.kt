@@ -15,7 +15,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
@@ -55,7 +54,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
         binding.all.isChecked = true
         getData()
-
     }
 
     override fun onCreateView(
@@ -213,7 +211,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
             }
 
             "Visited" -> {
-
                 requireView().findNavController()
                     .navigate(
                         HomeFragmentDirections.actionHomeFragmentToMeetingFragment(
@@ -225,7 +222,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
             }
 
             "Propose Costing" -> {
-
                 requireView().findNavController()
                     .navigate(
                         HomeFragmentDirections.actionHomeFragmentToCostingMoaDocumentFragment(

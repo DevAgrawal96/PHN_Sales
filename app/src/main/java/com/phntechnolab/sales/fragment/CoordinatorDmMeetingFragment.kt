@@ -312,8 +312,8 @@ class CoordinatorDmMeetingFragment : Fragment() {
 
         val dropdown: MaterialAutoCompleteTextView = binding.dmMeeting.autoMeetingAgenda
         val items = ArrayList<String>().apply {
-            add("Price discussion")
             add("Demo/Discussion")
+            add("Price discussion")
         }
 
         if(viewModel.dmMeetData.value?.meetingStatus == "Propose Costing"){
