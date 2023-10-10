@@ -24,8 +24,8 @@
         <action
             android:id="@+id/action_homeFragment_to_addSchoolFragment"
             app:destination="@id/addSchoolFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left" />
+            app:enterAnim="@anim/to_left"
+            app:exitAnim="@anim/from_left" />
         <action
             android:id="@+id/action_homeFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
@@ -37,19 +37,13 @@
             app:destination="@id/notificationFragment" />
         <action
             android:id="@+id/action_homeFragment_to_meetingFragment"
-            app:destination="@id/coordinatorDmMeeting"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"/>
+            app:destination="@id/coordinatorDmMeeting"/>
         <action
             android:id="@+id/action_homeFragment_to_costingMoaDocumentFragment"
-            app:destination="@id/costingMoaDocumentFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"/>
+            app:destination="@id/costingMoaDocumentFragment"/>
         <action
             android:id="@+id/action_homeFragment_to_moaSignedFragment"
-            app:destination="@id/installmentFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"/>
+            app:destination="@id/installmentFragment"/>
     </fragment>
 
     <fragment

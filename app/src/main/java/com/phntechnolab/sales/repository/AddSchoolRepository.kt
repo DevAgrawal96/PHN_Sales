@@ -2,24 +2,17 @@ package com.phntechnolab.sales.repository
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.api.RetrofitApi
-import com.phntechnolab.sales.model.AddSchoolSchema
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.ImageDataModel
-import com.phntechnolab.sales.model.SchoolData
-import com.phntechnolab.sales.model.UserResponse
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.NetworkUtils
-import okhttp3.MediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import timber.log.Timber
-import java.sql.Time
 import javax.inject.Inject
 
 class AddSchoolRepository @Inject constructor(
@@ -42,10 +35,11 @@ class AddSchoolRepository @Inject constructor(
     val imageUploadResponse: LiveData<NetworkResult<CustomResponse>>
         get() = _imageUploadResponse
 
-    suspend fun updateSchoolData(id: String, schoolData: SchoolData) {
+    suspend fun updateSchoolData(id: String, schoolData: MultipartBody) {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
-//                Log.e("Multipart body data", ""+ String(schoolData.toByte))
+                Log.e("Multipart body data", Gson().toJson(schoolData))
+                Log.e("Multipart body data", id)
                 val result = retrofitApi.updateSchoolData(id, schoolData)
                 Timber.e("Result 1 update")
                 Timber.e(id.toString())
@@ -116,37 +110,31 @@ class AddSchoolRepository @Inject constructor(
         }
     }
 
-    suspend fun uploadImage(imageData: ImageDataModel) {
+    suspend fun uploadImage(id: Int, imageData: MultipartBody) {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
-                val result = retrofitApi.uploadImg(
-                    MultipartBody.Part.createFormData(
-                        "image",
-                        imageData.image_name,
-                        imageData.image.body()
-                    ), imageData.image_name
-                )
-                result.body()?.status_code = result.code()
-                if (result.isSuccessful && result.body() != null) {
-                    _imageUploadResponse.postValue(NetworkResult.Success(result.body()))
-                } else if (result.errorBody() != null) {
-                    _imageUploadResponse.postValue(
-                        NetworkResult.Error(
-                            application.getString(R.string.something_went_wrong),
-                            CustomResponse(result.code(), result.errorBody()?.string())
-                        )
-                    )
-                } else {
-                    _imageUploadResponse.postValue(
-                        NetworkResult.Error(
-                            application.getString(R.string.something_went_wrong),
-                            CustomResponse(
-                                result.code(),
-                                application.getString(R.string.something_went_wrong)
-                            )
-                        )
-                    )
-                }
+                val result = retrofitApi.updateSchoolImage(id, imageData)
+//                result.body()?.status_code = result.code()
+//                if (result.isSuccessful && result.body() != null) {
+//                    _imageUploadResponse.postValue(NetworkResult.Success(result.body()))
+//                } else if (result.errorBody() != null) {
+//                    _imageUploadResponse.postValue(
+//                        NetworkResult.Error(
+//                            application.getString(R.string.something_went_wrong),
+//                            CustomResponse(result.code(), result.errorBody()?.string())
+//                        )
+//                    )
+//                } else {
+//                    _imageUploadResponse.postValue(
+//                        NetworkResult.Error(
+//                            application.getString(R.string.something_went_wrong),
+//                            CustomResponse(
+//                                result.code(),
+//                                application.getString(R.string.something_went_wrong)
+//                            )
+//                        )
+//                    )
+//                }
             } catch (ex: Exception) {
                 ex.printStackTrace()
                 NetworkResult.Error(

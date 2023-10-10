@@ -37,7 +37,7 @@
                     android:layout_marginStart="@dimen/dimen_16dp"
                     android:layout_marginTop="@dimen/dimen_16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:hint="@string/total_interested_intake"
+                    android:hint="@string/total_interested_intake_mandate"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +60,7 @@
                     android:layout_marginStart="@dimen/dimen_16dp"
                     android:layout_marginTop="@dimen/dimen_16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:hint="@string/enter_final_costing_per_student"
+                    android:hint="@string/enter_final_costing_per_student_mandate"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +84,7 @@
                     android:layout_marginStart="@dimen/dimen_16dp"
                     android:layout_marginTop="@dimen/dimen_16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:hint="@string/agreement_duration"
+                    android:hint="@string/agreement_duration_mandate"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -107,7 +107,7 @@
                     android:layout_marginStart="@dimen/dimen_16dp"
                     android:layout_marginTop="@dimen/dimen_16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:hint="@string/discussed_with_whom"
+                    android:hint="@string/discussed_with_whom_mandate"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -154,7 +154,7 @@
                     android:layout_marginStart="@dimen/dimen_16dp"
                     android:layout_marginTop="@dimen/dimen_16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:hint="@string/select_designation"
+                    android:hint="@string/select_designation_mandate"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -186,7 +186,7 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout"
+                    android:id="@+id/documentConstraint"
                     android:layout_width="@dimen/dimen_0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_16dp"
@@ -213,7 +213,7 @@
                         app:layout_constraintVertical_bias="0.0" />
 
                     <TextView
-                        android:id="@+id/textView6"
+                        android:id="@+id/documentFileName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dimen_8dp"
@@ -237,7 +237,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+                    app:layout_constraintTop_toBottomOf="@+id/documentConstraint"
                     app:layout_constraintVertical_bias="0.0">
 
                     <com.google.android.material.textfield.TextInputEditText

@@ -9,10 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.phntechnolab.sales.model.AddSchoolSchema
 import com.phntechnolab.sales.model.CustomResponse
-import com.phntechnolab.sales.model.ImageDataModel
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.repository.AddSchoolRepository
-import com.phntechnolab.sales.repository.LoginRepository
 import com.phntechnolab.sales.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -61,7 +59,7 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
 
     fun addNewSchool() {
 
-        val multiPartBody: MultipartBody = returnJsonData()
+        val multiPartBody: MultipartBody = returnJsonData(_newSchoolData.value?: SchoolData(), true)
 
         val addSchoolData: AddSchoolSchema = returnSchoolSchema()
         viewModelScope.launch {
@@ -70,27 +68,32 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
         }
     }
 
-    private fun changeIntoMultipartBody(addSchoolData: AddSchoolSchema): MultipartBody {
-        val multipartBody = returnJsonData()
-        return multipartBody
+    fun uploadImage(){
+        viewModelScope.launch {
+            repositories.uploadImage(_newSchoolData.value?.id ?: 0, MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("school_image", "$imageName.jpg", _requestFile!!).build())
+        }
     }
 
     fun updateSchoolDetails() {
 
-        val multiPartBody: MultipartBody = returnJsonData()
+        val multiPartBody: MultipartBody = returnJsonData(_newSchoolData.value?: SchoolData(), false)
 
         viewModelScope.launch {
             Timber.e(Gson().toJson(newSchoolData.value))
             repositories.updateSchoolData(
                 newSchoolData.value?.id.toString() ?: "",
-                newSchoolData.value ?: SchoolData()
+                multiPartBody
             )
+        }.invokeOnCompletion {
+            viewModelScope.launch {
+                uploadImage()
+            }
         }
     }
 
     fun uploadImage(imageUri: Uri, context: Context) {
         val fileDir = context.filesDir
-        val file = File(fileDir, "image.png")
+        val file = File(fileDir, "image.jpg")
         val inputStream = context.contentResolver.openInputStream(imageUri)
         val fileOutputStream = FileOutputStream(file)
         inputStream?.copyTo(fileOutputStream)
@@ -107,28 +110,31 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
         imageName = sdf.format(Date())
     }
 
-    private fun returnJsonData(): MultipartBody {
-        return MultipartBody.Builder().setType(MultipartBody.FORM)
-            .addFormDataPart("school_name", newSchoolData.value?.schoolName ?: "")
-            .addFormDataPart("school_address", newSchoolData.value?.schoolAddress ?: "")
-            .addFormDataPart("board", newSchoolData.value?.board ?: "")
-            .addFormDataPart("intake", newSchoolData.value?.intake.toString())
-            .addFormDataPart("total_class_room", newSchoolData.value?.totalClassRoom.toString())
-            .addFormDataPart("email", newSchoolData.value?.email ?: "")
-            .addFormDataPart("co_mobile_no", newSchoolData.value?.coMobileNo ?: "")
-            .addFormDataPart("co_name", newSchoolData.value?.coName ?: "")
-            .addFormDataPart("director_name", newSchoolData.value?.directorName ?: "")
-            .addFormDataPart("director_mob_no", newSchoolData.value?.directorMobNo ?: "")
-            .addFormDataPart("avg_school_fees", newSchoolData.value?.avgSchoolFees ?: "")
-            .addFormDataPart("existing_lab", newSchoolData.value?.existingLab ?: "")
-            .addFormDataPart("exp_quated_value", newSchoolData.value?.expQuatedValue ?: "")
-            .addFormDataPart("lead_type", newSchoolData.value?.leadType ?: "")
-            .addFormDataPart("next_followup", newSchoolData.value?.nextFollowup ?: "")
-            .addFormDataPart("followup_type", newSchoolData.value?.followupType ?: "")
-            .addFormDataPart("upload_img", newSchoolData.value?.uploadImg ?: "")
-            .addFormDataPart("remark", newSchoolData.value?.remark ?: "")
-            .addFormDataPart("school_image", "$imageName.jpg", _requestFile!!)
-            .build()
+    private fun returnJsonData(data: Any, isAddSchool: Boolean): MultipartBody {
+        var multipartBody = MultipartBody.Builder().setType(MultipartBody.FORM)
+            .addFormDataPart("school_name", (data as SchoolData)?.schoolName ?: "")
+            .addFormDataPart("school_address", data?.schoolAddress ?: "")
+            .addFormDataPart("board", data?.board ?: "")
+            .addFormDataPart("intake", data?.intake.toString())
+            .addFormDataPart("total_class_room", data?.totalClassRoom.toString())
+            .addFormDataPart("email", data?.email ?: "")
+            .addFormDataPart("co_mobile_no", data?.coMobileNo ?: "")
+            .addFormDataPart("co_name", data?.coName ?: "")
+            .addFormDataPart("director_name", data?.directorName ?: "")
+            .addFormDataPart("director_mob_no", data?.directorMobNo ?: "")
+            .addFormDataPart("avg_school_fees", data?.avgSchoolFees ?: "")
+            .addFormDataPart("existing_lab", data?.existingLab ?: "")
+            .addFormDataPart("exp_quated_value", data?.expQuatedValue ?: "")
+            .addFormDataPart("lead_type", data?.leadType ?: "")
+            .addFormDataPart("next_followup", data?.nextFollowup ?: "")
+            .addFormDataPart("followup_type", data?.followupType ?: "")
+            .addFormDataPart("upload_img", data?.uploadImg ?: "")
+            .addFormDataPart("remark", data?.remark ?: "")
+
+        if(isAddSchool)
+            multipartBody.addFormDataPart("school_image", "$imageName.jpg", _requestFile!!)
+
+        return multipartBody.build()
     }
 
     private fun returnSchoolSchema(): AddSchoolSchema {

@@ -1,16 +1,18 @@
 package com.phntechnolab.sales.repository
 
 import android.app.Application
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.api.RetrofitApi
 import com.phntechnolab.sales.model.CustomResponse
-import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.NetworkUtils
+import okhttp3.MultipartBody
 import javax.inject.Inject
 
 class CostingMOADocumentRepository @Inject constructor(
@@ -58,7 +60,8 @@ class CostingMOADocumentRepository @Inject constructor(
         }
     }
 
-    suspend fun moaDocumentData(moaDocumentData: MOADocumentData){
+    suspend fun moaDocumentData(moaDocumentData: MultipartBody){
+        Log.e("MOA DOCUMENT DATA", Gson().toJson(moaDocumentData))
         if (NetworkUtils.isInternetAvailable(application)) {
             try{
                 val result = retrofitApi.moaDocumentApi(moaDocumentData)

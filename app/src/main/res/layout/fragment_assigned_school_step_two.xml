@@ -212,7 +212,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/upload_school_img"
                     app:layout_constraintVertical_bias="0.0">
 
-
                     <ImageView
                         android:id="@+id/img_icon"
                         android:layout_width="@dimen/dimen_32dp"
@@ -225,7 +224,7 @@
                         app:srcCompat="@drawable/img_icon" />
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/imgName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dimen_16dp"
