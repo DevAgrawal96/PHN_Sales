@@ -1,21 +1,19 @@
 package com.phntechnolab.sales.api
 
-import com.phntechnolab.sales.model.AddSchoolSchema
 import com.phntechnolab.sales.model.ChangePasswordModel
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.DMData
-import com.phntechnolab.sales.model.ImageDataModel
 import com.phntechnolab.sales.model.LoginDetails
-import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.model.UserDataModel
 import com.phntechnolab.sales.model.UserResponse
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -55,11 +53,17 @@ interface RetrofitApi {
     @POST("api/addschool")
     suspend fun addSchool(@Body schoolDetails: MultipartBody): Response<CustomResponse>
 
-    @PUT("api/updateschool/{id} ")
+    @PUT("api/updateschool/{id}")
     suspend fun updateSchoolData(
         @Path(value = "id") id: String,
-        @Body schoolDetails: SchoolData
+        @Body schoolDetails: MultipartBody
     ): Response<CustomResponse>
+
+    @POST("api/updateimage/{id}")
+    suspend fun updateSchoolImage(
+        @Path(value = "id") id: Int,
+        @Body imageDetails: MultipartBody
+    ): Call<Void>
 
     @POST("api/coordinatormeet")
     suspend fun updateCoordinaterMeet(@Body coordinatorMeetDetails: CoordinatorData): Response<CustomResponse>
@@ -71,6 +75,6 @@ interface RetrofitApi {
     suspend fun proposeCostingApi(@Body proposeCostingData: ProposeCostingData): Response<CustomResponse>
 
     @POST("api/moadocument")
-    suspend fun moaDocumentApi(@Body moaDocumentData: MOADocumentData): Response<CustomResponse>
+    suspend fun moaDocumentApi(@Body moaDocumentData: MultipartBody): Response<CustomResponse>
 
 }

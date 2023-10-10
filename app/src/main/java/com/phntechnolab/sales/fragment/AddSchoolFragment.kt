@@ -284,37 +284,6 @@ class AddSchoolFragment : Fragment() {
         //Labs dropdown set
 
         setLabsDialog()
-//        val labsDropdown: AutoCompleteTextView = binding.schoolDetails.existingLabs
-//        val labsItem = ArrayList<String>()
-//
-//        if (_schoolData?.existingLab != null && !_schoolData.existingLab.isNullOrBlank()) {
-//            labsItem.add(_schoolData.existingLab)
-//        }
-//
-//        arrayOf(
-//            "Science Lab",
-//            "Computer Lab",
-//            "Engineering and Robotics Lab",
-//            "Art and Creativity Lab",
-//            "Environmental Science Lab",
-//            "Music and Audio Lab",
-//            "Physics and Electronics Lab",
-//            "Chemistry Lab",
-//            "Biology Lab"
-//        ).forEach {
-//            if (!labsItem.any { itemName -> itemName.contains(it) }) {
-//                labsItem.add(it)
-//            } else {
-//                binding.schoolDetails.existingLabs.setText(it)
-//            }
-//        }
-//        val labsAdapter: ArrayAdapter<String> =
-//            ArrayAdapter<String>(
-//                requireContext(),
-//                android.R.layout.simple_spinner_dropdown_item,
-//                labsItem
-//            )
-//        labsDropdown.setAdapter(labsAdapter)
 
         //set lead type dropdown
 
@@ -444,6 +413,7 @@ class AddSchoolFragment : Fragment() {
     }
 
     private fun observers() {
+
         viewModel.uploadImgResponse.observe(viewLifecycleOwner){
             when(it){
                 is NetworkResult.Success -> {
@@ -453,6 +423,7 @@ class AddSchoolFragment : Fragment() {
                         Toast.LENGTH_LONG
                     ).show()
                     Timber.e(it.toString())
+                    findNavController().popBackStack()
                 }
 
                 is NetworkResult.Error -> {
@@ -516,7 +487,7 @@ class AddSchoolFragment : Fragment() {
             binding.progressBar.visibility = View.GONE
             when (it) {
                 is NetworkResult.Success -> {
-                    findNavController().popBackStack()
+//                    findNavController().popBackStack()
                 }
 
                 is NetworkResult.Error -> {
@@ -554,33 +525,13 @@ class AddSchoolFragment : Fragment() {
     }
 
     private var contract = registerForActivityResult(ActivityResultContracts.GetContent()) {
-        image = it!!
-        Timber.e(image.toString())
-        viewModel.uploadImage(it, requireContext())
+        if (it != null) {
+            image = it
+            Timber.e(image.toString())
+            viewModel.uploadImage(it, requireContext())
+            binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
+        }
     }
-
-//    private fun uploadImage() {
-//        val fileDir = requireContext().filesDir
-//        val file = File(fileDir, "schoolImage.png")
-//        val inputStream = requireContext().contentResolver.openInputStream(image)
-//        val fileOutputStream = FileOutputStream(file)
-//        inputStream?.copyTo(fileOutputStream)
-
-//        val requestFile = RequestBody.create(
-//            MediaType.parse("image/jpg"),
-//            file
-//        )
-
-//        val part = MultipartBody.Part.createFormData("profile", file.name, requestFile)
-//        lifecycleScope.launch(Dispatchers.IO) {
-//            val responce = retroInstance.uploadImg(part)
-//
-//            Toast.makeText(requireContext(), "file successfully uploaded!", Toast.LENGTH_SHORT)
-//                .show()
-//            Log.e("responce", responce.toString())
-//        }
-
-//    }
 
     private fun oncClickListener() {
 

@@ -1,5 +1,6 @@
 package com.phntechnolab.sales.adapter
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.AdapterHomeInlineBinding
@@ -21,11 +23,15 @@ class SchoolDetailAdapter(private var callBacks: CallBacks) :
 
     private var data = ArrayList<SchoolData>()
 
+    private var context: Context? = null
+
     class SchoolViewHolder(val binding: AdapterHomeInlineBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SchoolViewHolder {
-        val binding = AdapterHomeInlineBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding =
+            AdapterHomeInlineBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        context = parent.context
         return SchoolViewHolder(binding)
     }
 
@@ -39,10 +45,14 @@ class SchoolDetailAdapter(private var callBacks: CallBacks) :
         holder.binding.txtEmail.text = schoolDetail.email
         holder.binding.txtMono.text = schoolDetail.coMobileNo
         holder.binding.chipStatus.text = schoolDetail.status
-        if(schoolDetail.leadType?.isNotBlank() == true && schoolDetail.leadType?.isNotEmpty() == true) {
+        if (schoolDetail.schoolImage?.isNotEmpty() == true && schoolDetail.schoolImage?.isNotEmpty() == true) {
+            Glide.with(context!!).load(schoolDetail.schoolImage).error(R.drawable.demo_img).into(holder.binding.schoolImg)
+        }
+
+        if (schoolDetail.leadType?.isNotBlank() == true && schoolDetail.leadType?.isNotEmpty() == true) {
             holder.binding.chipLeadStatus.text = schoolDetail.leadType
             holder.binding.chipLeadStatus.visibility = View.VISIBLE
-        }else{
+        } else {
             holder.binding.chipLeadStatus.visibility = View.GONE
         }
         holder.binding.cardView.setOnClickListener {

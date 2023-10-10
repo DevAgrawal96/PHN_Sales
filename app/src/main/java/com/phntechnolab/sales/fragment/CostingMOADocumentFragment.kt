@@ -4,6 +4,7 @@ import android.R
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,6 +16,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -41,6 +43,8 @@ class CostingMOADocumentFragment : Fragment() {
     private val viewModel: CostingMoaDocumentViewModel by viewModels()
 
     private val args: CostingMOADocumentFragmentArgs by navArgs()
+
+    private lateinit var image: Uri
 
     private val backPressHandler = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -183,6 +187,10 @@ class CostingMOADocumentFragment : Fragment() {
         binding.moaDocument.autoSelectDesignation.setOnItemClickListener { parent, view, position, id ->
             val designation = parent.adapter.getItem(position) as String
             viewModel._moaDocumentData.value?.designation = designation
+        }
+
+        binding.moaDocument.documentConstraint.setOnClickListener {
+            moaDocument.launch("application/pdf")
         }
     }
 
@@ -448,7 +456,7 @@ class CostingMOADocumentFragment : Fragment() {
         )
         else binding.proposeCostingStage.quotationSharedGroup.check(com.phntechnolab.sales.R.id.quotationSharedNo)
 
-        if (proposeCostingData?.conversationRatio == "yes") binding.proposeCostingStage.paymentScheduledLockedGroup.check(
+        if (proposeCostingData?.paymentShedule == "yes") binding.proposeCostingStage.paymentScheduledLockedGroup.check(
             com.phntechnolab.sales.R.id.paymentScheduledLockedYes
         )
         else binding.proposeCostingStage.paymentScheduledLockedGroup.check(com.phntechnolab.sales.R.id.paymentScheduledLockedNo)
@@ -794,6 +802,13 @@ class CostingMOADocumentFragment : Fragment() {
             )
             timePickerDialog.show()
         }
+    }
+
+    private var moaDocument = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        image = it!!
+        Timber.e(image.toString())
+        viewModel.uploadDocument(it, requireContext())
+        binding.moaDocument.documentFileName.text = "${viewModel.imageName}.pdf"
     }
 
     override fun onDestroyView() {

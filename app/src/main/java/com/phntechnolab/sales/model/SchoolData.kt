@@ -119,6 +119,10 @@ class SchoolData : Parcelable{
         set(value){
             field = value ?: ""
         }
+    @SerializedName("school_image") var schoolImage : String = ""
+        set(value){
+            field = value ?: ""
+        }
 
     @SerializedName("coordinator") var coordinator : CoordinatorData = CoordinatorData()
         set(value){
