@@ -55,12 +55,14 @@ class SplashScreenFragment : Fragment() {
                 }
 
                 is NetworkResult.Error -> {
+                    Timber.e("error")
                     Handler(Looper.getMainLooper()).postDelayed({
                         findNavController().navigate(R.id.action_splashScreenFragment_to_loginFragment)
                     }, 3000)
                 }
 
                 else -> {
+                    Timber.e("error ")
 //                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 }
             }

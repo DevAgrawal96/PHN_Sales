@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
 
     <fragment
@@ -25,31 +29,49 @@
             android:id="@+id/action_homeFragment_to_addSchoolFragment"
             app:destination="@id/addSchoolFragment"
             app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left" />
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_homeFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_homeFragment_to_pendingFragment"
-            app:destination="@id/pendingFragment" />
+            app:destination="@id/pendingFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_homeFragment_to_notificationFragment"
-            app:destination="@id/notificationFragment" />
+            app:destination="@id/notificationFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_homeFragment_to_meetingFragment"
             app:destination="@id/coordinatorDmMeeting"
             app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"/>
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_homeFragment_to_costingMoaDocumentFragment"
             app:destination="@id/costingMoaDocumentFragment"
             app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"/>
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_homeFragment_to_moaSignedFragment"
             app:destination="@id/installmentFragment"
             app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"/>
+            app:exitAnim="@anim/to_left" />
     </fragment>
 
     <fragment
@@ -61,37 +83,58 @@
         <argument
             android:name="schoolData"
             app:argType="com.phntechnolab.sales.model.SchoolData"
-            app:nullable="true"/>
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.phntechnolab.sales.fragment.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileFragment_to_activitiesFragment"
-            app:destination="@id/activitiesFragment" />
+            app:destination="@id/activitiesFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_profileFragment_to_myAccountFragment"
-            app:destination="@id/myAccountFragment" />
+            app:destination="@id/myAccountFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_profileFragment_to_changePasswordFragment"
-            app:destination="@id/changePasswordFragment" />
+            app:destination="@id/changePasswordFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_profileFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"  />
     </fragment>
     <fragment
         android:id="@+id/splashScreenFragment"
         android:name="com.phntechnolab.sales.fragment.SplashScreenFragment"
         android:label="fragment_splash_screen"
-        tools:layout="@layout/fragment_splash_screen" >
+        tools:layout="@layout/fragment_splash_screen">
         <action
             android:id="@+id/action_splashScreenFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/alpha_in" />
         <action
             android:id="@+id/action_splashScreenFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/alpha_in" />
     </fragment>
     <fragment
         android:id="@+id/activitiesFragment"
@@ -102,7 +145,15 @@
         android:id="@+id/pendingFragment"
         android:name="com.phntechnolab.sales.fragment.PendingFragment"
         android:label="fragment_pending"
-        tools:layout="@layout/fragment_pending" />
+        tools:layout="@layout/fragment_pending">
+        <action
+            android:id="@+id/action_pendingFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
     <fragment
         android:id="@+id/notificationFragment"
         android:name="com.phntechnolab.sales.fragment.NotificationFragment"
@@ -113,17 +164,25 @@
         android:id="@+id/myAccountFragment"
         android:name="com.phntechnolab.sales.fragment.MyAccountFragment"
         android:label="fragment_my_account"
-        tools:layout="@layout/fragment_my_account" >
+        tools:layout="@layout/fragment_my_account">
         <argument
             android:name="userData"
             app:argType="com.phntechnolab.sales.model.UserDataModel"
-            app:nullable="true"/>
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/meetingFragment"
         android:name="com.phntechnolab.sales.fragment.MeetingFragment"
         android:label="fragment_meeting"
-        tools:layout="@layout/fragment_meeting" />
+        tools:layout="@layout/fragment_meeting">
+        <action
+            android:id="@+id/action_meetingFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
         android:name="com.phntechnolab.sales.fragment.ChangePasswordFragment"
@@ -138,39 +197,41 @@
         android:id="@+id/coordinatorDmMeeting"
         android:name="com.phntechnolab.sales.fragment.CoordinatorDmMeetingFragment"
         android:label="Coordinator Meeting"
-        tools:layout="@layout/fragment_notification" >
+        tools:layout="@layout/fragment_notification">
 
         <argument
             android:name="coordinatorMeetingDetails"
             app:argType="com.phntechnolab.sales.model.CoordinatorData"
-            app:nullable="true"/>
+            app:nullable="true" />
 
         <argument
             android:name="dmMeetingDetails"
             app:argType="com.phntechnolab.sales.model.DMData"
-            app:nullable="true"/>
+            app:nullable="true" />
 
 
         <action
             android:id="@+id/action_coordinatordmmeeting_to_costingMoaDocumentFragment"
             app:destination="@id/costingMoaDocumentFragment"
             app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"/>
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/costingMoaDocumentFragment"
         android:name="com.phntechnolab.sales.fragment.CostingMOADocumentFragment"
-        android:label="Propose Costing Stage" >
+        android:label="Propose Costing Stage">
 
         <argument
             android:name="proposeCostingDetails"
             app:argType="com.phntechnolab.sales.model.ProposeCostingData"
-            app:nullable="true"/>
+            app:nullable="true" />
 
         <argument
             android:name="moaDocumentDetails"
             app:argType="com.phntechnolab.sales.model.MOADocumentData"
-            app:nullable="true"/>
+            app:nullable="true" />
 
     </fragment>
 </navigation>

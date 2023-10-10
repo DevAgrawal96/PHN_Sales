@@ -185,7 +185,11 @@ class ProfileFragment : Fragment(), MenuProvider {
                 }
 
                 else -> {
-                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -256,13 +260,11 @@ class ProfileFragment : Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.menu_search -> {
-                Toast.makeText(requireContext(), "search", Toast.LENGTH_SHORT).show()
                 true
             }
 
             R.id.menu_notification -> {
-                findNavController().navigate(R.id.notificationFragment)
-                Toast.makeText(requireContext(), "notification", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_profileFragment_to_notificationFragment)
                 true
             }
 

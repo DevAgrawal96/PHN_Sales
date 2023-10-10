@@ -102,64 +102,113 @@ class CoordinatorDmMeetingFragment : Fragment() {
 
         nextDMMeetingDateTimeClickListener()
 
+        initializeListener()
+
+
+    }
+
+    private fun initializeListener() {
+        binding.topAppBar.setNavigationOnClickListener {
+            when (position) {
+                0 -> {
+                    binding.topAppBar.title = getString(R.string.teacher_principal_meeting)
+                    findNavController().popBackStack()
+                }
+
+                1 -> {
+                    binding.coordinatorMeeting.root.visibility = View.VISIBLE
+                    binding.dmMeeting.root.visibility = View.GONE
+                    position = 0
+                    binding.topAppBar.title = getString(R.string.teacher_principal_meeting)
+                    binding.stepView.done(false)
+                    binding.stepView.go(position, true)
+                }
+
+                else -> {
+                    position = 1
+                    binding.stepView.done(true)
+                    binding.stepView.go(1, true)
+                }
+            }
+        }
+
         binding.coordinatorMeeting.button.setOnClickListener {
-            if(checkCoordinatorRequiredFieldsData()){
+            if (checkCoordinatorRequiredFieldsData()) {
                 viewModel.updateCoordinatorDetails()
             }
         }
 
         binding.dmMeeting.button.setOnClickListener {
-            if(checkDmRequiredFieldsData()){
+            if (checkDmRequiredFieldsData()) {
                 viewModel.updatedMDetails()
             }
         }
 
         binding.dmMeeting.autoMeetingAgenda.setOnItemClickListener { parent, view, position, id ->
             val meetingStatus = parent.adapter.getItem(position) as String
-            if(meetingStatus == "Price discussion")
+            if (meetingStatus == "Price discussion")
                 viewModel._dmMeetData.value?.meetingStatus = "Propose Costing"
-            else if(meetingStatus == "Demo/Discussion")
+            else if (meetingStatus == "Demo/Discussion")
                 viewModel._dmMeetData.value?.meetingStatus = "Visited"
         }
     }
 
     private fun checkCoordinatorRequiredFieldsData(): Boolean {
         val isCoordinatorAttendedMeet = viewModel._coordinatorMeetData.value?.coAttendMeet
-        if(isCoordinatorAttendedMeet != "yes"){
-            Toast.makeText(requireContext(), requireActivity().getString(R.string.please_attend_the_meeting_with_coordinator), Toast.LENGTH_LONG).show()
+        if (isCoordinatorAttendedMeet != "yes") {
+            Toast.makeText(
+                requireContext(),
+                requireActivity().getString(R.string.please_attend_the_meeting_with_coordinator),
+                Toast.LENGTH_LONG
+            ).show()
         }
 
 
         val isRescheduledMeeting = viewModel._coordinatorMeetData.value?.rescheduleWithCoordinator
-        if(isRescheduledMeeting == "yes"){
-            if(viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrBlank()){
-                Toast.makeText(requireContext(), requireActivity().getString(R.string.please_fill_rescheduled_date_for_proceed), Toast.LENGTH_LONG).show()
+        if (isRescheduledMeeting == "yes") {
+            if (viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrBlank()) {
+                Toast.makeText(
+                    requireContext(),
+                    requireActivity().getString(R.string.please_fill_rescheduled_date_for_proceed),
+                    Toast.LENGTH_LONG
+                ).show()
             }
-        }else{
-            if(viewModel._coordinatorMeetData.value?.nextMeetDateDm.isNullOrBlank()){
-                Toast.makeText(requireContext(), requireActivity().getString(R.string.please_next_rescheduled_date_for_proceed), Toast.LENGTH_LONG).show()
+        } else {
+            if (viewModel._coordinatorMeetData.value?.nextMeetDateDm.isNullOrBlank()) {
+                Toast.makeText(
+                    requireContext(),
+                    requireActivity().getString(R.string.please_next_rescheduled_date_for_proceed),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
-        val isRescheduledMeetingDateAvailableWithDate = !viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrBlank() && isRescheduledMeeting == "yes"
-        val isNextMeetingDateAvailableWithDate = !viewModel._coordinatorMeetData.value?.nextMeetDateDm.isNullOrBlank() && isRescheduledMeeting != "yes"
-        return (isCoordinatorAttendedMeet == "yes") && ( isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate)
+        val isRescheduledMeetingDateAvailableWithDate =
+            !viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrBlank() && isRescheduledMeeting == "yes"
+        val isNextMeetingDateAvailableWithDate =
+            !viewModel._coordinatorMeetData.value?.nextMeetDateDm.isNullOrBlank() && isRescheduledMeeting != "yes"
+        return (isCoordinatorAttendedMeet == "yes") && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate)
     }
 
     private fun checkDmRequiredFieldsData(): Boolean {
         val isDmAttendedMeet = viewModel._dmMeetData.value?.coAttendMeet
-        if(isDmAttendedMeet != "yes"){
-            Toast.makeText(requireContext(), requireActivity().getString(R.string.please_attend_the_meeting_with_director), Toast.LENGTH_LONG).show()
+        if (isDmAttendedMeet != "yes") {
+            Toast.makeText(
+                requireContext(),
+                requireActivity().getString(R.string.please_attend_the_meeting_with_director),
+                Toast.LENGTH_LONG
+            ).show()
         }
 
         val isMeetingAgenda = viewModel._dmMeetData.value?.meetingStatus
-        if(isMeetingAgenda.isNullOrBlank()){
-            binding.dmMeeting.tilMeetingAgenda.error = requireActivity().getString(R.string.select_meeting_agenda)
-        }else{
+        if (isMeetingAgenda.isNullOrBlank()) {
+            binding.dmMeeting.tilMeetingAgenda.error =
+                requireActivity().getString(R.string.select_meeting_agenda)
+        } else {
             binding.dmMeeting.tilMeetingAgenda.error = null
         }
 
-        return (isDmAttendedMeet == "yes") && ( !isMeetingAgenda.isNullOrBlank())
+        return (isDmAttendedMeet == "yes") && (!isMeetingAgenda.isNullOrBlank())
     }
 
     private fun checkedChangeListener() {
@@ -209,17 +258,17 @@ class CoordinatorDmMeetingFragment : Fragment() {
 
         binding.dmMeeting.nextMeetingGroup.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
-                if (checkedRadioButtonText == "Yes"){
-                    viewModel._dmMeetData.value?.nextFollowupDm = "yes"
-                    binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.VISIBLE
-                    binding.dmMeeting.tilNextMeetingDate.visibility = View.VISIBLE
-                    binding.dmMeeting.tilNextMeetingTime.visibility = View.VISIBLE
-                } else{
-                    viewModel._dmMeetData.value?.nextFollowupDm = "no"
-                    binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
-                    binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
-                    binding.dmMeeting.tilNextMeetingTime.visibility = View.GONE
-                }
+            if (checkedRadioButtonText == "Yes") {
+                viewModel._dmMeetData.value?.nextFollowupDm = "yes"
+                binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.VISIBLE
+                binding.dmMeeting.tilNextMeetingDate.visibility = View.VISIBLE
+                binding.dmMeeting.tilNextMeetingTime.visibility = View.VISIBLE
+            } else {
+                viewModel._dmMeetData.value?.nextFollowupDm = "no"
+                binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
+                binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
+                binding.dmMeeting.tilNextMeetingTime.visibility = View.GONE
+            }
         }
 
         binding.dmMeeting.labSetupGroup.setOnCheckedChangeListener { group, checkedId ->
@@ -243,8 +292,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
         if (_coordinatorData?.rescheduleWithCoordinator == "yes") {
             binding.coordinatorMeeting.rescheduleMeetingGroup.check(R.id.rescheduleMeetingYes)
             showRescheduleAndHideNextMeetingDate()
-        }
-        else {
+        } else {
             binding.coordinatorMeeting.rescheduleMeetingGroup.check(R.id.rescheduleMeetingNo)
             hideRescheduleAndShowNextMeetingDate()
         }
@@ -285,8 +333,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
             binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.VISIBLE
             binding.dmMeeting.tilNextMeetingDate.visibility = View.VISIBLE
             binding.dmMeeting.tilNextMeetingTime.visibility = View.VISIBLE
-        }
-        else {
+        } else {
             binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingNo)
             binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
             binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
@@ -313,9 +360,9 @@ class CoordinatorDmMeetingFragment : Fragment() {
             add("Price discussion")
         }
 
-        if(viewModel.dmMeetData.value?.meetingStatus == "Propose Costing"){
+        if (viewModel.dmMeetData.value?.meetingStatus == "Propose Costing") {
             binding.dmMeeting.autoMeetingAgenda.setText("Price discussion")
-        }else if(viewModel.dmMeetData.value?.meetingStatus == "Visited"){
+        } else if (viewModel.dmMeetData.value?.meetingStatus == "Visited") {
             binding.dmMeeting.autoMeetingAgenda.setText("Demo/Discussion")
         }
 
@@ -334,17 +381,29 @@ class CoordinatorDmMeetingFragment : Fragment() {
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
-                    Toast.makeText(requireContext(), getString(R.string.coordinator_meeting_details_updated_successfully), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.coordinator_meeting_details_updated_successfully),
+                        Toast.LENGTH_LONG
+                    ).show()
                     setPositionView()
                 }
 
                 is NetworkResult.Error -> {
-                    Toast.makeText(requireContext(), resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                     Timber.e(it.toString())
                 }
 
                 else -> {
-                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -360,12 +419,20 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 }
 
                 is NetworkResult.Error -> {
-                    Toast.makeText(requireContext(), resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                     Timber.e(it.toString())
                 }
 
                 else -> {
-                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -718,7 +785,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
         }
     }
 
-    private fun  showRescheduleAndHideNextMeetingDate(){
+    private fun showRescheduleAndHideNextMeetingDate() {
         binding.coordinatorMeeting.meetingDateAndTimeHeading.visibility = View.VISIBLE
         binding.coordinatorMeeting.tilRescheduleMeetingDate.visibility = View.VISIBLE
         binding.coordinatorMeeting.tilRescheduleMeetingTime.visibility = View.VISIBLE
@@ -727,7 +794,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
         binding.coordinatorMeeting.tilNextMeetingTime.visibility = View.GONE
     }
 
-    private fun  hideRescheduleAndShowNextMeetingDate(){
+    private fun hideRescheduleAndShowNextMeetingDate() {
         binding.coordinatorMeeting.meetingDateAndTimeHeading.visibility = View.GONE
         binding.coordinatorMeeting.tilRescheduleMeetingDate.visibility = View.GONE
         binding.coordinatorMeeting.tilRescheduleMeetingTime.visibility = View.GONE

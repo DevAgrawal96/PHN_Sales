@@ -144,13 +144,11 @@ class PendingFragment : Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.menu_search -> {
-                Toast.makeText(requireContext(), "search", Toast.LENGTH_SHORT).show()
                 true
             }
 
             R.id.menu_notification -> {
-                findNavController().navigate(R.id.notificationFragment)
-                Toast.makeText(requireContext(), "notification", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_pendingFragment_to_notificationFragment)
                 true
             }
 

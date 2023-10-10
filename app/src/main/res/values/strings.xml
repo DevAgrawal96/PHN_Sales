@@ -100,6 +100,7 @@
     <string name="total_school_intake_less_than">Please enter total shcool intake less than 20000!</string>
     <string name="total_no_of_classrooms_less_than">Please enter total number of classrooms less than 20000!</string>
     <string name="please_select_board">Please select board!</string>
+    <string name="please_connection_message">Please check the internet connection and try again!</string>
     <string name="activity">Activity</string>
     <string name="revenue">Revenue</string>
     <string name="change_password">Change Password</string>

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.adapter.ActivitiesAdapter
@@ -15,7 +16,7 @@ class NotificationFragment : Fragment() {
     private var _binding: FragmentNotificationBinding? = null
     private val binding get() = _binding!!
 
-    private var _adapter : ActivitiesAdapter? = null
+    private var _adapter: ActivitiesAdapter? = null
     private val adapter get() = _adapter!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +30,17 @@ class NotificationFragment : Fragment() {
     ): View? {
         _binding = FragmentNotificationBinding.inflate(inflater, container, false)
         initializeAdapter()
+        setbackPressed()
         return binding.root
+    }
+
+    private fun setbackPressed() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().popBackStack()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(callback)
     }
 
     private fun initializeAdapter() {

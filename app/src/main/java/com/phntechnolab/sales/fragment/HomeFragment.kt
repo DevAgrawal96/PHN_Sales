@@ -178,13 +178,11 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.menu_search -> {
-                Toast.makeText(requireContext(), "search", Toast.LENGTH_SHORT).show()
                 true
             }
 
             R.id.menu_notification -> {
                 findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
-                Toast.makeText(requireContext(), "notification", Toast.LENGTH_SHORT).show()
                 true
             }
 

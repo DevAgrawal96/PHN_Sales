@@ -109,6 +109,32 @@ class CostingMOADocumentFragment : Fragment() {
     }
 
     private fun setOnClickListeners() {
+
+        binding.topAppBar.setNavigationOnClickListener {
+            when (position) {
+                0 -> {
+                    findNavController().popBackStack()
+                }
+
+                1 -> {
+                    binding.proposeCostingStage.root.visibility = View.VISIBLE
+                    binding.moaDocument.root.visibility = View.GONE
+                    binding.topAppBar.title =
+                        requireActivity().getString(com.phntechnolab.sales.R.string.propose_costing_stage)
+                    position = 0
+                    binding.stepView.done(false)
+                    binding.stepView.go(position, true)
+                }
+
+                else -> {
+                    position = 1
+                    binding.stepView.done(true)
+                    binding.stepView.go(1, true)
+                }
+            }
+        }
+
+
         binding.proposeCostingStage.updateBtn.setOnClickListener {
             Timber.e("DATA POST")
             Timber.e(Gson().toJson(viewModel._proposeCostingData.value))
