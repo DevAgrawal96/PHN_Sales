@@ -54,7 +54,7 @@ interface RetrofitApi {
     @PUT("api/updateschool/{id}")
     suspend fun updateSchoolData(
         @Path(value = "id") id: String,
-        @Body schoolDetails: MultipartBody
+        @Body schoolDetails: SchoolData
     ): Response<CustomResponse>
 
     @POST("api/updateimage/{id}")

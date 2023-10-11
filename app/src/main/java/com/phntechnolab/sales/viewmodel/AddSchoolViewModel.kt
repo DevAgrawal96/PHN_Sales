@@ -89,7 +89,7 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
             withContext(this.coroutineContext) {
                 repositories.updateSchoolData(
                     newSchoolData.value?.id.toString() ?: "",
-                    multiPartBody
+                    _newSchoolData.value?:SchoolData()
                 )
             }
 
@@ -119,6 +119,7 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
     }
 
     private fun returnJsonData(data: Any, isAddSchool: Boolean): MultipartBody {
+
         var multipartBody = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart("school_name", (data as SchoolData)?.schoolName ?: "")
             .addFormDataPart("school_address", data?.schoolAddress ?: "")
@@ -140,7 +141,11 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
             .addFormDataPart("remark", data?.remark ?: "")
 
         if(isAddSchool)
-            multipartBody.addFormDataPart("school_image", "$imageName.jpg", _requestFile!!)
+            _requestFile?.let {
+                multipartBody.addFormDataPart("school_image", "$imageName.jpg",
+                    it
+                )
+            }
 
         return multipartBody.build()
     }

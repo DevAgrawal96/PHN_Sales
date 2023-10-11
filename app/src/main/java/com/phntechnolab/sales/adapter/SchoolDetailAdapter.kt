@@ -12,6 +12,8 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.AdapterHomeInlineBinding
@@ -45,8 +47,14 @@ class SchoolDetailAdapter(private var callBacks: CallBacks) :
         holder.binding.txtEmail.text = schoolDetail.email
         holder.binding.txtMono.text = schoolDetail.coMobileNo
         holder.binding.chipStatus.text = schoolDetail.status
+        Log.e("Image url", schoolDetail.schoolImage?: "")
         if (schoolDetail.schoolImage?.isNotEmpty() == true && schoolDetail.schoolImage?.isNotEmpty() == true) {
-            Glide.with(context!!).load(schoolDetail.schoolImage).error(R.drawable.demo_img).into(holder.binding.schoolImg)
+            val image = GlideUrl(
+                schoolDetail.schoolImage, LazyHeaders.Builder()
+                    .addHeader("User-Agent", "5")
+                    .build()
+            )
+            Glide.with(context!!).load(image).override(300,200).error(R.drawable.demo_img).into(holder.binding.schoolImg)
         }
 
         if (schoolDetail.leadType?.isNotBlank() == true && schoolDetail.leadType?.isNotEmpty() == true) {

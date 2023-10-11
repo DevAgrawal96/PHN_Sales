@@ -8,7 +8,7 @@ import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.api.RetrofitApi
 import com.phntechnolab.sales.model.CustomResponse
-import com.phntechnolab.sales.model.ImageDataModel
+import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.NetworkUtils
 import okhttp3.MultipartBody
@@ -35,7 +35,7 @@ class AddSchoolRepository @Inject constructor(
     val imageUploadResponse: LiveData<NetworkResult<CustomResponse>>
         get() = _imageUploadResponse
 
-    suspend fun updateSchoolData(id: String, schoolData: MultipartBody) {
+    suspend fun updateSchoolData(id: String, schoolData: SchoolData) {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
                 Log.e("Multipart body data", Gson().toJson(schoolData))
