@@ -123,11 +123,9 @@ class ProfileFragment : Fragment(), MenuProvider {
             dialog.dismiss()
         }
         dialogBinding.logoutYes.setOnClickListener {
-            Handler(Looper.getMainLooper()).postDelayed({
-                dialog.dismiss()
-                viewModel.logout(requireContext())
-
-            }, 3000)
+            binding.progressIndicator.visibility = View.VISIBLE
+            dialog.dismiss()
+            viewModel.logout(requireContext())
         }
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.show()
@@ -155,6 +153,7 @@ class ProfileFragment : Fragment(), MenuProvider {
                 is NetworkResult.Success -> {
                     lifecycleScope.launch(Dispatchers.IO) {
                         lifecycleScope.launch(Dispatchers.Main) {
+                            binding.progressIndicator.visibility = View.GONE
                             findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
                         }
                         clearDataStore(requireContext(), dataStoreProvider)
@@ -163,8 +162,8 @@ class ProfileFragment : Fragment(), MenuProvider {
                 }
 
                 is NetworkResult.Error -> {
-                }
 
+                }
                 else -> {
 
                 }

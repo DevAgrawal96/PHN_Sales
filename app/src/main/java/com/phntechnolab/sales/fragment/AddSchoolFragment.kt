@@ -135,9 +135,23 @@ class AddSchoolFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         oncClickListener()
 
         observers()
+        initEditText()
+    }
+
+    private fun initEditText() {
+//        Timber.e("change zero")
+//        Timber.e((binding.basicDetails.edtSchoolTotalIntake.getText()).toString())
+//        if ((binding.basicDetails.edtSchoolTotalIntake.text).toString() == "0" &&
+//            (binding.basicDetails.edtTotalNoOfClassroom.text).toString() == "0"
+//        ) {
+//            Timber.e("change zero")
+//            binding.basicDetails.edtSchoolTotalIntake.setText(getString(R.string.blank))
+//            binding.basicDetails.edtTotalNoOfClassroom.setText(R.string.blank)
+//        }
     }
 
     private fun addValidationWatchers() {
@@ -333,11 +347,11 @@ class AddSchoolFragment : Fragment() {
         val labList = ArrayList<Int>()
 
         labsData.forEachIndexed { index, s ->
-            if(viewModel.newSchoolData.value?.existingLab?.contains(s) == true){
+            if (viewModel.newSchoolData.value?.existingLab?.contains(s) == true) {
                 selectedLabs[index] = true
                 labList.add(index)
 
-            }else{
+            } else {
                 selectedLabs[index] = false
             }
         }
@@ -352,7 +366,8 @@ class AddSchoolFragment : Fragment() {
             // set dialog non cancelable
             builder.setCancelable(false)
 
-            builder.setMultiChoiceItems(labsData, selectedLabs
+            builder.setMultiChoiceItems(
+                labsData, selectedLabs
             ) { dialogInterface, i, b ->
                 // check condition
                 if (b) {
@@ -414,8 +429,8 @@ class AddSchoolFragment : Fragment() {
 
     private fun observers() {
 
-        viewModel.uploadImgResponse.observe(viewLifecycleOwner){
-            when(it){
+        viewModel.uploadImgResponse.observe(viewLifecycleOwner) {
+            when (it) {
                 is NetworkResult.Success -> {
                     Toast.makeText(
                         requireContext(),
@@ -487,7 +502,7 @@ class AddSchoolFragment : Fragment() {
             binding.progressBar.visibility = View.GONE
             when (it) {
                 is NetworkResult.Success -> {
-                    if(viewModel._requestFile != null)
+                    if (viewModel._requestFile != null)
                         viewModel.uploadImage()
                     else
                         findNavController().popBackStack()
@@ -539,7 +554,36 @@ class AddSchoolFragment : Fragment() {
     private fun oncClickListener() {
 
         binding.topBar.setNavigationOnClickListener {
+            when (position) {
+                0 -> {
+                    Timber.e(position.toString())
+                    findNavController().popBackStack()
+                }
 
+                1 -> {
+                    Timber.e(position.toString())
+                    binding.basicDetails.root.visibility = View.VISIBLE
+                    binding.schoolDetails.root.visibility = View.GONE
+                    position = 0
+                    binding.stepView.done(false)
+                    binding.stepView.go(position, true)
+                }
+
+                2 -> {
+                    Timber.e(position.toString())
+                    binding.schoolDetails.root.visibility = View.VISIBLE
+                    binding.followupDetails.root.visibility = View.GONE
+                    position = 1
+                    binding.stepView.done(false)
+                    binding.stepView.go(position, true)
+                }
+
+                else -> {
+                    position = 3
+                    binding.stepView.done(true)
+                    binding.stepView.go(0, true)
+                }
+            }
         }
 
         binding.schoolDetails.selectFileContainer.setOnClickListener {

@@ -61,7 +61,8 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
 
     fun addNewSchool() {
 
-        val multiPartBody: MultipartBody = returnJsonData(_newSchoolData.value?: SchoolData(), true)
+        val multiPartBody: MultipartBody =
+            returnJsonData(_newSchoolData.value ?: SchoolData(), true)
 
         val addSchoolData: AddSchoolSchema = returnSchoolSchema()
         viewModelScope.launch {
@@ -70,26 +71,30 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
         }
     }
 
-    fun uploadImage(){
+    fun uploadImage() {
         viewModelScope.launch {
             Log.e("Upload images", _newSchoolData.value?.id.toString())
             Log.e("Upload images", Gson().toJson(_requestFile))
             Log.e("Upload images", (_requestFile != null).toString())
-            repositories.uploadImage(_newSchoolData.value?.id ?: 0, MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("school_image", "$imageName.jpg", _requestFile).build())
+            repositories.uploadImage(_newSchoolData.value?.id ?: 0,
+                MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("school_image", "$imageName.jpg", _requestFile).build()
+            )
 //            repositories.uploadImage(_newSchoolData.value?.id ?: 0, MultipartBody.Part.createFormData("school_image", "$imageName.jpg",  _requestFile))
         }
     }
 
     fun updateSchoolDetails() {
 
-        val multiPartBody: MultipartBody = returnJsonData(_newSchoolData.value?: SchoolData(), false)
+        val multiPartBody: MultipartBody =
+            returnJsonData(_newSchoolData.value ?: SchoolData(), false)
 
         viewModelScope.launch {
             Timber.e(Gson().toJson(newSchoolData.value))
             withContext(this.coroutineContext) {
                 repositories.updateSchoolData(
                     newSchoolData.value?.id.toString() ?: "",
-                    _newSchoolData.value?:SchoolData()
+                    _newSchoolData.value ?: SchoolData()
                 )
             }
 
@@ -140,9 +145,10 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
             .addFormDataPart("upload_img", data?.uploadImg ?: "")
             .addFormDataPart("remark", data?.remark ?: "")
 
-        if(isAddSchool)
+        if (isAddSchool)
             _requestFile?.let {
-                multipartBody.addFormDataPart("school_image", "$imageName.jpg",
+                multipartBody.addFormDataPart(
+                    "school_image", "$imageName.jpg",
                     it
                 )
             }
@@ -155,8 +161,8 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
             this.schoolName = newSchoolData.value?.schoolName ?: ""
             this.schoolAddress = newSchoolData.value?.schoolAddress ?: ""
             this.board = newSchoolData.value?.board ?: ""
-            this.intake = newSchoolData.value?.intake ?: 0
-            this.totalClassRoom = newSchoolData.value?.totalClassRoom ?: 0
+            this.intake = newSchoolData.value?.intake!!
+            this.totalClassRoom = newSchoolData.value?.totalClassRoom!!
             this.email = newSchoolData.value?.email ?: ""
             this.coMobileNo = newSchoolData.value?.coMobileNo ?: ""
             this.coName = newSchoolData.value?.coName ?: ""
