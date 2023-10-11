@@ -10,10 +10,8 @@ import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.model.UserDataModel
 import com.phntechnolab.sales.model.UserResponse
 import okhttp3.MultipartBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -63,7 +61,7 @@ interface RetrofitApi {
     suspend fun updateSchoolImage(
         @Path(value = "id") id: Int,
         @Body imageDetails: MultipartBody
-    ): Call<Void>
+    ): Response<CustomResponse>
 
     @POST("api/coordinatormeet")
     suspend fun updateCoordinaterMeet(@Body coordinatorMeetDetails: CoordinatorData): Response<CustomResponse>

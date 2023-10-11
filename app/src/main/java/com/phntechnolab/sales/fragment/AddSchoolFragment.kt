@@ -419,7 +419,7 @@ class AddSchoolFragment : Fragment() {
                 is NetworkResult.Success -> {
                     Toast.makeText(
                         requireContext(),
-                        "File Upload successfully",
+                        "School details updated successfully",
                         Toast.LENGTH_LONG
                     ).show()
                     Timber.e(it.toString())
@@ -487,7 +487,10 @@ class AddSchoolFragment : Fragment() {
             binding.progressBar.visibility = View.GONE
             when (it) {
                 is NetworkResult.Success -> {
-//                    findNavController().popBackStack()
+                    if(viewModel._requestFile != null)
+                        viewModel.uploadImage()
+                    else
+                        findNavController().popBackStack()
                 }
 
                 is NetworkResult.Error -> {

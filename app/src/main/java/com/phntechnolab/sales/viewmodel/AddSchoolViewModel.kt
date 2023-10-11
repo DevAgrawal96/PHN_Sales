@@ -2,6 +2,7 @@ package com.phntechnolab.sales.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,6 +15,7 @@ import com.phntechnolab.sales.repository.AddSchoolRepository
 import com.phntechnolab.sales.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -70,7 +72,11 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
 
     fun uploadImage(){
         viewModelScope.launch {
-            repositories.uploadImage(_newSchoolData.value?.id ?: 0, MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("school_image", "$imageName.jpg", _requestFile!!).build())
+            Log.e("Upload images", _newSchoolData.value?.id.toString())
+            Log.e("Upload images", Gson().toJson(_requestFile))
+            Log.e("Upload images", (_requestFile != null).toString())
+            repositories.uploadImage(_newSchoolData.value?.id ?: 0, MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("school_image", "$imageName.jpg", _requestFile).build())
+//            repositories.uploadImage(_newSchoolData.value?.id ?: 0, MultipartBody.Part.createFormData("school_image", "$imageName.jpg",  _requestFile))
         }
     }
 
@@ -80,14 +86,16 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
 
         viewModelScope.launch {
             Timber.e(Gson().toJson(newSchoolData.value))
-            repositories.updateSchoolData(
-                newSchoolData.value?.id.toString() ?: "",
-                multiPartBody
-            )
-        }.invokeOnCompletion {
-            viewModelScope.launch {
-                uploadImage()
+            withContext(this.coroutineContext) {
+                repositories.updateSchoolData(
+                    newSchoolData.value?.id.toString() ?: "",
+                    multiPartBody
+                )
             }
+
+//            withContext(this.coroutineContext){
+//                uploadImage()
+//            }
         }
     }
 

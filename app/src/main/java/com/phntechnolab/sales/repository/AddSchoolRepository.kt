@@ -113,28 +113,31 @@ class AddSchoolRepository @Inject constructor(
     suspend fun uploadImage(id: Int, imageData: MultipartBody) {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
+                Timber.e("School image upload start")
                 val result = retrofitApi.updateSchoolImage(id, imageData)
-//                result.body()?.status_code = result.code()
-//                if (result.isSuccessful && result.body() != null) {
-//                    _imageUploadResponse.postValue(NetworkResult.Success(result.body()))
-//                } else if (result.errorBody() != null) {
-//                    _imageUploadResponse.postValue(
-//                        NetworkResult.Error(
-//                            application.getString(R.string.something_went_wrong),
-//                            CustomResponse(result.code(), result.errorBody()?.string())
-//                        )
-//                    )
-//                } else {
-//                    _imageUploadResponse.postValue(
-//                        NetworkResult.Error(
-//                            application.getString(R.string.something_went_wrong),
-//                            CustomResponse(
-//                                result.code(),
-//                                application.getString(R.string.something_went_wrong)
-//                            )
-//                        )
-//                    )
-//                }
+                Timber.e("School image upload end")
+//                Timber.e(Gson().toJson(result))
+                result.body()?.status_code = result.code()
+                if (result.isSuccessful && result.body() != null) {
+                    _imageUploadResponse.postValue(NetworkResult.Success(result.body()))
+                } else if (result.errorBody() != null) {
+                    _imageUploadResponse.postValue(
+                        NetworkResult.Error(
+                            application.getString(R.string.something_went_wrong),
+                            CustomResponse(result.code(), result.errorBody()?.string())
+                        )
+                    )
+                } else {
+                    _imageUploadResponse.postValue(
+                        NetworkResult.Error(
+                            application.getString(R.string.something_went_wrong),
+                            CustomResponse(
+                                result.code(),
+                                application.getString(R.string.something_went_wrong)
+                            )
+                        )
+                    )
+                }
             } catch (ex: Exception) {
                 ex.printStackTrace()
                 NetworkResult.Error(
