@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bgcolor"
-    tools:context=".fragment.LoginFragment"
-    >
+    tools:context=".fragment.LoginFragment">
 
     <ImageView
         android:layout_width="@dimen/dimen_0dp"
@@ -16,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/bg_img"/>
+        app:srcCompat="@drawable/bg_img" />
 
 
     <ImageView
@@ -51,19 +50,18 @@
         android:id="@+id/error_msg"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="24dp"
         android:layout_marginStart="@dimen/dimen_16dp"
         android:text="Invalid Credentials"
+        android:textColor="@color/md_theme_light_error"
         android:textSize="18sp"
         android:visibility="gone"
-        android:textColor="@color/md_theme_light_error"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_txt"
-        app:layout_constraintVertical_bias="0.0"
-        android:layout_marginVertical="24dp"
-        />
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_email_id"
@@ -71,7 +69,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_16dp"
         android:layout_marginEnd="@dimen/dimen_16dp"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
         android:hint="@string/email_id"
+        app:helperTextTextColor="@color/error_red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:maxLines="1"/>
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -94,13 +95,13 @@
         android:layout_marginTop="@dimen/dimen_8dp"
         android:layout_marginEnd="@dimen/dimen_16dp"
         android:text="@string/please_enter_valid_email_address"
-        android:visibility="gone"
         android:textColor="@color/design_default_color_error"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/til_email_id"
-        app:layout_constraintVertical_bias="0.0"/>
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_password"
@@ -110,7 +111,10 @@
         android:layout_marginStart="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_16dp"
         android:layout_marginEnd="@dimen/dimen_16dp"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
         android:hint="@string/password"
+        app:helperTextTextColor="@color/error_red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -122,13 +126,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:maxLines="1"/>
+            android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/login"
-        android:layout_width="@dimen/dimen_0dp"
         style="@style/buttonStyle"
+        android:layout_width="@dimen/dimen_0dp"
         android:layout_marginStart="@dimen/dimen_16dp"
         android:layout_marginEnd="@dimen/dimen_16dp"
         android:backgroundTint="@color/regular_blue"

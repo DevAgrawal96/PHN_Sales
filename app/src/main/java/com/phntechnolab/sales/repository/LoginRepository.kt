@@ -82,29 +82,22 @@ class LoginRepository @Inject constructor(
                 }
 
             } catch (e: Exception) {
-//                Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
-                loginMutableLiveData.postValue(
-                    NetworkResult.Error(
-                        "",
-                        UserResponse(null, null, null, null, message = e.message, null)
-                    )
+                NetworkResult.Error(
+                    application.getString(R.string.something_went_wrong),
+                    null
                 )
+                Toast.makeText(
+                    application,
+                    application.resources.getString(R.string.please_connection_message),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         } else {
-//            Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
-            loginMutableLiveData.postValue(
-                NetworkResult.Error(
-                    "",
-                    UserResponse(
-                        null,
-                        null,
-                        null,
-                        null,
-                        message = application.getString(R.string.no_internet_connection),
-                        null
-                    )
-                )
-            )
+            Toast.makeText(
+                application,
+                application.resources.getString(R.string.please_connection_message),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -139,18 +132,19 @@ class LoginRepository @Inject constructor(
                     )
                 }
             } catch (ex: Exception) {
+                ex.printStackTrace()
+                NetworkResult.Error(
+                    application.getString(R.string.something_went_wrong),
+                    null
+                )
                 Toast.makeText(
                     application,
                     application.resources.getString(R.string.something_went_wrong),
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_SHORT
                 ).show()
-                ex.printStackTrace()
 
             }
         } else {
-            Timber.e(
-                application.resources.getString(R.string.please_connection_message)
-            )
             Toast.makeText(
                 application,
                 application.resources.getString(R.string.please_connection_message),

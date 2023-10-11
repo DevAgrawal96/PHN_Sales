@@ -29,66 +29,117 @@ class CostingMOADocumentRepository @Inject constructor(
     val moaDocumentDetails: LiveData<NetworkResult<CustomResponse>>
         get() = _moaDocumentDetails
 
-    suspend fun proposeCostingData(proposeCostingData: ProposeCostingData){
+    suspend fun proposeCostingData(proposeCostingData: ProposeCostingData) {
         if (NetworkUtils.isInternetAvailable(application)) {
-            try{
+            try {
                 val result = retrofitApi.proposeCostingApi(proposeCostingData)
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
                     _proposeCostingDetails.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
-                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        application,
+                        application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                     _proposeCostingDetails.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
-                            CustomResponse( result.code(), result.errorBody()?.string())
+                            CustomResponse(result.code(), result.errorBody()?.string())
                         )
                     )
                 } else {
-                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        application,
+                        application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                     _proposeCostingDetails.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
-                            CustomResponse( result.code(), application.getString(R.string.something_went_wrong))
+                            CustomResponse(
+                                result.code(),
+                                application.getString(R.string.something_went_wrong)
+                            )
                         )
                     )
                 }
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 ex.printStackTrace()
+                NetworkResult.Error(
+                    application.getString(R.string.something_went_wrong),
+                    null
+                )
+                Toast.makeText(
+                    application,
+                    application.resources.getString(R.string.something_went_wrong),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         } else {
+            Toast.makeText(
+                application,
+                application.resources.getString(R.string.please_connection_message),
+                Toast.LENGTH_SHORT
+            ).show()
+
         }
     }
 
-    suspend fun moaDocumentData(moaDocumentData: MultipartBody){
+    suspend fun moaDocumentData(moaDocumentData: MultipartBody) {
         Log.e("MOA DOCUMENT DATA", Gson().toJson(moaDocumentData))
         if (NetworkUtils.isInternetAvailable(application)) {
-            try{
+            try {
                 val result = retrofitApi.moaDocumentApi(moaDocumentData)
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
                     _moaDocumentDetails.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
-                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        application,
+                        application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                     _moaDocumentDetails.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
-                            CustomResponse( result.code(), result.errorBody()?.string())
+                            CustomResponse(result.code(), result.errorBody()?.string())
                         )
                     )
                 } else {
-                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        application,
+                        application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                     _moaDocumentDetails.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
-                            CustomResponse( result.code(), application.getString(R.string.something_went_wrong))
+                            CustomResponse(
+                                result.code(),
+                                application.getString(R.string.something_went_wrong)
+                            )
                         )
                     )
                 }
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 ex.printStackTrace()
+                NetworkResult.Error(
+                    application.getString(R.string.something_went_wrong),
+                    null
+                )
+                Toast.makeText(
+                    application,
+                    application.resources.getString(R.string.something_went_wrong),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         } else {
+            Toast.makeText(
+                application,
+                application.resources.getString(R.string.please_connection_message),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 }

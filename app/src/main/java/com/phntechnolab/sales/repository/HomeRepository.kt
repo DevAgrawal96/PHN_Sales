@@ -53,22 +53,22 @@ class HomeRepository @Inject constructor(
                 }
 
             } catch (e: Exception) {
-                Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
-                schoolDataMutableLiveData.postValue(
-                    NetworkResult.Error(
-                        "",
-                        ArrayList()
-                    )
+                NetworkResult.Error(
+                    application.getString(R.string.something_went_wrong),
+                    null
                 )
+                Toast.makeText(
+                    application,
+                    application.resources.getString(R.string.something_went_wrong),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         } else {
-            Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
-            schoolDataMutableLiveData.postValue(
-                NetworkResult.Error(
-                    "",
-                    ArrayList()
-                )
-            )
+            Toast.makeText(
+                application,
+                application.resources.getString(R.string.please_connection_message),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 }

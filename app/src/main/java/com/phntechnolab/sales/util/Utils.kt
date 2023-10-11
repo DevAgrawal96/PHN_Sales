@@ -2,6 +2,7 @@ package com.phntechnolab.sales.util
 
 import android.app.Activity
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -11,8 +12,6 @@ import android.util.Patterns
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import androidx.databinding.InverseMethod
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
@@ -20,6 +19,19 @@ import com.google.android.material.textfield.TextInputEditText
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import kotlinx.coroutines.flow.first
+
+
+//fun Fragment.hideSoftKeyboard() {
+//    val inputMethodManager = activity?.getSystemService(
+//        INPUT_METHOD_SERVICE
+//    ) as InputMethodManager
+//    if (inputMethodManager.isAcceptingText) {
+//        inputMethodManager.hideSoftInputFromWindow(
+//            activity?.currentFocus!!.windowToken,
+//            0
+//        )
+//    }
+//}
 
 
 suspend fun saveData(
@@ -77,7 +89,6 @@ fun Fragment.hideToolbarAndClearFullScreen() {
 }
 
 
-
 fun TextInputEditText.validation(afterTextChanged: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -115,20 +126,22 @@ abstract class TextValidator(private val textView: TextInputEditText) : TextWatc
     ) { /* Don't care */
     }
 }
+
 fun isValidName(name: String, context: Context): String? {
     if (name.isBlank()) {
-        return context.getString(R.string.empty_,"name")
+        return context.getString(R.string.empty_, "name")
     }
     if (name.length <= 1) {
         return context.getString(R.string.name_length)
     }
     return null
 }
+
 fun isValidEmail(email: String, context: Context): String? {
     if (email.isBlank()) {
-        return context.getString(R.string.empty_,"Email")
+        return context.getString(R.string.empty_, "Email")
     }
-    if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+    if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
         return context.getString(R.string.enter_valid_email)
     }
     return null
@@ -136,7 +149,7 @@ fun isValidEmail(email: String, context: Context): String? {
 
 fun isValidMobileNumber(number: String, context: Context): String? {
     if (number.isBlank()) {
-        return context.getString(R.string.empty_,"Mobile Number")
+        return context.getString(R.string.empty_, "Mobile Number")
     }
     if (number.length != 10) {
         return context.getString(R.string.mobile_number_length)
@@ -147,10 +160,11 @@ fun isValidMobileNumber(number: String, context: Context): String? {
     return null
 }
 
-fun Fragment.disableScreen(){
+fun Fragment.disableScreen() {
     activity!!.window.setFlags(
         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+    )
 }
 
 fun View.disable() {

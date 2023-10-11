@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -58,7 +59,9 @@ class LoginFragment : Fragment() {
 
 
         binding.login.setOnClickListener {
-            if(android.util.Patterns.EMAIL_ADDRESS.matcher(binding.edtEmailId.text.toString()).matches()) {
+            if (android.util.Patterns.EMAIL_ADDRESS.matcher(binding.edtEmailId.text.toString())
+                    .matches()
+            ) {
                 val email_id = binding.tilEmailId.helperText
                 val password = binding.tilPassword.helperText
 
@@ -151,6 +154,20 @@ class LoginFragment : Fragment() {
                 }
 
                 is NetworkResult.Error -> {
+                    when (it.data?.status_code) {
+                        401 -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "unauthorized user",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            showError()
+                        }
+
+                        else -> {
+
+                        }
+                    }
                     if (!it.data?.message.isNullOrBlank() && it.data?.message == getString(R.string.no_internet_connection)) {
 //                        showAllExceptNoInternet(
 //                            LoadingModel(isLoading = false, isCheck = false,
@@ -162,29 +179,50 @@ class LoginFragment : Fragment() {
 //                                LoadingModel(isLoading = false, isCheck = false,
 //                                    isInternetAvailable = true, retryNow = false)
 //                            )
-                            Snackbar.make(
-                                requireActivity().findViewById(android.R.id.content),
-                                "${it.message}",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+                        Snackbar.make(
+                            requireActivity().findViewById(android.R.id.content),
+                            "${it.message}",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
 //                        }
                     }
                 }
 
                 else -> {
-
                 }
             }
         })
 
         addEmailValidation()
+        focusListener()
     }
+
+    private fun showError() {
+        binding.tilEmailId.helperText = getString(R.string.enter_valid_email)
+        binding.tilPassword.helperText = getString(R.string.enter_valid_number)
+    }
+
+
+    private fun focusListener() {
+        binding.edtEmailId.setOnFocusChangeListener { v, focused ->
+            if (!focused) {
+                Timber.e("hide-if")
+//                hideSoftKeyboard()
+            }
+        }
+        binding.edtPassword.setOnFocusChangeListener { v, focused ->
+            if (!focused) {
+                Timber.e("hide-if")
+//                hideSoftKeyboard()
+            }
+        }
+    }
+
 
     private fun addEmailValidation() {
         binding.edtEmailId.addTextChangedListener(object : TextValidator(binding.edtEmailId) {
 
             override fun validate(textView: TextInputEditText?, text: String?) {
-                Timber.e("Validate method 1")
                 Timber.e(textView?.text.toString())
                 Timber.e(text)
                 if (android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches()) {

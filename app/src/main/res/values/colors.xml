@@ -19,6 +19,8 @@
     <color name="dark_grey">#474646</color>
     <color name="light_pink">#FFF2FA</color>
 
+    <color name="error_red">#E91E63</color>
+
     <color name="dark_blue">#00005C</color>
     <color name="dark_blue1">#1E3A8A</color>
     <color name="regular_blue">#1D4ED8</color>
