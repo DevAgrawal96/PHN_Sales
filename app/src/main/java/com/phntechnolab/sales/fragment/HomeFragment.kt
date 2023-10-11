@@ -234,6 +234,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
             "MOASigned" -> {
                 requireView().findNavController()
                     .navigate(R.id.action_homeFragment_to_moaSignedFragment)
+//                    .navigate(HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(schoolData))
             }
         }
     }

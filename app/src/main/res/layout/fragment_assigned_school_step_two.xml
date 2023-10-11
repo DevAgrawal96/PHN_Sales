@@ -64,6 +64,7 @@
                         android:id="@+id/edt_director_dm_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="@string/name_validation"
                         android:inputType="text"
                         android:maxLines="1"
                         android:text="@={viewModel.newSchoolData.directorName}" />
@@ -113,8 +114,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
+                        android:maxLength="10"
                         android:maxLines="1"
-                        android:maxLength="15"
                         android:text="@={viewModel.newSchoolData.avgSchoolFees}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -128,6 +129,8 @@
                     android:layout_marginTop="@dimen/dimen_8dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
                     android:hint="@string/existing_labs_in_school"
+                    app:endIconCheckable="false"
+                    app:endIconTint="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -162,6 +165,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="number"
                         android:maxLines="1"
+                        android:maxLength="8"
                         android:text="@={viewModel.newSchoolData.expQuatedValue}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
