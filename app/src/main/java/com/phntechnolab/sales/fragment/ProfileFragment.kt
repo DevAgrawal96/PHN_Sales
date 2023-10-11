@@ -154,10 +154,10 @@ class ProfileFragment : Fragment(), MenuProvider {
             when (it) {
                 is NetworkResult.Success -> {
                     lifecycleScope.launch(Dispatchers.IO) {
-                        clearDataStore(requireContext(), dataStoreProvider)
                         lifecycleScope.launch(Dispatchers.Main) {
                             findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
                         }
+                        clearDataStore(requireContext(), dataStoreProvider)
                     }
 
                 }

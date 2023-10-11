@@ -538,6 +538,10 @@ class AddSchoolFragment : Fragment() {
 
     private fun oncClickListener() {
 
+        binding.topBar.setNavigationOnClickListener {
+
+        }
+
         binding.schoolDetails.selectFileContainer.setOnClickListener {
             contract.launch("image/*")
 //            uploadImage()

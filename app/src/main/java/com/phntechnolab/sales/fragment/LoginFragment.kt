@@ -179,11 +179,11 @@ class LoginFragment : Fragment() {
 //                                LoadingModel(isLoading = false, isCheck = false,
 //                                    isInternetAvailable = true, retryNow = false)
 //                            )
-                        Snackbar.make(
-                            requireActivity().findViewById(android.R.id.content),
-                            "${it.message}",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+//                        Snackbar.make(
+//                            requireActivity().findViewById(android.R.id.content),
+//                            "${it.message}",
+//                            Snackbar.LENGTH_SHORT
+//                        ).show()
 //                        }
                     }
                 }
@@ -226,9 +226,11 @@ class LoginFragment : Fragment() {
                 Timber.e(textView?.text.toString())
                 Timber.e(text)
                 if (android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches()) {
-                    binding.emailErrorMsg.visibility = View.GONE
+                    binding.tilEmailId.helperText = ""
+//                    binding.tilPassword.helperText = ""
                 } else {
-                    binding.emailErrorMsg.visibility = View.VISIBLE
+                    binding.tilEmailId.helperText = getString(R.string.enter_valid_email)
+//                    binding.tilPassword.helperText = getString(R.string.password)
                 }
             }
         })
