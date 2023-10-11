@@ -2,6 +2,7 @@ package com.phntechnolab.sales.repository
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
@@ -69,8 +70,22 @@ class AddSchoolRepository @Inject constructor(
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
+                NetworkResult.Error(
+                    application.getString(R.string.something_went_wrong),
+                    null
+                )
+                Toast.makeText(
+                    application,
+                    application.resources.getString(R.string.something_went_wrong),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         } else {
+            Toast.makeText(
+                application,
+                application.resources.getString(R.string.please_connection_message),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -105,8 +120,22 @@ class AddSchoolRepository @Inject constructor(
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
+                NetworkResult.Error(
+                    application.getString(R.string.something_went_wrong),
+                    null
+                )
+                Toast.makeText(
+                    application,
+                    application.resources.getString(R.string.something_went_wrong),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         } else {
+            Toast.makeText(
+                application,
+                application.resources.getString(R.string.please_connection_message),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -141,12 +170,18 @@ class AddSchoolRepository @Inject constructor(
                     application.getString(R.string.something_went_wrong),
                     null
                 )
+                Toast.makeText(
+                    application,
+                    application.resources.getString(R.string.something_went_wrong),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         } else {
-            NetworkResult.Error(
-                application.getString(R.string.something_went_wrong),
-                null
-            )
+            Toast.makeText(
+                application,
+                application.resources.getString(R.string.please_connection_message),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 }

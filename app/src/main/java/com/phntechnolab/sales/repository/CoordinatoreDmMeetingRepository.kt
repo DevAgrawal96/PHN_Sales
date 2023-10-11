@@ -53,8 +53,22 @@ class CoordinatoreDmMeetingRepository  @Inject constructor(
                 }
             }catch (ex: Exception){
                 ex.printStackTrace()
+                NetworkResult.Error(
+                    application.getString(R.string.something_went_wrong),
+                    null
+                )
+                Toast.makeText(
+                    application,
+                    application.resources.getString(R.string.something_went_wrong),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         } else {
+            Toast.makeText(
+                application,
+                application.resources.getString(R.string.please_connection_message),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -84,8 +98,22 @@ class CoordinatoreDmMeetingRepository  @Inject constructor(
                 }
             }catch (ex: Exception){
                 ex.printStackTrace()
+                NetworkResult.Error(
+                    application.getString(R.string.something_went_wrong),
+                    null
+                )
+                Toast.makeText(
+                    application,
+                    application.resources.getString(R.string.something_went_wrong),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         } else {
+            Toast.makeText(
+                application,
+                application.resources.getString(R.string.please_connection_message),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 }
