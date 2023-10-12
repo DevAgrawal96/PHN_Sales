@@ -16,6 +16,7 @@ import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentLoginBinding
 import com.phntechnolab.sales.model.LoginDetails
+import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.util.DataStoreManager.setToken
 import com.phntechnolab.sales.util.DataStoreManager.setUser
 import com.phntechnolab.sales.util.NetworkResult

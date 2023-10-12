@@ -143,6 +143,11 @@ class SchoolData : Parcelable{
         set(value){
             field = value
         }
+
+    @SerializedName("updated_at") var updatedAt : String = ""
+        set(value){
+            field = value ?: ""
+        }
 }
 
 @Parcelize

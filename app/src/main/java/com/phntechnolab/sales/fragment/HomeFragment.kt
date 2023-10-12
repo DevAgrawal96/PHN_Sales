@@ -88,7 +88,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                     chipGroup.getChildAt(i).isClickable = true
                 }
                 chip.isClickable = false
-                adapter?.setData(viewModel.schoolLiveData.value?.data?.filter {
+                adapter?.setData(viewModel.schoolLiveData.value?.data?.sortedByDescending { it.updatedAt }?.filter {
                     when (chip.text) {
                         "All" -> {
                             true
@@ -126,7 +126,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                 binding.homeRecyclerView.visibility = View.VISIBLE
                 binding.noDataLottie.visibility = View.GONE
                 binding.progressIndicator.visibility = View.GONE
-                adapter?.setData(it.data as ArrayList<SchoolData>)
+                adapter?.setData(ArrayList<SchoolData>().apply {  addAll(it.data.sortedByDescending { it.updatedAt }) })
                 binding.progressBar.visibility = View.GONE
             }
         }
