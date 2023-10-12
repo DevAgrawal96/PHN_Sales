@@ -143,10 +143,11 @@
                 android:text="@string/no_internet_connection"
                 android:textSize="@dimen/txt_20sp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/chipGroup"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.4" />
 
             <TextView
@@ -159,6 +160,7 @@
                 android:text="@string/no_internet_message"
                 android:textAlignment="center"
                 android:textSize="@dimen/txt_16sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

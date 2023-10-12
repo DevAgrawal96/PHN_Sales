@@ -35,7 +35,11 @@ class HomeRepository @Inject constructor(
 
                     schoolDataMutableLiveData.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
-                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        application,
+                        application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                     schoolDataMutableLiveData.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -43,19 +47,25 @@ class HomeRepository @Inject constructor(
                         )
                     )
                 } else {
-                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        application,
+                        application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                     schoolDataMutableLiveData.postValue(
                         NetworkResult.Error(
-                            "",
+                            application.getString(R.string.something_went_wrong),
                             ArrayList()
                         )
                     )
                 }
 
             } catch (e: Exception) {
-                NetworkResult.Error(
-                    application.getString(R.string.something_went_wrong),
-                    null
+                schoolDataMutableLiveData.postValue(
+                    NetworkResult.Error(
+                        application.getString(R.string.something_went_wrong),
+                        null
+                    )
                 )
                 Toast.makeText(
                     application,
@@ -64,6 +74,12 @@ class HomeRepository @Inject constructor(
                 ).show()
             }
         } else {
+            schoolDataMutableLiveData.postValue(
+                NetworkResult.Error(
+                    application.resources.getString(R.string.please_connection_message),
+                    null
+                )
+            )
             Toast.makeText(
                 application,
                 application.resources.getString(R.string.please_connection_message),

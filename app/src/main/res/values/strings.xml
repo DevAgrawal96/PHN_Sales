@@ -70,7 +70,7 @@
     <string name="quotation_validity">Quotation validity*</string>
     <string name="agreement_duration">Agreement Duration</string>
     <string name="agreement_duration_mandate">Agreement Duration*</string>
-    <string name="agreement_duration_compulsary">Agreement Duration*</string>
+    <string name="agreement_duration_compulsary">Agreement duration*</string>
     <string name="select_meeting_agenda">Select meeting agenda</string>
     <string name="meeting_with_whom">Meeting with whom</string>
     <string name="meeting_with_whom_mandate">Meeting with whom*</string>
@@ -186,6 +186,7 @@
     <string name="location">Location</string>
     <string name="role">Role</string>
     <string name="no_internet_message">Make sure Wi-Fi or Mobile data is turned on, then try agian</string>
+    <string name="retry">Retry</string>
 
 
     <string-array name="agreement_duration">
