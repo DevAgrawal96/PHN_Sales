@@ -143,6 +143,10 @@ class SchoolData : Parcelable{
         set(value){
             field = value
         }
+    @SerializedName("installmet") var installmentData : InstallmentData = InstallmentData()
+        set(value){
+            field = value
+        }
 
     @SerializedName("updated_at") var updatedAt : String = ""
         set(value){
@@ -204,6 +208,28 @@ data class MOADocumentData(
     @SerializedName("moa_file") var moaFile : String? = "",
     @SerializedName("remark") var remark : String? = "",
     @SerializedName("status") var status : String? = ""
+): Parcelable
+
+@Parcelize
+data class InstallmentData(
+    @SerializedName("id") var id : String? = null,
+    @SerializedName("school_id") var schoolId : String? = "",
+    @SerializedName("total_installment") var totalInstallment : String? = "",
+    @SerializedName("first_installment") var firstInstallment : String? = "",
+    @SerializedName("first_installment_amount") var firstInstallmentAmount : String? = "",
+    @SerializedName("first_installment_date_time") var firstInstallmentDateTime : String? = "",
+    @SerializedName("first_installment_reciept") var firstInstallmentReciept : String? = "",
+    @SerializedName("second_installment") var secondInstallment : String? = "",
+    @SerializedName("second_installment_amount") var secondInstallmentAmount : String? = "",
+    @SerializedName("second_installment_date_time") var secondInstallmentDateTime : String? = "",
+    @SerializedName("second_installment_reciept") var secondInstallmentReciept : String? = "",
+    @SerializedName("third_installment") var thirdInstallment : String? = "",
+    @SerializedName("third_installment_amount") var thirdInstallmentAmount : String? = "",
+    @SerializedName("third_installment_date_time") var thirdInstallmentDateTime : String? = "",
+    @SerializedName("third_installment_reciept") var thirdInstallmentReciept : String? = "",
+    @SerializedName("created_at") var createdAt : String? = "",
+    @SerializedName("updated_at") var updatedAt : String? = "",
+
 ): Parcelable
 
 //data class SchoolData (
