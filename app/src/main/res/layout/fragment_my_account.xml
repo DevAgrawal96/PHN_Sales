@@ -33,7 +33,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_back"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-                app:title="School Name"
+                app:title="My Account"
                 app:titleTextAppearance="@style/NavigationStyle" />
 
         </com.google.android.material.appbar.AppBarLayout>

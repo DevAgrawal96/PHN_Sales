@@ -551,7 +551,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
         binding.coordinatorMeeting.edtRescheduleMeetingTime.setOnClickListener {
             val c = Calendar.getInstance()
 
-            var hour = c.get(Calendar.HOUR_OF_DAY)
+            var hour = c.get(Calendar.HOUR)
             var minute = c.get(Calendar.MINUTE)
             if (!viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrEmpty()) {
                 viewModel._coordinatorMeetData.value?.meetDateCoordinator?.split(" ")
@@ -648,7 +648,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
         binding.coordinatorMeeting.edtNextMeetingTime.setOnClickListener {
             val c = Calendar.getInstance()
 
-            var hour = c.get(Calendar.HOUR_OF_DAY)
+            var hour = c.get(Calendar.HOUR)
             var minute = c.get(Calendar.MINUTE)
             if (!viewModel._coordinatorMeetData.value?.nextMeetDateDm.isNullOrEmpty()) {
                 viewModel._coordinatorMeetData.value?.nextMeetDateDm?.split(" ")
@@ -743,7 +743,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
         binding.dmMeeting.edtNextMeetingTime.setOnClickListener {
             val c = Calendar.getInstance()
 
-            var hour = c.get(Calendar.HOUR_OF_DAY)
+            var hour = c.get(Calendar.HOUR)
             var minute = c.get(Calendar.MINUTE)
             if (!viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrEmpty()) {
                 viewModel._dmMeetData.value?.nextMeetDateDm?.split(" ")?.let { _dateAndTime ->

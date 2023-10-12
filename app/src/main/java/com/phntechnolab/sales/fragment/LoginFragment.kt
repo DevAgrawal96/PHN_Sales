@@ -179,7 +179,11 @@ class LoginFragment : Fragment() {
     }
 
     private fun showError() {
-        binding.tilPassword.helperText = getString(R.string.enter_valid_email_and_password)
+        Snackbar.make(
+            requireActivity().findViewById(android.R.id.content),
+            getString(R.string.enter_valid_email_and_password),
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
 

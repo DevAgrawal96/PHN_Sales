@@ -314,7 +314,7 @@ class CostingMOADocumentFragment : Fragment() {
 
                         val c = Calendar.getInstance()
 
-                        var hour = c.get(Calendar.HOUR_OF_DAY)
+                        var hour = c.get(Calendar.HOUR)
                         var minute = c.get(Calendar.MINUTE)
                         if (!viewModel.proposeCostingData.value?.quotationValidity.isNullOrEmpty()) {
                             viewModel.proposeCostingData.value?.quotationValidity?.split(" ")
@@ -765,7 +765,7 @@ class CostingMOADocumentFragment : Fragment() {
         binding.proposeCostingStage.edtTime.setOnClickListener {
             val c = Calendar.getInstance()
 
-            var hour = c.get(Calendar.HOUR_OF_DAY)
+            var hour = c.get(Calendar.HOUR)
             var minute = c.get(Calendar.MINUTE)
             if (!viewModel.proposeCostingData.value?.nextMeet.isNullOrEmpty()) {
                 viewModel.proposeCostingData.value?.nextMeet?.split(" ")?.let { _dateAndTime ->

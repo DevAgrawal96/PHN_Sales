@@ -96,7 +96,7 @@
                         android:layout_height="wrap_content"
                         android:digits="@string/number_validation"
                         android:inputType="text"
-                        android:maxLength="15"
+                        android:maxLength="5"
                         android:maxLines="1"
                         android:text="@={viewModel._proposeCostingData.pricePerStudent}" />
                 </com.google.android.material.textfield.TextInputLayout>

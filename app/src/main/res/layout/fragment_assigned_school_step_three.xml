@@ -90,6 +90,10 @@
                         android:digits="@string/date_time_validation"
                         android:drawableEnd="@drawable/date_icon"
                         android:inputType="none"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -115,6 +119,10 @@
                         android:digits="@string/date_time_validation"
                         android:drawableEnd="@drawable/time_icon"
                         android:inputType="none"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -161,10 +169,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:digits="@string/remark_validation"
+                        android:imeOptions="actionDone"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:text="@={viewModel.newSchoolData.remark}"
-                        />
+                        android:text="@={viewModel.newSchoolData.remark}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 

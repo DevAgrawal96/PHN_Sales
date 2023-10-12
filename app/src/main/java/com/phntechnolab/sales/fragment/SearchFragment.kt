@@ -24,7 +24,7 @@ import com.phntechnolab.sales.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchFragment: Fragment() , SchoolDetailAdapter.CallBacks{
+class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
@@ -37,6 +37,7 @@ class SearchFragment: Fragment() , SchoolDetailAdapter.CallBacks{
         super.onCreate(savedInstanceState)
         viewModel.getAllSchools()
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,8 +61,9 @@ class SearchFragment: Fragment() , SchoolDetailAdapter.CallBacks{
         _adapter = SchoolDetailAdapter(this)
         binding.recyclerView.adapter = _adapter
     }
+
     private fun textWatchers() {
-        binding.autoSearch.addTextChangedListener(object : TextWatcher{
+        binding.autoSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -75,14 +77,18 @@ class SearchFragment: Fragment() , SchoolDetailAdapter.CallBacks{
     }
 
     private fun fetchData(schoolName: String) {
-        if(!schoolName.isNullOrBlank()) {
-            val refereshData = viewModel.schoolLiveData.value?.data?.filter {it.schoolName.toLowerCase().contains(schoolName.toLowerCase()) }?.sortedByDescending { it.updatedAt }
+        if (!schoolName.isNullOrBlank()) {
+            val refereshData = viewModel.schoolLiveData.value?.data?.filter {
+                it.schoolName.toLowerCase().contains(schoolName.toLowerCase())
+            }?.sortedByDescending { it.updatedAt }
             refereshData?.let { ArrayList(it) }?.let { adapter?.setData(it) }
+        } else {
+            adapter?.setData(java.util.ArrayList())
         }
     }
 
     private fun observers() {
-        viewModel.schoolLiveData.observe(viewLifecycleOwner){
+        viewModel.schoolLiveData.observe(viewLifecycleOwner) {
             if (it.data?.isEmpty()!!) {
                 binding.noDataLottie.visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.GONE

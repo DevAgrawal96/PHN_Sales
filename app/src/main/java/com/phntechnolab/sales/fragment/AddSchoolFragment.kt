@@ -235,7 +235,8 @@ class AddSchoolFragment : Fragment() {
 
                 } else if (type == "checkIntegerNullOrZero") {
                     val isNameEmpty: Boolean =
-                        editText.text.toString().trim().isNullOrEmpty() ||  editText.text.toString().trim() == "0"
+                        editText.text.toString().trim().isNullOrEmpty() || editText.text.toString()
+                            .trim() == "0"
                     if (isNameEmpty)
                         til.error = errorMessage
                     else
@@ -681,7 +682,8 @@ class AddSchoolFragment : Fragment() {
         binding.followupDetails.edtSchoolTime.setOnClickListener {
             hideKeyboard()
             val c = Calendar.getInstance()
-            var hour = c.get(Calendar.HOUR_OF_DAY)
+            var hour = c.get(Calendar.HOUR)
+            Timber.e(c.get(Calendar.HOUR).toString())
             var minute = c.get(Calendar.MINUTE)
             if (!viewModel.newSchoolData.value?.nextFollowup.isNullOrEmpty()) {
                 viewModel.newSchoolData.value?.nextFollowup?.split(" ")?.let { _dateAndTime ->

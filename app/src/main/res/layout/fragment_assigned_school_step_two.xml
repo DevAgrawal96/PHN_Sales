@@ -66,6 +66,7 @@
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
                         android:inputType="text"
+                        android:imeOptions="actionNext"
                         android:maxLines="1"
                         android:text="@={viewModel.newSchoolData.directorName}" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -91,6 +92,7 @@
                         android:layout_height="wrap_content"
                         android:digits="@string/number_validation"
                         android:inputType="number"
+                        android:imeOptions="actionNext"
                         android:maxLength="10"
                         android:text="@={viewModel.newSchoolData.directorMobNo}" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -117,6 +119,7 @@
                         android:digits="@string/number_validation"
                         android:inputType="number"
                         android:maxLength="10"
+                        android:imeOptions="actionNext"
                         android:maxLines="1"
                         android:text="@={viewModel.newSchoolData.avgSchoolFees}" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -167,6 +170,7 @@
                         android:layout_height="wrap_content"
                         android:digits="@string/number_validation"
                         android:inputType="number"
+                        android:imeOptions="actionDone"
                         android:maxLength="8"
                         android:maxLines="1"
                         android:text="@={viewModel.newSchoolData.expQuatedValue}" />
