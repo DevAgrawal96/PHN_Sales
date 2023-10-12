@@ -177,6 +177,7 @@
     <string name="school_name_validation"><![CDATA[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,.\'&]]></string>
     <string name="name_validation">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ </string>
     <string name="date_time_validation">1234567890/ </string>
+    <string name="search">Search</string>
 
 
     <string-array name="agreement_duration">
