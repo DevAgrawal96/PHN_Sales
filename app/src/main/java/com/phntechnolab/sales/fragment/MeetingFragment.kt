@@ -11,22 +11,32 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.adapter.ActivitiesAdapter
 import com.phntechnolab.sales.databinding.FragmentMeetingBinding
+import com.phntechnolab.sales.model.SchoolData
+import com.phntechnolab.sales.viewmodel.HomeViewModel
+import com.phntechnolab.sales.viewmodel.MeetingViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 
+@AndroidEntryPoint
 class MeetingFragment : Fragment(), MenuProvider {
     private var _binding: FragmentMeetingBinding? = null
     private val binding get() = _binding!!
 
+    private val viewModel by viewModels<MeetingViewModel>()
     private var _adapter: ActivitiesAdapter? = null
     private val adapter get() = _adapter!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        viewModel.getAllSchools()
     }
 
     override fun onCreateView(
@@ -49,6 +59,31 @@ class MeetingFragment : Fragment(), MenuProvider {
         setActionBar()
         setDataToAdapter()
         initializeListener()
+        observers()
+    }
+
+    private fun observers() {
+        viewModel.schoolLiveData.observe(viewLifecycleOwner){
+            if (it.data?.isNotEmpty() == true) {
+                viewModel.todayMeetingData()
+            }
+        }
+
+        viewModel.todayMeetingMutableLiveData.observe(viewLifecycleOwner){
+            Timber.e("Today meetings data")
+            Timber.e(Gson().toJson(it))
+        }
+
+        viewModel.tomorrowMeetingMutableLiveData.observe(viewLifecycleOwner){
+
+            Timber.e("Tomorrow Date")
+            Timber.e(Gson().toJson(it))
+        }
+
+        viewModel.upcomingMeetingMutableLiveData.observe(viewLifecycleOwner){
+            Timber.e("Upcoming Date")
+            Timber.e(Gson().toJson(it))
+        }
     }
 
     private fun setOnBackPressed() {
