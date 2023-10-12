@@ -69,6 +69,13 @@
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
 
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
 
         <action
             android:id="@+id/action_homeFragment_to_moaSignedFragment"
@@ -77,6 +84,60 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.phntechnolab.sales.fragment.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search">
+
+        <action
+            android:id="@+id/action_searchFragment_to_addSchoolFragment"
+            app:destination="@id/addSchoolFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+        <action
+            android:id="@+id/action_searchFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_searchFragment_to_pendingFragment"
+            app:destination="@id/pendingFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_searchFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_searchFragment_to_meetingFragment"
+            app:destination="@id/coordinatorDmMeeting"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_searchFragment_to_costingMoaDocumentFragment"
+            app:destination="@id/costingMoaDocumentFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_searchFragment_to_moaSignedFragment"
+            app:destination="@id/installmentFragment" />
     </fragment>
 
     <fragment
@@ -95,6 +156,14 @@
         android:name="com.phntechnolab.sales.fragment.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile">
+
+        <action
+            android:id="@+id/action_profileFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_profileFragment_to_activitiesFragment"
             app:destination="@id/activitiesFragment"
@@ -151,6 +220,15 @@
         android:name="com.phntechnolab.sales.fragment.PendingFragment"
         android:label="fragment_pending"
         tools:layout="@layout/fragment_pending">
+
+        <action
+            android:id="@+id/action_pendingFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
         <action
             android:id="@+id/action_pendingFragment_to_notificationFragment"
             app:destination="@id/notificationFragment"
@@ -183,6 +261,14 @@
         <action
             android:id="@+id/action_meetingFragment_to_notificationFragment"
             app:destination="@id/notificationFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+        <action
+            android:id="@+id/action_meetingFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"

@@ -182,6 +182,7 @@
     <string name="email_validation">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ @.1234567890_</string>
     <string name="date_time_validation">1234567890/ </string>
     <string name="add_installment_details">Add Installment Details</string>
+    <string name="search">Search</string>
 
 
     <string-array name="agreement_duration">

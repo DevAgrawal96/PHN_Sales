@@ -259,6 +259,7 @@ class ProfileFragment : Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.menu_search -> {
+                findNavController().navigate(R.id.action_profileFragment_to_searchFragment)
                 true
             }
 

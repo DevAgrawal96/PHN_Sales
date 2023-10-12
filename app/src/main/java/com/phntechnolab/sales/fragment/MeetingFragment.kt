@@ -111,6 +111,7 @@ class MeetingFragment : Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.menu_search -> {
+                findNavController().navigate(R.id.action_meetingFragment_to_searchFragment)
                 true
             }
 
