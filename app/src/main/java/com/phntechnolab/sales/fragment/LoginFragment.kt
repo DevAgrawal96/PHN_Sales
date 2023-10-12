@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -52,7 +53,17 @@ class LoginFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        setBackPressed()
         return binding.root
+    }
+
+    private fun setBackPressed() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finishAffinity()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(callback)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -136,20 +147,6 @@ class LoginFragment : Fragment() {
                                     findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                                 }
                             }
-//                            showAllExceptNoInternet(
-//                                LoadingModel(isLoading = false, isCheck = true,
-//                                    isInternetAvailable = true, retryNow = false)
-//                            )
-//                            setData(it.data.apps)
-                        }
-
-                        404 -> {
-//                            hideAllViewExceptNoFound(true)
-                        }
-
-                        408 -> {
-                            // token expire
-//                            viewModel.getTokenIfExpired()
                         }
                     }
                 }
@@ -166,27 +163,10 @@ class LoginFragment : Fragment() {
                         }
 
                         else -> {
-
+                            Timber.e("Error body else")
                         }
                     }
-                    if (!it.data?.message.isNullOrBlank() && it.data?.message == getString(R.string.no_internet_connection)) {
-//                        showAllExceptNoInternet(
-//                            LoadingModel(isLoading = false, isCheck = false,
-//                                isInternetAvailable = false, retryNow = false)
-//                        )
-                    } else {
-//                        if (!it.data?.message.isNullOrBlank()) {
-//                            showAllExceptNoInternet(
-//                                LoadingModel(isLoading = false, isCheck = false,
-//                                    isInternetAvailable = true, retryNow = false)
-//                            )
-//                        Snackbar.make(
-//                            requireActivity().findViewById(android.R.id.content),
-//                            "${it.message}",
-//                            Snackbar.LENGTH_SHORT
-//                        ).show()
-//                        }
-                    }
+
                 }
 
                 else -> {
@@ -200,7 +180,6 @@ class LoginFragment : Fragment() {
 
     private fun showError() {
         binding.tilEmailId.helperText = getString(R.string.enter_valid_email)
-        binding.tilPassword.helperText = getString(R.string.enter_valid_number)
     }
 
 

@@ -34,6 +34,7 @@ import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.TextValidator
+import com.phntechnolab.sales.util.hideKeyboard
 import com.phntechnolab.sales.viewmodel.AddSchoolViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -135,9 +136,23 @@ class AddSchoolFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         oncClickListener()
 
         observers()
+        initEditText()
+    }
+
+    private fun initEditText() {
+//        Timber.e("change zero")
+//        Timber.e((binding.basicDetails.edtSchoolTotalIntake.getText()).toString())
+//        if ((binding.basicDetails.edtSchoolTotalIntake.text).toString() == "0" &&
+//            (binding.basicDetails.edtTotalNoOfClassroom.text).toString() == "0"
+//        ) {
+//            Timber.e("change zero")
+//            binding.basicDetails.edtSchoolTotalIntake.setText(getString(R.string.blank))
+//            binding.basicDetails.edtTotalNoOfClassroom.setText(R.string.blank)
+//        }
     }
 
     private fun addValidationWatchers() {
@@ -316,7 +331,12 @@ class AddSchoolFragment : Fragment() {
     }
 
     private fun setLabsDialog() {
+        binding.schoolDetails.existingLabs.setOnClickListener {
+            openMultiSelectionDialog()
+        }
+    }
 
+    private fun openMultiSelectionDialog() {
         val labsData = arrayOf(
             "Science Lab",
             "Computer Lab",
@@ -333,89 +353,88 @@ class AddSchoolFragment : Fragment() {
         val labList = ArrayList<Int>()
 
         labsData.forEachIndexed { index, s ->
-            if(viewModel.newSchoolData.value?.existingLab?.contains(s) == true){
+            if (viewModel.newSchoolData.value?.existingLab?.contains(s) == true) {
                 selectedLabs[index] = true
                 labList.add(index)
 
-            }else{
+            } else {
                 selectedLabs[index] = false
             }
         }
+        // Initialize alert dialog
+        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
 
-        binding.schoolDetails.existingLabs.setOnClickListener {
-            // Initialize alert dialog
-            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        // set title
+        builder.setTitle("Select existing labs in school")
 
-            // set title
-            builder.setTitle("Select existing labs in school")
+        // set dialog non cancelable
+        builder.setCancelable(false)
 
-            // set dialog non cancelable
-            builder.setCancelable(false)
-
-            builder.setMultiChoiceItems(labsData, selectedLabs
-            ) { dialogInterface, i, b ->
-                // check condition
-                if (b) {
-                    // Add position  in lang list
-                    labList.add(i)
-                    // Sort array list
-                    labList.sort()
-                } else {
-                    // when checkbox unselected
-                    // Remove position from langList
-                    labList.remove(Integer.valueOf(i))
-                }
+        builder.setMultiChoiceItems(
+            labsData, selectedLabs
+        ) { dialogInterface, i, b ->
+            // check condition
+            if (b) {
+                // Add position  in lang list
+                labList.add(i)
+                // Sort array list
+                labList.sort()
+            } else {
+                // when checkbox unselected
+                // Remove position from langList
+                labList.remove(Integer.valueOf(i))
             }
-
-            builder.setPositiveButton(
-                "OK"
-            ) { dialogInterface, i -> // Initialize string builder
-                val stringBuilder = StringBuilder()
-                // use for loop
-                for (j in 0 until labList.size) {
-                    // concat array value
-                    stringBuilder.append(labsData[labList[j]])
-                    // check condition
-                    if (j != labList.size - 1) {
-                        // When j value  not equal
-                        // to lang list size - 1
-                        // add comma
-                        stringBuilder.append(", ")
-                    }
-                }
-                // set text on textView
-                binding.schoolDetails.existingLabs.setText(stringBuilder.toString())
-                viewModel._newSchoolData.value?.existingLab = stringBuilder.toString()
-            }
-
-            builder.setNegativeButton(
-                "Cancel"
-            ) { dialogInterface, i -> // dismiss dialog
-                dialogInterface.dismiss()
-            }
-
-            builder.setNeutralButton(
-                "Clear All"
-            ) { dialogInterface, i ->
-                // use for loop
-                for (j in selectedLabs.indices) {
-                    // remove all selection
-                    selectedLabs[j] = false
-                    // clear language list
-                    labList.clear()
-                    // clear text view value
-                    binding.schoolDetails.existingLabs.setText("")
-                }
-            }
-            // show dialog
-            builder.show()
         }
+
+        builder.setPositiveButton(
+            "OK"
+        ) { dialogInterface, i -> // Initialize string builder
+            val stringBuilder = StringBuilder()
+            // use for loop
+            for (j in 0 until labList.size) {
+                // concat array value
+                stringBuilder.append(labsData[labList[j]])
+                // check condition
+                if (j != labList.size - 1) {
+                    // When j value  not equal
+                    // to lang list size - 1
+                    // add comma
+                    stringBuilder.append(", ")
+                }
+            }
+            // set text on textView
+            binding.schoolDetails.existingLabs.setText(stringBuilder.toString())
+            viewModel._newSchoolData.value?.existingLab = stringBuilder.toString()
+        }
+
+        builder.setNegativeButton(
+            "Cancel"
+        ) { dialogInterface, i -> // dismiss dialog
+            dialogInterface.dismiss()
+        }
+
+        builder.setNeutralButton(
+            "Clear All"
+        ) { dialogInterface, i ->
+            // use for loop
+            for (j in selectedLabs.indices) {
+                // remove all selection
+                selectedLabs[j] = false
+                // clear language list
+                labList.clear()
+                // clear text view value
+                binding.schoolDetails.existingLabs.setText("")
+            }
+        }
+        // show dialog
+        builder.show()
+        hideKeyboard()
     }
 
     private fun observers() {
 
-        viewModel.uploadImgResponse.observe(viewLifecycleOwner){
-            when(it){
+        viewModel.uploadImgResponse.observe(viewLifecycleOwner) {
+            when (it) {
                 is NetworkResult.Success -> {
                     Toast.makeText(
                         requireContext(),
@@ -487,7 +506,7 @@ class AddSchoolFragment : Fragment() {
             binding.progressBar.visibility = View.GONE
             when (it) {
                 is NetworkResult.Success -> {
-                    if(viewModel._requestFile != null)
+                    if (viewModel._requestFile != null)
                         viewModel.uploadImage()
                     else
                         findNavController().popBackStack()
@@ -537,19 +556,40 @@ class AddSchoolFragment : Fragment() {
     }
 
     private fun oncClickListener() {
-
         binding.topBar.setNavigationOnClickListener {
+            when (position) {
+                0 -> {
+                    findNavController().popBackStack()
+                }
 
+                1 -> {
+                    binding.basicDetails.root.visibility = View.VISIBLE
+                    binding.schoolDetails.root.visibility = View.GONE
+                    position = 0
+                    binding.stepView.done(false)
+                    binding.stepView.go(position, true)
+                }
+
+                2 -> {
+                    binding.schoolDetails.root.visibility = View.VISIBLE
+                    binding.followupDetails.root.visibility = View.GONE
+                    position = 1
+                    binding.stepView.done(false)
+                    binding.stepView.go(position, true)
+                }
+
+                else -> {
+                    position = 3
+                    binding.stepView.done(true)
+                    binding.stepView.go(0, true)
+                }
+            }
         }
 
         binding.schoolDetails.selectFileContainer.setOnClickListener {
             contract.launch("image/*")
-//            uploadImage()
         }
 
-        binding.topBar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
 
         binding.basicDetails.btnSave.setOnClickListener {
             Timber.d("data binding data")
@@ -592,6 +632,7 @@ class AddSchoolFragment : Fragment() {
         }
 
         binding.followupDetails.edtSchoolDate.setOnClickListener {
+            hideKeyboard()
             val c = Calendar.getInstance()
             var year = c.get(Calendar.YEAR)
             var month = c.get(Calendar.MONTH)
@@ -640,8 +681,8 @@ class AddSchoolFragment : Fragment() {
         }
 
         binding.followupDetails.edtSchoolTime.setOnClickListener {
+            hideKeyboard()
             val c = Calendar.getInstance()
-
             var hour = c.get(Calendar.HOUR_OF_DAY)
             var minute = c.get(Calendar.MINUTE)
             if (!viewModel.newSchoolData.value?.nextFollowup.isNullOrEmpty()) {

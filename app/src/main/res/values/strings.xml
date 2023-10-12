@@ -93,6 +93,7 @@
     <string name="installment_date_time"><![CDATA[Installment date & time]]></string>
     <string name="save">Save</string>
     <string name="propose_costing">Propose Costing</string>
+    <string name="blank"></string>
 
     <string name="my_account">My Account</string>
     <string name="please_enter_valid_email_address">Please enter valid email address!</string>
@@ -173,6 +174,9 @@
     <string name="please_fill_rescheduled_date_for_proceed">Please fill rescheduled meeting date for proceed.</string>
     <string name="please_next_rescheduled_date_for_proceed">Please fill next rescheduled meeting date for proceed.</string>
     <string name="please_fill_all_the_mendate_details">Please fill all the mandate fields to proceed.</string>
+    <string name="school_name_validation"><![CDATA[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,.\'&]]></string>
+    <string name="name_validation">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ </string>
+    <string name="date_time_validation">1234567890/ </string>
 
 
     <string-array name="agreement_duration">

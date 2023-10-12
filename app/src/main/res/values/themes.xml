@@ -3,6 +3,7 @@
     <style name="Base.Theme.Sales" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="colorPrimary">@color/regular_blue</item>
     </style>
 
     <style name="CustomChipChoice" parent="@style/Widget.Material3.Chip.Filter">
@@ -13,7 +14,7 @@
 
     <style name="Theme.Sales" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorPrimary">@color/regular_blue</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
         <item name="colorOnPrimaryContainer">@color/md_theme_light_onPrimaryContainer</item>
