@@ -187,6 +187,13 @@ class AddSchoolFragment : Fragment() {
         )
 
         validationTextWatcherSchema(
+            binding.basicDetails.edtTotalNoOfClassroom,
+            "checkIntegerNullOrZero",
+            binding.basicDetails.tilSchoolTotalNoOfClassroom,
+            resources.getString(R.string.please_enter_number_of_classrooms)
+        )
+
+        validationTextWatcherSchema(
             binding.basicDetails.edtCoordinatorName,
             "checkStringNullOrEmpty",
             binding.basicDetails.tilCoordinatorName,
@@ -238,9 +245,9 @@ class AddSchoolFragment : Fragment() {
 
                 } else if (type == "checkIntegerNullOrZero") {
                     val isNameEmpty: Boolean =
-                        editText.text.toString().isNullOrEmpty() || editText.text.toString() == "0"
+                        editText.text.toString().trim().isNullOrEmpty() ||  editText.text.toString().trim() == "0"
                     if (isNameEmpty)
-//                        til.error = errorMessage
+                        til.error = errorMessage
                     else
                         til.error = null
                 } else if (type == "phone" || type == "email") {
@@ -249,7 +256,7 @@ class AddSchoolFragment : Fragment() {
 
                     when (type) {
                         "phone" -> {
-                            pattern = Pattern.compile("[0123456789]{10}")
+                            pattern = Pattern.compile("[6789][0123456789]{9}")
                         }
 
                         "email" -> {
@@ -262,7 +269,9 @@ class AddSchoolFragment : Fragment() {
                         }
                     }
 
-                    if (!pattern.matcher(text).matches())
+                    if (text.isNullOrEmpty()) {
+                        til.error = "Please enter valid data"
+                    } else if (!pattern.matcher(text).matches())
                         til.error = errorMessage
                     else
                         til.error = null
@@ -608,7 +617,6 @@ class AddSchoolFragment : Fragment() {
             Timber.d("data binding data 3")
             Timber.d(Gson().toJson(viewModel.newSchoolData.value))
             checkValidationsAndApiCall(3)
-
         }
 
         binding.basicDetails.boardSpinner.setOnItemClickListener { parent, view, position, id ->
@@ -792,7 +800,7 @@ class AddSchoolFragment : Fragment() {
             binding.basicDetails.edtSchoolAddress.text.toString().isNullOrEmpty()
         if (isSchoolAddressEmpty)
             binding.basicDetails.tilSchoolAddress.error =
-                resources.getString(R.string.please_enter_valid_email_address)
+                resources.getString(R.string.please_enter_valid_school_address)
         else
             binding.basicDetails.tilSchoolAddress.error = null
 
@@ -805,6 +813,7 @@ class AddSchoolFragment : Fragment() {
         val isSchoolIntakeEmpty = binding.basicDetails.edtSchoolTotalIntake.text.toString()
             .isNullOrEmpty() || binding.basicDetails.edtSchoolTotalIntake.text.toString()
             .trim() == "0"
+
         if (isSchoolIntakeEmpty)
             binding.basicDetails.tilSchoolTotalIntake.error =
                 resources.getString(R.string.please_enter_total_school_intake)
@@ -817,7 +826,7 @@ class AddSchoolFragment : Fragment() {
             binding.basicDetails.edtTotalNoOfClassroom.text.toString().isNullOrEmpty()
         if (isNumberOfClassroomsEmpty)
             binding.basicDetails.tilSchoolTotalIntake.error =
-                resources.getString(R.string.please_enter_number_of_classrooms)
+                resources.getString(R.string.please_enter_total_school_intake)
         else if (binding.basicDetails.edtTotalNoOfClassroom.text.toString().trim().toInt() >= 100)
             binding.basicDetails.tilSchoolTotalIntake.error =
                 resources.getString(R.string.total_no_of_classrooms_less_than)
@@ -831,7 +840,7 @@ class AddSchoolFragment : Fragment() {
         else
             binding.basicDetails.tilCoordinatorName.error = null
 
-        val mPhonePattern = Pattern.compile("[0123456789]{10}")
+        val mPhonePattern = Pattern.compile("[6789][0123456789]{9}")
         val isCoordinatorPhoneValid =
             mPhonePattern.matcher(binding.basicDetails.edtCoordinatorMono.text.toString()).matches()
         if (!isCoordinatorPhoneValid)

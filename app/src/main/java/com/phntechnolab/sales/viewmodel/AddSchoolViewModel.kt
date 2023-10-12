@@ -86,9 +86,6 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
 
     fun updateSchoolDetails() {
 
-        val multiPartBody: MultipartBody =
-            returnJsonData(_newSchoolData.value ?: SchoolData(), false)
-
         viewModelScope.launch {
             Timber.e(Gson().toJson(newSchoolData.value))
             withContext(this.coroutineContext) {

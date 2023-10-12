@@ -150,8 +150,11 @@ class CostingMOADocumentFragment : Fragment() {
         binding.moaDocument.updateBtn.setOnClickListener {
             Timber.e("MOA DATA POST")
             Timber.e(Gson().toJson(viewModel._moaDocumentData.value))
-            if (isMOADocumentFieldsValid())
+            if (!image.toString().isNullOrEmpty() && isMOADocumentFieldsValid())
                 viewModel.updateMoaDocumentDetails()
+            else
+                Timber.e("fill all man")
+
         }
 
         binding.proposeCostingStage.autoAgreementDuration.setOnItemClickListener { parent, view, position, id ->

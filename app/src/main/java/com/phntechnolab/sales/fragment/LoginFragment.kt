@@ -179,7 +179,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun showError() {
-        binding.tilEmailId.helperText = getString(R.string.enter_valid_email)
+        binding.tilPassword.helperText = getString(R.string.enter_valid_email_and_password)
     }
 
 
@@ -210,7 +210,7 @@ class LoginFragment : Fragment() {
 //                    binding.tilPassword.helperText = ""
                 } else {
                     binding.tilEmailId.helperText = getString(R.string.enter_valid_email)
-//                    binding.tilPassword.helperText = getString(R.string.password)
+                    binding.tilPassword.helperText = ""
                 }
             }
         })

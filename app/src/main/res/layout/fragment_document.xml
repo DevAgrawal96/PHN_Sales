@@ -49,6 +49,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
+                        android:maxLength="10"
+                        android:digits="@string/number_validation"
                         android:text="@={viewModel._moaDocumentData.interestedIntake}"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -72,6 +74,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
+                        android:digits="@string/number_validation"
+                        android:maxLength="10"
                         android:text="@={viewModel._moaDocumentData.finalCosting}"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -258,6 +262,7 @@
                     android:layout_marginEnd="@dimen/dimen_16dp"
                     android:backgroundTint="@color/regular_blue"
                     android:text="@string/update"
+                    android:digits="@string/remark_validation"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"

@@ -138,7 +138,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
             }
         }
 
-        binding.dmMeeting.button.setOnClickListener {
+        binding.dmMeeting.updateBtn.setOnClickListener {
             if (checkDmRequiredFieldsData()) {
                 viewModel.updatedMDetails()
             }

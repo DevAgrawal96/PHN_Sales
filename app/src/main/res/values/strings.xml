@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Sales</string>
     <string name="enter_valid_email">Please enter valid email!</string>
+    <string name="enter_valid_email_and_password">Please enter valid email and password!</string>
     <string name="no_internet_connection">No internet connection!</string>
     <string name="something_went_wrong">Something went wrong!</string>
     <string name="something_went_wrong_please">Something went wrong! Please try again later.</string>
@@ -101,9 +102,9 @@
     <string name="please_enter_number_of_classrooms">Please enter number of classrooms!</string>
     <string name="please_enter_valid_phone_no">Please enter valid phone number!</string>
     <string name="some_fields_are_empty_or_not_valid">Some fields are empty or not valid!</string>
-    <string name="please_enter_valid_school_name">Please enter valid school name!</string>
-    <string name="please_enter_valid_school_address">Please enter valid school address!</string>
-    <string name="please_enter_valid_coordinator_name">Please enter valid coordinator name!</string>
+    <string name="please_enter_valid_school_name">Please enter school name!</string>
+    <string name="please_enter_valid_school_address">Please enter school address!</string>
+    <string name="please_enter_valid_coordinator_name">Please enter coordinator name!</string>
     <string name="please_enter_total_school_intake">Please enter total shcool intake!</string>
     <string name="total_school_intake_less_than">Please enter total shcool intake less than 20000!</string>
     <string name="total_no_of_classrooms_less_than">Please enter total number of classrooms less than 20000!</string>
@@ -146,7 +147,7 @@
     <string name="teacher_principal_meeting">Teacher/Principal Meeting</string>
     <string name="dm_level_meeting">DM Level Meeting</string>
     <string name="teacher_principal_attended_the_meet">Teacher/Principal attended the meet? *</string>
-    <string name="product_demo_happned">Product demo happned?</string>
+    <string name="product_demo_happened">Product demo happened?</string>
     <string name="do_you_want_to_reschedule_meeting_with_teacher_principal">Do you want to reschedule meeting with Teacher/Principal ?</string>
     <string name="interested_in_lab_set_up">Interested in lab set up?</string>
     <string name="propose_costing_stage">Propose Costing Stage</string>
@@ -176,7 +177,11 @@
     <string name="please_fill_all_the_mendate_details">Please fill all the mandate fields to proceed.</string>
     <string name="school_name_validation"><![CDATA[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,.\'&]]></string>
     <string name="name_validation">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ </string>
+    <string name="remark_validation"><![CDATA[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,.\']]></string>
+    <string name="number_validation">1234567890</string>
+    <string name="email_validation">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ @.1234567890_</string>
     <string name="date_time_validation">1234567890/ </string>
+    <string name="add_installment_details">Add Installment Details</string>
 
 
     <string-array name="agreement_duration">

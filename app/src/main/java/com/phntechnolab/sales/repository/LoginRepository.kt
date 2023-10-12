@@ -130,6 +130,11 @@ class LoginRepository @Inject constructor(
                             )
                         )
                     )
+                    Toast.makeText(
+                        application,
+                        application.resources.getString(R.string.please_connection_message),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
@@ -139,7 +144,7 @@ class LoginRepository @Inject constructor(
                 )
                 Toast.makeText(
                     application,
-                    application.resources.getString(R.string.something_went_wrong),
+                    application.resources.getString(R.string.please_connection_message),
                     Toast.LENGTH_SHORT
                 ).show()
 
