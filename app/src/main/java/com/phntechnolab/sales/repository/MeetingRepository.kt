@@ -94,12 +94,18 @@ class MeetingRepository @Inject constructor(
     }
 
     fun todayMeetingDataSetup() {
-        val date = Calendar.getInstance().time
+        val date = Calendar.getInstance()
+        date.set(Date().year, Date().month, Date().date, 0, 0, 0)
 
         Timber.e("Today Date")
-        Timber.e(date.toString())
+        Timber.e(date.time.toString())
         _todayMeetingMutableLiveData.postValue(_allSchoolMutableLiveData.value?.data?.filter {
-            formattedDate(it.nextFollowup.replace("/", "-")) == date
+            if(it.nextFollowup == null)
+                false
+            else {
+                val upcomingDate = formattedDate(it.nextFollowup?.replace("/", "-")?.split(" ")?.get(0) ?: "")
+                Date().year == upcomingDate.year && Date().month == upcomingDate.month && Date().date == upcomingDate.date
+            }
         })
 
     }
@@ -112,9 +118,14 @@ class MeetingRepository @Inject constructor(
 
         Timber.e("Tomorrow Date")
         Timber.e(date.time.toString())
+//        Timber.e(formattedDate(_allSchoolMutableLiveData.value?.data?.get(0)?.nextFollowup?.replace("/", "-")?.split(" ")
+//            ?.get(0) ?: "").toString())
         Timber.e(Date().toString())
         _tomorrowMeetingMutableLiveData.postValue(_allSchoolMutableLiveData.value?.data?.filter {
-            formattedDate(it.nextFollowup.replace("/", "-").split(" ")[0]) ==  date.time
+            if(it.nextFollowup == null)
+                false
+            else
+                formattedDate(it.nextFollowup?.replace("/", "-")?.split(" ")?.get(0) ?: "") ==  date.time
         })
     }
 
@@ -126,7 +137,10 @@ class MeetingRepository @Inject constructor(
         Timber.e(date.time.toString())
 
         _upcomingMeetingMutableLiveData.postValue(_allSchoolMutableLiveData.value?.data?.filter {
-            formattedDate(it.nextFollowup.replace("/", "-").split(" ")[0]) >= date.time
+            if(it.nextFollowup == null)
+                 false
+            else
+            formattedDate(it.nextFollowup?.replace("/", "-")?.split(" ")?.get(0) ?:"") >= date.time
         })
     }
 
@@ -137,6 +151,8 @@ class MeetingRepository @Inject constructor(
         val date = dateFormat_yyyyMMddHHmmss.parse(oldDate)
         val calendar = Calendar.getInstance()
         calendar.time = date
-        return date
+//        calendar.set(date.year, date.month, date.date, 0 ,0 ,0)
+        Timber.e(calendar.time.toString())
+        return calendar.time
     }
 }

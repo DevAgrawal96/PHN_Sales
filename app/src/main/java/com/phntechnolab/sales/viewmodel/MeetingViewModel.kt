@@ -33,7 +33,7 @@ class MeetingViewModel @Inject constructor(private val repositories: MeetingRepo
 
     fun todayMeetingData(){
         repositories.todayMeetingDataSetup()
-        repositories.tomorrowMeetingDataSetup()
-        repositories.upcomingMeetingDataSetup()
+//        repositories.tomorrowMeetingDataSetup()
+//        repositories.upcomingMeetingDataSetup()
     }
 }
