@@ -4,6 +4,7 @@ import com.phntechnolab.sales.model.ChangePasswordModel
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.DMData
+import com.phntechnolab.sales.model.InstallmentData
 import com.phntechnolab.sales.model.LoginDetails
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
@@ -55,6 +56,11 @@ interface RetrofitApi {
     suspend fun updateSchoolData(
         @Path(value = "id") id: String,
         @Body schoolDetails: SchoolData
+    ): Response<CustomResponse>
+
+    @POST("api/installment")
+    suspend fun uploadInstallmentData(
+        @Body schoolDetails: MultipartBody
     ): Response<CustomResponse>
 
     @POST("api/updateimage/{id}")

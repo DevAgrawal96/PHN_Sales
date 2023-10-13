@@ -19,6 +19,8 @@ import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentInstalmentBinding
 import com.phntechnolab.sales.di.FileDownloader
+import com.phntechnolab.sales.model.InstallmentData
+import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.viewmodel.InstallmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -42,6 +44,8 @@ class InstallmentFragment : Fragment() {
     private var receipt1: String? = null
     private var receipt2: String? = null
     private var receipt3: String? = null
+    private var id: String? = null
+    private var schoolId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,7 +57,7 @@ class InstallmentFragment : Fragment() {
     ): View? {
         _binding = FragmentInstalmentBinding.inflate(inflater, container, false)
         setOnBackPressed()
-        viewModel.setOldSchoolData(args.moaSchoolData)
+        viewModel.setInstallmentData(args.moaSchoolData)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         return binding.root
@@ -350,7 +354,29 @@ class InstallmentFragment : Fragment() {
     }
 
     private fun observers() {
-        viewModel.oldSchoolData.observe(viewLifecycleOwner) {
+
+        viewModel.addInstallmentResponse.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    Toast.makeText(requireContext(), "Added successfully!!", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                is NetworkResult.Error -> {
+                    Timber.e("Add installment error")
+                }
+
+                else -> {
+
+                }
+            }
+        }
+
+
+
+        viewModel.installmentData.observe(viewLifecycleOwner) {
+            id = it?.id
+            schoolId = it?.schoolId
             if (!it?.firstInstallmentAmount.isNullOrEmpty()) {
                 binding.installment1.installmentDetailsTxt.text =
                     getString(R.string._1st_installment_details, (1).toString())
@@ -446,6 +472,26 @@ class InstallmentFragment : Fragment() {
     }
 
     private fun initializeListener() {
+        binding.updateBtn.setOnClickListener {
+            viewModel.setInstallmentData(
+                InstallmentData(
+                    id = id,
+                    schoolId = schoolId,
+                    totalInstallment = count.toString(),
+                    firstInstallment = binding.addInstallment1.installmentTxt.toString(),
+                    firstInstallmentAmount = binding.addInstallment1.edtInstallmentAmount.text.toString(),
+                    firstInstallmentDateTime = binding.addInstallment1.edtInstallmentDate.text.toString(),
+                    secondInstallment = binding.addInstallment2.installmentTxt.toString(),
+                    secondInstallmentAmount = binding.addInstallment2.edtInstallmentAmount.text.toString(),
+                    secondInstallmentDateTime = binding.addInstallment2.edtInstallmentDate.text.toString(),
+                    thirdInstallment = binding.addInstallment3.installmentTxt.toString(),
+                    thirdInstallmentAmount = binding.addInstallment3.edtInstallmentAmount.text.toString(),
+                    thirdInstallmentDateTime = binding.addInstallment3.edtInstallmentDate.text.toString()
+                )
+            )
+            viewModel.addNewInstallment()
+        }
+
         val fileDownloader = FileDownloader(requireContext())
         binding.installment1.downloadImg.setOnClickListener {
             if (!receipt1.isNullOrBlank()) {

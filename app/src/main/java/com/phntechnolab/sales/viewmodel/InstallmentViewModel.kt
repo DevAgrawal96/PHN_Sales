@@ -5,10 +5,15 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.InstallmentData
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.SchoolData
+import com.phntechnolab.sales.repository.InstallmentRepository
+import com.phntechnolab.sales.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -19,7 +24,7 @@ import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class InstallmentViewModel @Inject constructor() : ViewModel() {
+class InstallmentViewModel @Inject constructor(private var repository: InstallmentRepository) : ViewModel() {
     var _requestFile1: RequestBody? = null
     var imageData1: MultipartBody.Part? = null
     var imageName1: String? = null
@@ -35,12 +40,15 @@ class InstallmentViewModel @Inject constructor() : ViewModel() {
     var imageName3: String? = null
     var imagesize3: Int? = null
 
-    private var _oldSchoolData: MutableLiveData<InstallmentData?> = MutableLiveData()
-    val oldSchoolData: LiveData<InstallmentData?>
-        get() = _oldSchoolData
+    private var _installmentData: MutableLiveData<InstallmentData?> = MutableLiveData()
+    val installmentData: LiveData<InstallmentData?>
+        get() = _installmentData
 
-    fun setOldSchoolData(data: InstallmentData?) {
-        _oldSchoolData.postValue(data)
+    val addInstallmentResponse: LiveData<NetworkResult<CustomResponse>>
+        get() = repository.installmentResponse
+
+    fun setInstallmentData(data: InstallmentData?) {
+        _installmentData.postValue(data)
     }
 
     fun uploadInstallmentDocument(
@@ -136,6 +144,53 @@ class InstallmentViewModel @Inject constructor() : ViewModel() {
             }
         }
 
+    }
+
+    fun addNewInstallment() {
+        val multiPartBody: MultipartBody =
+            returnJsonData(_installmentData.value ?: InstallmentData())
+        viewModelScope.launch {
+            repository.uploadInstallmentData(multiPartBody)
+        }
+    }
+
+    private fun returnJsonData(data: Any): MultipartBody {
+
+        val multipartBody = MultipartBody.Builder().setType(MultipartBody.FORM)
+            .addFormDataPart("id", (data as InstallmentData).id ?: "")
+            .addFormDataPart("school_id", data.schoolId ?: "")
+            .addFormDataPart("total_installment", data.totalInstallment ?: "")
+            .addFormDataPart("first_installment", data.firstInstallment ?: "")
+            .addFormDataPart("first_installment_amount", data.firstInstallmentAmount ?: "")
+            .addFormDataPart("first_installment_date_time", data.firstInstallmentDateTime ?: "")
+            .addFormDataPart("second_installment", data.secondInstallment ?: "")
+            .addFormDataPart("second_installment_amount", data.secondInstallmentAmount ?: "")
+            .addFormDataPart("second_installment_date_time", data.secondInstallmentDateTime ?: "")
+            .addFormDataPart("third_installment", data.thirdInstallment ?: "")
+            .addFormDataPart("third_installment_amount", data.thirdInstallmentAmount ?: "")
+            .addFormDataPart("third_installment_date_time", data.thirdInstallmentDateTime ?: "")
+            .addFormDataPart("created_at", data.createdAt ?: "")
+            .addFormDataPart("updated_at", data.updatedAt ?: "")
+
+        _requestFile1?.let {
+            multipartBody.addFormDataPart(
+                "first_installment_reciept", imageName1,
+                it
+            )
+        }
+        _requestFile2?.let {
+            multipartBody.addFormDataPart(
+                "second_installment_reciept", imageName2,
+                it
+            )
+        }
+        _requestFile3?.let {
+            multipartBody.addFormDataPart(
+                "third_installment_reciept", imageName3,
+                it
+            )
+        }
+        return multipartBody.build()
     }
 
 }
