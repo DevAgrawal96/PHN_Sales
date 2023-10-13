@@ -25,6 +25,7 @@ import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentHomeBinding
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.DMData
+import com.phntechnolab.sales.model.InstallmentData
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
@@ -110,7 +111,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                                 it.status == chip.text
                             }
                         }
-                    } as ArrayList<SchoolData>)
+                    } as ArrayList<SchoolData> ?: ArrayList<SchoolData>())
             }
         }
 
@@ -263,11 +264,22 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                     )
             }
 
-            "MOASigned" -> {
-                schoolData.moaDocumentData
+            "MOA Pending" -> {
                 requireView().findNavController()
-                    .navigate(R.id.action_homeFragment_to_moaSignedFragment)
-//                    .navigate(HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(schoolData))
+                    .navigate(
+                        HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
+                            schoolData.installmentData ?: InstallmentData()
+                        )
+                    )
+            }
+
+            "MOASigned" -> {
+                requireView().findNavController()
+                    .navigate(
+                        HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
+                            schoolData.installmentData ?: InstallmentData()
+                        )
+                    )
             }
         }
     }

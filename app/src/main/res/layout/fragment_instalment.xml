@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -70,7 +71,8 @@
 
                     <include
                         android:id="@+id/school_details"
-                        layout="@layout/adapter_home_inline"
+                        layout="@layout/installment_school_data_item"
+                        bind:viewModel="@={viewModel}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="1.0"
@@ -196,9 +198,9 @@
                     android:text="@string/update"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/installment_details_container"
+                    app:layout_constraintTop_toBottomOf="@+id/add_installment_details"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <androidx.constraintlayout.widget.Guideline
@@ -208,21 +210,6 @@
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.5" />
 
-                <TextView
-                    android:id="@+id/add_installment_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/add_installment_details"
-                    android:textSize="@dimen/txt_16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/materialCardView2"
-                    app:layout_constraintVertical_bias="0.0" />
 
                 <LinearLayout
                     android:id="@+id/installment_details_container"
@@ -234,72 +221,88 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/add_installment_details"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView2"
                     app:layout_constraintVertical_bias="0.0">
 
                     <include
                         android:id="@+id/installment_1"
                         layout="@layout/installment_details"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/add_installment_details" />
+                        app:layout_constraintTop_toBottomOf="@+id/add_installment_details"
+                        bind:viewModel="@={viewModel}" />
 
                     <include
                         android:id="@+id/installment_2"
                         layout="@layout/installment_details"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/add_installment_details" />
+                        app:layout_constraintTop_toBottomOf="@+id/add_installment_details"
+                        bind:viewModel="@={viewModel}" />
 
                     <include
                         android:id="@+id/installment_3"
                         layout="@layout/installment_details"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/add_installment_details" />
+                        app:layout_constraintTop_toBottomOf="@+id/add_installment_details"
+                        bind:viewModel="@={viewModel}" />
 
-                    <include
-                        android:id="@+id/installment_4"
-                        layout="@layout/installment_details"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/add_installment_details" />
                     <include
                         android:id="@+id/add_installment_1"
                         layout="@layout/add_installment_details"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/add_installment_details" />
+                        app:layout_constraintTop_toBottomOf="@+id/add_installment_details"
+                        bind:viewModel="@={viewModel}" />
 
                     <include
                         android:id="@+id/add_installment_2"
                         layout="@layout/add_installment_details"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/add_installment_details" />
+                        app:layout_constraintTop_toBottomOf="@+id/add_installment_details"
+                        bind:viewModel="@={viewModel}" />
 
                     <include
                         android:id="@+id/add_installment_3"
                         layout="@layout/add_installment_details"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/add_installment_details" />
+                        app:layout_constraintTop_toBottomOf="@+id/add_installment_details"
+                        bind:viewModel="@={viewModel}" />
 
-                    <include
-                        android:id="@+id/add_installment_4"
-                        layout="@layout/add_installment_details"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/add_installment_details" />
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/add_installment_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/add_installment_details"
+                    android:textColor="@color/regular_blue"
+                    android:textSize="@dimen/txt_16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/installment_details_container"
+                    app:layout_constraintVertical_bias="0.0" />
+
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
