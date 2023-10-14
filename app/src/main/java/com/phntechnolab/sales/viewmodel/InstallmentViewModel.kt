@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -65,6 +66,7 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
             0 -> {
                 val fileDir = requireContext.filesDir
                 val file = File(fileDir, "moaDocument.$fileType")
+                Timber.e("$fileDir")
                 val inputStream = requireContext.contentResolver.openInputStream(documentUri)
                 val fileOutputStream = FileOutputStream(file)
                 inputStream?.copyTo(fileOutputStream)
@@ -120,6 +122,7 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
 
             2 -> {
                 val fileDir = requireContext.filesDir
+                Timber.e("$fileDir")
                 val file = File(fileDir, "moaDocument.$fileType")
                 val inputStream = requireContext.contentResolver.openInputStream(documentUri)
                 val fileOutputStream = FileOutputStream(file)
@@ -162,7 +165,10 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
         val multiPartBody: MultipartBody =
             returnJsonData(_installmentData.value ?: InstallmentData())
         viewModelScope.launch {
-            repository.uploadInstallmentImage(_installmentData.value?.schoolId!! ?: "", multiPartBody)
+            repository.uploadInstallmentImage(
+                _installmentData.value?.schoolId!! ?: "",
+                multiPartBody
+            )
         }
     }
 

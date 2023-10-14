@@ -352,11 +352,11 @@ class InstallmentFragment : Fragment() {
                                 viewModel.uploadInstallmentImages()
                             else
                                 Timber.e("_requestFile1 null")
-                                Toast.makeText(
-                                    requireContext(),
-                                    "please upload reciept",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+//                            Toast.makeText(
+//                                requireContext(),
+//                                "please upload reciept",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
 //                            findNavController().popBackStack()
                         }
 
@@ -365,11 +365,11 @@ class InstallmentFragment : Fragment() {
                                 viewModel.uploadInstallmentImages()
                             else
                                 Timber.e("_requestFile1 _requestFile2 null")
-                                Toast.makeText(
-                                    requireContext(),
-                                    "please upload reciept",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+//                            Toast.makeText(
+//                                requireContext(),
+//                                "please upload reciept",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
 //                            findNavController().popBackStack()
                         }
 
@@ -378,11 +378,11 @@ class InstallmentFragment : Fragment() {
                                 viewModel.uploadInstallmentImages()
                             else
                                 Timber.e("_requestFile1 _requestFile2 _requestFile3 null")
-                                Toast.makeText(
-                                    requireContext(),
-                                    "please upload reciept",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+//                            Toast.makeText(
+//                                requireContext(),
+//                                "please upload reciept",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
 //                            findNavController().popBackStack()
                         }
                     }
@@ -424,9 +424,12 @@ class InstallmentFragment : Fragment() {
             schoolId = it?.schoolId
             if (!it?.firstInstallmentAmount.isNullOrEmpty()) {
                 binding.installment1.installmentDetailsTxt.text =
-                    getString(R.string._1st_installment_details, (1).toString())
+                    getString(R.string._1st_installment_details, "1st")
                 binding.installment1.amount.text = it?.firstInstallmentAmount
                 binding.installment1.dateAndTime.text = it?.firstInstallmentDateTime
+                binding.installment1.root.visibility = View.VISIBLE
+                binding.addInstallment1.root.visibility = View.GONE
+                count = 0
                 if (!it?.firstInstallmentReciept.isNullOrEmpty()) {
                     val fileName = it?.firstInstallmentReciept!!.substring(
                         it.firstInstallmentReciept!!.lastIndexOf('/') + 1
@@ -446,20 +449,25 @@ class InstallmentFragment : Fragment() {
                     }
                     receipt1 = it.firstInstallmentReciept
                     binding.installment1.fileName.text = fileName
-                    binding.installment1.root.visibility = View.VISIBLE
-                    count = 0
+
                     Timber.e("$fileName")
                 }
 
             } else {
+                binding.addInstallment1.root.visibility = View.VISIBLE
                 binding.installment1.root.visibility = View.GONE
+
             }
             if (!it?.secondInstallmentAmount.isNullOrEmpty()) {
+
                 binding.installment2.installmentDetailsTxt.text =
-                    getString(R.string._1st_installment_details, (2).toString())
+                    getString(R.string._1st_installment_details, "2nd")
                 binding.installment2.amount.text = it?.secondInstallmentAmount
                 binding.installment2.dateAndTime.text = it?.firstInstallmentDateTime
+                binding.addInstallment1.root.visibility = View.GONE
+                binding.addInstallment2.root.visibility = View.GONE
                 binding.installment2.root.visibility = View.VISIBLE
+                count = 1
                 if (!it?.secondInstallmentReciept.isNullOrEmpty()) {
                     val fileName = it?.secondInstallmentReciept!!.substring(
                         it.secondInstallmentReciept!!.lastIndexOf('/') + 1
@@ -477,20 +485,28 @@ class InstallmentFragment : Fragment() {
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
                         )
                     }
+
                     receipt2 = it.secondInstallmentReciept
                     binding.installment2.fileName.text = fileName
-                    count = 1
+
                     Timber.e("$fileName")
+
                 }
             } else {
                 binding.installment2.root.visibility = View.GONE
             }
             if (!it?.thirdInstallmentAmount.isNullOrEmpty()) {
+
                 binding.installment3.installmentDetailsTxt.text =
-                    getString(R.string._1st_installment_details, (3).toString())
+                    getString(R.string._1st_installment_details, "3rd")
                 binding.installment3.amount.text = it?.secondInstallmentAmount
                 binding.installment3.dateAndTime.text = it?.secondInstallmentDateTime
                 binding.installment3.root.visibility = View.VISIBLE
+                binding.addInstallment1.root.visibility = View.GONE
+                binding.addInstallment2.root.visibility = View.GONE
+                binding.addInstallment3.root.visibility = View.GONE
+                binding.addInstallmentDetails.visibility = View.GONE
+                count = 2
                 if (!it?.thirdInstallmentReciept.isNullOrEmpty()) {
                     val fileName = it?.thirdInstallmentReciept!!.substring(
                         it.thirdInstallmentReciept!!.lastIndexOf('/') + 1
@@ -510,14 +526,11 @@ class InstallmentFragment : Fragment() {
                     }
                     receipt3 = it.thirdInstallmentReciept
                     binding.installment3.fileName.text = fileName
-                    count = 2
+
                     Timber.e("$fileName")
-                    binding.addInstallment1.root.visibility = View.GONE
-                    binding.addInstallmentDetails.visibility = View.GONE
+
                 }
             } else {
-                binding.addInstallmentDetails.visibility = View.VISIBLE
-                binding.addInstallment1.root.visibility = View.VISIBLE
                 binding.installment3.root.visibility = View.GONE
             }
         }
@@ -600,7 +613,7 @@ class InstallmentFragment : Fragment() {
                     binding.addInstallment2.root.visibility = View.VISIBLE
                     count = 1
                     binding.addInstallment2.installmentTxt.text =
-                        getString(R.string.nd_installment, (2).toString())
+                        getString(R.string.nd_installment, "2nd")
                 }
 
                 1 -> {
@@ -608,14 +621,14 @@ class InstallmentFragment : Fragment() {
                     binding.addInstallmentDetails.visibility = View.GONE
                     count = 2
                     binding.addInstallment3.installmentTxt.text =
-                        getString(R.string.nd_installment, (3).toString())
+                        getString(R.string.nd_installment, "3rd")
                 }
 
                 else -> {
                     binding.addInstallment1.root.visibility = View.VISIBLE
                     count = 0
                     binding.addInstallment1.installmentTxt.text =
-                        getString(R.string.nd_installment, (1).toString())
+                        getString(R.string.nd_installment, "1st")
 
                 }
             }
