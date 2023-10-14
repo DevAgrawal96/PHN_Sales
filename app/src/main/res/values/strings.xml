@@ -87,7 +87,7 @@
     <string name="total_interested_intake_mandate">Total interested intake*</string>
     <string name="enter_final_costing_per_student_mandate">Enter final costing per student*</string>
     <string name="discussed_with_whom">discussed with whom</string>
-    <string name="discussed_with_whom_mandate">discussed with whom*</string>
+    <string name="discussed_with_whom_mandate">Discussed with whom*</string>
     <string name="select_designation">Select designation</string>
     <string name="select_designation_mandate">Select designation*</string>
     <string name="draft_moa_file">Draft MOA File</string>
@@ -180,6 +180,7 @@
     <string name="please_fill_rescheduled_date_for_proceed">Please fill rescheduled meeting date for proceed.</string>
     <string name="please_next_rescheduled_date_for_proceed">Please fill next rescheduled meeting date for proceed.</string>
     <string name="please_fill_all_the_mendate_details">Please fill all the mandate fields to proceed.</string>
+    <string name="please_upload_moa_document">Please upload moa document.</string>
     <string name="school_name_validation"><![CDATA[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,.\'&]]></string>
     <string name="name_validation">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ </string>
     <string name="remark_validation"><![CDATA[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,.\']]></string>

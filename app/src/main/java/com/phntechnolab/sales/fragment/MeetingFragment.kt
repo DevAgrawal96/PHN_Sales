@@ -8,26 +8,40 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.activity.MainActivity
-import com.phntechnolab.sales.adapter.ActivitiesAdapter
+import com.phntechnolab.sales.adapter.MeetingsAdapter
 import com.phntechnolab.sales.databinding.FragmentMeetingBinding
+import com.phntechnolab.sales.model.CoordinatorData
+import com.phntechnolab.sales.model.DMData
+import com.phntechnolab.sales.model.MOADocumentData
+import com.phntechnolab.sales.model.MeetingData
+import com.phntechnolab.sales.model.ProposeCostingData
+import com.phntechnolab.sales.viewmodel.MeetingViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 
-class MeetingFragment : Fragment(), MenuProvider {
+@AndroidEntryPoint
+class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
     private var _binding: FragmentMeetingBinding? = null
     private val binding get() = _binding!!
 
-    private var _adapter: ActivitiesAdapter? = null
+    private val viewModel by viewModels<MeetingViewModel>()
+    private var _adapter: MeetingsAdapter? = null
     private val adapter get() = _adapter!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        viewModel.getAllSchools()
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,15 +54,29 @@ class MeetingFragment : Fragment(), MenuProvider {
     }
 
     private fun initializeAdapter() {
-        _adapter = ActivitiesAdapter()
+        _adapter = MeetingsAdapter(this)
         binding.meetingRv.adapter = adapter
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setActionBar()
-        setDataToAdapter()
         initializeListener()
+        observers()
+    }
+
+    private fun observers() {
+        viewModel.schoolLiveData.observe(viewLifecycleOwner){
+            if (it.data?.isNotEmpty() == true) {
+                viewModel.segregateData()
+            }
+        }
+
+        viewModel.meetingsData.observe(viewLifecycleOwner){
+            Timber.e("DATA OF FINAL")
+            Timber.e(Gson().toJson(it))
+            adapter.setData(ArrayList<MeetingData>(it.filter { it.taskDateFilter == "today" }))
+        }
     }
 
     private fun setOnBackPressed() {
@@ -60,33 +88,20 @@ class MeetingFragment : Fragment(), MenuProvider {
         requireActivity().onBackPressedDispatcher.addCallback(callback)
     }
 
-    private fun setDataToAdapter() {
-        adapter.setData(ArrayList<String>().apply {
-            add(getString(R.string.demo_text))
-            add(getString(R.string.demo_text))
-            add(getString(R.string.demo_text))
-            add(getString(R.string.demo_text))
-            add(getString(R.string.demo_text))
-            add(getString(R.string.demo_text))
-        })
-    }
-
     private fun initializeListener() {
         binding.materialButtonToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
                 when (checkedId) {
                     R.id.today_btn -> {
-                        Toast.makeText(requireContext(), "today button", Toast.LENGTH_SHORT).show()
+                        adapter.setData(ArrayList<MeetingData>((viewModel.meetingsData.value?: ArrayList()).filter { it.taskDateFilter == "today" }))
                     }
 
                     R.id.tomorrow_btn -> {
-                        Toast.makeText(requireContext(), "tomorrow button", Toast.LENGTH_SHORT)
-                            .show()
+                        adapter.setData(ArrayList<MeetingData>((viewModel.meetingsData.value?: ArrayList()).filter { it.taskDateFilter == "tomorrow" }))
                     }
 
                     R.id.upcoming_btn -> {
-                        Toast.makeText(requireContext(), "upcoming button", Toast.LENGTH_SHORT)
-                            .show()
+                        adapter.setData(ArrayList<MeetingData>((viewModel.meetingsData.value?: ArrayList()).filter { it.taskDateFilter == "upcoming" }))
                     }
                 }
             }
@@ -130,5 +145,39 @@ class MeetingFragment : Fragment(), MenuProvider {
         super.onDestroy()
         _binding = null
         _adapter = null
+    }
+
+    override fun meetingData(data: MeetingData) {
+        when(data.taskName){
+            "proposecosting" -> {
+                requireView().findNavController()
+                    .navigate(
+                        MeetingFragmentDirections.actionMeetingFragmentToCostingMoaDocumentFragment(
+                            data.data?.proposeCostingData
+                                ?: ProposeCostingData(schoolId = data.data?.schoolId),
+                            data.data?.moaDocumentData
+                                ?: MOADocumentData(schoolId = data.data?.schoolId)
+                        )
+                    )
+            }
+
+            "coordinator" -> {
+                requireView().findNavController()
+                    .navigate(
+                        MeetingFragmentDirections.actionHomeFragmentToMeetingFragment(
+                            data.data?.coordinator
+                                ?: CoordinatorData(schoolId = data.data?.schoolId),
+                            data.data?.director ?: DMData(schoolId = data.data?.schoolId)
+                        )
+                    )
+            }
+            "basicDetails" -> {
+
+            }
+
+            else -> {
+
+            }
+        }
     }
 }

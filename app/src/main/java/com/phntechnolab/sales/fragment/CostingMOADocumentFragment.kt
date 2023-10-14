@@ -139,7 +139,6 @@ class CostingMOADocumentFragment : Fragment() {
             }
         }
 
-
         binding.proposeCostingStage.updateBtn.setOnClickListener {
             Timber.e("DATA POST")
             Timber.e(Gson().toJson(viewModel._proposeCostingData.value))
@@ -151,7 +150,7 @@ class CostingMOADocumentFragment : Fragment() {
         binding.moaDocument.updateBtn.setOnClickListener {
             Timber.e("MOA DATA POST")
             Timber.e(Gson().toJson(viewModel._moaDocumentData.value))
-            if (!image.toString().isNullOrEmpty() && isMOADocumentFieldsValid())
+            if (isMOADocumentFieldsValid())
                 viewModel.updateMoaDocumentDetails()
             else
                 Timber.e("fill all man")
@@ -258,18 +257,28 @@ class CostingMOADocumentFragment : Fragment() {
         val isDesignationNotSelected =
             viewModel._moaDocumentData.value?.designation.isNullOrBlank()
 
+        val isMoaDocumentNotUploaded = viewModel._requestFile == null
+
 
         return if (isTotalInterestedIntakeNotFilled ||
             isCostingPerStudentNotFilled ||
             isDiscussedWithWhoomNotSelected ||
             isDesignationNotSelected ||
-            isAgreementDurationNotSelected
+            isAgreementDurationNotSelected || isMoaDocumentNotUploaded
         ) {
-            Toast.makeText(
-                requireContext(),
-                requireActivity().getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_details),
-                Toast.LENGTH_LONG
-            ).show()
+            if(isMoaDocumentNotUploaded){
+                Toast.makeText(
+                    requireContext(),
+                    requireActivity().getString(com.phntechnolab.sales.R.string.please_upload_moa_document),
+                    Toast.LENGTH_LONG
+                ).show()
+            }else {
+                Toast.makeText(
+                    requireContext(),
+                    requireActivity().getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_details),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
             false
         } else {
             true
