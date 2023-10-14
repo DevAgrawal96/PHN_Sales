@@ -8,11 +8,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -126,11 +128,21 @@ class AddSchoolFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        onCheckedChangedListener()
 
         oncClickListener()
 
         observers()
         initEditText()
+    }
+
+    private fun onCheckedChangedListener() {
+        binding.followupDetails.labSetupGroup.setOnCheckedChangeListener { group, checkedId ->
+            val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
+            viewModel._newSchoolData.value?.interested =
+                if (checkedRadioButtonText == "Yes") "yes" else "no"
+            viewModel._newSchoolData.value?.interested?.let { Log.e("CHecked box", it) }
+        }
     }
 
     private fun initEditText() {
@@ -436,12 +448,20 @@ class AddSchoolFragment : Fragment() {
         viewModel.uploadImgResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "School details updated successfully",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    Timber.e(it.toString())
+
+                    if(viewModel.newSchoolData.value?.interested == "yes")
+                        Toast.makeText(
+                            requireContext(),
+                            "School details updated successfully",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.meeting_has_been_moved_to_not_interested_section),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                     findNavController().popBackStack()
                 }
 
@@ -477,7 +497,16 @@ class AddSchoolFragment : Fragment() {
             binding.progressBar.visibility = View.GONE
             when (it) {
                 is NetworkResult.Success -> {
-                    showDialog()
+                    if(viewModel.newSchoolData.value?.interested == "yes")
+                        showDialog()
+                    else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.meeting_has_been_moved_to_not_interested_section),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        findNavController().popBackStack()
+                    }
                 }
 
                 is NetworkResult.Error -> {
@@ -508,8 +537,16 @@ class AddSchoolFragment : Fragment() {
                 is NetworkResult.Success -> {
                     if (viewModel._requestFile != null)
                         viewModel.uploadImage()
-                    else
+                    else {
+                        if(viewModel.newSchoolData.value?.interested != "yes")
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.meeting_has_been_moved_to_not_interested_section),
+                                Toast.LENGTH_LONG
+                            ).show()
+
                         findNavController().popBackStack()
+                    }
                 }
 
                 is NetworkResult.Error -> {
@@ -895,6 +932,12 @@ class AddSchoolFragment : Fragment() {
         binding.schoolDetails.edtAvgSchoolFee.setText(viewModel.newSchoolData.value?.avgSchoolFees)
         binding.schoolDetails.existingLabs.setText(viewModel.newSchoolData.value?.existingLab)
         binding.schoolDetails.edtValuePerStudent.setText(viewModel.newSchoolData.value?.expQuatedValue)
+
+        if (viewModel.newSchoolData.value?.interested == "yes") binding.followupDetails.labSetupGroup.check(
+            R.id.labSetupYes
+        )
+        else binding.followupDetails.labSetupGroup.check(R.id.labSetupNo)
+
         viewModel.newSchoolData.value?.nextFollowup.let {
             val dateAndTime = it?.split(" ")
             binding.followupDetails.edtSchoolDate.setText(

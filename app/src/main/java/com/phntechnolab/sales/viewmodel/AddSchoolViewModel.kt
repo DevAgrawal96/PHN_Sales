@@ -86,6 +86,7 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
 
     fun updateSchoolDetails() {
 
+        Log.e("view model data", Gson().toJson(newSchoolData.value))
         viewModelScope.launch {
             Timber.e(Gson().toJson(newSchoolData.value))
             withContext(this.coroutineContext) {
@@ -137,6 +138,7 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
             .addFormDataPart("existing_lab", data?.existingLab ?: "")
             .addFormDataPart("exp_quated_value", data?.expQuatedValue ?: "")
             .addFormDataPart("lead_type", data?.leadType ?: "")
+            .addFormDataPart("interested", data?.interested ?: "")
             .addFormDataPart("next_followup", data?.nextFollowup ?: "")
             .addFormDataPart("followup_type", data?.followupType ?: "")
             .addFormDataPart("upload_img", data?.uploadImg ?: "")
@@ -169,6 +171,7 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
             this.existingLab = newSchoolData.value?.existingLab ?: ""
             this.expQuatedValue = newSchoolData.value?.expQuatedValue ?: ""
             this.leadType = newSchoolData.value?.leadType ?: ""
+            this.interested = newSchoolData.value?.interested ?: ""
             this.nextFollowup = newSchoolData.value?.nextFollowup ?: ""
             this.followupType = newSchoolData.value?.followupType ?: ""
         }

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -144,7 +145,7 @@ class LoginFragment : Fragment() {
                             }.invokeOnCompletion {
                                 lifecycleScope.launch(Dispatchers.Main) {
 
-                                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                                    requireView().findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                                 }
                             }
                         }

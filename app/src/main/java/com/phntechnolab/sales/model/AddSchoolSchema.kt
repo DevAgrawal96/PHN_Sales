@@ -21,6 +21,7 @@ class AddSchoolSchema(
     @SerializedName("existing_lab") var existingLab: String = "",
     @SerializedName("exp_quated_value") var expQuatedValue: String = "",
     @SerializedName("lead_type") var leadType: String = "",
+    @SerializedName("interested") var interested: String = "",
     @SerializedName("next_followup") var nextFollowup: String = "",
     @SerializedName("followup_type") var followupType: String = "",
     @SerializedName("upload_img") var uploadImg: String = "",

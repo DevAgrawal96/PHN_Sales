@@ -91,7 +91,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                     chipGroup.getChildAt(i).isClickable = true
                 }
                 chip.isClickable = false
-                adapter?.setData(viewModel.schoolLiveData.value?.data?.sortedByDescending { it.updatedAt }
+                adapter?.setData(((viewModel.schoolLiveData.value?.data?.sortedByDescending { it.updatedAt }
                     ?.filter {
                         when (chip.text) {
                             "All" -> {
@@ -106,11 +106,15 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                                 it.status == "MOASigned"
                             }
 
+                            "Not Interested" -> {
+                                it.status == "Not Interested"
+                            }
+
                             else -> {
                                 it.status == chip.text
                             }
                         }
-                    } as ArrayList<SchoolData>)
+                    } as ArrayList<SchoolData>) as ArrayList<SchoolData>))
             }
         }
 
@@ -232,6 +236,15 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     override fun meetingNavigation(schoolData: SchoolData) {
         when (schoolData.status) {
             "Assigned" -> {
+                findNavController()
+                    .navigate(
+                        HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(
+                            schoolData
+                        )
+                    )
+            }
+
+            "Not Interested" -> {
                 findNavController()
                     .navigate(
                         HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(

@@ -85,6 +85,11 @@ class SchoolData : Parcelable{
             field = value ?: ""
         }
 
+    @SerializedName("interested") var interested : String = ""
+        set(value){
+            field = value ?: ""
+        }
+
     @SerializedName("next_followup") var nextFollowup : String = ""
         set(value){
             field = value ?: ""
@@ -174,10 +179,13 @@ data class DMData(
     @SerializedName("school_id") var schoolId : String? = "",
     @SerializedName("co_attend_meet") var coAttendMeet : String? = "",
     @SerializedName("product_demo_happen") var productDemoHappen : String? = "",
-    @SerializedName("next_followup_dm") var nextFollowupDm : String? = "",
+    @SerializedName("next_followup") var nextFollowup : String? = "",
     @SerializedName("interested") var interested : String? = "",
-    @SerializedName("next_meet_date_dm") var nextMeetDateDm : String? = "",
+    @SerializedName("next_meet_date") var nextMeetDate : String? = "",
     @SerializedName("meeting_status") var meetingStatus : String? = "",
+    @SerializedName("reschedule_director") var rescheduleWithDirector : String? = "",
+    @SerializedName("next_meet_date_dm") var nextMeetDateDm : String? = "",
+
 ):Parcelable
 
 @Parcelize
