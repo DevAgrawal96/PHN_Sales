@@ -74,31 +74,41 @@ class LoginFragment : Fragment() {
 
         binding.login.setOnClickListener {
             hideKeyboard()
-            if (android.util.Patterns.EMAIL_ADDRESS.matcher(binding.edtEmailId.text.toString())
-                    .matches()
+            if (!binding.edtEmailId.text.toString()
+                    .isNullOrEmpty() && !binding.edtPassword.text.toString().isNullOrEmpty()
             ) {
-                val email_id = binding.tilEmailId.helperText
-                val password = binding.tilPassword.helperText
+                if (android.util.Patterns.EMAIL_ADDRESS.matcher(binding.edtEmailId.text.toString())
+                        .matches()
+                ) {
+                    val email_id = binding.tilEmailId.helperText
+                    val password = binding.tilPassword.helperText
 
-                if (email_id == null && password == null) {
-                    if (NetworkUtils.isInternetAvailable(it.context)) {
-                        val loginDetails = LoginDetails(
-                            binding.edtEmailId.text.toString(),
-                            password = binding.edtPassword.text.toString()
-                        )
+                    if (email_id == null && password == null) {
+                        if (NetworkUtils.isInternetAvailable(it.context)) {
+                            val loginDetails = LoginDetails(
+                                binding.edtEmailId.text.toString(),
+                                password = binding.edtPassword.text.toString()
+                            )
 
 //                    hideKeyboard()
 //                    disableScreen()
-                        viewModel.login(loginDetails, it.context)
+                            viewModel.login(loginDetails, it.context)
 
-                    } else {
-                        Snackbar.make(
-                            requireActivity().findViewById(android.R.id.content),
-                            getString(R.string.no_internet_connection),
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+                        } else {
+                            Snackbar.make(
+                                requireActivity().findViewById(android.R.id.content),
+                                getString(R.string.no_internet_connection),
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Please enter email and password!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -147,7 +157,8 @@ class LoginFragment : Fragment() {
                             }.invokeOnCompletion {
                                 lifecycleScope.launch(Dispatchers.Main) {
 
-                                    requireView().findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                                    requireView().findNavController()
+                                        .navigate(R.id.action_loginFragment_to_homeFragment)
                                 }
                             }
                         }
@@ -188,7 +199,6 @@ class LoginFragment : Fragment() {
             Snackbar.LENGTH_SHORT
         ).show()
     }
-
 
     private fun focusListener() {
         binding.edtEmailId.setOnFocusChangeListener { v, focused ->
