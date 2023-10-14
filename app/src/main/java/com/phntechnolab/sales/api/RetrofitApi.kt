@@ -60,12 +60,18 @@ interface RetrofitApi {
 
     @POST("api/installment")
     suspend fun uploadInstallmentData(
-        @Body schoolDetails: MultipartBody
+        @Body schoolDetails: InstallmentData
     ): Response<CustomResponse>
 
     @POST("api/updateimage/{id}")
     suspend fun updateSchoolImage(
         @Path(value = "id") id: Int,
+        @Body imageDetails: MultipartBody
+    ): Response<CustomResponse>
+
+    @POST("api/uploadreciept/{school_id}")
+    suspend fun updateInstallmentImage(
+        @Path(value = "school_id") schoolId: String,
         @Body imageDetails: MultipartBody
     ): Response<CustomResponse>
 

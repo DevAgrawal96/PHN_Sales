@@ -2,12 +2,9 @@ package com.phntechnolab.sales.api
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.lifecycleScope
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.util.DataStoreManager
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -38,6 +35,9 @@ class AuthInterceptor @Inject constructor(@ApplicationContext val appContext: Co
 
         request.addHeader("Accept", "application/json")
 
+        val boundary = "-------------" + System.currentTimeMillis()
+
+        request.addHeader("Content-type", "multipart/form-data; boundary=$boundary")
 
 
         // add token here with the header

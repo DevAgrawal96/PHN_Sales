@@ -268,7 +268,15 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                 requireView().findNavController()
                     .navigate(
                         HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
-                            schoolData.installmentData ?: InstallmentData()
+                            schoolData.installmentData ?: InstallmentData(schoolId = schoolData.schoolId)
+                        )
+                    )
+            }
+            "Installment" -> {
+                requireView().findNavController()
+                    .navigate(
+                        HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
+                            schoolData.installmentData ?: InstallmentData(schoolId = schoolData.schoolId)
                         )
                     )
             }

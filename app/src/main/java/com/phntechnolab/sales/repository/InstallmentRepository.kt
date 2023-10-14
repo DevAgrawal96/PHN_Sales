@@ -26,15 +26,21 @@ class InstallmentRepository @Inject constructor(
     val installmentResponse: LiveData<NetworkResult<CustomResponse>>
         get() = _installmentResponse
 
-    suspend fun uploadInstallmentData(schoolData: MultipartBody) {
+    private val _installmentImageResponse = MutableLiveData<NetworkResult<CustomResponse>>()
+
+    val installmentImageResponse: LiveData<NetworkResult<CustomResponse>>
+        get() = _installmentImageResponse
+
+    suspend fun uploadInstallmentData(installmentData: InstallmentData) {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
-                val result = retrofitApi.uploadInstallmentData(schoolData)
+                Timber.e(Gson().toJson(installmentData))
+                val result = retrofitApi.uploadInstallmentData(installmentData)
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
                     _installmentResponse.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
-                    Timber.e(result.code().toString())
+                    Timber.e(result.code().toString()+"add installment data")
                     _installmentResponse.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -70,6 +76,64 @@ class InstallmentRepository @Inject constructor(
             }
         } else {
             _installmentResponse.postValue(
+                NetworkResult.Error(
+                    application.getString(R.string.please_connection_message),
+                    null
+                )
+            )
+            Toast.makeText(
+                application,
+                application.resources.getString(R.string.please_connection_message),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    suspend fun uploadInstallmentImage(schoolId : String,multiPart: MultipartBody) {
+        if (NetworkUtils.isInternetAvailable(application)) {
+            try {
+                Timber.e(Gson().toJson(multiPart))
+                val result = retrofitApi.updateInstallmentImage(schoolId, multiPart)
+                result.body()?.status_code = result.code()
+                if (result.isSuccessful && result.body() != null) {
+                    _installmentImageResponse.postValue(NetworkResult.Success(result.body()))
+                } else if (result.errorBody() != null) {
+                    Timber.e(result.code().toString())
+                    _installmentImageResponse.postValue(
+                        NetworkResult.Error(
+                            application.getString(R.string.something_went_wrong),
+                            CustomResponse(result.code(), result.errorBody()?.string())
+                        )
+                    )
+                } else {
+                    Timber.e(result.code().toString())
+                    _installmentImageResponse.postValue(
+                        NetworkResult.Error(
+                            application.getString(R.string.something_went_wrong),
+                            CustomResponse(
+                                result.code(),
+                                application.getString(R.string.something_went_wrong)
+                            )
+                        )
+                    )
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+                Timber.e(ex.message)
+                _installmentImageResponse.postValue(
+                    NetworkResult.Error(
+                        application.getString(R.string.something_went_wrong),
+                        null
+                    )
+                )
+                Toast.makeText(
+                    application,
+                    application.resources.getString(R.string.something_went_wrong),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        } else {
+            _installmentImageResponse.postValue(
                 NetworkResult.Error(
                     application.getString(R.string.please_connection_message),
                     null

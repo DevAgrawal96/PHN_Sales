@@ -24,7 +24,8 @@ import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class InstallmentViewModel @Inject constructor(private var repository: InstallmentRepository) : ViewModel() {
+class InstallmentViewModel @Inject constructor(private var repository: InstallmentRepository) :
+    ViewModel() {
     var _requestFile1: RequestBody? = null
     var imageData1: MultipartBody.Part? = null
     var imageName1: String? = null
@@ -46,6 +47,9 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
 
     val addInstallmentResponse: LiveData<NetworkResult<CustomResponse>>
         get() = repository.installmentResponse
+
+    val addInstallmentImageResponse: LiveData<NetworkResult<CustomResponse>>
+        get() = repository.installmentImageResponse
 
     fun setInstallmentData(data: InstallmentData?) {
         _installmentData.postValue(data)
@@ -83,7 +87,7 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
                 imagesize1 = Integer.parseInt((file.length() / 1024).toString())
                 imageData1 = part
                 val sdf = SimpleDateFormat("ddMyyyyhhmmss")
-                imageName1 = sdf.format(Date())
+                imageName1 = sdf.format(Date()) + "." + fileType
             }
 
             1 -> {
@@ -111,7 +115,7 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
                 imagesize2 = Integer.parseInt((file.length() / 1024).toString())
                 imageData2 = part
                 val sdf = SimpleDateFormat("ddMyyyyhhmmss")
-                imageName2 = sdf.format(Date())
+                imageName2 = sdf.format(Date()) + "." + fileType
             }
 
             2 -> {
@@ -140,38 +144,31 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
                 imagesize3 = Integer.parseInt((file.length() / 1024).toString())
                 imageData3 = part
                 val sdf = SimpleDateFormat("ddMyyyyhhmmss")
-                imageName3 = sdf.format(Date())
+                imageName3 = sdf.format(Date()) + "." + fileType
             }
         }
 
     }
 
-    fun addNewInstallment() {
+    fun addNewInstallment(data: InstallmentData) {
+        viewModelScope.launch {
+            repository.uploadInstallmentData(
+                data
+            )
+        }
+    }
+
+    fun uploadInstallmentImages() {
         val multiPartBody: MultipartBody =
             returnJsonData(_installmentData.value ?: InstallmentData())
         viewModelScope.launch {
-            repository.uploadInstallmentData(multiPartBody)
+            repository.uploadInstallmentImage(_installmentData.value?.schoolId!! ?: "", multiPartBody)
         }
     }
 
     private fun returnJsonData(data: Any): MultipartBody {
 
         val multipartBody = MultipartBody.Builder().setType(MultipartBody.FORM)
-            .addFormDataPart("id", (data as InstallmentData).id ?: "")
-            .addFormDataPart("school_id", data.schoolId ?: "")
-            .addFormDataPart("total_installment", data.totalInstallment ?: "")
-            .addFormDataPart("first_installment", data.firstInstallment ?: "")
-            .addFormDataPart("first_installment_amount", data.firstInstallmentAmount ?: "")
-            .addFormDataPart("first_installment_date_time", data.firstInstallmentDateTime ?: "")
-            .addFormDataPart("second_installment", data.secondInstallment ?: "")
-            .addFormDataPart("second_installment_amount", data.secondInstallmentAmount ?: "")
-            .addFormDataPart("second_installment_date_time", data.secondInstallmentDateTime ?: "")
-            .addFormDataPart("third_installment", data.thirdInstallment ?: "")
-            .addFormDataPart("third_installment_amount", data.thirdInstallmentAmount ?: "")
-            .addFormDataPart("third_installment_date_time", data.thirdInstallmentDateTime ?: "")
-            .addFormDataPart("created_at", data.createdAt ?: "")
-            .addFormDataPart("updated_at", data.updatedAt ?: "")
-
         _requestFile1?.let {
             multipartBody.addFormDataPart(
                 "first_installment_reciept", imageName1,

@@ -4,14 +4,21 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.MenuProvider
+import androidx.databinding.adapters.SearchViewBindingAdapter.setOnQueryTextListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.adapter.SchoolDetailAdapter
 import com.phntechnolab.sales.databinding.FragmentHomeBinding
 import com.phntechnolab.sales.databinding.FragmentSearchBinding
@@ -23,6 +30,7 @@ import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.viewmodel.HomeViewModel
 import com.phntechnolab.sales.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
@@ -60,7 +68,6 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initializeAdapter()
 
         observers()
@@ -74,6 +81,30 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
     }
 
     private fun textWatchers() {
+        binding.backBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
+        binding.search.onActionViewExpanded()
+        binding.search.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (!query.isNullOrEmpty()) {
+                    fetchData(query.toString())
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (!newText.isNullOrEmpty()) {
+                    fetchData(newText.toString())
+                } else {
+                    Timber.e("null")
+                }
+                return true
+            }
+        })
+
+
         binding.autoSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -119,6 +150,7 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
         _adapter = null
         super.onDestroyView()
     }
+
 
     override fun openSchoolDetails(schoolData: SchoolData) {
         findNavController()

@@ -75,9 +75,9 @@ class InstallmentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initializeListener()
         observers()
         initializeAddInstallmentCard()
+        initializeListener()
     }
 
     private var receiptPdf = registerForActivityResult(
@@ -354,8 +354,65 @@ class InstallmentFragment : Fragment() {
     }
 
     private fun observers() {
-
         viewModel.addInstallmentResponse.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    Timber.e("addInstallment success")
+                    when (position) {
+                        0 -> {
+                            if (viewModel._requestFile1 != null)
+                                viewModel.uploadInstallmentImages()
+                            else
+                                Timber.e("_requestFile1 null")
+                                Toast.makeText(
+                                    requireContext(),
+                                    "please upload reciept",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+//                            findNavController().popBackStack()
+                        }
+
+                        1 -> {
+                            if (viewModel._requestFile1 != null && viewModel._requestFile2 != null)
+                                viewModel.uploadInstallmentImages()
+                            else
+                                Timber.e("_requestFile1 _requestFile2 null")
+                                Toast.makeText(
+                                    requireContext(),
+                                    "please upload reciept",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+//                            findNavController().popBackStack()
+                        }
+
+                        2 -> {
+                            if (viewModel._requestFile1 != null && viewModel._requestFile2 != null && viewModel._requestFile3 != null)
+                                viewModel.uploadInstallmentImages()
+                            else
+                                Timber.e("_requestFile1 _requestFile2 _requestFile3 null")
+                                Toast.makeText(
+                                    requireContext(),
+                                    "please upload reciept",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+//                            findNavController().popBackStack()
+                        }
+                    }
+
+
+                }
+
+                is NetworkResult.Error -> {
+                    Timber.e("Add installment error add installment ")
+                }
+
+                else -> {
+
+                }
+            }
+        }
+
+        viewModel.addInstallmentImageResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
                     Toast.makeText(requireContext(), "Added successfully!!", Toast.LENGTH_SHORT)
@@ -363,7 +420,7 @@ class InstallmentFragment : Fragment() {
                 }
 
                 is NetworkResult.Error -> {
-                    Timber.e("Add installment error")
+                    Timber.e("Add installment error addInstallment upload image")
                 }
 
                 else -> {
@@ -382,27 +439,30 @@ class InstallmentFragment : Fragment() {
                     getString(R.string._1st_installment_details, (1).toString())
                 binding.installment1.amount.text = it?.firstInstallmentAmount
                 binding.installment1.dateAndTime.text = it?.firstInstallmentDateTime
-                val fileName = it?.firstInstallmentReciept!!.substring(
-                    it.firstInstallmentReciept!!.lastIndexOf('/') + 1
-                )
-                if (fileName.split(".").last() == "jpg") {
-                    binding.installment1.fileTypeImg.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
+                if (!it?.firstInstallmentReciept.isNullOrEmpty()) {
+                    val fileName = it?.firstInstallmentReciept!!.substring(
+                        it.firstInstallmentReciept!!.lastIndexOf('/') + 1
                     )
-                } else if (fileName.split(".").last() == "png") {
-                    binding.installment1.fileTypeImg.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
-                    )
-                } else if (fileName.split(".").last() == "pdf") {
-                    binding.installment1.fileTypeImg.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
-                    )
+                    if (fileName.split(".").last() == "jpg") {
+                        binding.installment1.fileTypeImg.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
+                        )
+                    } else if (fileName.split(".").last() == "png") {
+                        binding.installment1.fileTypeImg.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
+                        )
+                    } else if (fileName.split(".").last() == "pdf") {
+                        binding.installment1.fileTypeImg.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
+                        )
+                    }
+                    receipt1 = it.firstInstallmentReciept
+                    binding.installment1.fileName.text = fileName
+                    binding.installment1.root.visibility = View.VISIBLE
+                    count = 0
+                    Timber.e("$fileName")
                 }
-                receipt1 = it.firstInstallmentReciept
-                binding.installment1.fileName.text = fileName
-                binding.installment1.root.visibility = View.VISIBLE
-                count = 0
-                Timber.e("$fileName")
+
             } else {
                 binding.installment1.root.visibility = View.GONE
             }
@@ -412,26 +472,28 @@ class InstallmentFragment : Fragment() {
                 binding.installment2.amount.text = it?.secondInstallmentAmount
                 binding.installment2.dateAndTime.text = it?.firstInstallmentDateTime
                 binding.installment2.root.visibility = View.VISIBLE
-                val fileName = it?.secondInstallmentReciept!!.substring(
-                    it.secondInstallmentReciept!!.lastIndexOf('/') + 1
-                )
-                if (fileName.split(".").last() == "jpg") {
-                    binding.installment2.fileTypeImg.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
+                if (!it?.secondInstallmentReciept.isNullOrEmpty()) {
+                    val fileName = it?.secondInstallmentReciept!!.substring(
+                        it.secondInstallmentReciept!!.lastIndexOf('/') + 1
                     )
-                } else if (fileName.split(".").last() == "png") {
-                    binding.installment2.fileTypeImg.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
-                    )
-                } else if (fileName.split(".").last() == "pdf") {
-                    binding.installment2.fileTypeImg.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
-                    )
+                    if (fileName.split(".").last() == "jpg") {
+                        binding.installment2.fileTypeImg.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
+                        )
+                    } else if (fileName.split(".").last() == "png") {
+                        binding.installment2.fileTypeImg.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
+                        )
+                    } else if (fileName.split(".").last() == "pdf") {
+                        binding.installment2.fileTypeImg.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
+                        )
+                    }
+                    receipt2 = it.secondInstallmentReciept
+                    binding.installment2.fileName.text = fileName
+                    count = 1
+                    Timber.e("$fileName")
                 }
-                receipt2 = it.secondInstallmentReciept
-                binding.installment2.fileName.text = fileName
-                count = 1
-                Timber.e("$fileName")
             } else {
                 binding.installment2.root.visibility = View.GONE
             }
@@ -441,28 +503,30 @@ class InstallmentFragment : Fragment() {
                 binding.installment3.amount.text = it?.secondInstallmentAmount
                 binding.installment3.dateAndTime.text = it?.secondInstallmentDateTime
                 binding.installment3.root.visibility = View.VISIBLE
-                val fileName = it?.thirdInstallmentReciept!!.substring(
-                    it.thirdInstallmentReciept!!.lastIndexOf('/') + 1
-                )
-                if (fileName.split(".").last() == "jpg") {
-                    binding.installment3.fileTypeImg.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
+                if (!it?.thirdInstallmentReciept.isNullOrEmpty()) {
+                    val fileName = it?.thirdInstallmentReciept!!.substring(
+                        it.thirdInstallmentReciept!!.lastIndexOf('/') + 1
                     )
-                } else if (fileName.split(".").last() == "png") {
-                    binding.installment3.fileTypeImg.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
-                    )
-                } else if (fileName.split(".").last() == "pdf") {
-                    binding.installment3.fileTypeImg.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
-                    )
+                    if (fileName.split(".").last() == "jpg") {
+                        binding.installment3.fileTypeImg.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
+                        )
+                    } else if (fileName.split(".").last() == "png") {
+                        binding.installment3.fileTypeImg.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
+                        )
+                    } else if (fileName.split(".").last() == "pdf") {
+                        binding.installment3.fileTypeImg.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
+                        )
+                    }
+                    receipt3 = it.thirdInstallmentReciept
+                    binding.installment3.fileName.text = fileName
+                    count = 2
+                    Timber.e("$fileName")
+                    binding.addInstallment1.root.visibility = View.GONE
+                    binding.addInstallmentDetails.visibility = View.GONE
                 }
-                receipt3 = it.thirdInstallmentReciept
-                binding.installment3.fileName.text = fileName
-                count = 2
-                Timber.e("$fileName")
-                binding.addInstallment1.root.visibility = View.GONE
-                binding.addInstallmentDetails.visibility = View.GONE
             } else {
                 binding.addInstallmentDetails.visibility = View.VISIBLE
                 binding.addInstallment1.root.visibility = View.VISIBLE
@@ -473,23 +537,21 @@ class InstallmentFragment : Fragment() {
 
     private fun initializeListener() {
         binding.updateBtn.setOnClickListener {
-            viewModel.setInstallmentData(
-                InstallmentData(
-                    id = id,
-                    schoolId = schoolId,
-                    totalInstallment = count.toString(),
-                    firstInstallment = binding.addInstallment1.installmentTxt.toString(),
-                    firstInstallmentAmount = binding.addInstallment1.edtInstallmentAmount.text.toString(),
-                    firstInstallmentDateTime = binding.addInstallment1.edtInstallmentDate.text.toString(),
-                    secondInstallment = binding.addInstallment2.installmentTxt.toString(),
-                    secondInstallmentAmount = binding.addInstallment2.edtInstallmentAmount.text.toString(),
-                    secondInstallmentDateTime = binding.addInstallment2.edtInstallmentDate.text.toString(),
-                    thirdInstallment = binding.addInstallment3.installmentTxt.toString(),
-                    thirdInstallmentAmount = binding.addInstallment3.edtInstallmentAmount.text.toString(),
-                    thirdInstallmentDateTime = binding.addInstallment3.edtInstallmentDate.text.toString()
-                )
+            val data = InstallmentData(
+                schoolId = args.moaSchoolData?.schoolId,
+                totalInstallment = count.toString(),
+                firstInstallment = binding.addInstallment1.installmentTxt.text.toString(),
+                firstInstallmentAmount = binding.addInstallment1.edtInstallmentAmount.text.toString(),
+                firstInstallmentDateTime = binding.addInstallment1.edtInstallmentDate.text.toString(),
+                secondInstallment = binding.addInstallment2.installmentTxt.text.toString(),
+                secondInstallmentAmount = binding.addInstallment2.edtInstallmentAmount.text.toString(),
+                secondInstallmentDateTime = binding.addInstallment2.edtInstallmentDate.text.toString(),
+                thirdInstallment = binding.addInstallment3.installmentTxt.text.toString(),
+                thirdInstallmentAmount = binding.addInstallment3.edtInstallmentAmount.text.toString(),
+                thirdInstallmentDateTime = binding.addInstallment3.edtInstallmentDate.text.toString()
             )
-            viewModel.addNewInstallment()
+            viewModel.setInstallmentData(data)
+            viewModel.addNewInstallment(data)
         }
 
         val fileDownloader = FileDownloader(requireContext())
