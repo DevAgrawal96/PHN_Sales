@@ -30,6 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.cancel
 import timber.log.Timber
 import java.util.Calendar
+import java.util.Date
 
 @AndroidEntryPoint
 class CoordinatorDmMeetingFragment : Fragment() {
@@ -97,6 +98,8 @@ class CoordinatorDmMeetingFragment : Fragment() {
         checkedChangeListener()
 
         rescheduleDateTimeClickListener()
+
+        rescheduleDMDateTimeClickListener()
 
         nextMeetingDateTimeClickListener()
 
@@ -208,7 +211,31 @@ class CoordinatorDmMeetingFragment : Fragment() {
             binding.dmMeeting.tilMeetingAgenda.error = null
         }
 
-        return (isDmAttendedMeet == "yes") && (!isMeetingAgenda.isNullOrBlank())
+        val isRescheduledMeeting = viewModel._dmMeetData.value?.rescheduleWithDirector
+        if (isRescheduledMeeting == "yes") {
+            if (viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrBlank()) {
+                Toast.makeText(
+                    requireContext(),
+                    requireActivity().getString(R.string.please_fill_rescheduled_date_for_proceed),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        } else {
+            if (viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrBlank()) {
+                Toast.makeText(
+                    requireContext(),
+                    requireActivity().getString(R.string.please_next_rescheduled_date_for_proceed),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+
+        val isRescheduledMeetingDateAvailableWithDate =
+            !viewModel._dmMeetData.value?.rescheduleWithDirector.isNullOrBlank() && isRescheduledMeeting == "yes"
+        val isNextMeetingDateAvailableWithDate =
+            !viewModel._dmMeetData.value?.nextMeetDate.isNullOrBlank() && isRescheduledMeeting != "yes"
+
+        return (isDmAttendedMeet == "yes") && (!isMeetingAgenda.isNullOrBlank()) && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate)
     }
 
     private fun checkedChangeListener() {
@@ -237,6 +264,17 @@ class CoordinatorDmMeetingFragment : Fragment() {
             }
         }
 
+        binding.dmMeeting.rescheduleMeetingGroup.setOnCheckedChangeListener { group, checkedId ->
+            val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
+            if (checkedRadioButtonText == "Yes") {
+                viewModel._dmMeetData.value?.rescheduleWithDirector = "yes"
+                showDMRescheduleAndHideNextMeetingDate()
+            } else {
+                viewModel._dmMeetData.value?.rescheduleWithDirector = "no"
+                hideDMRescheduleAndShowNextMeetingDate()
+            }
+        }
+
         binding.coordinatorMeeting.labSetupGroup.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
             viewModel._coordinatorMeetData.value?.interested =
@@ -259,12 +297,12 @@ class CoordinatorDmMeetingFragment : Fragment() {
         binding.dmMeeting.nextMeetingGroup.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
             if (checkedRadioButtonText == "Yes") {
-                viewModel._dmMeetData.value?.nextFollowupDm = "yes"
+                viewModel._dmMeetData.value?.nextFollowup = "yes"
                 binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.VISIBLE
                 binding.dmMeeting.tilNextMeetingDate.visibility = View.VISIBLE
                 binding.dmMeeting.tilNextMeetingTime.visibility = View.VISIBLE
             } else {
-                viewModel._dmMeetData.value?.nextFollowupDm = "no"
+                viewModel._dmMeetData.value?.nextFollowup = "no"
                 binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
                 binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
                 binding.dmMeeting.tilNextMeetingTime.visibility = View.GONE
@@ -328,7 +366,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
         if (_dmData?.productDemoHappen == "yes") binding.dmMeeting.demoHappenedGroup.check(R.id.demoHappenedYes)
         else binding.dmMeeting.demoHappenedGroup.check(R.id.demoHappenedNo)
 
-        if (_dmData?.nextFollowupDm == "yes") {
+        if (_dmData?.nextFollowup == "yes") {
             binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingYes)
             binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.VISIBLE
             binding.dmMeeting.tilNextMeetingDate.visibility = View.VISIBLE
@@ -343,7 +381,27 @@ class CoordinatorDmMeetingFragment : Fragment() {
         if (_dmData?.interested == "yes") binding.dmMeeting.labSetupGroup.check(R.id.labSetupYes)
         else binding.dmMeeting.labSetupGroup.check(R.id.labSetupNo)
 
+
+        if (_dmData?.rescheduleWithDirector == "yes") {
+            binding.dmMeeting.rescheduleMeetingGroup.check(R.id.rescheduleMeetingYes)
+            showDMRescheduleAndHideNextMeetingDate()
+        } else {
+            binding.dmMeeting.rescheduleMeetingGroup.check(R.id.rescheduleMeetingNo)
+            hideDMRescheduleAndShowNextMeetingDate()
+        }
+
         viewModel._dmMeetData.value?.nextMeetDateDm.let {
+            val dateAndTime = it?.split(" ")
+            binding.dmMeeting.edtRescheduleMeetingDate.setText(
+                dateAndTime?.get(0)
+            )
+            if ((dateAndTime?.size ?: 0) > 1)
+                binding.dmMeeting.edtRescheduleMeetingTime.setText(
+                    dateAndTime?.get(1) ?: ""
+                )
+        }
+
+        viewModel._dmMeetData.value?.nextMeetDate.let {
             val dateAndTime = it?.split(" ")
             binding.dmMeeting.edtNextMeetingDate.setText(
                 dateAndTime?.get(0)
@@ -381,12 +439,22 @@ class CoordinatorDmMeetingFragment : Fragment() {
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.coordinator_meeting_details_updated_successfully),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    setPositionView()
+                    if (viewModel._coordinatorMeetData.value?.rescheduleWithCoordinator != "yes" && viewModel._coordinatorMeetData.value?.interested == "yes") {
+                        printToast(getString(R.string.coordinator_meeting_details_updated_successfully))
+                        setPositionView()
+                    } else if (viewModel._coordinatorMeetData.value?.interested == "yes" && viewModel._coordinatorMeetData.value?.rescheduleWithCoordinator == "yes") {
+                        printToast(getString(R.string.meeting_has_been_rescheduled_with_coordinator))
+                        findNavController().popBackStack()
+                    } else if (viewModel._coordinatorMeetData.value?.interested != "yes" && viewModel._coordinatorMeetData.value?.rescheduleWithCoordinator != "yes") {
+                        printToast(getString(R.string.meeting_has_been_moved_to_not_interested_section))
+                        findNavController().popBackStack()
+                    } else if (viewModel._coordinatorMeetData.value?.interested != "yes" && viewModel._coordinatorMeetData.value?.rescheduleWithCoordinator == "yes") {
+                        printToast(getString(R.string.meeting_has_been_moved_to_not_interested_section))
+                        findNavController().popBackStack()
+                    } else {
+                        printToast(getString(R.string.coordinator_meeting_details_updated_successfully))
+                        setPositionView()
+                    }
                 }
 
                 is NetworkResult.Error -> {
@@ -413,7 +481,22 @@ class CoordinatorDmMeetingFragment : Fragment() {
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
-                    showDialog()
+                    if (viewModel._dmMeetData.value?.rescheduleWithDirector != "yes" && viewModel._dmMeetData.value?.interested == "yes") {
+                        printToast(getString(R.string.coordinator_meeting_details_updated_successfully))
+                        showDialog()
+                    } else if (viewModel._dmMeetData.value?.interested == "yes" && viewModel._dmMeetData.value?.rescheduleWithDirector == "yes") {
+                        printToast(getString(R.string.meeting_has_been_rescheduled_with_coordinator))
+                        findNavController().popBackStack()
+                    } else if (viewModel._dmMeetData.value?.interested != "yes" && viewModel._dmMeetData.value?.rescheduleWithDirector != "yes") {
+                        printToast(getString(R.string.meeting_has_been_moved_to_not_interested_section))
+                        findNavController().popBackStack()
+                    } else if (viewModel._dmMeetData.value?.interested != "yes" && viewModel._dmMeetData.value?.rescheduleWithDirector == "yes") {
+                        printToast(getString(R.string.meeting_has_been_moved_to_not_interested_section))
+                        findNavController().popBackStack()
+                    } else {
+                        printToast(getString(R.string.coordinator_meeting_details_updated_successfully))
+                        showDialog()
+                    }
                     viewModel.updateCoordinatorLevelMeetDetails.removeObservers(viewLifecycleOwner)
                     viewModel.updateDMLevelMeetDetails.removeObservers(viewLifecycleOwner)
                 }
@@ -540,11 +623,100 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 day
             )
 
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().apply {
-                this.set(Calendar.DAY_OF_MONTH, day)
-                this.set(Calendar.MONTH, month)
-                this.set(Calendar.YEAR, year)
-            }.timeInMillis - 1000
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
+            datePickerDialog.show()
+        }
+
+        binding.coordinatorMeeting.edtRescheduleMeetingTime.setOnClickListener {
+            val c = Calendar.getInstance()
+
+            var hour = c.get(Calendar.HOUR)
+            var minute = c.get(Calendar.MINUTE)
+            if (!viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrEmpty()) {
+                viewModel._coordinatorMeetData.value?.meetDateCoordinator?.split(" ")
+                    ?.let { _dateAndTime ->
+                        if (_dateAndTime.size > 1) {
+                            binding.coordinatorMeeting.edtRescheduleMeetingTime.setText(_dateAndTime[1])
+                            _dateAndTime[1].split(":").let { _timeArray ->
+                                hour = _timeArray[0].toInt()
+                                minute = _timeArray[1].toInt()
+                            }
+                        }
+                    }
+            }
+
+            val timePickerDialog = TimePickerDialog(
+                requireContext(),
+                { view, hourOfDay, minute ->
+                    val updatedTime = "$hourOfDay:$minute"
+                    binding.coordinatorMeeting.edtRescheduleMeetingTime.setText(updatedTime)
+                    viewModel._coordinatorMeetData.value?.meetDateCoordinator?.let { _nextFollowUpDate ->
+                        if (_nextFollowUpDate.contains(" ")) {
+                            val dateAndTime = _nextFollowUpDate.split(" ")
+                            viewModel._coordinatorMeetData.value?.meetDateCoordinator =
+                                "${dateAndTime[0]} $updatedTime"
+                        } else {
+                            viewModel._coordinatorMeetData.value?.meetDateCoordinator =
+                                "$_nextFollowUpDate $updatedTime"
+                        }
+
+                        Timber.e("Time")
+                        Timber.e(viewModel._coordinatorMeetData.value?.meetDateCoordinator)
+
+                    }
+                },
+                hour,
+                minute,
+                false
+            )
+            timePickerDialog.show()
+        }
+    }
+
+    private fun rescheduleDMDateTimeClickListener() {
+        binding.dmMeeting.edtRescheduleMeetingDate.setOnClickListener {
+            val c = Calendar.getInstance()
+            var year = c.get(Calendar.YEAR)
+            var month = c.get(Calendar.MONTH)
+            var day = c.get(Calendar.DAY_OF_MONTH)
+            if (!viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrEmpty()) {
+                viewModel._dmMeetData.value?.nextMeetDateDm?.split(" ")
+                    ?.let { _dateAndTime ->
+                        binding.dmMeeting.edtRescheduleMeetingDate.setText(_dateAndTime[0])
+                        _dateAndTime[0].split("/").let { _dateArray ->
+                            day = _dateArray[0].toInt()
+                            month = _dateArray[1].toInt()
+                            year = _dateArray[2].toInt()
+                        }
+                    }
+            }
+
+            val datePickerDialog = DatePickerDialog(
+                requireContext(),
+                { view, year, monthOfYear, dayOfMonth ->
+                    val updatedDateAndTime =
+                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    binding.dmMeeting.edtRescheduleMeetingDate.setText(updatedDateAndTime)
+                    viewModel._dmMeetData.value?.nextMeetDateDm.let { _nextFollowUpDate ->
+                        if ((_nextFollowUpDate ?: "").contains(" ")) {
+                            val dateAndTime = (_nextFollowUpDate ?: "").split(" ")
+                            viewModel._dmMeetData.value?.nextMeetDateDm =
+                                "$updatedDateAndTime ${dateAndTime[1]}"
+                        } else {
+                            viewModel._dmMeetData.value?.nextMeetDateDm =
+                                updatedDateAndTime
+                        }
+
+                        Timber.e("Date")
+                        Timber.e(viewModel._dmMeetData.value?.nextMeetDateDm)
+                    }
+                },
+                year,
+                month,
+                day
+            )
+
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
             datePickerDialog.show()
         }
 
@@ -637,11 +809,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 day
             )
 
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().apply {
-                this.set(Calendar.DAY_OF_MONTH, day)
-                this.set(Calendar.MONTH, month)
-                this.set(Calendar.YEAR, year)
-            }.timeInMillis - 1000
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
             datePickerDialog.show()
         }
 
@@ -697,8 +865,8 @@ class CoordinatorDmMeetingFragment : Fragment() {
             var year = c.get(Calendar.YEAR)
             var month = c.get(Calendar.MONTH)
             var day = c.get(Calendar.DAY_OF_MONTH)
-            if (!viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrEmpty()) {
-                viewModel._dmMeetData.value?.nextMeetDateDm?.split(" ")?.let { _dateAndTime ->
+            if (!viewModel._dmMeetData.value?.nextMeetDate.isNullOrEmpty()) {
+                viewModel._dmMeetData.value?.nextMeetDate?.split(" ")?.let { _dateAndTime ->
                     binding.dmMeeting.edtNextMeetingDate.setText(_dateAndTime[0])
                     _dateAndTime[0].split("/").let { _dateArray ->
                         day = _dateArray[0].toInt()
@@ -714,17 +882,17 @@ class CoordinatorDmMeetingFragment : Fragment() {
                     val updatedDateAndTime =
                         dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                     binding.dmMeeting.edtNextMeetingDate.setText(updatedDateAndTime)
-                    viewModel._dmMeetData.value?.nextMeetDateDm.let { _nextFollowUpDate ->
+                    viewModel._dmMeetData.value?.nextMeetDate.let { _nextFollowUpDate ->
                         if ((_nextFollowUpDate ?: "").contains(" ")) {
                             val dateAndTime = (_nextFollowUpDate ?: "").split(" ")
-                            viewModel._dmMeetData.value?.nextMeetDateDm =
+                            viewModel._dmMeetData.value?.nextMeetDate =
                                 "$updatedDateAndTime ${dateAndTime[1]}"
                         } else {
-                            viewModel._dmMeetData.value?.nextMeetDateDm = updatedDateAndTime
+                            viewModel._dmMeetData.value?.nextMeetDate = updatedDateAndTime
                         }
 
                         Timber.e("Date")
-                        Timber.e(viewModel._dmMeetData.value?.nextMeetDateDm)
+                        Timber.e(viewModel._dmMeetData.value?.nextMeetDate)
                     }
                 },
                 year,
@@ -732,11 +900,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 day
             )
 
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().apply {
-                this.set(Calendar.DAY_OF_MONTH, day)
-                this.set(Calendar.MONTH, month)
-                this.set(Calendar.YEAR, year)
-            }.timeInMillis - 1000
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
             datePickerDialog.show()
         }
 
@@ -745,8 +909,8 @@ class CoordinatorDmMeetingFragment : Fragment() {
 
             var hour = c.get(Calendar.HOUR)
             var minute = c.get(Calendar.MINUTE)
-            if (!viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrEmpty()) {
-                viewModel._dmMeetData.value?.nextMeetDateDm?.split(" ")?.let { _dateAndTime ->
+            if (!viewModel._dmMeetData.value?.nextMeetDate.isNullOrEmpty()) {
+                viewModel._dmMeetData.value?.nextMeetDate?.split(" ")?.let { _dateAndTime ->
                     if (_dateAndTime.size > 1) {
                         binding.dmMeeting.edtNextMeetingTime.setText(_dateAndTime[1])
                         _dateAndTime[1].split(":").let { _timeArray ->
@@ -762,18 +926,18 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 { view, hourOfDay, minute ->
                     val updatedTime = "$hourOfDay:$minute"
                     binding.dmMeeting.edtNextMeetingTime.setText(updatedTime)
-                    viewModel._dmMeetData.value?.nextMeetDateDm?.let { _nextFollowUpDate ->
+                    viewModel._dmMeetData.value?.nextMeetDate?.let { _nextFollowUpDate ->
                         if (_nextFollowUpDate.contains(" ")) {
                             val dateAndTime = _nextFollowUpDate.split(" ")
-                            viewModel._dmMeetData.value?.nextMeetDateDm =
+                            viewModel._dmMeetData.value?.nextMeetDate =
                                 "${dateAndTime[0]} $updatedTime"
                         } else {
-                            viewModel._dmMeetData.value?.nextMeetDateDm =
+                            viewModel._dmMeetData.value?.nextMeetDate =
                                 "$_nextFollowUpDate $updatedTime"
                         }
 
                         Timber.e("Time")
-                        Timber.e(viewModel._dmMeetData.value?.nextMeetDateDm)
+                        Timber.e(viewModel._dmMeetData.value?.nextMeetDate)
 
                     }
                 },
@@ -803,6 +967,27 @@ class CoordinatorDmMeetingFragment : Fragment() {
         binding.coordinatorMeeting.tilNextMeetingTime.visibility = View.VISIBLE
     }
 
+    private fun showDMRescheduleAndHideNextMeetingDate() {
+        binding.dmMeeting.meetingDateAndTimeHeading.visibility = View.VISIBLE
+        binding.dmMeeting.tilRescheduleMeetingDate.visibility = View.VISIBLE
+        binding.dmMeeting.tilRescheduleMeetingTime.visibility = View.VISIBLE
+        binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
+        binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
+        binding.dmMeeting.tilNextMeetingTime.visibility = View.GONE
+    }
+
+    private fun hideDMRescheduleAndShowNextMeetingDate() {
+        binding.dmMeeting.meetingDateAndTimeHeading.visibility = View.GONE
+        binding.dmMeeting.tilRescheduleMeetingDate.visibility = View.GONE
+        binding.dmMeeting.tilRescheduleMeetingTime.visibility = View.GONE
+        binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.VISIBLE
+        binding.dmMeeting.tilNextMeetingDate.visibility = View.VISIBLE
+        binding.dmMeeting.tilNextMeetingTime.visibility = View.VISIBLE
+    }
+
+    fun printToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
     override fun onDestroyView() {
         _binding = null
         position = 0

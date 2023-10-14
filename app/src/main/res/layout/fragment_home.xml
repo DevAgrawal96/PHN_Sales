@@ -103,6 +103,14 @@
                     android:text="@string/moa_signed"
                     app:checkedIconEnabled="false" />
 
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/not_interested"
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/not_interested"
+                    app:checkedIconEnabled="false" />
+
             </com.google.android.material.chip.ChipGroup>
 
             <com.airbnb.lottie.LottieAnimationView

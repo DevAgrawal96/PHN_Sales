@@ -8,11 +8,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -36,6 +40,7 @@ import com.phntechnolab.sales.viewmodel.AddSchoolViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.Calendar
+import java.util.Date
 import java.util.regex.Pattern
 
 
@@ -126,11 +131,53 @@ class AddSchoolFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        onCheckedChangedListener()
 
         oncClickListener()
 
         observers()
         initEditText()
+    }
+
+    private fun onCheckedChangedListener() {
+        binding.followupDetails.labSetupGroup.setOnCheckedChangeListener { group, checkedId ->
+            val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
+            viewModel._newSchoolData.value?.interested =
+                if (checkedRadioButtonText == "Yes") "yes" else "no"
+            viewModel._newSchoolData.value?.interested?.let { Log.e("CHecked box", it) }
+        }
+
+        binding.basicDetails.edtSchoolTotalIntake.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                try {
+                    viewModel._newSchoolData.value?.intake = s.toString().toInt()
+                }catch (ex: Exception){
+                    ex.printStackTrace()
+                }
+            }
+        })
+
+        binding.basicDetails.edtTotalNoOfClassroom.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                try {
+                    viewModel._newSchoolData.value?.totalClassRoom = s.toString().toInt()
+                }catch (ex: Exception){
+                    ex.printStackTrace()
+                }
+            }
+        })
     }
 
     private fun initEditText() {
@@ -436,12 +483,20 @@ class AddSchoolFragment : Fragment() {
         viewModel.uploadImgResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "School details updated successfully",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    Timber.e(it.toString())
+
+                    if(viewModel.newSchoolData.value?.interested == "yes")
+                        Toast.makeText(
+                            requireContext(),
+                            "School details updated successfully",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.meeting_has_been_moved_to_not_interested_section),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                     findNavController().popBackStack()
                 }
 
@@ -477,7 +532,16 @@ class AddSchoolFragment : Fragment() {
             binding.progressBar.visibility = View.GONE
             when (it) {
                 is NetworkResult.Success -> {
-                    showDialog()
+                    if(viewModel.newSchoolData.value?.interested == "yes")
+                        showDialog()
+                    else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.meeting_has_been_moved_to_not_interested_section),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        findNavController().popBackStack()
+                    }
                 }
 
                 is NetworkResult.Error -> {
@@ -508,8 +572,16 @@ class AddSchoolFragment : Fragment() {
                 is NetworkResult.Success -> {
                     if (viewModel._requestFile != null)
                         viewModel.uploadImage()
-                    else
+                    else {
+                        if(viewModel.newSchoolData.value?.interested != "yes")
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.meeting_has_been_moved_to_not_interested_section),
+                                Toast.LENGTH_LONG
+                            ).show()
+
                         findNavController().popBackStack()
+                    }
                 }
 
                 is NetworkResult.Error -> {
@@ -671,11 +743,7 @@ class AddSchoolFragment : Fragment() {
                 day
             )
 
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().apply {
-                this.set(Calendar.DAY_OF_MONTH, day)
-                this.set(Calendar.MONTH, month)
-                this.set(Calendar.YEAR, year)
-            }.timeInMillis - 1000
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
             datePickerDialog.show()
         }
 
@@ -885,8 +953,8 @@ class AddSchoolFragment : Fragment() {
     private fun setSchoolDetails() {
         binding.basicDetails.edtSchoolName.setText(viewModel.newSchoolData.value?.schoolName)
         binding.basicDetails.edtSchoolAddress.setText(viewModel.newSchoolData.value?.schoolAddress)
-        binding.basicDetails.edtSchoolTotalIntake.setText("${viewModel.newSchoolData.value?.intake ?: 0}")
-        binding.basicDetails.edtTotalNoOfClassroom.setText("${viewModel.newSchoolData.value?.totalClassRoom ?: 0}")
+//        binding.basicDetails.edtSchoolTotalIntake.setText("${viewModel.newSchoolData.value?.intake}")
+//        binding.basicDetails.edtTotalNoOfClassroom.setText("${viewModel.newSchoolData.value?.totalClassRoom}")
         binding.basicDetails.edtEmailId.setText(viewModel.newSchoolData.value?.email)
         binding.basicDetails.edtCoordinatorName.setText(viewModel.newSchoolData.value?.coName)
         binding.basicDetails.edtCoordinatorMono.setText(viewModel.newSchoolData.value?.coMobileNo)
@@ -895,6 +963,12 @@ class AddSchoolFragment : Fragment() {
         binding.schoolDetails.edtAvgSchoolFee.setText(viewModel.newSchoolData.value?.avgSchoolFees)
         binding.schoolDetails.existingLabs.setText(viewModel.newSchoolData.value?.existingLab)
         binding.schoolDetails.edtValuePerStudent.setText(viewModel.newSchoolData.value?.expQuatedValue)
+
+        if (viewModel.newSchoolData.value?.interested == "yes") binding.followupDetails.labSetupGroup.check(
+            R.id.labSetupYes
+        )
+        else binding.followupDetails.labSetupGroup.check(R.id.labSetupNo)
+
         viewModel.newSchoolData.value?.nextFollowup.let {
             val dateAndTime = it?.split(" ")
             binding.followupDetails.edtSchoolDate.setText(

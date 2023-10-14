@@ -27,6 +27,7 @@
     <string name="visited">Visited</string>
     <string name="moa_negotiation">MOA Negotiation</string>
     <string name="moa_signed">MOA Signed</string>
+    <string name="not_interested">Not Interested</string>
     <string name="hot_status">Hot</string>
     <string name="warm_status">Warm</string>
     <string name="cool_status">Cool</string>
@@ -41,7 +42,7 @@
     <string name="school_name">School Name</string>
     <string name="school_address">School Address</string>
     <string name="board">Board</string>
-    <string name="school_total_intake">School Total Intake</string>
+    <string name="school_total_intake">Total School Intake</string>
     <string name="total_no_of_classroom">Total No.of Classroom</string>
     <string name="coordinator_name">Coordinator Name</string>
     <string name="coordinator_phone_no">Coordinator Phone Number</string>
@@ -59,6 +60,7 @@
     <string name="follow_up_details">Follow up Details</string>
     <string name="lead_type">Select Lead Type</string>
     <string name="follow_date">Select Next Follow Up Date</string>
+    <string name="next_follow_date"><![CDATA[Next Follow Up Date & Time]]></string>
     <string name="follow_up_type">Select Follow Up Type</string>
     <string name="remark">Remark</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -105,7 +107,7 @@
     <string name="please_enter_valid_school_name">Please enter valid school name!</string>
     <string name="please_enter_valid_school_address">Please enter valid school address!</string>
     <string name="please_enter_valid_coordinator_name">Please enter valid coordinator name!</string>
-    <string name="please_enter_total_school_intake">Please enter total shcool intake!</string>
+    <string name="please_enter_total_school_intake">Please enter total school intake!</string>
     <string name="total_school_intake_less_than">Please enter total shcool intake less than 20000!</string>
     <string name="total_no_of_classrooms_less_than">Please enter total number of classrooms less than 20000!</string>
     <string name="please_select_board">Please select board!</string>
@@ -157,6 +159,8 @@
     <string name="quotation_shared">Quotation shared?*</string>
     <string name="payment_scheduled_locked">Payment scheduled locked?*</string>
     <string name="coordinator_meeting_details_updated_successfully">Coordinator meeting details updated successfully.</string>
+    <string name="meeting_has_been_rescheduled_with_coordinator">Meeting has been rescheduled with Coordinator.</string>
+    <string name="meeting_has_been_moved_to_not_interested_section">Meeting has been moved to not interested section.</string>
     <string name="other">\Other</string>
     <string name="_1st_installment_details">%sst Installment Details</string>
     <string name="date_and_time">Date and Time</string>

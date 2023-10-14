@@ -21,6 +21,7 @@
         app:strokeWidth="@dimen/dimen_0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainConstraint"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/dimen_8dp">
