@@ -1,26 +1,20 @@
 package com.phntechnolab.sales.repository
 
 import android.app.Application
-import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.api.RetrofitApi
-import com.phntechnolab.sales.model.LoginDetails
 import com.phntechnolab.sales.model.SchoolData
-import com.phntechnolab.sales.model.UserResponse
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.NetworkUtils
-import timber.log.Timber
 import javax.inject.Inject
 
-class HomeRepository @Inject constructor(
+class PendingForAprrovalRepository @Inject constructor(
     private val application: Application,
     private val retrofitApi: RetrofitApi
-) {
+)  {
 
     private val schoolDataMutableLiveData = MutableLiveData<NetworkResult<List<SchoolData>>>()
 
@@ -87,4 +81,5 @@ class HomeRepository @Inject constructor(
             ).show()
         }
     }
+
 }

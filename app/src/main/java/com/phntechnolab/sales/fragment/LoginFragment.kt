@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -23,6 +24,7 @@ import com.phntechnolab.sales.util.DataStoreManager.setUser
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.NetworkUtils
 import com.phntechnolab.sales.util.TextValidator
+import com.phntechnolab.sales.util.hideKeyboard
 import com.phntechnolab.sales.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -71,6 +73,7 @@ class LoginFragment : Fragment() {
 
 
         binding.login.setOnClickListener {
+            hideKeyboard()
             if (android.util.Patterns.EMAIL_ADDRESS.matcher(binding.edtEmailId.text.toString())
                     .matches()
             ) {
@@ -144,7 +147,7 @@ class LoginFragment : Fragment() {
                             }.invokeOnCompletion {
                                 lifecycleScope.launch(Dispatchers.Main) {
 
-                                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                                    requireView().findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                                 }
                             }
                         }
@@ -179,7 +182,11 @@ class LoginFragment : Fragment() {
     }
 
     private fun showError() {
-        binding.tilEmailId.helperText = getString(R.string.enter_valid_email)
+        Snackbar.make(
+            requireActivity().findViewById(android.R.id.content),
+            getString(R.string.enter_valid_email_and_password),
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
 
@@ -210,7 +217,7 @@ class LoginFragment : Fragment() {
 //                    binding.tilPassword.helperText = ""
                 } else {
                     binding.tilEmailId.helperText = getString(R.string.enter_valid_email)
-//                    binding.tilPassword.helperText = getString(R.string.password)
+                    binding.tilPassword.helperText = ""
                 }
             }
         })

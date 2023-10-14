@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import com.bumptech.glide.Glide
+import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.PendingAdapterItemBinding
 import com.phntechnolab.sales.model.PendingApprovalModel
+import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.viewHolder.PendingApprovalViewHolder
 
-class PendingApprovalAdapter : Adapter<PendingApprovalViewHolder>() {
-private var data = ArrayList<PendingApprovalModel>()
+class PendingApprovalAdapter(private var callBacks: CallBacks) : Adapter<PendingApprovalViewHolder>() {
+private var data = ArrayList<SchoolData>()
 private lateinit var context : Context
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PendingApprovalViewHolder {
         context = parent.context
@@ -24,11 +27,13 @@ private lateinit var context : Context
     }
 
     override fun onBindViewHolder(holder: PendingApprovalViewHolder, position: Int) {
-        holder.binding.pendingTitle.text = data[position].pendingTitle
-        holder.binding.schoolImg.setImageResource(data[position].schoolImg)
+        val schoolData = data[position]
+        holder.binding.pendingTitle.text = "${ data[position].schoolName.capitalize() } price discussion is pending"
+        Glide.with(context!!).load(data[position].schoolImage).override(300,200).error(R.drawable.demo_img).into(holder.binding.schoolImg)
+        holder.binding.mainConstraint.setOnClickListener { callBacks.meetingNavigation(schoolData) }
     }
 
-    fun setData(newData: ArrayList<PendingApprovalModel>) {
+    fun setData(newData: ArrayList<SchoolData>) {
         val pendingApprovalDiffUtil = PendingApprovalDiffUtil(data, newData)
         val pendingApprovalDiff = DiffUtil.calculateDiff(pendingApprovalDiffUtil)
         data = newData
@@ -36,7 +41,7 @@ private lateinit var context : Context
 
     }
 
-    class PendingApprovalDiffUtil(private val oldData: ArrayList<PendingApprovalModel>,private val newData: ArrayList<PendingApprovalModel>) :
+    class PendingApprovalDiffUtil(private val oldData: ArrayList<SchoolData>,private val newData: ArrayList<SchoolData>) :
         DiffUtil.Callback() {
         override fun getOldListSize(): Int {
             return oldData.size
@@ -51,8 +56,12 @@ private lateinit var context : Context
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldData[oldItemPosition].pendingTitle == newData[newItemPosition].pendingTitle
+            return oldData[oldItemPosition] == newData[newItemPosition]
         }
 
+    }
+
+    interface CallBacks {
+        fun meetingNavigation(schoolData: SchoolData)
     }
 }

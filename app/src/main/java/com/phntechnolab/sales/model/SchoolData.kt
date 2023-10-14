@@ -85,6 +85,11 @@ class SchoolData : Parcelable{
             field = value ?: ""
         }
 
+    @SerializedName("interested") var interested : String = ""
+        set(value){
+            field = value ?: ""
+        }
+
     @SerializedName("next_followup") var nextFollowup : String = ""
         set(value){
             field = value ?: ""
@@ -143,6 +148,10 @@ class SchoolData : Parcelable{
         set(value){
             field = value
         }
+    @SerializedName("installmet") var installmentData : InstallmentData = InstallmentData()
+        set(value){
+            field = value
+        }
 
     @SerializedName("updated_at") var updatedAt : String = ""
         set(value){
@@ -170,10 +179,13 @@ data class DMData(
     @SerializedName("school_id") var schoolId : String? = "",
     @SerializedName("co_attend_meet") var coAttendMeet : String? = "",
     @SerializedName("product_demo_happen") var productDemoHappen : String? = "",
-    @SerializedName("next_followup_dm") var nextFollowupDm : String? = "",
+    @SerializedName("next_followup") var nextFollowup : String? = "",
     @SerializedName("interested") var interested : String? = "",
-    @SerializedName("next_meet_date_dm") var nextMeetDateDm : String? = "",
+    @SerializedName("next_meet_date") var nextMeetDate : String? = "",
     @SerializedName("meeting_status") var meetingStatus : String? = "",
+    @SerializedName("reschedule_director") var rescheduleWithDirector : String? = "",
+    @SerializedName("next_meet_date_dm") var nextMeetDateDm : String? = "",
+
 ):Parcelable
 
 @Parcelize
@@ -204,6 +216,28 @@ data class MOADocumentData(
     @SerializedName("moa_file") var moaFile : String? = "",
     @SerializedName("remark") var remark : String? = "",
     @SerializedName("status") var status : String? = ""
+): Parcelable
+
+@Parcelize
+data class InstallmentData(
+    @SerializedName("id") var id : String? = null,
+    @SerializedName("school_id") var schoolId : String? = "",
+    @SerializedName("total_installment") var totalInstallment : String? = "",
+    @SerializedName("first_installment") var firstInstallment : String? = "",
+    @SerializedName("first_installment_amount") var firstInstallmentAmount : String? = "",
+    @SerializedName("first_installment_date_time") var firstInstallmentDateTime : String? = "",
+    @SerializedName("first_installment_reciept") var firstInstallmentReciept : String? = "",
+    @SerializedName("second_installment") var secondInstallment : String? = "",
+    @SerializedName("second_installment_amount") var secondInstallmentAmount : String? = "",
+    @SerializedName("second_installment_date_time") var secondInstallmentDateTime : String? = "",
+    @SerializedName("second_installment_reciept") var secondInstallmentReciept : String? = "",
+    @SerializedName("third_installment") var thirdInstallment : String? = "",
+    @SerializedName("third_installment_amount") var thirdInstallmentAmount : String? = "",
+    @SerializedName("third_installment_date_time") var thirdInstallmentDateTime : String? = "",
+    @SerializedName("third_installment_reciept") var thirdInstallmentReciept : String? = "",
+    @SerializedName("created_at") var createdAt : String? = "",
+    @SerializedName("updated_at") var updatedAt : String? = "",
+
 ): Parcelable
 
 //data class SchoolData (

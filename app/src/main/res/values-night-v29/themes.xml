@@ -5,5 +5,8 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="android:forceDarkAllowed">false</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="colorPrimary">@color/regular_blue</item>
+        <item name="colorError">@color/md_theme_light_error</item>
     </style>
 </resources>

@@ -65,6 +65,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_email_id"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="@dimen/dimen_0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_16dp"

@@ -92,7 +92,6 @@
                         android:imeOptions="actionNext"
                         android:inputType="text"
                         android:maxLines="1"
-
                         android:text="@={viewModel.newSchoolData.schoolAddress}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -142,8 +141,7 @@
                         android:inputType="number"
                         android:maxLength="5"
                         android:maxLines="1"
-
-                        android:text="@={``+ viewModel.newSchoolData.intake}" />
+                        android:text="@{viewModel.newSchoolData.intake == 0 ? `` : ``+viewModel.newSchoolData.intake}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -169,8 +167,7 @@
                         android:inputType="number"
                         android:maxLength="4"
                         android:maxLines="1"
-
-                        android:text="@={``+ viewModel.newSchoolData.totalClassRoom}" />
+                        android:text="@{ viewModel.newSchoolData.totalClassRoom == 0? `` : ``+viewModel.newSchoolData.totalClassRoom}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -195,7 +192,6 @@
                         android:imeOptions="actionNext"
                         android:inputType="text"
                         android:maxLines="1"
-
                         android:text="@={viewModel.newSchoolData.email}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -218,10 +214,9 @@
                         android:id="@+id/edt_coordinator_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="@string/school_name_validation"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
                         android:imeOptions="actionNext"
                         android:inputType="text"
-
                         android:maxLines="1"
                         android:text="@={viewModel.newSchoolData.coName}" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -248,7 +243,6 @@
                         android:imeOptions="actionDone"
                         android:inputType="number"
                         android:maxLength="10"
-
                         android:text="@={viewModel.newSchoolData.coMobileNo}" />
                 </com.google.android.material.textfield.TextInputLayout>
 

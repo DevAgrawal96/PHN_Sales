@@ -1,6 +1,7 @@
 package com.phntechnolab.sales.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -24,13 +25,16 @@ import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentHomeBinding
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.DMData
+import com.phntechnolab.sales.model.InstallmentData
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
+import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -88,25 +92,30 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                     chipGroup.getChildAt(i).isClickable = true
                 }
                 chip.isClickable = false
-                adapter?.setData(viewModel.schoolLiveData.value?.data?.sortedByDescending { it.updatedAt }?.filter {
-                    when (chip.text) {
-                        "All" -> {
-                            true
-                        }
+                adapter?.setData(((viewModel.schoolLiveData.value?.data?.filter { it.status != "MOA Pending" }?.sortedByDescending { it.updatedAt }
+                    ?.filter {
+                        when (chip.text) {
+                            "All" -> {
+                                true
+                            }
 
-                        "Propose Costing" -> {
-                            it.status == "Propose Costing"
-                        }
+                            "Propose Costing" -> {
+                                it.status == "Propose Costing"
+                            }
 
-                        "MOA Signed" -> {
-                            it.status == "MOASigned"
-                        }
+                            "MOA Signed" -> {
+                                it.status == "MOASigned"
+                            }
 
-                        else -> {
-                            it.status == chip.text
+                            "Not Interested" -> {
+                                it.status == "Not Interested"
+                            }
+
+                            else -> {
+                                it.status == chip.text
+                            }
                         }
-                    }
-                } as ArrayList<SchoolData>)
+                    } as ArrayList<SchoolData>) as ArrayList<SchoolData>))
             }
         }
 
@@ -118,17 +127,44 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     private fun observers() {
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
-            if (it.data?.isEmpty()!!) {
-                binding.noDataLottie.visibility = View.VISIBLE
-                binding.homeRecyclerView.visibility = View.GONE
-                binding.progressBar.visibility = View.GONE
-            } else {
-                binding.homeRecyclerView.visibility = View.VISIBLE
-                binding.noDataLottie.visibility = View.GONE
-                binding.progressIndicator.visibility = View.GONE
-                adapter?.setData(ArrayList<SchoolData>().apply {  addAll(it.data.sortedByDescending { it.updatedAt }) })
-                binding.progressBar.visibility = View.GONE
+            when (it) {
+                is NetworkResult.Success -> {
+                    Timber.e(it.message.toString())
+                    binding.noInternetConnection.visibility = View.GONE
+                    binding.noInternetMessage.visibility = View.GONE
+                    if (it.data?.isEmpty()!!) {
+                        binding.noDataLottie.visibility = View.VISIBLE
+                        binding.homeRecyclerView.visibility = View.GONE
+                        binding.progressBar.visibility = View.GONE
+                        binding.progressIndicator.visibility = View.GONE
+                    } else {
+                        binding.homeRecyclerView.visibility = View.VISIBLE
+                        binding.noDataLottie.visibility = View.GONE
+                        binding.progressIndicator.visibility = View.GONE
+                        adapter?.setData(ArrayList<SchoolData>().apply { addAll(it.data.filter { it.status != "MOA Pending" }.sortedByDescending { it.updatedAt }) })
+                        binding.progressBar.visibility = View.GONE
+                    }
+                }
+
+                is NetworkResult.Error -> {
+                    Timber.e(it.message.toString())
+                    when (it.message) {
+                        getString(R.string.please_connection_message) -> {
+                            binding.noInternetConnection.visibility = View.VISIBLE
+                            binding.noInternetMessage.visibility = View.VISIBLE
+                            binding.progressIndicator.visibility = View.GONE
+                        }
+
+                        else -> {
+                        }
+                    }
+                }
+
+                else -> {
+                    Timber.e(it.message.toString())
+                }
             }
+
         }
     }
 
@@ -209,6 +245,15 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                     )
             }
 
+            "Not Interested" -> {
+                findNavController()
+                    .navigate(
+                        HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment(
+                            schoolData
+                        )
+                    )
+            }
+
             "Visited" -> {
                 requireView().findNavController()
                     .navigate(
@@ -232,10 +277,22 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                     )
             }
 
+            "MOA Pending" -> {
+                requireView().findNavController()
+                    .navigate(
+                        HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
+                            schoolData.installmentData ?: InstallmentData()
+                        )
+                    )
+            }
+
             "MOASigned" -> {
                 requireView().findNavController()
-                    .navigate(R.id.action_homeFragment_to_moaSignedFragment)
-//                    .navigate(HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(schoolData))
+                    .navigate(
+                        HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
+                            schoolData.installmentData ?: InstallmentData()
+                        )
+                    )
             }
         }
     }

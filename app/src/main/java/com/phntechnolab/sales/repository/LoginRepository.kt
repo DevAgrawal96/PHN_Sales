@@ -65,7 +65,11 @@ class LoginRepository @Inject constructor(
                         )
                     )
                 } else {
-                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        application,
+                        application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                     loginMutableLiveData.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -82,17 +86,25 @@ class LoginRepository @Inject constructor(
                 }
 
             } catch (e: Exception) {
-                NetworkResult.Error(
-                    application.getString(R.string.something_went_wrong),
-                    null
+                loginMutableLiveData.postValue(
+                    NetworkResult.Error(
+                        application.getString(R.string.something_went_wrong),
+                        null
+                    )
                 )
                 Toast.makeText(
                     application,
-                    application.resources.getString(R.string.please_connection_message),
+                    application.getString(R.string.something_went_wrong),
                     Toast.LENGTH_SHORT
                 ).show()
             }
         } else {
+            loginMutableLiveData.postValue(
+                NetworkResult.Error(
+                    application.resources.getString(R.string.please_connection_message),
+                    null
+                )
+            )
             Toast.makeText(
                 application,
                 application.resources.getString(R.string.please_connection_message),
@@ -130,21 +142,34 @@ class LoginRepository @Inject constructor(
                             )
                         )
                     )
+                    Toast.makeText(
+                        application,
+                        application.resources.getString(R.string.please_connection_message),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
-                NetworkResult.Error(
-                    application.getString(R.string.something_went_wrong),
-                    null
+                _refereshToken.postValue(
+                    NetworkResult.Error(
+                        application.resources.getString(R.string.please_connection_message),
+                        null
+                    )
                 )
                 Toast.makeText(
                     application,
-                    application.resources.getString(R.string.something_went_wrong),
+                    application.resources.getString(R.string.please_connection_message),
                     Toast.LENGTH_SHORT
                 ).show()
 
             }
         } else {
+            _refereshToken.postValue(
+                NetworkResult.Error(
+                    application.resources.getString(R.string.please_connection_message),
+                    null
+                )
+            )
             Toast.makeText(
                 application,
                 application.resources.getString(R.string.please_connection_message),

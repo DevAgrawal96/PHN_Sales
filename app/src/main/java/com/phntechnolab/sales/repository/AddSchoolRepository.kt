@@ -41,12 +41,18 @@ class AddSchoolRepository @Inject constructor(
             try {
                 Log.e("Multipart body data", Gson().toJson(schoolData))
                 Log.e("Multipart body data", id)
+                if(schoolData.interested == "yes"){
+                    schoolData.status = "Visited"
+                }else{
+                    schoolData.status = "Not Interested"
+                }
+                Log.e("Multipart body data 2", Gson().toJson(schoolData))
                 val result = retrofitApi.updateSchoolData(id, schoolData)
-                Timber.e("Result 1 update")
-                Timber.e(id.toString())
-                Timber.e(Gson().toJson(schoolData))
-                Timber.e(Gson().toJson(result.body()))
-                Timber.e(result.code().toString())
+//                Timber.e("Result 1 update")
+//                Timber.e(id.toString())
+//                Timber.e(Gson().toJson(schoolData))
+//                Timber.e(Gson().toJson(result.body()))
+//                Timber.e(result.code().toString())
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
                     _updateSchoolResponse.postValue(NetworkResult.Success(result.body()))

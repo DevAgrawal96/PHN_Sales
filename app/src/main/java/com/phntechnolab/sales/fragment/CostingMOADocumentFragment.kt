@@ -33,6 +33,7 @@ import com.phntechnolab.sales.viewmodel.CostingMoaDocumentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.Calendar
+import java.util.Date
 
 @AndroidEntryPoint
 class CostingMOADocumentFragment : Fragment() {
@@ -44,7 +45,7 @@ class CostingMOADocumentFragment : Fragment() {
 
     private val args: CostingMOADocumentFragmentArgs by navArgs()
 
-    private lateinit var image: Uri
+    private var image: Uri? = null
 
     private val backPressHandler = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -150,8 +151,11 @@ class CostingMOADocumentFragment : Fragment() {
         binding.moaDocument.updateBtn.setOnClickListener {
             Timber.e("MOA DATA POST")
             Timber.e(Gson().toJson(viewModel._moaDocumentData.value))
-            if (isMOADocumentFieldsValid())
+            if (!image.toString().isNullOrEmpty() && isMOADocumentFieldsValid())
                 viewModel.updateMoaDocumentDetails()
+            else
+                Timber.e("fill all man")
+
         }
 
         binding.proposeCostingStage.autoAgreementDuration.setOnItemClickListener { parent, view, position, id ->
@@ -311,7 +315,7 @@ class CostingMOADocumentFragment : Fragment() {
 
                         val c = Calendar.getInstance()
 
-                        var hour = c.get(Calendar.HOUR_OF_DAY)
+                        var hour = c.get(Calendar.HOUR)
                         var minute = c.get(Calendar.MINUTE)
                         if (!viewModel.proposeCostingData.value?.quotationValidity.isNullOrEmpty()) {
                             viewModel.proposeCostingData.value?.quotationValidity?.split(" ")
@@ -362,11 +366,7 @@ class CostingMOADocumentFragment : Fragment() {
                 day
             )
 
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().apply {
-                this.set(Calendar.DAY_OF_MONTH, day)
-                this.set(Calendar.MONTH, month)
-                this.set(Calendar.YEAR, year)
-            }.timeInMillis - 1000
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
             datePickerDialog.show()
         }
     }
@@ -751,18 +751,14 @@ class CostingMOADocumentFragment : Fragment() {
                 day
             )
 
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().apply {
-                this.set(Calendar.DAY_OF_MONTH, day)
-                this.set(Calendar.MONTH, month)
-                this.set(Calendar.YEAR, year)
-            }.timeInMillis - 1000
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
             datePickerDialog.show()
         }
 
         binding.proposeCostingStage.edtTime.setOnClickListener {
             val c = Calendar.getInstance()
 
-            var hour = c.get(Calendar.HOUR_OF_DAY)
+            var hour = c.get(Calendar.HOUR)
             var minute = c.get(Calendar.MINUTE)
             if (!viewModel.proposeCostingData.value?.nextMeet.isNullOrEmpty()) {
                 viewModel.proposeCostingData.value?.nextMeet?.split(" ")?.let { _dateAndTime ->

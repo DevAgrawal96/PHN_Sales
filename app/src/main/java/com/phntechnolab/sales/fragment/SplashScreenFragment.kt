@@ -42,6 +42,14 @@ class SplashScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navigateScreen()
+        initializeListener()
+    }
+
+    private fun initializeListener() {
+        binding.retryBtn.setOnClickListener {
+            viewModel.getToken()
+            binding.retryBtn.visibility = View.GONE
+        }
     }
 
 
@@ -55,10 +63,23 @@ class SplashScreenFragment : Fragment() {
                 }
 
                 is NetworkResult.Error -> {
+                    when (it.message) {
+                        getString(R.string.please_connection_message) -> {
+                            binding.retryBtn.visibility = View.VISIBLE
+                        }
+
+                        getString(R.string.something_went_wrong) -> {
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                findNavController().navigate(R.id.action_splashScreenFragment_to_loginFragment)
+                            }, 3000)
+                        }
+
+                        else -> {
+
+                        }
+                    }
                     Timber.e("error")
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        findNavController().navigate(R.id.action_splashScreenFragment_to_loginFragment)
-                    }, 3000)
+
                 }
 
                 else -> {
