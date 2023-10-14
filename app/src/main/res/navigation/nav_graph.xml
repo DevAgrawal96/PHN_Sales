@@ -289,6 +289,23 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+
+
+        <action
+            android:id="@+id/action_meetingFragment_to_costingMoaDocumentFragment"
+            app:destination="@id/costingMoaDocumentFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_meetingFragment"
+            app:destination="@id/coordinatorDmMeeting"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
