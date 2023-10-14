@@ -192,7 +192,7 @@
     <string name="role">Role</string>
     <string name="no_internet_message">Make sure Wi-Fi or Mobile data is turned on, then try agian</string>
     <string name="retry">Retry</string>
-    <string name="_1nd_installment">1nd Installment</string>
+    <string name="_1nd_installment">1st Installment</string>
     <string name="nd_installment">%s Installment</string>
     <string name="file_size_and_today_date_">%s KB · %s</string>
     <string name="_313_kb_31_june_2023">313 KB · 31 June, 2023</string>
