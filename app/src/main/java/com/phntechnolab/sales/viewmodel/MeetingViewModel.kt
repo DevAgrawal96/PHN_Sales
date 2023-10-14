@@ -3,6 +3,7 @@ package com.phntechnolab.sales.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.phntechnolab.sales.model.MeetingData
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.repository.MeetingRepository
 import com.phntechnolab.sales.util.NetworkResult
@@ -15,15 +16,8 @@ class MeetingViewModel @Inject constructor(private val repositories: MeetingRepo
 
     val schoolLiveData : LiveData<NetworkResult<List<SchoolData>>>
         get() = repositories.allSchoolMutableLiveData
-
-    val todayMeetingMutableLiveData : LiveData<List<SchoolData>>
-        get() = repositories.todayMeetingMutableLiveData
-
-    val tomorrowMeetingMutableLiveData : LiveData<List<SchoolData>>
-        get() = repositories.tomorrowMeetingMutableLiveData
-
-    val upcomingMeetingMutableLiveData : LiveData<List<SchoolData>>
-        get() = repositories.upcomingMeetingMutableLiveData
+    val meetingsData : LiveData<List<MeetingData>>
+        get() = repositories.meetingsData
 
     fun getAllSchools() {
         viewModelScope.launch {
@@ -31,9 +25,7 @@ class MeetingViewModel @Inject constructor(private val repositories: MeetingRepo
         }
     }
 
-    fun todayMeetingData(){
-        repositories.todayMeetingDataSetup()
-//        repositories.tomorrowMeetingDataSetup()
-//        repositories.upcomingMeetingDataSetup()
+    fun segregateData(){
+        repositories.segregateData()
     }
 }
