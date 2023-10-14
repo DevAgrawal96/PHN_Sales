@@ -141,8 +141,7 @@
                         android:inputType="number"
                         android:maxLength="5"
                         android:maxLines="1"
-
-                        android:text="@={``+ viewModel.newSchoolData.intake}" />
+                        android:text="@{viewModel.newSchoolData.intake == 0 ? `` : ``+viewModel.newSchoolData.intake}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -168,7 +167,7 @@
                         android:inputType="number"
                         android:maxLength="4"
                         android:maxLines="1"
-                        android:text="@={``+ viewModel.newSchoolData.totalClassRoom}" />
+                        android:text="@{ viewModel.newSchoolData.totalClassRoom == 0? `` : ``+viewModel.newSchoolData.totalClassRoom}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout

@@ -293,11 +293,7 @@ class InstallmentFragment : Fragment() {
                 day
             )
 
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().apply {
-                this.set(Calendar.DAY_OF_MONTH, day)
-                this.set(Calendar.MONTH, month)
-                this.set(Calendar.YEAR, year)
-            }.timeInMillis - 1000
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
             datePickerDialog.show()
         }
         binding.addInstallment2.edtInstallmentDate.setOnClickListener {
@@ -318,11 +314,7 @@ class InstallmentFragment : Fragment() {
                 day
             )
 
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().apply {
-                this.set(Calendar.DAY_OF_MONTH, day)
-                this.set(Calendar.MONTH, month)
-                this.set(Calendar.YEAR, year)
-            }.timeInMillis - 1000
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
             datePickerDialog.show()
         }
         binding.addInstallment3.edtInstallmentDate.setOnClickListener {
@@ -343,11 +335,7 @@ class InstallmentFragment : Fragment() {
                 day
             )
 
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().apply {
-                this.set(Calendar.DAY_OF_MONTH, day)
-                this.set(Calendar.MONTH, month)
-                this.set(Calendar.YEAR, year)
-            }.timeInMillis - 1000
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
             datePickerDialog.show()
         }
 

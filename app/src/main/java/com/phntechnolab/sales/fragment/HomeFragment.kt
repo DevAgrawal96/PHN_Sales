@@ -92,7 +92,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                     chipGroup.getChildAt(i).isClickable = true
                 }
                 chip.isClickable = false
-                adapter?.setData(((viewModel.schoolLiveData.value?.data?.sortedByDescending { it.updatedAt }
+                adapter?.setData(((viewModel.schoolLiveData.value?.data?.filter { it.status != "MOA Pending" }?.sortedByDescending { it.updatedAt }
                     ?.filter {
                         when (chip.text) {
                             "All" -> {
@@ -141,7 +141,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                         binding.homeRecyclerView.visibility = View.VISIBLE
                         binding.noDataLottie.visibility = View.GONE
                         binding.progressIndicator.visibility = View.GONE
-                        adapter?.setData(ArrayList<SchoolData>().apply { addAll(it.data.sortedByDescending { it.updatedAt }) })
+                        adapter?.setData(ArrayList<SchoolData>().apply { addAll(it.data.filter { it.status != "MOA Pending" }.sortedByDescending { it.updatedAt }) })
                         binding.progressBar.visibility = View.GONE
                     }
                 }

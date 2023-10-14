@@ -30,6 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.cancel
 import timber.log.Timber
 import java.util.Calendar
+import java.util.Date
 
 @AndroidEntryPoint
 class CoordinatorDmMeetingFragment : Fragment() {
@@ -622,11 +623,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 day
             )
 
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().apply {
-                this.set(Calendar.DAY_OF_MONTH, day)
-                this.set(Calendar.MONTH, month)
-                this.set(Calendar.YEAR, year)
-            }.timeInMillis - 1000
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
             datePickerDialog.show()
         }
 
@@ -719,11 +716,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 day
             )
 
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().apply {
-                this.set(Calendar.DAY_OF_MONTH, day)
-                this.set(Calendar.MONTH, month)
-                this.set(Calendar.YEAR, year)
-            }.timeInMillis - 1000
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
             datePickerDialog.show()
         }
 
@@ -816,11 +809,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 day
             )
 
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().apply {
-                this.set(Calendar.DAY_OF_MONTH, day)
-                this.set(Calendar.MONTH, month)
-                this.set(Calendar.YEAR, year)
-            }.timeInMillis - 1000
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
             datePickerDialog.show()
         }
 
@@ -911,11 +900,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 day
             )
 
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().apply {
-                this.set(Calendar.DAY_OF_MONTH, day)
-                this.set(Calendar.MONTH, month)
-                this.set(Calendar.YEAR, year)
-            }.timeInMillis - 1000
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
             datePickerDialog.show()
         }
 
