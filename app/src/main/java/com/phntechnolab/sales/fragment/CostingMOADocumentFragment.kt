@@ -44,7 +44,7 @@ class CostingMOADocumentFragment : Fragment() {
 
     private val args: CostingMOADocumentFragmentArgs by navArgs()
 
-    private lateinit var image: Uri
+    private var image: Uri? = null
 
     private val backPressHandler = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {

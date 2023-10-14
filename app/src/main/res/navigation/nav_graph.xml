@@ -285,10 +285,10 @@
         android:label="Installment"
         tools:layout="@layout/fragment_instalment"
          >
-<!--         <argument-->
-<!--             android:name="moaSchoolData"-->
-<!--             app:argType="com.phntechnolab.sales.model.MOADocumentData"-->
-<!--             app:nullable="true" />-->
+         <argument
+             android:name="moaSchoolData"
+             app:argType="com.phntechnolab.sales.model.InstallmentData"
+             app:nullable="true" />
      </fragment>
     <fragment
         android:id="@+id/coordinatorDmMeeting"

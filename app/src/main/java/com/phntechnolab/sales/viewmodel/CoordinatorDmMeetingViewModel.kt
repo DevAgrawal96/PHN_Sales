@@ -1,9 +1,9 @@
 package com.phntechnolab.sales.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.DMData
@@ -14,7 +14,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.cancelFutureOnCompletion
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -46,10 +45,10 @@ class CoordinatorDmMeetingViewModel @Inject constructor(private val repositories
         }
     }
 
-    fun updatedMDetails(){
+    fun updatedMDetails(context: Context){
 
         defaultScope.launch {
-            repositories.updateDMData(_dmMeetData.value?: DMData())
+            repositories.updateDMData(_dmMeetData.value?: DMData(), context)
         }
     }
 

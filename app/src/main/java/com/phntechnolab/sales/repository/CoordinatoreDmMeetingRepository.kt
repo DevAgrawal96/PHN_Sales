@@ -1,6 +1,7 @@
 package com.phntechnolab.sales.repository
 
 import android.app.Application
+import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -72,7 +73,7 @@ class CoordinatoreDmMeetingRepository  @Inject constructor(
         }
     }
 
-    suspend fun updateDMData(dmData: DMData){
+    suspend fun updateDMData(dmData: DMData, context: Context){
         if (NetworkUtils.isInternetAvailable(application)) {
             try{
                 val result = retrofitApi.updateDMMeet(dmData)
@@ -88,7 +89,7 @@ class CoordinatoreDmMeetingRepository  @Inject constructor(
                         )
                     )
                 } else {
-                    Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                     _updateDMLevelMeetDetails.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -103,14 +104,14 @@ class CoordinatoreDmMeetingRepository  @Inject constructor(
                     null
                 )
                 Toast.makeText(
-                    application,
+                    context,
                     application.resources.getString(R.string.something_went_wrong),
                     Toast.LENGTH_SHORT
                 ).show()
             }
         } else {
             Toast.makeText(
-                application,
+                context,
                 application.resources.getString(R.string.please_connection_message),
                 Toast.LENGTH_SHORT
             ).show()

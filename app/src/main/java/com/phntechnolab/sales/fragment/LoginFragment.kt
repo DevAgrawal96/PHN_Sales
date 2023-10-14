@@ -24,6 +24,7 @@ import com.phntechnolab.sales.util.DataStoreManager.setUser
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.NetworkUtils
 import com.phntechnolab.sales.util.TextValidator
+import com.phntechnolab.sales.util.hideKeyboard
 import com.phntechnolab.sales.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -72,6 +73,7 @@ class LoginFragment : Fragment() {
 
 
         binding.login.setOnClickListener {
+            hideKeyboard()
             if (android.util.Patterns.EMAIL_ADDRESS.matcher(binding.edtEmailId.text.toString())
                     .matches()
             ) {

@@ -162,7 +162,7 @@
     <string name="meeting_has_been_rescheduled_with_coordinator">Meeting has been rescheduled with Coordinator.</string>
     <string name="meeting_has_been_moved_to_not_interested_section">Meeting has been moved to not interested section.</string>
     <string name="other">\Other</string>
-    <string name="_1st_installment_details">1st Installment Details</string>
+    <string name="_1st_installment_details">%sst Installment Details</string>
     <string name="date_and_time">Date and Time</string>
     <string name="_2nd_installment">2nd Installment</string>
     <string name="_3rd_installment">3rd Installment</string>
@@ -170,6 +170,7 @@
     <string name="_4th_installment">4th Installment</string>
     <string name="upload_receipt">Upload Receipt</string>
     <string name="number_of_installment">Number of Installment</string>
+    <string name="start_downloading">Downloading Start...</string>
 
     <string name="well_done">Well Done!</string>
 
@@ -185,12 +186,17 @@
     <string name="number_validation">1234567890</string>
     <string name="email_validation">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ @.1234567890_</string>
     <string name="date_time_validation">1234567890/ </string>
-    <string name="add_installment_details">Add Installment Details</string>
+    <string name="add_installment_details">Add installment</string>
     <string name="search">Search</string>
     <string name="location">Location</string>
     <string name="role">Role</string>
     <string name="no_internet_message">Make sure Wi-Fi or Mobile data is turned on, then try agian</string>
     <string name="retry">Retry</string>
+    <string name="_1nd_installment">1nd Installment</string>
+    <string name="nd_installment">%snd Installment</string>
+    <string name="file_size_and_today_date_">%s KB · %s</string>
+    <string name="_313_kb_31_june_2023">313 KB · 31 June, 2023</string>
+    <string name="receipt">Receipt</string>
 
 
     <string-array name="agreement_duration">

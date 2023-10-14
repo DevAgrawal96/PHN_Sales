@@ -152,7 +152,7 @@ class LoginRepository @Inject constructor(
                 ex.printStackTrace()
                 _refereshToken.postValue(
                     NetworkResult.Error(
-                        application.getString(R.string.something_went_wrong),
+                        application.resources.getString(R.string.please_connection_message),
                         null
                     )
                 )

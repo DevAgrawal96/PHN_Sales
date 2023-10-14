@@ -40,8 +40,8 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
         get() = repositories.moaDocumentDetails
 
     var imageData: MultipartBody.Part? = null
-    var _requestFile: RequestBody? = null
     var imageName: String? = null
+    var _requestFile: RequestBody? = null
 
     fun updateProposeCostingDetails(){
 
