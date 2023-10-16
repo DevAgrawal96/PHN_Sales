@@ -199,6 +199,7 @@
     <string name="_313_kb_31_june_2023">313 KB · 31 June, 2023</string>
     <string name="receipt">Receipt</string>
     <string name="moa_document">MOA Document</string>
+    <string name="do_you_want_to_reschedule_meeting_with_dm">Do you want to reschedule meeting with DM?</string>
 
 
     <string-array name="agreement_duration">

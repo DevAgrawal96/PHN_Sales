@@ -94,11 +94,18 @@ class ProfileFragment : Fragment(), MenuProvider {
 
                     1 -> {
                         Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
-//                        findNavController().navigate(R.id.action_profileFragment_to_activitiesFragment)
+                    }
+
+                    2 -> {
+                        Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
                     }
 
                     3 -> {
                         findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
+                    }
+
+                    4 -> {
+                        Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
                     }
 
                     5 -> {
@@ -163,11 +170,32 @@ class ProfileFragment : Fragment(), MenuProvider {
                 }
 
                 is NetworkResult.Error -> {
+                    when (it.message) {
+                        requireContext().resources.getString(R.string.no_internet_connection) -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getText(R.string.no_internet_connection),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        requireContext().resources.getString(R.string.something_went_wrong) -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getText(R.string.something_went_wrong),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
 
                 }
 
                 else -> {
-
+                    Toast.makeText(
+                        requireContext(),
+                        requireActivity().resources.getString(R.string.something_went_wrong_please),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -183,12 +211,29 @@ class ProfileFragment : Fragment(), MenuProvider {
                 }
 
                 is NetworkResult.Error -> {
+                    when (it.message) {
+                        getString(R.string.no_internet_connection) -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getText(R.string.no_internet_connection),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        getString(R.string.something_went_wrong) -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getText(R.string.something_went_wrong),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
 
                 else -> {
                     Toast.makeText(
                         requireContext(),
-                        requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
+                        requireActivity().resources.getString(R.string.something_went_wrong_please),
                         Toast.LENGTH_LONG
                     ).show()
                 }

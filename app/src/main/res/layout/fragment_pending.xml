@@ -49,7 +49,7 @@
                 android:id="@+id/no_data_lottie"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -118,22 +118,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/circle_shape"
-        android:indeterminate="false"
-        android:max="100"
-        android:minWidth="50dp"
-        android:minHeight="50dp"
-        android:progress="65"
-        android:progressDrawable="@drawable/progress_bar_background"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <ProgressBar-->
+<!--        android:id="@+id/progressBar"-->
+<!--        style="?android:attr/progressBarStyleHorizontal"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:background="@drawable/circle_shape"-->
+<!--        android:indeterminate="false"-->
+<!--        android:max="100"-->
+<!--        android:minWidth="50dp"-->
+<!--        android:minHeight="50dp"-->
+<!--        android:progress="65"-->
+<!--        android:progressDrawable="@drawable/progress_bar_background"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

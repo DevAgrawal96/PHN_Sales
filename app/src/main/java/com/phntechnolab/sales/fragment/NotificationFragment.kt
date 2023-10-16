@@ -61,15 +61,15 @@ class NotificationFragment : Fragment() {
     }
 
     private fun setDataToAdapter() {
-        adapter.setData(ArrayList<String>().apply {
-            add(getString(R.string.demo_text))
-            add(getString(R.string.demo_text))
-            add(getString(R.string.demo_text))
-            add(getString(R.string.demo_text))
-            add(getString(R.string.demo_text))
-            add(getString(R.string.demo_text))
-            add(getString(R.string.demo_text))
-        })
+//        adapter.setData(ArrayList<String>().apply {
+//            add(getString(R.string.demo_text))
+//            add(getString(R.string.demo_text))
+//            add(getString(R.string.demo_text))
+//            add(getString(R.string.demo_text))
+//            add(getString(R.string.demo_text))
+//            add(getString(R.string.demo_text))
+//            add(getString(R.string.demo_text))
+//        })
     }
 
     override fun onDestroyView() {

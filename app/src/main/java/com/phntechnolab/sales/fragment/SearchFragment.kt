@@ -131,6 +131,7 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
 
     private fun observers() {
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
+
             if (it.data?.isEmpty()!!) {
                 binding.noDataLottie.visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.GONE
