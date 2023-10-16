@@ -232,7 +232,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
                     ).show()
                 }
             } else {
-                if (viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrBlank()) {
+                if (viewModel._dmMeetData.value?.nextMeetDate.isNullOrBlank()) {
                     Toast.makeText(
                         requireContext(),
                         requireActivity().getString(R.string.please_next_rescheduled_date_for_proceed),
@@ -499,7 +499,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 is NetworkResult.Success -> {
                     binding.progressIndicator.visibility = View.GONE
                     if (viewModel._dmMeetData.value?.rescheduleWithDirector != "yes" && viewModel._dmMeetData.value?.interested == "yes") {
-                        printToast(getString(R.string.director_meeting_details_updated_successfully))
+//                        printToast(getString(R.string.director_meeting_details_updated_successfully))
                         showDialog()
                     } else if (viewModel._dmMeetData.value?.interested == "yes" && viewModel._dmMeetData.value?.rescheduleWithDirector == "yes") {
                         printToast(getString(R.string.director_meeting_details_updated_successfully))

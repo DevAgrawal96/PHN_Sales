@@ -180,7 +180,7 @@
     <string name="please_attend_the_meeting_with_coordinator">Please mark the meeting with Teacher/Principal yes for proceed.</string>
     <string name="please_attend_the_meeting_with_director">Please mark the meeting with Director yes for proceed.</string>
     <string name="please_fill_rescheduled_date_for_proceed">Please fill rescheduled meeting date for proceed.</string>
-    <string name="please_next_rescheduled_date_for_proceed">Please fill next rescheduled meeting date for proceed.</string>
+    <string name="please_next_rescheduled_date_for_proceed">Please fill next meeting date for proceed.</string>
     <string name="please_fill_all_the_mendate_details">Please fill all the mandate fields to proceed.</string>
     <string name="please_upload_moa_document">Please upload moa document.</string>
     <string name="school_name_validation"><![CDATA[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,.\'&]]></string>

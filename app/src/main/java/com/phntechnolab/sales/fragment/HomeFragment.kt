@@ -153,7 +153,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     private fun observers() {
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
-//            viewModel.refereshToken()
+            viewModel.refereshToken()
             when (it) {
                 is NetworkResult.Success -> {
                     Timber.e(it.message.toString())
