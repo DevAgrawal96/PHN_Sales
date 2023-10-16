@@ -100,33 +100,33 @@ class MeetingRepository @Inject constructor(
             if (!it.proposeCostingData?.nextMeet.isNullOrEmpty() && todayTomorrowUpcomingMeetingDateCheck(it.proposeCostingData?.nextMeet?:"") != "wrong" ) {
                 val date =
                     todayTomorrowUpcomingMeetingDateCheck(it.proposeCostingData.nextMeet?.replace("/", "-")?.split(" ")?.get(0) ?: "")
-                data.add(MeetingData("proposecosting", date, it, "MOA Document"))
+                data.add(MeetingData("proposecosting", date, it, "MOA Document", it.proposeCostingData.nextMeet))
 
             } else if ((!it.director?.nextMeetDateDm.isNullOrEmpty() && todayTomorrowUpcomingMeetingDateCheck(it.director?.nextMeetDateDm?:"") != "wrong") || !it.director?.nextMeetDate.isNullOrEmpty() && todayTomorrowUpcomingMeetingDateCheck(it.director?.nextMeetDate?:"") != "wrong") {
                 if(it.director?.nextMeetDate != null &&  todayTomorrowUpcomingMeetingDateCheck(it.director.nextMeetDate?.replace("/", "-")?.split(" ")?.get(0)?:"") != "wrong"){
                     val date =
                         todayTomorrowUpcomingMeetingDateCheck(it.director.nextMeetDate?.replace("/", "-")?.split(" ")?.get(0) ?: "")
-                    data.add(MeetingData("coordinator", date, it, "Propose Costing"))
+                    data.add(MeetingData("coordinator", date, it, "Propose Costing", it.director.nextMeetDate))
                 }else{
                     val date =
                         todayTomorrowUpcomingMeetingDateCheck(it.director.nextMeetDateDm?.replace("/", "-")?.split(" ")?.get(0) ?: "")
-                    data.add(MeetingData("coordinator", date, it, "Director"))
+                    data.add(MeetingData("coordinator", date, it, "Director", it.director.nextMeetDateDm))
                 }
             } else if ((!it.coordinator?.nextMeetDateDm.isNullOrEmpty() && todayTomorrowUpcomingMeetingDateCheck(it.coordinator?.nextMeetDateDm?:"") != "wrong") || (!it.coordinator?.meetDateCoordinator.isNullOrEmpty() && todayTomorrowUpcomingMeetingDateCheck(it.coordinator?.meetDateCoordinator?:"") != "wrong")) {
                 if(it.coordinator?.nextMeetDateDm != null && todayTomorrowUpcomingMeetingDateCheck(it.coordinator.nextMeetDateDm?.replace("/", "-")?.split(" ")?.get(0)?:"") != "wrong"){
                     val date =
                         todayTomorrowUpcomingMeetingDateCheck(it.coordinator.nextMeetDateDm?.replace("/", "-")?.split(" ")?.get(0) ?: "")
-                    data.add(MeetingData("coordinator", date, it, "Director"))
+                    data.add(MeetingData("coordinator", date, it, "Director", it.coordinator.nextMeetDateDm))
                 }else{
                     val date =
                         todayTomorrowUpcomingMeetingDateCheck(it.coordinator.meetDateCoordinator?.replace("/", "-")?.split(" ")?.get(0) ?: "")
-                    data.add(MeetingData("coordinator", date, it, "Coordinator"))
+                    data.add(MeetingData("coordinator", date, it, "Coordinator", it.coordinator.meetDateCoordinator))
                 }
             } else {
                 if(!it.nextFollowup.isNullOrEmpty() && todayTomorrowUpcomingMeetingDateCheck(it.nextFollowup ?:"") != "wrong"){
                     val date =
                         todayTomorrowUpcomingMeetingDateCheck(it.nextFollowup?.replace("/", "-")?.split(" ")?.get(0) ?: "")
-                    data.add(MeetingData("basicDetails", date, it, "Coordinator"))
+                    data.add(MeetingData("basicDetails", date, it, "Coordinator", it.nextFollowup))
                 }
             }
         }

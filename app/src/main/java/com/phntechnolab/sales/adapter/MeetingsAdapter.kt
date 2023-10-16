@@ -24,7 +24,16 @@ class MeetingsAdapter(var callback: CallBacks) : Adapter<ActivitiesViewHolder>()
     }
 
     override fun onBindViewHolder(holder: ActivitiesViewHolder, position: Int) {
-        holder.binding.activityName.text = "You have a follow up with ${data[position].data?.schoolName} on ${data[position].taskDateFilter}"
+        val meetingData = data[position]
+        if(meetingData.taskDateFilter != "upcoming")
+            if((meetingData.dateTime?.split(" ")?.size ?: 0) > 1)
+                holder.binding.activityName.text = "You have a follow up with ${meetingData.data?.schoolName} at ${meetingData.dateTime?.split(" ")?.get(1)} pm"
+        else
+                holder.binding.activityName.text = "You have a follow up with ${meetingData.data?.schoolName} "
+
+        else
+            holder.binding.activityName.text = "You have a follow up with ${meetingData.data?.schoolName} at ${meetingData.dateTime}"
+
         holder.binding.mainConstraint.setOnClickListener {
             callback.meetingData(data[position])
         }
