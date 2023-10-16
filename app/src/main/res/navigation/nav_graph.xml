@@ -327,8 +327,8 @@
         tools:layout="@layout/fragment_instalment"
          >
          <argument
-             android:name="moaSchoolData"
-             app:argType="com.phntechnolab.sales.model.InstallmentData"
+             android:name="schoolData"
+             app:argType="com.phntechnolab.sales.model.SchoolData"
              app:nullable="true" />
      </fragment>
     <fragment
