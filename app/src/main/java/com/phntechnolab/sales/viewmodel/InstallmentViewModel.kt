@@ -28,16 +28,19 @@ import javax.inject.Inject
 class InstallmentViewModel @Inject constructor(private var repository: InstallmentRepository) :
     ViewModel() {
     var _requestFile1: RequestBody? = null
+     var is_requestFile1  = false
     var imageData1: MultipartBody.Part? = null
     var imageName1: String? = null
     var imagesize1: Int? = null
 
     var _requestFile2: RequestBody? = null
+     var is_requestFile2  = false
     var imageData2: MultipartBody.Part? = null
     var imageName2: String? = null
     var imagesize2: Int? = null
 
     var _requestFile3: RequestBody? = null
+     var is_requestFile3  = false
     var imageData3: MultipartBody.Part? = null
     var imageName3: String? = null
     var imagesize3: Int? = null
@@ -84,7 +87,7 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
                     )
                 }
                 _requestFile1 = requestFile
-
+                is_requestFile1 = true
                 val part = MultipartBody.Part.createFormData("moa_document", file.name, requestFile)
                 imagesize1 = Integer.parseInt((file.length() / 1024).toString())
                 imageData1 = part
@@ -112,7 +115,7 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
                     )
                 }
                 _requestFile2 = requestFile
-
+                is_requestFile2 = true
                 val part = MultipartBody.Part.createFormData("moa_document", file.name, requestFile)
                 imagesize2 = Integer.parseInt((file.length() / 1024).toString())
                 imageData2 = part
@@ -142,7 +145,7 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
                 }
 
                 _requestFile3 = requestFile
-
+                is_requestFile3 = true
                 val part = MultipartBody.Part.createFormData("moa_document", file.name, requestFile)
                 imagesize3 = Integer.parseInt((file.length() / 1024).toString())
                 imageData3 = part
@@ -173,26 +176,34 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
     }
 
     private fun returnJsonData(data: Any): MultipartBody {
-
         val multipartBody = MultipartBody.Builder().setType(MultipartBody.FORM)
-        _requestFile1?.let {
-            multipartBody.addFormDataPart(
-                "first_installment_reciept", imageName1,
-                it
-            )
-        }
-        _requestFile2?.let {
-            multipartBody.addFormDataPart(
-                "second_installment_reciept", imageName2,
-                it
-            )
-        }
-        _requestFile3?.let {
-            multipartBody.addFormDataPart(
-                "third_installment_reciept", imageName3,
-                it
-            )
-        }
+//        if (is_requestFile1) {
+            Timber.e("is_requestFile1")
+            _requestFile1?.let {
+                multipartBody.addFormDataPart(
+                    "first_installment_reciept", imageName1,
+                    it
+                )
+            }
+//        }
+//        if (is_requestFile2) {
+            Timber.e("is_requestFile2")
+            _requestFile2?.let {
+                multipartBody.addFormDataPart(
+                    "second_installment_reciept", imageName2,
+                    it
+                )
+            }
+//        }
+//        if (is_requestFile3) {
+            Timber.e("is_requestFile3")
+            _requestFile3?.let {
+                multipartBody.addFormDataPart(
+                    "third_installment_reciept", imageName3,
+                    it
+                )
+            }
+//        }
         return multipartBody.build()
     }
 

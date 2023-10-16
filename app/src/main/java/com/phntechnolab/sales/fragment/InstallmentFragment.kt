@@ -200,34 +200,34 @@ class InstallmentFragment : Fragment() {
     private fun initializeAddInstallmentCard() {
 
         binding.addInstallment1.uploadReceipt.setOnClickListener {
-            Toast.makeText(requireContext(), "Coming soon!", Toast.LENGTH_SHORT).show()
-//            receiptPdf.launch(
-//                arrayOf(
-//                    "image/*",
-//                    "application/pdf"
-//                )
-//            )
-//            position = 0
+//            Toast.makeText(requireContext(), "Coming soon!", Toast.LENGTH_SHORT).show()
+            receiptPdf.launch(
+                arrayOf(
+                    "image/*",
+                    "application/pdf"
+                )
+            )
+            position = 0
         }
         binding.addInstallment2.uploadReceipt.setOnClickListener {
-            Toast.makeText(requireContext(), "Coming soon!", Toast.LENGTH_SHORT).show()
-//            receiptPdf.launch(
-//                arrayOf(
-//                    "image/*",
-//                    "application/pdf"
-//                )
-//            )
-//            position = 1
+//            Toast.makeText(requireContext(), "Coming soon!", Toast.LENGTH_SHORT).show()
+            receiptPdf.launch(
+                arrayOf(
+                    "image/*",
+                    "application/pdf"
+                )
+            )
+            position = 1
         }
         binding.addInstallment3.uploadReceipt.setOnClickListener {
-            Toast.makeText(requireContext(), "Coming soon!", Toast.LENGTH_SHORT).show()
-//            receiptPdf.launch(
-//                arrayOf(
-//                    "image/*",
-//                    "application/pdf"
-//                )
-//            )
-//            position = 2
+//            Toast.makeText(requireContext(), "Coming soon!", Toast.LENGTH_SHORT).show()
+            receiptPdf.launch(
+                arrayOf(
+                    "image/*",
+                    "application/pdf"
+                )
+            )
+            position = 2
         }
 
         binding.addInstallment1.edtInstallmentTime.setOnClickListener {
@@ -356,12 +356,6 @@ class InstallmentFragment : Fragment() {
                                 viewModel.uploadInstallmentImages()
                             else
                                 Timber.e("_requestFile1 null")
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "please upload reciept",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                            findNavController().popBackStack()
                         }
 
                         1 -> {
@@ -369,12 +363,6 @@ class InstallmentFragment : Fragment() {
                                 viewModel.uploadInstallmentImages()
                             else
                                 Timber.e("_requestFile1 _requestFile2 null")
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "please upload reciept",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                            findNavController().popBackStack()
                         }
 
                         2 -> {
@@ -382,12 +370,6 @@ class InstallmentFragment : Fragment() {
                                 viewModel.uploadInstallmentImages()
                             else
                                 Timber.e("_requestFile1 _requestFile2 _requestFile3 null")
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "please upload reciept",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                            findNavController().popBackStack()
                         }
                     }
 
@@ -430,9 +412,20 @@ class InstallmentFragment : Fragment() {
                 binding.installment1.installmentDetailsTxt.text =
                     getString(R.string._1st_installment_details, "1st")
                 binding.installment1.amount.text = it?.firstInstallmentAmount
+                binding.addInstallment1.edtInstallmentAmount.setText(it?.firstInstallmentAmount)
+                try {
+                    val date: String = it?.firstInstallmentDateTime?.split(",")?.get(0) ?: ""
+                    val time: String = it?.firstInstallmentDateTime?.split(",")?.get(1) ?: ""
+                    Timber.e(date + "," + time)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+//                binding.addInstallment1.edtInstallmentDate.setText(date)
+//                binding.addInstallment1.edtInstallmentTime.setText(time)
+                binding.addInstallment1.root.visibility = View.GONE
                 binding.installment1.dateAndTime.text = it?.firstInstallmentDateTime
                 binding.installment1.root.visibility = View.VISIBLE
-                binding.addInstallment1.root.visibility = View.GONE
                 count = 0
                 if (!it?.firstInstallmentReciept.isNullOrEmpty()) {
                     val fileName = it?.firstInstallmentReciept!!.substring(
@@ -463,11 +456,21 @@ class InstallmentFragment : Fragment() {
 
             }
             if (!it?.secondInstallmentAmount.isNullOrEmpty()) {
+                binding.addInstallment2.edtInstallmentAmount.setText(it?.secondInstallmentAmount)
+                try {
+                    val date: String = it?.secondInstallmentDateTime?.split(",")?.get(0) ?: ""
+                    val time: String = it?.secondInstallmentDateTime?.split(",")?.get(1) ?: ""
+                    Timber.e(date + "," + time)
+                    binding.addInstallment2.edtInstallmentDate.setText(date)
+                    binding.addInstallment2.edtInstallmentTime.setText(time)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
 
                 binding.installment2.installmentDetailsTxt.text =
                     getString(R.string._1st_installment_details, "2nd")
                 binding.installment2.amount.text = it?.secondInstallmentAmount
-                binding.installment2.dateAndTime.text = it?.firstInstallmentDateTime
+                binding.installment2.dateAndTime.text = it?.secondInstallmentDateTime
                 binding.addInstallment1.root.visibility = View.GONE
                 binding.addInstallment2.root.visibility = View.GONE
                 binding.installment2.root.visibility = View.VISIBLE
@@ -500,6 +503,16 @@ class InstallmentFragment : Fragment() {
                 binding.installment2.root.visibility = View.GONE
             }
             if (!it?.thirdInstallmentAmount.isNullOrEmpty()) {
+                binding.addInstallment3.edtInstallmentAmount.setText(it?.thirdInstallmentAmount)
+                try {
+                    val date: String = it?.thirdInstallmentDateTime?.split(",")?.get(0) ?: ""
+                    val time: String = it?.thirdInstallmentDateTime?.split(",")?.get(1) ?: ""
+                    Timber.e(date + "," + time)
+                    binding.addInstallment3.edtInstallmentDate.setText(date)
+                    binding.addInstallment3.edtInstallmentTime.setText(time)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
 
                 binding.installment3.installmentDetailsTxt.text =
                     getString(R.string._1st_installment_details, "3rd")
@@ -542,22 +555,22 @@ class InstallmentFragment : Fragment() {
 
     private fun initializeListener() {
         binding.updateBtn.setOnClickListener {
-            Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
-//            val data = InstallmentData(
-//                schoolId = args.moaSchoolData?.schoolId,
-//                totalInstallment = count.toString(),
-//                firstInstallment = binding.addInstallment1.installmentTxt.text.toString(),
-//                firstInstallmentAmount = binding.addInstallment1.edtInstallmentAmount.text.toString(),
-//                firstInstallmentDateTime = binding.addInstallment1.edtInstallmentDate.text.toString(),
-//                secondInstallment = binding.addInstallment2.installmentTxt.text.toString(),
-//                secondInstallmentAmount = binding.addInstallment2.edtInstallmentAmount.text.toString(),
-//                secondInstallmentDateTime = binding.addInstallment2.edtInstallmentDate.text.toString(),
-//                thirdInstallment = binding.addInstallment3.installmentTxt.text.toString(),
-//                thirdInstallmentAmount = binding.addInstallment3.edtInstallmentAmount.text.toString(),
-//                thirdInstallmentDateTime = binding.addInstallment3.edtInstallmentDate.text.toString()
-//            )
-//            viewModel.setInstallmentData(data)
-//            viewModel.addNewInstallment(data)
+//            Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
+            val data = InstallmentData(
+                schoolId = args.moaSchoolData?.schoolId,
+                totalInstallment = count.toString(),
+                firstInstallment = binding.addInstallment1.installmentTxt.text.toString(),
+                firstInstallmentAmount = binding.addInstallment1.edtInstallmentAmount.text.toString(),
+                firstInstallmentDateTime = binding.addInstallment1.edtInstallmentDate.text.toString() + ", " + binding.addInstallment1.edtInstallmentTime.text.toString(),
+                secondInstallment = binding.addInstallment2.installmentTxt.text.toString(),
+                secondInstallmentAmount = binding.addInstallment2.edtInstallmentAmount.text.toString(),
+                secondInstallmentDateTime = binding.addInstallment2.edtInstallmentDate.text.toString() + ", " + binding.addInstallment2.edtInstallmentTime.text.toString(),
+                thirdInstallment = binding.addInstallment3.installmentTxt.text.toString(),
+                thirdInstallmentAmount = binding.addInstallment3.edtInstallmentAmount.text.toString(),
+                thirdInstallmentDateTime = binding.addInstallment3.edtInstallmentDate.text.toString() + ", " + binding.addInstallment3.edtInstallmentTime.text.toString()
+            )
+            viewModel.setInstallmentData(data)
+            viewModel.addNewInstallment(data)
         }
 
         val fileDownloader = FileDownloader(requireContext())
