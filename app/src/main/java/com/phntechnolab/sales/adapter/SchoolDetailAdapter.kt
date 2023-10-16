@@ -48,6 +48,21 @@ class SchoolDetailAdapter(private var callBacks: CallBacks) :
         holder.binding.txtMono.text = schoolDetail.coMobileNo
         holder.binding.chipStatus.text = schoolDetail.status
         Log.e("Image url", schoolDetail.schoolImage ?: "")
+        if (schoolDetail.email.isNullOrEmpty()) {
+            holder.binding.txtEmail.visibility = View.GONE
+            holder.binding.emailIcon.visibility = View.GONE
+        } else {
+            holder.binding.txtEmail.visibility = View.VISIBLE
+            holder.binding.emailIcon.visibility = View.VISIBLE
+        }
+        if (schoolDetail.coMobileNo.isNullOrEmpty()) {
+            holder.binding.txtMono.visibility = View.GONE
+            holder.binding.callIcon.visibility = View.GONE
+
+        } else {
+            holder.binding.txtMono.visibility = View.VISIBLE
+            holder.binding.callIcon.visibility = View.VISIBLE
+        }
         if (schoolDetail.schoolImage?.isNotEmpty() == true && schoolDetail.schoolImage?.isNotEmpty() == true) {
             val image = GlideUrl(
                 schoolDetail.schoolImage, LazyHeaders.Builder()
@@ -68,9 +83,9 @@ class SchoolDetailAdapter(private var callBacks: CallBacks) :
             callBacks.meetingNavigation(schoolDetail)
         }
 
-        if(schoolDetail.status == "MOASigned"){
+        if (schoolDetail.status == "MOASigned") {
             holder.binding.editIcon.visibility = View.GONE
-        }else{
+        } else {
             holder.binding.editIcon.visibility = View.VISIBLE
         }
         holder.binding.editIcon.setOnClickListener {

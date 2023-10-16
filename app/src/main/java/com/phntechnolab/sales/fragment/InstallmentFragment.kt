@@ -86,7 +86,7 @@ class InstallmentFragment : Fragment() {
     }
 
     private fun initializeSchoolDetails(data: SchoolData) {
-        val imageUrl = if(!data.schoolImage.isNullOrEmpty()) data.schoolImage else "sjfdsdfjhudsf"
+        val imageUrl = if (!data.schoolImage.isNullOrEmpty()) data.schoolImage else "sjfdsdfjhudsf"
         val image = GlideUrl(
             imageUrl, LazyHeaders.Builder()
                 .addHeader("User-Agent", "5")
@@ -106,7 +106,7 @@ class InstallmentFragment : Fragment() {
             binding.fileName.text = fileName
             val fileDownloader = FileDownloader(requireContext())
             binding.download.setOnClickListener {
-                fileDownloader.downloadFile(data.moaDocumentData.moaFile!!,fileName)
+                fileDownloader.downloadFile(data.moaDocumentData.moaFile!!, fileName)
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.start_downloading),
@@ -431,6 +431,7 @@ class InstallmentFragment : Fragment() {
         viewModel.addInstallmentImageResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
+                    findNavController().popBackStack()
                     Toast.makeText(requireContext(), "Added successfully!!", Toast.LENGTH_SHORT)
                         .show()
                 }

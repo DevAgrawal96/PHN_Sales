@@ -101,12 +101,19 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                                     true
                                 }
 
+                                "Visited" -> {
+                                    it.status == "Visited"
+                                }
+                                "Assigned" -> {
+                                    it.status == "Assigned"
+                                }
+
                                 "Propose Costing" -> {
                                     it.status == "Propose Costing"
                                 }
 
                                 "MOA Signed" -> {
-                                    it.status == "MOASigned"
+                                    it.status == "MOASigned" || it.status == "Installment"
                                 }
 
                                 "Not Interested" -> {
