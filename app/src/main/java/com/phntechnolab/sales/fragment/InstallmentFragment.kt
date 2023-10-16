@@ -359,14 +359,14 @@ class InstallmentFragment : Fragment() {
                         }
 
                         1 -> {
-                            if (viewModel._requestFile1 != null && viewModel._requestFile2 != null)
+                            if (viewModel._requestFile2 != null)
                                 viewModel.uploadInstallmentImages()
                             else
                                 Timber.e("_requestFile1 _requestFile2 null")
                         }
 
                         2 -> {
-                            if (viewModel._requestFile1 != null && viewModel._requestFile2 != null && viewModel._requestFile3 != null)
+                            if (viewModel._requestFile3 != null)
                                 viewModel.uploadInstallmentImages()
                             else
                                 Timber.e("_requestFile1 _requestFile2 _requestFile3 null")
@@ -557,6 +557,9 @@ class InstallmentFragment : Fragment() {
         binding.updateBtn.setOnClickListener {
 //            Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
             val data = InstallmentData(
+                firstInstallmentReciept = args.moaSchoolData?.firstInstallmentReciept,
+                secondInstallmentReciept = args.moaSchoolData?.secondInstallmentReciept,
+                thirdInstallmentReciept = args.moaSchoolData?.thirdInstallmentReciept,
                 schoolId = args.moaSchoolData?.schoolId,
                 totalInstallment = count.toString(),
                 firstInstallment = binding.addInstallment1.installmentTxt.text.toString(),

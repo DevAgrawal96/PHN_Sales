@@ -237,7 +237,6 @@ data class InstallmentData(
     @SerializedName("third_installment_reciept") var thirdInstallmentReciept : String? = "",
     @SerializedName("created_at") var createdAt : String? = "",
     @SerializedName("updated_at") var updatedAt : String? = "",
-
 ): Parcelable
 
 //data class SchoolData (

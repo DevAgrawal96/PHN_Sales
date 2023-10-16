@@ -93,7 +93,8 @@ class ProfileFragment : Fragment(), MenuProvider {
                     }
 
                     1 -> {
-                        findNavController().navigate(R.id.action_profileFragment_to_activitiesFragment)
+                        Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
+//                        findNavController().navigate(R.id.action_profileFragment_to_activitiesFragment)
                     }
 
                     3 -> {
@@ -164,6 +165,7 @@ class ProfileFragment : Fragment(), MenuProvider {
                 is NetworkResult.Error -> {
 
                 }
+
                 else -> {
 
                 }
