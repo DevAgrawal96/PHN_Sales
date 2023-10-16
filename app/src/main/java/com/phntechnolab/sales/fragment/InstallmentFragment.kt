@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentInstalmentBinding
@@ -82,18 +86,44 @@ class InstallmentFragment : Fragment() {
     }
 
     private fun initializeSchoolDetails(data: SchoolData) {
+        val imageUrl = if(!data.schoolImage.isNullOrEmpty()) data.schoolImage else "sjfdsdfjhudsf"
+        val image = GlideUrl(
+            imageUrl, LazyHeaders.Builder()
+                .addHeader("User-Agent", "5")
+                .build()
+        )
+        Glide.with(requireContext()).load(image).override(300, 200)
+            .error(R.drawable.demo_img).into(binding.schoolDetails.schoolImg)
         binding.schoolDetails.editIcon.visibility = View.GONE
         binding.schoolDetails.schoolName.text = data.schoolName
         binding.schoolDetails.txtEmail.text = data.email
         binding.schoolDetails.txtMono.text = data.coMobileNo
         binding.schoolDetails.locationTxt.text = data.schoolAddress
+        try {
+            val fileName = data.moaDocumentData.moaFile!!.substring(
+                data.moaDocumentData.moaFile!!.lastIndexOf('/') + 1
+            )
+            binding.fileName.text = fileName
+            val fileDownloader = FileDownloader(requireContext())
+            binding.download.setOnClickListener {
+                fileDownloader.downloadFile(data.moaDocumentData.moaFile!!,fileName)
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.start_downloading),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
     }
 
     private var receiptPdf = registerForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
         Timber.e("BACK")
-        if(uri != null){
+        if (uri != null) {
             pdfOrImg = uri
             val sdf = SimpleDateFormat("dd/M/yyyy")
             when (position) {
@@ -416,7 +446,7 @@ class InstallmentFragment : Fragment() {
         }
 
         viewModel.installmentData.observe(viewLifecycleOwner) {
-            initializeSchoolDetails(it?: SchoolData())
+            initializeSchoolDetails(it ?: SchoolData())
             id = it?.installmentData?.id ?: ""
             schoolId = it?.schoolId
             if (!it?.installmentData?.firstInstallmentAmount.isNullOrEmpty()) {
@@ -425,8 +455,10 @@ class InstallmentFragment : Fragment() {
                 binding.installment1.amount.text = it?.installmentData?.firstInstallmentAmount
                 binding.addInstallment1.edtInstallmentAmount.setText(it?.installmentData?.firstInstallmentAmount)
                 try {
-                    val date: String = it?.installmentData?.firstInstallmentDateTime?.split(",")?.get(0) ?: ""
-                    val time: String = it?.installmentData?.firstInstallmentDateTime?.split(",")?.get(1) ?: ""
+                    val date: String =
+                        it?.installmentData?.firstInstallmentDateTime?.split(",")?.get(0) ?: ""
+                    val time: String =
+                        it?.installmentData?.firstInstallmentDateTime?.split(",")?.get(1) ?: ""
                     Timber.e(date + "," + time)
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -435,7 +467,8 @@ class InstallmentFragment : Fragment() {
 //                binding.addInstallment1.edtInstallmentDate.setText(date)
 //                binding.addInstallment1.edtInstallmentTime.setText(time)
                 binding.addInstallment1.root.visibility = View.GONE
-                binding.installment1.dateAndTime.text = it?.installmentData?.firstInstallmentDateTime
+                binding.installment1.dateAndTime.text =
+                    it?.installmentData?.firstInstallmentDateTime
                 binding.installment1.root.visibility = View.VISIBLE
                 count = 0
                 if (!it?.installmentData?.firstInstallmentReciept.isNullOrEmpty()) {
@@ -469,8 +502,10 @@ class InstallmentFragment : Fragment() {
             if (!it?.installmentData?.secondInstallmentAmount.isNullOrEmpty()) {
                 binding.addInstallment2.edtInstallmentAmount.setText(it?.installmentData?.secondInstallmentAmount)
                 try {
-                    val date: String = it?.installmentData?.secondInstallmentDateTime?.split(",")?.get(0) ?: ""
-                    val time: String = it?.installmentData?.secondInstallmentDateTime?.split(",")?.get(1) ?: ""
+                    val date: String =
+                        it?.installmentData?.secondInstallmentDateTime?.split(",")?.get(0) ?: ""
+                    val time: String =
+                        it?.installmentData?.secondInstallmentDateTime?.split(",")?.get(1) ?: ""
                     Timber.e(date + "," + time)
                     binding.addInstallment2.edtInstallmentDate.setText(date)
                     binding.addInstallment2.edtInstallmentTime.setText(time)
@@ -481,7 +516,8 @@ class InstallmentFragment : Fragment() {
                 binding.installment2.installmentDetailsTxt.text =
                     getString(R.string._1st_installment_details, "2nd")
                 binding.installment2.amount.text = it?.installmentData?.secondInstallmentAmount
-                binding.installment2.dateAndTime.text = it?.installmentData?.secondInstallmentDateTime
+                binding.installment2.dateAndTime.text =
+                    it?.installmentData?.secondInstallmentDateTime
                 binding.addInstallment1.root.visibility = View.GONE
                 binding.addInstallment2.root.visibility = View.GONE
                 binding.installment2.root.visibility = View.VISIBLE
@@ -516,8 +552,10 @@ class InstallmentFragment : Fragment() {
             if (!it?.installmentData?.thirdInstallmentAmount.isNullOrEmpty()) {
                 binding.addInstallment3.edtInstallmentAmount.setText(it?.installmentData?.thirdInstallmentAmount)
                 try {
-                    val date: String = it?.installmentData?.thirdInstallmentDateTime?.split(",")?.get(0) ?: ""
-                    val time: String = it?.installmentData?.thirdInstallmentDateTime?.split(",")?.get(1) ?: ""
+                    val date: String =
+                        it?.installmentData?.thirdInstallmentDateTime?.split(",")?.get(0) ?: ""
+                    val time: String =
+                        it?.installmentData?.thirdInstallmentDateTime?.split(",")?.get(1) ?: ""
                     Timber.e(date + "," + time)
                     binding.addInstallment3.edtInstallmentDate.setText(date)
                     binding.addInstallment3.edtInstallmentTime.setText(time)
@@ -528,7 +566,8 @@ class InstallmentFragment : Fragment() {
                 binding.installment3.installmentDetailsTxt.text =
                     getString(R.string._1st_installment_details, "3rd")
                 binding.installment3.amount.text = it?.installmentData?.secondInstallmentAmount
-                binding.installment3.dateAndTime.text = it?.installmentData?.secondInstallmentDateTime
+                binding.installment3.dateAndTime.text =
+                    it?.installmentData?.secondInstallmentDateTime
                 binding.installment3.root.visibility = View.VISIBLE
                 binding.addInstallment1.root.visibility = View.GONE
                 binding.addInstallment2.root.visibility = View.GONE
@@ -636,6 +675,7 @@ class InstallmentFragment : Fragment() {
                 Timber.e("receipt3 null or blank")
             }
         }
+
 
 
 

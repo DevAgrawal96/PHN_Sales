@@ -902,7 +902,7 @@ class AddSchoolFragment : Fragment() {
             binding.basicDetails.edtTotalNoOfClassroom.text.toString().isNullOrEmpty()
         if (isNumberOfClassroomsEmpty)
             binding.basicDetails.tilSchoolTotalNoOfClassroom.error =
-                resources.getString(R.string.please_enter_total_school_intake)
+                resources.getString(R.string.total_no_of_classrooms_less_than)
         else if (binding.basicDetails.edtTotalNoOfClassroom.text.toString().trim().toInt() >= 100)
 //            binding.basicDetails.tilSchoolTotalNoOfClassroom.error =
 //                resources.getString(R.string.total_no_of_classrooms_less_than)
