@@ -84,117 +84,120 @@ class InstallmentFragment : Fragment() {
         ActivityResultContracts.OpenDocument()
     ) { uri ->
         Timber.e("BACK")
-        pdfOrImg = uri!!
-        val sdf = SimpleDateFormat("dd/M/yyyy")
-        when (position) {
-            0 -> {
-                viewModel.uploadInstallmentDocument(
-                    pdfOrImg!!,
-                    requireContext(),
-                    pdfOrImg.toString().split(".").last(),
-                    position
-                )
-
-
-                binding.addInstallment1.fileInstallmentName.text =
-                    "${viewModel.imageName1}.${pdfOrImg.toString().split(".").last()}"
-
-                binding.addInstallment1.fileInstallmentInfo.text =
-                    getString(
-                        R.string.file_size_and_today_date_,
-                        viewModel.imagesize1.toString(),
-                        sdf.format(Date())
+        if(uri != null){
+            pdfOrImg = uri
+            val sdf = SimpleDateFormat("dd/M/yyyy")
+            when (position) {
+                0 -> {
+                    viewModel.uploadInstallmentDocument(
+                        pdfOrImg!!,
+                        requireContext(),
+                        pdfOrImg.toString().split(".").last(),
+                        position
                     )
 
 
-                if (pdfOrImg.toString().split(".").last() == "jpg") {
-                    binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
-                    )
-                } else if (pdfOrImg.toString().split(".").last() == "png") {
-                    binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
-                    )
-                } else if (pdfOrImg.toString().split(".").last() == "pdf") {
-                    binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
-                    )
+                    binding.addInstallment1.fileInstallmentName.text =
+                        "${viewModel.imageName1}.${pdfOrImg.toString().split(".").last()}"
+
+                    binding.addInstallment1.fileInstallmentInfo.text =
+                        getString(
+                            R.string.file_size_and_today_date_,
+                            viewModel.imagesize1.toString(),
+                            sdf.format(Date())
+                        )
+
+
+                    if (pdfOrImg.toString().split(".").last() == "jpg") {
+                        binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
+                        )
+                    } else if (pdfOrImg.toString().split(".").last() == "png") {
+                        binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
+                        )
+                    } else if (pdfOrImg.toString().split(".").last() == "pdf") {
+                        binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
+                        )
+                    }
+                    binding.addInstallment1.uploadReceiptContainer.visibility = View.VISIBLE
                 }
-                binding.addInstallment1.uploadReceiptContainer.visibility = View.VISIBLE
-            }
 
-            1 -> {
-                viewModel.uploadInstallmentDocument(
-                    pdfOrImg!!,
-                    requireContext(),
-                    pdfOrImg.toString().split(".").last(),
-                    position
-                )
-
-
-                binding.addInstallment2.fileInstallmentName.text =
-                    "${viewModel.imageName2}.${pdfOrImg.toString().split(".").last()}"
-                binding.addInstallment2.fileInstallmentInfo.text =
-                    getString(
-                        R.string.file_size_and_today_date_,
-                        viewModel.imagesize2.toString(),
-                        sdf.format(Date())
+                1 -> {
+                    viewModel.uploadInstallmentDocument(
+                        pdfOrImg!!,
+                        requireContext(),
+                        pdfOrImg.toString().split(".").last(),
+                        position
                     )
 
 
-                if (pdfOrImg.toString().split(".").last() == "jpg") {
-                    binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
-                    )
-                } else if (pdfOrImg.toString().split(".").last() == "png") {
-                    binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
-                    )
-                } else if (pdfOrImg.toString().split(".").last() == "pdf") {
-                    binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
-                    )
+                    binding.addInstallment2.fileInstallmentName.text =
+                        "${viewModel.imageName2}.${pdfOrImg.toString().split(".").last()}"
+                    binding.addInstallment2.fileInstallmentInfo.text =
+                        getString(
+                            R.string.file_size_and_today_date_,
+                            viewModel.imagesize2.toString(),
+                            sdf.format(Date())
+                        )
+
+
+                    if (pdfOrImg.toString().split(".").last() == "jpg") {
+                        binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
+                        )
+                    } else if (pdfOrImg.toString().split(".").last() == "png") {
+                        binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
+                        )
+                    } else if (pdfOrImg.toString().split(".").last() == "pdf") {
+                        binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
+                        )
+                    }
+                    binding.addInstallment2.uploadReceiptContainer.visibility = View.VISIBLE
                 }
-                binding.addInstallment2.uploadReceiptContainer.visibility = View.VISIBLE
-            }
 
-            2 -> {
-                viewModel.uploadInstallmentDocument(
-                    pdfOrImg!!,
-                    requireContext(),
-                    pdfOrImg.toString().split(".").last(),
-                    position
-                )
-
-
-                binding.addInstallment3.fileInstallmentName.text =
-                    "${viewModel.imageName3}.${pdfOrImg.toString().split(".").last()}"
-
-                binding.addInstallment3.fileInstallmentInfo.text =
-                    getString(
-                        R.string.file_size_and_today_date_,
-                        viewModel.imagesize3.toString(),
-                        sdf.format(Date())
+                2 -> {
+                    viewModel.uploadInstallmentDocument(
+                        pdfOrImg!!,
+                        requireContext(),
+                        pdfOrImg.toString().split(".").last(),
+                        position
                     )
 
 
-                if (pdfOrImg.toString().split(".").last() == "jpg") {
-                    binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
-                    )
-                } else if (pdfOrImg.toString().split(".").last() == "png") {
-                    binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
-                    )
-                } else if (pdfOrImg.toString().split(".").last() == "pdf") {
-                    binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
-                    )
+                    binding.addInstallment3.fileInstallmentName.text =
+                        "${viewModel.imageName3}.${pdfOrImg.toString().split(".").last()}"
+
+                    binding.addInstallment3.fileInstallmentInfo.text =
+                        getString(
+                            R.string.file_size_and_today_date_,
+                            viewModel.imagesize3.toString(),
+                            sdf.format(Date())
+                        )
+
+
+                    if (pdfOrImg.toString().split(".").last() == "jpg") {
+                        binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
+                        )
+                    } else if (pdfOrImg.toString().split(".").last() == "png") {
+                        binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
+                        )
+                    } else if (pdfOrImg.toString().split(".").last() == "pdf") {
+                        binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
+                        )
+                    }
+                    binding.addInstallment3.uploadReceiptContainer.visibility = View.VISIBLE
                 }
-                binding.addInstallment3.uploadReceiptContainer.visibility = View.VISIBLE
             }
+            Timber.e(pdfOrImg.toString())
         }
-        Timber.e(pdfOrImg.toString())
+
     }
 
     private fun initializeAddInstallmentCard() {
