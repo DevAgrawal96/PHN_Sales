@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
+import com.google.gson.Gson
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.adapter.SchoolDetailAdapter
@@ -29,6 +30,8 @@ import com.phntechnolab.sales.model.InstallmentData
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
+import com.phntechnolab.sales.util.DataStoreManager
+import com.phntechnolab.sales.util.DataStoreManager.setToken
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -125,8 +128,9 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                                     it.status == chip.text
                                 }
                             }
-                        } as ArrayList<SchoolData>) as ArrayList<SchoolData>)
-                adapter?.setData(schoolData)
+                        }))
+                if(!schoolData.isNullOrEmpty())
+                    adapter?.setData(schoolData as ArrayList<SchoolData>)
                 if (schoolData.isNullOrEmpty()) {
                     binding.noDataLottie.visibility = View.VISIBLE
                     binding.homeRecyclerView.visibility = View.GONE
@@ -149,6 +153,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     private fun observers() {
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
+//            viewModel.refereshToken()
             when (it) {
                 is NetworkResult.Success -> {
                     Timber.e(it.message.toString())
@@ -198,6 +203,30 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                 }
             }
 
+            viewModel.refereshToken.observe(viewLifecycleOwner) {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        Log.e("TOKEN REFERESH", Gson().toJson(it))
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            setToken(
+                                requireContext(),
+                                dataStoreProvider,
+                                "authToken",
+                                it.data?.access_token.toString()
+                            )
+                        }
+                    }
+
+                    is NetworkResult.Error -> {
+                        Timber.e(it.message.toString())
+                    }
+
+                    else -> {
+                        Timber.e(it.message.toString())
+                    }
+                }
+
+            }
         }
     }
 
