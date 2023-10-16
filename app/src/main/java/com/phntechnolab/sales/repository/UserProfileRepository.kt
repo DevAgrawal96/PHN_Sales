@@ -59,7 +59,7 @@ class UserProfileRepository @Inject constructor(
         } else {
 //            Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
             logoutMutableLiveData.postValue(
-                NetworkResult.Error(application.getString(R.string.something_went_wrong))
+                NetworkResult.Error(application.getString(R.string.no_internet_connection),null)
             )
         }
     }
@@ -124,7 +124,7 @@ class UserProfileRepository @Inject constructor(
 //                Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
                 userProfileMutableLiveData.postValue(
                     NetworkResult.Error(
-                        "",
+                        application.resources.getString(R.string.something_went_wrong),
                         null
                     )
                 )
@@ -133,7 +133,7 @@ class UserProfileRepository @Inject constructor(
 //            Toast.makeText(application, application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
             userProfileMutableLiveData.postValue(
                 NetworkResult.Error(
-                    "",
+                    application.resources.getString(R.string.no_internet_connection),
                     null
                 )
             )

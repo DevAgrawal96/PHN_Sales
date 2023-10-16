@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
@@ -70,23 +71,23 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
-                    Timber.e(it.message.toString())
+                    val filterData = ArrayList<SchoolData>().apply {
+                        addAll(it.data?.filter { it.status == "MOA Pending" }
+                            ?.sortedByDescending { it.updatedAt } ?: ArrayList<SchoolData>())
+                    }
                     binding.noInternetConnection.visibility = View.GONE
                     binding.noInternetMessage.visibility = View.GONE
-                    if (it.data?.isEmpty()!!) {
+                    if (filterData.isNullOrEmpty()) {
                         binding.noDataLottie.visibility = View.VISIBLE
                         binding.pendingApprovalRv.visibility = View.GONE
-                        binding.progressBar.visibility = View.GONE
+//                        binding.progressBar.visibility = View.GONE
                         binding.progressIndicator.visibility = View.GONE
                     } else {
                         binding.pendingApprovalRv.visibility = View.VISIBLE
                         binding.noDataLottie.visibility = View.GONE
                         binding.progressIndicator.visibility = View.GONE
-                        adapter?.setData(ArrayList<SchoolData>().apply {
-                            addAll(it.data.filter { it.status == "MOA Pending" }
-                                .sortedByDescending { it.updatedAt })
-                        })
-                        binding.progressBar.visibility = View.GONE
+                        adapter.setData(filterData)
+//                        binding.progressBar.visibility = View.GONE
                     }
                 }
 
@@ -97,6 +98,13 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
                             binding.noInternetConnection.visibility = View.VISIBLE
                             binding.noInternetMessage.visibility = View.VISIBLE
                             binding.progressIndicator.visibility = View.GONE
+                        }
+                        getString(R.string.something_went_wrong) -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getText(R.string.something_went_wrong),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
 
                         else -> {

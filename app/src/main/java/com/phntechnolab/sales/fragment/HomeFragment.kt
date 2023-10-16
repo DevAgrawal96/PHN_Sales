@@ -104,6 +104,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                                 "Visited" -> {
                                     it.status == "Visited"
                                 }
+
                                 "Assigned" -> {
                                     it.status == "Assigned"
                                 }
@@ -131,7 +132,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                     binding.homeRecyclerView.visibility = View.GONE
                     binding.progressBar.visibility = View.GONE
                     binding.progressIndicator.visibility = View.GONE
-                }else{
+                } else {
                     binding.homeRecyclerView.visibility = View.VISIBLE
                     binding.noDataLottie.visibility = View.GONE
                     binding.progressIndicator.visibility = View.GONE
@@ -153,7 +154,11 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                     Timber.e(it.message.toString())
                     binding.noInternetConnection.visibility = View.GONE
                     binding.noInternetMessage.visibility = View.GONE
-                    if (it.data?.isEmpty()!!) {
+                    val filterData = ArrayList<SchoolData>().apply {
+                        addAll(it.data?.filter { it.status != "MOA Pending" }
+                            ?.sortedByDescending { it.updatedAt } ?: ArrayList<SchoolData>())
+                    }
+                    if (filterData.isEmpty()) {
                         binding.noDataLottie.visibility = View.VISIBLE
                         binding.homeRecyclerView.visibility = View.GONE
                         binding.progressBar.visibility = View.GONE
@@ -163,20 +168,24 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                         binding.noDataLottie.visibility = View.GONE
                         binding.progressIndicator.visibility = View.GONE
                         binding.progressBar.visibility = View.GONE
-                        adapter?.setData(ArrayList<SchoolData>().apply {
-                            addAll(it.data.filter { it.status != "MOA Pending" }
-                                .sortedByDescending { it.updatedAt })
-                        })
+                        adapter?.setData(filterData)
                     }
                 }
 
                 is NetworkResult.Error -> {
                     Timber.e(it.message.toString())
                     when (it.message) {
-                        getString(R.string.please_connection_message) -> {
+                        requireContext().getString(R.string.please_connection_message) -> {
                             binding.noInternetConnection.visibility = View.VISIBLE
                             binding.noInternetMessage.visibility = View.VISIBLE
                             binding.progressIndicator.visibility = View.GONE
+                        }
+                        getString(R.string.something_went_wrong) -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getText(R.string.something_went_wrong),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
 
                         else -> {

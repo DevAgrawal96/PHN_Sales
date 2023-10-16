@@ -62,7 +62,7 @@
                 app:queryHint="@string/search"
                 app:searchHintIcon="@null"
                 android:background="@drawable/home_search_bg"
-                android:paddingStart="@dimen/dimen_28dp"
+                android:paddingStart="@dimen/dimen_32dp"
                 android:queryHint="@string/search"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
