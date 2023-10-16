@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -131,12 +132,17 @@ class AddSchoolFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initializeData()
+
         onCheckedChangedListener()
 
         oncClickListener()
 
         observers()
-        initEditText()
+    }
+
+    private fun initializeData() {
+        viewModel.newSchoolData
     }
 
     private fun onCheckedChangedListener() {
@@ -147,7 +153,7 @@ class AddSchoolFragment : Fragment() {
             viewModel._newSchoolData.value?.interested?.let { Log.e("CHecked box", it) }
         }
 
-        binding.basicDetails.edtSchoolTotalIntake.addTextChangedListener(object : TextWatcher{
+        binding.basicDetails.edtSchoolTotalIntake.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -157,13 +163,13 @@ class AddSchoolFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 try {
                     viewModel._newSchoolData.value?.intake = s.toString().toInt()
-                }catch (ex: Exception){
+                } catch (ex: Exception) {
                     ex.printStackTrace()
                 }
             }
         })
 
-        binding.basicDetails.edtTotalNoOfClassroom.addTextChangedListener(object : TextWatcher{
+        binding.basicDetails.edtTotalNoOfClassroom.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -173,24 +179,13 @@ class AddSchoolFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 try {
                     viewModel._newSchoolData.value?.totalClassRoom = s.toString().toInt()
-                }catch (ex: Exception){
+                } catch (ex: Exception) {
                     ex.printStackTrace()
                 }
             }
         })
     }
 
-    private fun initEditText() {
-//        Timber.e("change zero")
-//        Timber.e((binding.basicDetails.edtSchoolTotalIntake.getText()).toString())
-//        if ((binding.basicDetails.edtSchoolTotalIntake.text).toString() == "0" &&
-//            (binding.basicDetails.edtTotalNoOfClassroom.text).toString() == "0"
-//        ) {
-//            Timber.e("change zero")
-//            binding.basicDetails.edtSchoolTotalIntake.setText(getString(R.string.blank))
-//            binding.basicDetails.edtTotalNoOfClassroom.setText(R.string.blank)
-//        }
-    }
 
     private fun addValidationWatchers() {
 
@@ -484,7 +479,7 @@ class AddSchoolFragment : Fragment() {
             when (it) {
                 is NetworkResult.Success -> {
 
-                    if(viewModel.newSchoolData.value?.interested == "yes")
+                    if (viewModel.newSchoolData.value?.interested == "yes")
                         Toast.makeText(
                             requireContext(),
                             "School details updated successfully",
@@ -521,6 +516,17 @@ class AddSchoolFragment : Fragment() {
 
         viewModel.newSchoolData.observe(viewLifecycleOwner) { _schoolData ->
             setSchoolDetails()
+            if (!_schoolData?.schoolImage.isNullOrEmpty()) {
+                binding.schoolDetails.schoolImage.visibility = View.VISIBLE
+                binding.schoolDetails.imgIcon.visibility = View.GONE
+                binding.schoolDetails.imgName.visibility = View.GONE
+                Glide.with(requireContext()).load(_schoolData?.schoolImage).override(140, 140)
+                    .error(R.drawable.demo_img).into(binding.schoolDetails.schoolImage)
+            } else {
+                binding.schoolDetails.schoolImage.visibility = View.GONE
+                binding.schoolDetails.imgIcon.visibility = View.VISIBLE
+                binding.schoolDetails.imgName.visibility = View.VISIBLE
+            }
 
             setDropdowns(_schoolData)
 
@@ -532,7 +538,7 @@ class AddSchoolFragment : Fragment() {
             binding.progressBar.visibility = View.GONE
             when (it) {
                 is NetworkResult.Success -> {
-                    if(viewModel.newSchoolData.value?.interested == "yes")
+                    if (viewModel.newSchoolData.value?.interested == "yes")
                         showDialog()
                     else {
                         Toast.makeText(
@@ -573,7 +579,7 @@ class AddSchoolFragment : Fragment() {
                     if (viewModel._requestFile != null)
                         viewModel.uploadImage()
                     else {
-                        if(viewModel.newSchoolData.value?.interested != "yes")
+                        if (viewModel.newSchoolData.value?.interested != "yes")
                             Toast.makeText(
                                 requireContext(),
                                 getString(R.string.meeting_has_been_moved_to_not_interested_section),

@@ -47,14 +47,15 @@ class SchoolDetailAdapter(private var callBacks: CallBacks) :
         holder.binding.txtEmail.text = schoolDetail.email
         holder.binding.txtMono.text = schoolDetail.coMobileNo
         holder.binding.chipStatus.text = schoolDetail.status
-        Log.e("Image url", schoolDetail.schoolImage?: "")
+        Log.e("Image url", schoolDetail.schoolImage ?: "")
         if (schoolDetail.schoolImage?.isNotEmpty() == true && schoolDetail.schoolImage?.isNotEmpty() == true) {
             val image = GlideUrl(
                 schoolDetail.schoolImage, LazyHeaders.Builder()
                     .addHeader("User-Agent", "5")
                     .build()
             )
-            Glide.with(context!!).load(image).override(300,200).error(R.drawable.demo_img).into(holder.binding.schoolImg)
+            Glide.with(context!!).load(image).override(300, 200)
+                .error(R.drawable.demo_img).into(holder.binding.schoolImg)
         }
 
         if (schoolDetail.leadType?.isNotBlank() == true && schoolDetail.leadType?.isNotEmpty() == true) {
