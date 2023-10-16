@@ -19,6 +19,7 @@ import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentLoginBinding
 import com.phntechnolab.sales.model.LoginDetails
 import com.phntechnolab.sales.model.SchoolData
+import com.phntechnolab.sales.util.DataStoreManager.setIsUserLoggedIn
 import com.phntechnolab.sales.util.DataStoreManager.setToken
 import com.phntechnolab.sales.util.DataStoreManager.setUser
 import com.phntechnolab.sales.util.NetworkResult
@@ -146,6 +147,13 @@ class LoginFragment : Fragment() {
                                     dataStoreProvider,
                                     "authToken",
                                     it.data.access_token.toString()
+                                )
+
+                                setIsUserLoggedIn(
+                                    requireContext(),
+                                    dataStoreProvider,
+                                    "isLoggedIn",
+                                    "true"
                                 )
 
                                 setUser(

@@ -11,13 +11,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentSplashScreenBinding
+import com.phntechnolab.sales.util.DataStoreManager
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.viewmodel.HomeViewModel
 import com.phntechnolab.sales.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
+import javax.inject.Inject
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
@@ -26,6 +30,12 @@ class SplashScreenFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: LoginViewModel by viewModels()
+
+    @Inject
+    lateinit var dataStoreProvider: DataStoreProvider
+
+    var isLoggedIn = "false"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getToken()
@@ -41,6 +51,18 @@ class SplashScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        isLoggedIn = runBlocking {DataStoreManager.getIsUserLoggedIn(requireContext(), dataStoreProvider, "isLoggedIn").toString() }
+
+        if(isLoggedIn == "true"){
+            Handler(Looper.getMainLooper()).postDelayed({
+                findNavController().navigate(R.id.action_splashScreenFragment_to_homeFragment)
+            }, 3000)
+        }else{
+            Handler(Looper.getMainLooper()).postDelayed({
+                findNavController().navigate(R.id.action_splashScreenFragment_to_loginFragment)
+            }, 3000)
+        }
         navigateScreen()
         initializeListener()
     }
@@ -54,40 +76,40 @@ class SplashScreenFragment : Fragment() {
 
 
     private fun navigateScreen() {
-        viewModel.refereshToken.observe(viewLifecycleOwner) {
-            when (it) {
-                is NetworkResult.Success -> {
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        findNavController().navigate(R.id.action_splashScreenFragment_to_homeFragment)
-                    }, 3000)
-                }
-
-                is NetworkResult.Error -> {
-                    when (it.message) {
-                        getString(R.string.please_connection_message) -> {
-                            binding.retryBtn.visibility = View.VISIBLE
-                        }
-
-                        getString(R.string.something_went_wrong) -> {
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                findNavController().navigate(R.id.action_splashScreenFragment_to_loginFragment)
-                            }, 3000)
-                        }
-
-                        else -> {
-
-                        }
-                    }
-                    Timber.e("error")
-
-                }
-
-                else -> {
-                    Timber.e("error ")
-//                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
-                }
-            }
-        }
+//        viewModel.refereshToken.observe(viewLifecycleOwner) {
+//            when (it) {
+//                is NetworkResult.Success -> {
+//                    Handler(Looper.getMainLooper()).postDelayed({
+//                        findNavController().navigate(R.id.action_splashScreenFragment_to_homeFragment)
+//                    }, 3000)
+//                }
+//
+//                is NetworkResult.Error -> {
+//                    when (it.message) {
+//                        getString(R.string.please_connection_message) -> {
+//                            binding.retryBtn.visibility = View.VISIBLE
+//                        }
+//
+//                        getString(R.string.something_went_wrong) -> {
+//                            Handler(Looper.getMainLooper()).postDelayed({
+//                                findNavController().navigate(R.id.action_splashScreenFragment_to_loginFragment)
+//                            }, 3000)
+//                        }
+//
+//                        else -> {
+//
+//                        }
+//                    }
+//                    Timber.e("error")
+//
+//                }
+//
+//                else -> {
+//                    Timber.e("error ")
+////                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
+//                }
+//            }
+//        }
     }
 
     override fun onDestroyView() {

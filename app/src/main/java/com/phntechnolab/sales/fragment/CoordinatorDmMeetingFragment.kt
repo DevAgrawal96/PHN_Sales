@@ -166,31 +166,38 @@ class CoordinatorDmMeetingFragment : Fragment() {
             ).show()
         }
 
-
+        val isInterested = viewModel._coordinatorMeetData.value?.interested == "yes"
         val isRescheduledMeeting = viewModel._coordinatorMeetData.value?.rescheduleWithCoordinator
-        if (isRescheduledMeeting == "yes") {
-            if (viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrBlank()) {
-                Toast.makeText(
-                    requireContext(),
-                    requireActivity().getString(R.string.please_fill_rescheduled_date_for_proceed),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        } else {
-            if (viewModel._coordinatorMeetData.value?.nextMeetDateDm.isNullOrBlank()) {
-                Toast.makeText(
-                    requireContext(),
-                    requireActivity().getString(R.string.please_next_rescheduled_date_for_proceed),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
 
+        if(isInterested) {
+            if (isRescheduledMeeting == "yes") {
+                if (viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrBlank()) {
+                    Toast.makeText(
+                        requireContext(),
+                        requireActivity().getString(R.string.please_fill_rescheduled_date_for_proceed),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            } else {
+                if (viewModel._coordinatorMeetData.value?.nextMeetDateDm.isNullOrBlank()) {
+                    Toast.makeText(
+                        requireContext(),
+                        requireActivity().getString(R.string.please_next_rescheduled_date_for_proceed),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
+        }
         val isRescheduledMeetingDateAvailableWithDate =
             !viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrBlank() && isRescheduledMeeting == "yes"
         val isNextMeetingDateAvailableWithDate =
             !viewModel._coordinatorMeetData.value?.nextMeetDateDm.isNullOrBlank() && isRescheduledMeeting != "yes"
-        return (isCoordinatorAttendedMeet == "yes") && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate)
+        return if(!isInterested) {
+            (isCoordinatorAttendedMeet == "yes") && !isInterested
+        }else{
+            (isCoordinatorAttendedMeet == "yes") && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate)
+        }
     }
 
     private fun checkDmRequiredFieldsData(): Boolean {
@@ -212,21 +219,25 @@ class CoordinatorDmMeetingFragment : Fragment() {
         }
 
         val isRescheduledMeeting = viewModel._dmMeetData.value?.rescheduleWithDirector
-        if (isRescheduledMeeting == "yes") {
-            if (viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrBlank()) {
-                Toast.makeText(
-                    requireContext(),
-                    requireActivity().getString(R.string.please_fill_rescheduled_date_for_proceed),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        } else {
-            if (viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrBlank()) {
-                Toast.makeText(
-                    requireContext(),
-                    requireActivity().getString(R.string.please_next_rescheduled_date_for_proceed),
-                    Toast.LENGTH_LONG
-                ).show()
+        val isInterested = viewModel._dmMeetData.value?.interested == "yes"
+
+        if(isInterested) {
+            if (isRescheduledMeeting == "yes") {
+                if (viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrBlank()) {
+                    Toast.makeText(
+                        requireContext(),
+                        requireActivity().getString(R.string.please_fill_rescheduled_date_for_proceed),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            } else {
+                if (viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrBlank()) {
+                    Toast.makeText(
+                        requireContext(),
+                        requireActivity().getString(R.string.please_next_rescheduled_date_for_proceed),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         }
 
@@ -235,7 +246,11 @@ class CoordinatorDmMeetingFragment : Fragment() {
         val isNextMeetingDateAvailableWithDate =
             !viewModel._dmMeetData.value?.nextMeetDate.isNullOrBlank() && isRescheduledMeeting != "yes"
 
-        return (isDmAttendedMeet == "yes") && (!isMeetingAgenda.isNullOrBlank()) && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate)
+        return if(!isInterested){
+            return (isDmAttendedMeet == "yes") && !isInterested
+        }else {
+            return (isDmAttendedMeet == "yes") && (!isMeetingAgenda.isNullOrBlank()) && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate || isInterested)
+        }
     }
 
     private fun checkedChangeListener() {

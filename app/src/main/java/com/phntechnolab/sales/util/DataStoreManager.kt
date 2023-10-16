@@ -42,6 +42,30 @@ object DataStoreManager {
         return preferences?.get(dataStoreKey)
     }
 
+    suspend fun setIsUserLoggedIn(
+        context: Context,
+        dataStoreProvider: DataStoreProvider,
+        key: String,
+        value: String
+    ) {
+        val dataStore = dataStoreProvider.getDataStoreInstance(context)
+        val dataStoreKey = stringPreferencesKey(key)
+        dataStore.edit { role ->
+            role[dataStoreKey] = value
+        }
+    }
+
+    suspend fun getIsUserLoggedIn(
+        context: Context,
+        dataStoreProvider: DataStoreProvider,
+        key: String
+    ): String? {
+        val dataStore = dataStoreProvider.getDataStoreInstance(context)
+        val dataStoreKey = stringPreferencesKey(key)
+        val preferences = dataStore.data.first()
+        return preferences?.get(dataStoreKey)
+    }
+
     suspend fun setUser(
         context: Context,
         dataStoreProvider: DataStoreProvider,

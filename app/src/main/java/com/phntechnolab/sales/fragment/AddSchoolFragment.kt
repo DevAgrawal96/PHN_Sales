@@ -41,7 +41,6 @@ import com.phntechnolab.sales.viewmodel.AddSchoolViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.Calendar
-import java.util.Date
 import java.util.regex.Pattern
 
 
@@ -717,11 +716,13 @@ class AddSchoolFragment : Fragment() {
             var day = c.get(Calendar.DAY_OF_MONTH)
             if (!viewModel.newSchoolData.value?.nextFollowup.isNullOrEmpty()) {
                 viewModel.newSchoolData.value?.nextFollowup?.split(" ")?.let { _dateAndTime ->
-                    binding.followupDetails.edtSchoolDate.setText(_dateAndTime[0])
-                    _dateAndTime[0].split("/").let { _dateArray ->
-                        day = _dateArray[0].toInt()
-                        month = _dateArray[1].toInt()
-                        year = _dateArray[2].toInt()
+                    if (!_dateAndTime[0].trim().isNullOrBlank()) {
+                        binding.followupDetails.edtSchoolDate.setText(_dateAndTime[0])
+                        _dateAndTime[0].split("/").let { _dateArray ->
+                            day = _dateArray[0].toInt()
+                            month = _dateArray[1].toInt()
+                            year = _dateArray[2].toInt()
+                        }
                     }
                 }
             }
