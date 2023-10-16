@@ -28,7 +28,7 @@ private lateinit var context : Context
 
     override fun onBindViewHolder(holder: PendingApprovalViewHolder, position: Int) {
         val schoolData = data[position]
-        holder.binding.pendingTitle.text = "${ data[position].schoolName.capitalize() } price discussion is pending"
+        holder.binding.pendingTitle.text = "${ data[position].schoolName.capitalize() } moa approval is pending"
         Glide.with(context!!).load(data[position].schoolImage).override(300,200).error(R.drawable.demo_img).into(holder.binding.schoolImg)
         holder.binding.mainConstraint.setOnClickListener { callBacks.meetingNavigation(schoolData) }
     }

@@ -121,7 +121,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="@dimen/dimen_16dp"
                 android:layout_marginEnd="8dp"
-                android:text="@string/do_you_want_to_reschedule_meeting_with_teacher_principal"
+                android:text="@string/do_you_want_to_reschedule_meeting_with_dm"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"

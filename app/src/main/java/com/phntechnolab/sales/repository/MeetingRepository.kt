@@ -115,11 +115,11 @@ class MeetingRepository @Inject constructor(
             } else if ((!it.coordinator?.nextMeetDateDm.isNullOrEmpty() && todayTomorrowUpcomingMeetingDateCheck(it.coordinator?.nextMeetDateDm?:"") != "wrong") || (!it.coordinator?.meetDateCoordinator.isNullOrEmpty() && todayTomorrowUpcomingMeetingDateCheck(it.coordinator?.meetDateCoordinator?:"") != "wrong")) {
                 if(it.coordinator?.nextMeetDateDm != null && todayTomorrowUpcomingMeetingDateCheck(it.coordinator.nextMeetDateDm?.replace("/", "-")?.split(" ")?.get(0)?:"") != "wrong"){
                     val date =
-                        todayTomorrowUpcomingMeetingDateCheck(it.coordinator.nextFollowupDm?.replace("/", "-")?.split(" ")?.get(0) ?: "")
+                        todayTomorrowUpcomingMeetingDateCheck(it.coordinator.nextMeetDateDm?.replace("/", "-")?.split(" ")?.get(0) ?: "")
                     data.add(MeetingData("coordinator", date, it, "Director"))
                 }else{
                     val date =
-                        todayTomorrowUpcomingMeetingDateCheck(it.coordinator.nextMeetDateDm?.replace("/", "-")?.split(" ")?.get(0) ?: "")
+                        todayTomorrowUpcomingMeetingDateCheck(it.coordinator.meetDateCoordinator?.replace("/", "-")?.split(" ")?.get(0) ?: "")
                     data.add(MeetingData("coordinator", date, it, "Coordinator"))
                 }
             } else {
