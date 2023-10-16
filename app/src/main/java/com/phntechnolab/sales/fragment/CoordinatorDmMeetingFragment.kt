@@ -497,10 +497,10 @@ class CoordinatorDmMeetingFragment : Fragment() {
             when (it) {
                 is NetworkResult.Success -> {
                     if (viewModel._dmMeetData.value?.rescheduleWithDirector != "yes" && viewModel._dmMeetData.value?.interested == "yes") {
-                        printToast(getString(R.string.coordinator_meeting_details_updated_successfully))
+                        printToast(getString(R.string.director_meeting_details_updated_successfully))
                         showDialog()
                     } else if (viewModel._dmMeetData.value?.interested == "yes" && viewModel._dmMeetData.value?.rescheduleWithDirector == "yes") {
-                        printToast(getString(R.string.meeting_has_been_rescheduled_with_coordinator))
+                        printToast(getString(R.string.director_meeting_details_updated_successfully))
                         findNavController().popBackStack()
                     } else if (viewModel._dmMeetData.value?.interested != "yes" && viewModel._dmMeetData.value?.rescheduleWithDirector != "yes") {
                         printToast(getString(R.string.meeting_has_been_moved_to_not_interested_section))
@@ -509,8 +509,8 @@ class CoordinatorDmMeetingFragment : Fragment() {
                         printToast(getString(R.string.meeting_has_been_moved_to_not_interested_section))
                         findNavController().popBackStack()
                     } else {
-                        printToast(getString(R.string.coordinator_meeting_details_updated_successfully))
-                        showDialog()
+                        printToast(getString(R.string.director_meeting_details_updated_successfully))
+                        findNavController().popBackStack()
                     }
                     viewModel.updateCoordinatorLevelMeetDetails.removeObservers(viewLifecycleOwner)
                     viewModel.updateDMLevelMeetDetails.removeObservers(viewLifecycleOwner)
