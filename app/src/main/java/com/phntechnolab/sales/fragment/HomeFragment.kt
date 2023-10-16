@@ -92,30 +92,44 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                     chipGroup.getChildAt(i).isClickable = true
                 }
                 chip.isClickable = false
-                adapter?.setData(((viewModel.schoolLiveData.value?.data?.filter { it.status != "MOA Pending" }?.sortedByDescending { it.updatedAt }
-                    ?.filter {
-                        when (chip.text) {
-                            "All" -> {
-                                true
-                            }
+                val schoolData =
+                    ((viewModel.schoolLiveData.value?.data?.filter { it.status != "MOA Pending" }
+                        ?.sortedByDescending { it.updatedAt }
+                        ?.filter {
+                            when (chip.text) {
+                                "All" -> {
+                                    true
+                                }
 
-                            "Propose Costing" -> {
-                                it.status == "Propose Costing"
-                            }
+                                "Propose Costing" -> {
+                                    it.status == "Propose Costing"
+                                }
 
-                            "MOA Signed" -> {
-                                it.status == "MOASigned"
-                            }
+                                "MOA Signed" -> {
+                                    it.status == "MOASigned"
+                                }
 
-                            "Not Interested" -> {
-                                it.status == "Not Interested"
-                            }
+                                "Not Interested" -> {
+                                    it.status == "Not Interested"
+                                }
 
-                            else -> {
-                                it.status == chip.text
+                                else -> {
+                                    it.status == chip.text
+                                }
                             }
-                        }
-                    } as ArrayList<SchoolData>) as ArrayList<SchoolData>))
+                        } as ArrayList<SchoolData>) as ArrayList<SchoolData>)
+                adapter?.setData(schoolData)
+                if (schoolData.isNullOrEmpty()) {
+                    binding.noDataLottie.visibility = View.VISIBLE
+                    binding.homeRecyclerView.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
+                    binding.progressIndicator.visibility = View.GONE
+                }else{
+                    binding.homeRecyclerView.visibility = View.VISIBLE
+                    binding.noDataLottie.visibility = View.GONE
+                    binding.progressIndicator.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
+                }
             }
         }
 
@@ -141,8 +155,11 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                         binding.homeRecyclerView.visibility = View.VISIBLE
                         binding.noDataLottie.visibility = View.GONE
                         binding.progressIndicator.visibility = View.GONE
-                        adapter?.setData(ArrayList<SchoolData>().apply { addAll(it.data.filter { it.status != "MOA Pending" }.sortedByDescending { it.updatedAt }) })
                         binding.progressBar.visibility = View.GONE
+                        adapter?.setData(ArrayList<SchoolData>().apply {
+                            addAll(it.data.filter { it.status != "MOA Pending" }
+                                .sortedByDescending { it.updatedAt })
+                        })
                     }
                 }
 
@@ -281,15 +298,18 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                 requireView().findNavController()
                     .navigate(
                         HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
-                            schoolData.installmentData ?: InstallmentData(schoolId = schoolData.schoolId)
+                            schoolData.installmentData
+                                ?: InstallmentData(schoolId = schoolData.schoolId)
                         )
                     )
             }
+
             "Installment" -> {
                 requireView().findNavController()
                     .navigate(
                         HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
-                            schoolData.installmentData ?: InstallmentData(schoolId = schoolData.schoolId)
+                            schoolData.installmentData
+                                ?: InstallmentData(schoolId = schoolData.schoolId)
                         )
                     )
             }
@@ -298,7 +318,8 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                 requireView().findNavController()
                     .navigate(
                         HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
-                            schoolData.installmentData ?: InstallmentData(schoolId = schoolData.schoolId)
+                            schoolData.installmentData
+                                ?: InstallmentData(schoolId = schoolData.schoolId)
                         )
                     )
             }

@@ -606,6 +606,7 @@ class AddSchoolFragment : Fragment() {
     }
 
     private var contract = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        Timber.e("BACK")
         if (it != null) {
             image = it
             Timber.e(image.toString())
@@ -799,8 +800,16 @@ class AddSchoolFragment : Fragment() {
             } else if (stepCount == 2) {
                 setPositionView()
             } else {
-                binding.progressBar.visibility = View.VISIBLE
-                viewModel.addNewSchool()
+
+                val isLeadTypeEmpty =
+                    binding.followupDetails.edtLeadType.text.toString().isNullOrEmpty()
+                if (isLeadTypeEmpty)
+                    binding.followupDetails.tilLeadType.error =
+                        resources.getString(R.string.please_select_the_lead_type)
+                else {
+                    binding.progressBar.visibility = View.VISIBLE
+                    viewModel.addNewSchool()
+                }
             }
         } else {
             if (stepCount == 1) {
@@ -872,12 +881,12 @@ class AddSchoolFragment : Fragment() {
         val isNumberOfClassroomsEmpty =
             binding.basicDetails.edtTotalNoOfClassroom.text.toString().isNullOrEmpty()
         if (isNumberOfClassroomsEmpty)
-            binding.basicDetails.tilSchoolTotalIntake.error =
+            binding.basicDetails.tilSchoolTotalNoOfClassroom.error =
                 resources.getString(R.string.please_enter_total_school_intake)
         else if (binding.basicDetails.edtTotalNoOfClassroom.text.toString().trim().toInt() >= 100)
-            binding.basicDetails.tilSchoolTotalIntake.error =
+            binding.basicDetails.tilSchoolTotalNoOfClassroom.error =
                 resources.getString(R.string.total_no_of_classrooms_less_than)
-        else binding.basicDetails.tilSchoolTotalIntake.error = null
+        else binding.basicDetails.tilSchoolTotalNoOfClassroom.error = null
 
         val isCoordinatorNameEmpty =
             binding.basicDetails.edtCoordinatorName.text.toString().isNullOrEmpty()

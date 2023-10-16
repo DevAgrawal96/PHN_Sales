@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 object DataStoreManager {
 
@@ -34,6 +35,9 @@ object DataStoreManager {
     ): String? {
         val dataStore = dataStoreProvider.getDataStoreInstance(context)
         val dataStoreKey = stringPreferencesKey(key)
+        Timber.e("TOKEN RETRIEVE")
+        Timber.e(Gson().toJson(dataStore.data))
+        Timber.e(Gson().toJson(dataStore.data.first()))
         val preferences = dataStore.data.first()
         return preferences?.get(dataStoreKey)
     }

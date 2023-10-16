@@ -814,10 +814,13 @@ class CostingMOADocumentFragment : Fragment() {
     }
 
     private var moaDocument = registerForActivityResult(ActivityResultContracts.GetContent()) {
-        image = it!!
-        Timber.e(image.toString())
-        viewModel.uploadDocument(it, requireContext())
-        binding.moaDocument.documentFileName.text = "${viewModel.imageName}.pdf"
+        Timber.e("BACK")
+        if(it != null) {
+            image = it
+            Timber.e(image.toString())
+            viewModel.uploadDocument(it, requireContext())
+            binding.moaDocument.documentFileName.text = "${viewModel.imageName}.pdf"
+        }
     }
 
     override fun onDestroyView() {

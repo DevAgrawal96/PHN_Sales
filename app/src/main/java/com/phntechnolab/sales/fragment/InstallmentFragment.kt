@@ -83,6 +83,7 @@ class InstallmentFragment : Fragment() {
     private var receiptPdf = registerForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
+        Timber.e("BACK")
         pdfOrImg = uri!!
         val sdf = SimpleDateFormat("dd/M/yyyy")
         when (position) {

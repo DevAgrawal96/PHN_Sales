@@ -66,6 +66,12 @@ class SchoolDetailAdapter(private var callBacks: CallBacks) :
         holder.binding.cardView.setOnClickListener {
             callBacks.meetingNavigation(schoolDetail)
         }
+
+        if(schoolDetail.status == "MOASigned"){
+            holder.binding.editIcon.visibility = View.GONE
+        }else{
+            holder.binding.editIcon.visibility = View.VISIBLE
+        }
         holder.binding.editIcon.setOnClickListener {
             if (it != null)
                 callBacks.openSchoolDetails(schoolDetail)

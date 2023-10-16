@@ -63,10 +63,10 @@
                         android:id="@+id/edt_school_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="@string/school_name_validation"
                         android:imeOptions="actionNext"
                         android:inputType="text"
                         android:maxLines="1"
+                        android:nextFocusForward="@id/edt_school_address"
                         android:text="@={viewModel.newSchoolData.schoolName}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
