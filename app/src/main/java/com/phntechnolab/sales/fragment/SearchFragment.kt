@@ -121,7 +121,7 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
     private fun fetchData(schoolName: String) {
         if (!schoolName.isNullOrBlank()) {
             val refereshData = viewModel.schoolLiveData.value?.data?.filter {
-                it.schoolName.toLowerCase().contains(schoolName.toLowerCase())
+                (it.schoolName?.toLowerCase()?:"").contains(schoolName?.toLowerCase()?:"")
             }?.sortedByDescending { it.updatedAt }
             refereshData?.let { ArrayList(it) }?.let { adapter?.setData(it) }
         } else {

@@ -61,6 +61,7 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
 
     fun setInstallmentsData(data: InstallmentData){
         _installmentData.value?.installmentData = data
+        _installmentData.postValue(_installmentData.value)
     }
     fun uploadInstallmentDocument(
         documentUri: Uri,
