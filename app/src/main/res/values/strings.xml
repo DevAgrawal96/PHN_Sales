@@ -71,7 +71,7 @@
     <string name="price_pitch_per_student">Price Pitch per student*</string>
     <string name="quotation_validity">Quotation validity*</string>
     <string name="agreement_duration">Agreement Duration</string>
-    <string name="agreement_duration_mandate">Agreement Duration*</string>
+    <string name="agreement_duration_mandate">Agreement duration*</string>
     <string name="agreement_duration_compulsary">Agreement duration*</string>
     <string name="select_meeting_agenda">Select meeting agenda</string>
     <string name="meeting_with_whom">Meeting with whom</string>

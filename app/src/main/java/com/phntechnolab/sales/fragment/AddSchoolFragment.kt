@@ -894,8 +894,8 @@ class AddSchoolFragment : Fragment() {
             binding.basicDetails.tilSchoolTotalIntake.error =
                 resources.getString(R.string.please_enter_total_school_intake)
         else if (binding.basicDetails.edtSchoolTotalIntake.text.toString().trim().toInt() >= 20000)
-            binding.basicDetails.tilSchoolTotalIntake.error =
-                resources.getString(R.string.total_school_intake_less_than)
+//            binding.basicDetails.tilSchoolTotalIntake.error =
+//                resources.getString(R.string.total_school_intake_less_than)
         else binding.basicDetails.tilSchoolTotalIntake.error = null
 
         val isNumberOfClassroomsEmpty =
@@ -904,8 +904,8 @@ class AddSchoolFragment : Fragment() {
             binding.basicDetails.tilSchoolTotalNoOfClassroom.error =
                 resources.getString(R.string.please_enter_total_school_intake)
         else if (binding.basicDetails.edtTotalNoOfClassroom.text.toString().trim().toInt() >= 100)
-            binding.basicDetails.tilSchoolTotalNoOfClassroom.error =
-                resources.getString(R.string.total_no_of_classrooms_less_than)
+//            binding.basicDetails.tilSchoolTotalNoOfClassroom.error =
+//                resources.getString(R.string.total_no_of_classrooms_less_than)
         else binding.basicDetails.tilSchoolTotalNoOfClassroom.error = null
 
         val isCoordinatorNameEmpty =

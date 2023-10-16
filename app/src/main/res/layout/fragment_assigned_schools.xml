@@ -64,7 +64,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
-                        android:digits="@string/name_validation"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,.'&amp;"
                         android:inputType="text"
                         android:maxLines="1"
                         android:nextFocusForward="@id/edt_school_address"
