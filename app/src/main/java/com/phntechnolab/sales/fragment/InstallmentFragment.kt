@@ -355,38 +355,20 @@ class InstallmentFragment : Fragment() {
                                 viewModel.uploadInstallmentImages()
                             else
                                 Timber.e("_requestFile1 null")
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "please upload reciept",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                            findNavController().popBackStack()
                         }
 
                         1 -> {
-                            if (viewModel._requestFile2 != null)
+                            if (viewModel._requestFile1 != null && viewModel._requestFile2 != null)
                                 viewModel.uploadInstallmentImages()
                             else
                                 Timber.e("_requestFile1 _requestFile2 null")
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "please upload reciept",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                            findNavController().popBackStack()
                         }
 
                         2 -> {
-                            if (viewModel._requestFile3 != null)
+                            if (viewModel._requestFile1 != null && viewModel._requestFile2 != null && viewModel._requestFile3 != null)
                                 viewModel.uploadInstallmentImages()
                             else
                                 Timber.e("_requestFile1 _requestFile2 _requestFile3 null")
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "please upload reciept",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                            findNavController().popBackStack()
                         }
                     }
 
@@ -438,7 +420,6 @@ class InstallmentFragment : Fragment() {
                     e.printStackTrace()
                 }
 
-
 //                binding.addInstallment1.edtInstallmentDate.setText(date)
 //                binding.addInstallment1.edtInstallmentTime.setText(time)
                 binding.addInstallment1.root.visibility = View.GONE
@@ -479,11 +460,12 @@ class InstallmentFragment : Fragment() {
                     val date: String = it?.secondInstallmentDateTime?.split(",")?.get(0) ?: ""
                     val time: String = it?.secondInstallmentDateTime?.split(",")?.get(1) ?: ""
                     Timber.e(date + "," + time)
+                    binding.addInstallment2.edtInstallmentDate.setText(date)
+                    binding.addInstallment2.edtInstallmentTime.setText(time)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-//                binding.addInstallment2.edtInstallmentDate.setText(date)
-//                binding.addInstallment2.edtInstallmentTime.setText(time)
+
                 binding.installment2.installmentDetailsTxt.text =
                     getString(R.string._1st_installment_details, "2nd")
                 binding.installment2.amount.text = it?.secondInstallmentAmount
@@ -525,11 +507,12 @@ class InstallmentFragment : Fragment() {
                     val date: String = it?.thirdInstallmentDateTime?.split(",")?.get(0) ?: ""
                     val time: String = it?.thirdInstallmentDateTime?.split(",")?.get(1) ?: ""
                     Timber.e(date + "," + time)
+                    binding.addInstallment3.edtInstallmentDate.setText(date)
+                    binding.addInstallment3.edtInstallmentTime.setText(time)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-//                binding.addInstallment3.edtInstallmentDate.setText(date)
-//                binding.addInstallment3.edtInstallmentTime.setText(time)
+
                 binding.installment3.installmentDetailsTxt.text =
                     getString(R.string._1st_installment_details, "3rd")
                 binding.installment3.amount.text = it?.secondInstallmentAmount
@@ -580,10 +563,10 @@ class InstallmentFragment : Fragment() {
                 firstInstallmentDateTime = binding.addInstallment1.edtInstallmentDate.text.toString() + ", " + binding.addInstallment1.edtInstallmentTime.text.toString(),
                 secondInstallment = binding.addInstallment2.installmentTxt.text.toString(),
                 secondInstallmentAmount = binding.addInstallment2.edtInstallmentAmount.text.toString(),
-                secondInstallmentDateTime = binding.addInstallment2.edtInstallmentDate.text.toString(),
+                secondInstallmentDateTime = binding.addInstallment2.edtInstallmentDate.text.toString() + ", " + binding.addInstallment2.edtInstallmentTime.text.toString(),
                 thirdInstallment = binding.addInstallment3.installmentTxt.text.toString(),
                 thirdInstallmentAmount = binding.addInstallment3.edtInstallmentAmount.text.toString(),
-                thirdInstallmentDateTime = binding.addInstallment3.edtInstallmentDate.text.toString()
+                thirdInstallmentDateTime = binding.addInstallment3.edtInstallmentDate.text.toString() + ", " + binding.addInstallment3.edtInstallmentTime.text.toString()
             )
             viewModel.setInstallmentData(data)
             viewModel.addNewInstallment(data)
