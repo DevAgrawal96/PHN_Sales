@@ -294,22 +294,21 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                     )
             }
 
-            "MOA Pending" -> {
-                requireView().findNavController()
-                    .navigate(
-                        HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
-                            schoolData.installmentData
-                                ?: InstallmentData(schoolId = schoolData.schoolId)
-                        )
-                    )
-            }
+//            "MOA Pending" -> {
+//                requireView().findNavController()
+//                    .navigate(
+//                        HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
+//                            schoolData.installmentData
+//                                ?: InstallmentData(schoolId = schoolData.schoolId)
+//                        )
+//                    )
+//            }
 
             "Installment" -> {
                 requireView().findNavController()
                     .navigate(
                         HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
-                            schoolData.installmentData
-                                ?: InstallmentData(schoolId = schoolData.schoolId)
+                            schoolData
                         )
                     )
             }
@@ -318,8 +317,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                 requireView().findNavController()
                     .navigate(
                         HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
-                            schoolData.installmentData
-                                ?: InstallmentData(schoolId = schoolData.schoolId)
+                            schoolData
                         )
                     )
             }

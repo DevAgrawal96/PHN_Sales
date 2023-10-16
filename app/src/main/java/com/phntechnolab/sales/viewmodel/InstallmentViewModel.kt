@@ -45,8 +45,8 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
     var imageName3: String? = null
     var imagesize3: Int? = null
 
-    private var _installmentData: MutableLiveData<InstallmentData?> = MutableLiveData()
-    val installmentData: LiveData<InstallmentData?>
+    private var _installmentData: MutableLiveData<SchoolData?> = MutableLiveData()
+    val installmentData: LiveData<SchoolData?>
         get() = _installmentData
 
     val addInstallmentResponse: LiveData<NetworkResult<CustomResponse>>
@@ -55,10 +55,13 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
     val addInstallmentImageResponse: LiveData<NetworkResult<CustomResponse>>
         get() = repository.installmentImageResponse
 
-    fun setInstallmentData(data: InstallmentData?) {
+    fun setInstallmentData(data: SchoolData?) {
         _installmentData.postValue(data)
     }
 
+    fun setInstallmentsData(data: InstallmentData){
+        _installmentData.value?.installmentData = data
+    }
     fun uploadInstallmentDocument(
         documentUri: Uri,
         requireContext: Context,
@@ -166,7 +169,7 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
 
     fun uploadInstallmentImages() {
         val multiPartBody: MultipartBody =
-            returnJsonData(_installmentData.value ?: InstallmentData())
+            returnJsonData()
         viewModelScope.launch {
             repository.uploadInstallmentImage(
                 _installmentData.value?.schoolId!! ?: "",
@@ -175,7 +178,7 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
         }
     }
 
-    private fun returnJsonData(data: Any): MultipartBody {
+    private fun returnJsonData(): MultipartBody {
         val multipartBody = MultipartBody.Builder().setType(MultipartBody.FORM)
 //        if (is_requestFile1) {
             Timber.e("is_requestFile1")

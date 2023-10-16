@@ -20,6 +20,7 @@ import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentInstalmentBinding
 import com.phntechnolab.sales.di.FileDownloader
 import com.phntechnolab.sales.model.InstallmentData
+import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.viewmodel.InstallmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,7 +58,7 @@ class InstallmentFragment : Fragment() {
     ): View? {
         _binding = FragmentInstalmentBinding.inflate(inflater, container, false)
         setOnBackPressed()
-        viewModel.setInstallmentData(args.moaSchoolData)
+        viewModel.setInstallmentData(args.schoolData)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         return binding.root
@@ -78,6 +79,14 @@ class InstallmentFragment : Fragment() {
         observers()
         initializeAddInstallmentCard()
         initializeListener()
+    }
+
+    private fun initializeSchoolDetails(data: SchoolData) {
+        binding.schoolDetails.editIcon.visibility = View.GONE
+        binding.schoolDetails.schoolName.text = data.schoolName
+        binding.schoolDetails.txtEmail.text = data.email
+        binding.schoolDetails.txtMono.text = data.coMobileNo
+        binding.schoolDetails.locationTxt.text = data.schoolAddress
     }
 
     private var receiptPdf = registerForActivityResult(
@@ -406,19 +415,18 @@ class InstallmentFragment : Fragment() {
             }
         }
 
-
-
         viewModel.installmentData.observe(viewLifecycleOwner) {
-            id = it?.id
+            initializeSchoolDetails(it?: SchoolData())
+            id = it?.installmentData?.id ?: ""
             schoolId = it?.schoolId
-            if (!it?.firstInstallmentAmount.isNullOrEmpty()) {
+            if (!it?.installmentData?.firstInstallmentAmount.isNullOrEmpty()) {
                 binding.installment1.installmentDetailsTxt.text =
                     getString(R.string._1st_installment_details, "1st")
-                binding.installment1.amount.text = it?.firstInstallmentAmount
-                binding.addInstallment1.edtInstallmentAmount.setText(it?.firstInstallmentAmount)
+                binding.installment1.amount.text = it?.installmentData?.firstInstallmentAmount
+                binding.addInstallment1.edtInstallmentAmount.setText(it?.installmentData?.firstInstallmentAmount)
                 try {
-                    val date: String = it?.firstInstallmentDateTime?.split(",")?.get(0) ?: ""
-                    val time: String = it?.firstInstallmentDateTime?.split(",")?.get(1) ?: ""
+                    val date: String = it?.installmentData?.firstInstallmentDateTime?.split(",")?.get(0) ?: ""
+                    val time: String = it?.installmentData?.firstInstallmentDateTime?.split(",")?.get(1) ?: ""
                     Timber.e(date + "," + time)
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -427,12 +435,12 @@ class InstallmentFragment : Fragment() {
 //                binding.addInstallment1.edtInstallmentDate.setText(date)
 //                binding.addInstallment1.edtInstallmentTime.setText(time)
                 binding.addInstallment1.root.visibility = View.GONE
-                binding.installment1.dateAndTime.text = it?.firstInstallmentDateTime
+                binding.installment1.dateAndTime.text = it?.installmentData?.firstInstallmentDateTime
                 binding.installment1.root.visibility = View.VISIBLE
                 count = 0
-                if (!it?.firstInstallmentReciept.isNullOrEmpty()) {
-                    val fileName = it?.firstInstallmentReciept!!.substring(
-                        it.firstInstallmentReciept!!.lastIndexOf('/') + 1
+                if (!it?.installmentData?.firstInstallmentReciept.isNullOrEmpty()) {
+                    val fileName = it?.installmentData?.firstInstallmentReciept!!.substring(
+                        it.installmentData?.firstInstallmentReciept!!.lastIndexOf('/') + 1
                     )
                     if (fileName.split(".").last() == "jpg") {
                         binding.installment1.fileTypeImg.setImageDrawable(
@@ -447,7 +455,7 @@ class InstallmentFragment : Fragment() {
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
                         )
                     }
-                    receipt1 = it.firstInstallmentReciept
+                    receipt1 = it.installmentData?.firstInstallmentReciept
                     binding.installment1.fileName.text = fileName
 
                     Timber.e("$fileName")
@@ -458,11 +466,11 @@ class InstallmentFragment : Fragment() {
                 binding.installment1.root.visibility = View.GONE
 
             }
-            if (!it?.secondInstallmentAmount.isNullOrEmpty()) {
-                binding.addInstallment2.edtInstallmentAmount.setText(it?.secondInstallmentAmount)
+            if (!it?.installmentData?.secondInstallmentAmount.isNullOrEmpty()) {
+                binding.addInstallment2.edtInstallmentAmount.setText(it?.installmentData?.secondInstallmentAmount)
                 try {
-                    val date: String = it?.secondInstallmentDateTime?.split(",")?.get(0) ?: ""
-                    val time: String = it?.secondInstallmentDateTime?.split(",")?.get(1) ?: ""
+                    val date: String = it?.installmentData?.secondInstallmentDateTime?.split(",")?.get(0) ?: ""
+                    val time: String = it?.installmentData?.secondInstallmentDateTime?.split(",")?.get(1) ?: ""
                     Timber.e(date + "," + time)
                     binding.addInstallment2.edtInstallmentDate.setText(date)
                     binding.addInstallment2.edtInstallmentTime.setText(time)
@@ -472,15 +480,15 @@ class InstallmentFragment : Fragment() {
 
                 binding.installment2.installmentDetailsTxt.text =
                     getString(R.string._1st_installment_details, "2nd")
-                binding.installment2.amount.text = it?.secondInstallmentAmount
-                binding.installment2.dateAndTime.text = it?.secondInstallmentDateTime
+                binding.installment2.amount.text = it?.installmentData?.secondInstallmentAmount
+                binding.installment2.dateAndTime.text = it?.installmentData?.secondInstallmentDateTime
                 binding.addInstallment1.root.visibility = View.GONE
                 binding.addInstallment2.root.visibility = View.GONE
                 binding.installment2.root.visibility = View.VISIBLE
                 count = 1
-                if (!it?.secondInstallmentReciept.isNullOrEmpty()) {
-                    val fileName = it?.secondInstallmentReciept!!.substring(
-                        it.secondInstallmentReciept!!.lastIndexOf('/') + 1
+                if (!it?.installmentData?.secondInstallmentReciept.isNullOrEmpty()) {
+                    val fileName = it?.installmentData?.secondInstallmentReciept!!.substring(
+                        it.installmentData?.secondInstallmentReciept!!.lastIndexOf('/') + 1
                     )
                     if (fileName.split(".").last() == "jpg") {
                         binding.installment2.fileTypeImg.setImageDrawable(
@@ -496,7 +504,7 @@ class InstallmentFragment : Fragment() {
                         )
                     }
 
-                    receipt2 = it.secondInstallmentReciept
+                    receipt2 = it.installmentData?.secondInstallmentReciept
                     binding.installment2.fileName.text = fileName
 
                     Timber.e("$fileName")
@@ -505,11 +513,11 @@ class InstallmentFragment : Fragment() {
             } else {
                 binding.installment2.root.visibility = View.GONE
             }
-            if (!it?.thirdInstallmentAmount.isNullOrEmpty()) {
-                binding.addInstallment3.edtInstallmentAmount.setText(it?.thirdInstallmentAmount)
+            if (!it?.installmentData?.thirdInstallmentAmount.isNullOrEmpty()) {
+                binding.addInstallment3.edtInstallmentAmount.setText(it?.installmentData?.thirdInstallmentAmount)
                 try {
-                    val date: String = it?.thirdInstallmentDateTime?.split(",")?.get(0) ?: ""
-                    val time: String = it?.thirdInstallmentDateTime?.split(",")?.get(1) ?: ""
+                    val date: String = it?.installmentData?.thirdInstallmentDateTime?.split(",")?.get(0) ?: ""
+                    val time: String = it?.installmentData?.thirdInstallmentDateTime?.split(",")?.get(1) ?: ""
                     Timber.e(date + "," + time)
                     binding.addInstallment3.edtInstallmentDate.setText(date)
                     binding.addInstallment3.edtInstallmentTime.setText(time)
@@ -519,17 +527,17 @@ class InstallmentFragment : Fragment() {
 
                 binding.installment3.installmentDetailsTxt.text =
                     getString(R.string._1st_installment_details, "3rd")
-                binding.installment3.amount.text = it?.secondInstallmentAmount
-                binding.installment3.dateAndTime.text = it?.secondInstallmentDateTime
+                binding.installment3.amount.text = it?.installmentData?.secondInstallmentAmount
+                binding.installment3.dateAndTime.text = it?.installmentData?.secondInstallmentDateTime
                 binding.installment3.root.visibility = View.VISIBLE
                 binding.addInstallment1.root.visibility = View.GONE
                 binding.addInstallment2.root.visibility = View.GONE
                 binding.addInstallment3.root.visibility = View.GONE
                 binding.addInstallmentDetails.visibility = View.GONE
                 count = 2
-                if (!it?.thirdInstallmentReciept.isNullOrEmpty()) {
-                    val fileName = it?.thirdInstallmentReciept!!.substring(
-                        it.thirdInstallmentReciept!!.lastIndexOf('/') + 1
+                if (!it?.installmentData?.thirdInstallmentReciept.isNullOrEmpty()) {
+                    val fileName = it?.installmentData?.thirdInstallmentReciept!!.substring(
+                        it.installmentData?.thirdInstallmentReciept!!.lastIndexOf('/') + 1
                     )
                     if (fileName.split(".").last() == "jpg") {
                         binding.installment3.fileTypeImg.setImageDrawable(
@@ -544,7 +552,7 @@ class InstallmentFragment : Fragment() {
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
                         )
                     }
-                    receipt3 = it.thirdInstallmentReciept
+                    receipt3 = it.installmentData?.thirdInstallmentReciept
                     binding.installment3.fileName.text = fileName
 
                     Timber.e("$fileName")
@@ -560,10 +568,10 @@ class InstallmentFragment : Fragment() {
         binding.updateBtn.setOnClickListener {
 //            Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
             val data = InstallmentData(
-                firstInstallmentReciept = args.moaSchoolData?.firstInstallmentReciept,
-                secondInstallmentReciept = args.moaSchoolData?.secondInstallmentReciept,
-                thirdInstallmentReciept = args.moaSchoolData?.thirdInstallmentReciept,
-                schoolId = args.moaSchoolData?.schoolId,
+                firstInstallmentReciept = args.schoolData?.installmentData?.firstInstallmentReciept,
+                secondInstallmentReciept = args.schoolData?.installmentData?.secondInstallmentReciept,
+                thirdInstallmentReciept = args.schoolData?.installmentData?.thirdInstallmentReciept,
+                schoolId = args.schoolData?.schoolId,
                 totalInstallment = count.toString(),
                 firstInstallment = binding.addInstallment1.installmentTxt.text.toString(),
                 firstInstallmentAmount = binding.addInstallment1.edtInstallmentAmount.text.toString(),
@@ -575,7 +583,7 @@ class InstallmentFragment : Fragment() {
                 thirdInstallmentAmount = binding.addInstallment3.edtInstallmentAmount.text.toString(),
                 thirdInstallmentDateTime = binding.addInstallment3.edtInstallmentDate.text.toString() + ", " + binding.addInstallment3.edtInstallmentTime.text.toString()
             )
-            viewModel.setInstallmentData(data)
+            viewModel.setInstallmentsData(data)
             viewModel.addNewInstallment(data)
         }
 
