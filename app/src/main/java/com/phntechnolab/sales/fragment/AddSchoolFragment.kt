@@ -136,7 +136,6 @@ class AddSchoolFragment : Fragment() {
         oncClickListener()
 
         observers()
-        initEditText()
     }
 
     private fun onCheckedChangedListener() {
@@ -178,18 +177,6 @@ class AddSchoolFragment : Fragment() {
                 }
             }
         })
-    }
-
-    private fun initEditText() {
-//        Timber.e("change zero")
-//        Timber.e((binding.basicDetails.edtSchoolTotalIntake.getText()).toString())
-//        if ((binding.basicDetails.edtSchoolTotalIntake.text).toString() == "0" &&
-//            (binding.basicDetails.edtTotalNoOfClassroom.text).toString() == "0"
-//        ) {
-//            Timber.e("change zero")
-//            binding.basicDetails.edtSchoolTotalIntake.setText(getString(R.string.blank))
-//            binding.basicDetails.edtTotalNoOfClassroom.setText(R.string.blank)
-//        }
     }
 
     private fun addValidationWatchers() {
@@ -294,7 +281,7 @@ class AddSchoolFragment : Fragment() {
 
                     when (type) {
                         "phone" -> {
-                            pattern = Pattern.compile("[6789][0123456789]{9}")
+                            pattern = Pattern.compile("[0123456789]{10}")
                         }
 
                         "email" -> {
@@ -900,7 +887,7 @@ class AddSchoolFragment : Fragment() {
         else
             binding.basicDetails.tilCoordinatorName.error = null
 
-        val mPhonePattern = Pattern.compile("[6789][0123456789]{9}")
+        val mPhonePattern = Pattern.compile("[0123456789]{10}")
         val isCoordinatorPhoneValid =
             mPhonePattern.matcher(binding.basicDetails.edtCoordinatorMono.text.toString()).matches()
         if (!isCoordinatorPhoneValid)
@@ -953,8 +940,10 @@ class AddSchoolFragment : Fragment() {
     private fun setSchoolDetails() {
         binding.basicDetails.edtSchoolName.setText(viewModel.newSchoolData.value?.schoolName)
         binding.basicDetails.edtSchoolAddress.setText(viewModel.newSchoolData.value?.schoolAddress)
-//        binding.basicDetails.edtSchoolTotalIntake.setText("${viewModel.newSchoolData.value?.intake}")
-//        binding.basicDetails.edtTotalNoOfClassroom.setText("${viewModel.newSchoolData.value?.totalClassRoom}")
+        if(viewModel.newSchoolData.value?.intake.toString().trim() != "0")
+            binding.basicDetails.edtSchoolTotalIntake.setText("${viewModel.newSchoolData.value?.intake}")
+        if(viewModel.newSchoolData.value?.totalClassRoom.toString().trim() != "0")
+            binding.basicDetails.edtTotalNoOfClassroom.setText("${viewModel.newSchoolData.value?.totalClassRoom}")
         binding.basicDetails.edtEmailId.setText(viewModel.newSchoolData.value?.email)
         binding.basicDetails.edtCoordinatorName.setText(viewModel.newSchoolData.value?.coName)
         binding.basicDetails.edtCoordinatorMono.setText(viewModel.newSchoolData.value?.coMobileNo)
