@@ -1,5 +1,6 @@
 package com.phntechnolab.sales.api
 
+import com.phntechnolab.sales.model.AddSchoolSchema
 import com.phntechnolab.sales.model.ChangePasswordModel
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.CustomResponse
@@ -55,7 +56,7 @@ interface RetrofitApi {
     @PUT("api/updateschool/{id}")
     suspend fun updateSchoolData(
         @Path(value = "id") id: String,
-        @Body schoolDetails: SchoolData
+        @Body schoolDetails: AddSchoolSchema
     ): Response<CustomResponse>
 
     @POST("api/installment")

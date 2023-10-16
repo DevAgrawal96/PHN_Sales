@@ -7,6 +7,8 @@ import okhttp3.MultipartBody
 
 @Parcelize
 class AddSchoolSchema(
+    @SerializedName("id") var id: String = "",
+    @SerializedName("school_id") var schoolId: String = "",
     @SerializedName("school_name") var schoolName: String = "",
     @SerializedName("school_address") var schoolAddress: String = "",
     @SerializedName("board") var board: String = "",

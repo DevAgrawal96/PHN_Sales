@@ -64,7 +64,7 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
         val multiPartBody: MultipartBody =
             returnJsonData(_newSchoolData.value ?: SchoolData(), true)
 
-        val addSchoolData: AddSchoolSchema = returnSchoolSchema()
+        val addSchoolData: AddSchoolSchema = returnSchoolSchema(true)
         viewModelScope.launch {
 
             repositories.addNewSchool(multiPartBody)
@@ -91,14 +91,10 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
             Timber.e(Gson().toJson(newSchoolData.value))
             withContext(this.coroutineContext) {
                 repositories.updateSchoolData(
-                    newSchoolData.value?.id.toString() ?: "",
-                    _newSchoolData.value ?: SchoolData()
+                    _newSchoolData.value?.id.toString()?:"" ,
+                    returnSchoolSchema(false)
                 )
             }
-
-//            withContext(this.coroutineContext){
-//                uploadImage()
-//            }
         }
     }
 
@@ -155,8 +151,12 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
         return multipartBody.build()
     }
 
-    private fun returnSchoolSchema(): AddSchoolSchema {
+    private fun returnSchoolSchema(isAddSchool: Boolean): AddSchoolSchema {
         return AddSchoolSchema().apply {
+            if(!isAddSchool){
+                this.id = (newSchoolData.value?.id.toString() ?: "")
+                this.schoolId = newSchoolData.value?.schoolId ?: ""
+            }
             this.schoolName = newSchoolData.value?.schoolName ?: ""
             this.schoolAddress = newSchoolData.value?.schoolAddress ?: ""
             this.board = newSchoolData.value?.board ?: ""
