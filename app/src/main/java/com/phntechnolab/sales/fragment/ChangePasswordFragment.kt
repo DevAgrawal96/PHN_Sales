@@ -49,6 +49,38 @@ class ChangePasswordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeListener()
+        observable()
+
+    }
+
+    private fun observable() {
+        viewModel.changePasswordLiveData.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    binding.progressIndicator.visibility = View.GONE
+                    binding.changePasswordButton.isEnabled = true
+                    Toast.makeText(
+                        requireContext(),
+                        "Password change successfully!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    findNavController().popBackStack()
+                }
+
+                is NetworkResult.Error -> {
+                    binding.changePasswordButton.isEnabled = true
+                    binding.progressIndicator.visibility = View.GONE
+                }
+
+                is NetworkResult.Loading -> {
+
+                }
+
+                else -> {
+
+                }
+            }
+        }
     }
 
     private fun initializeListener() {
@@ -71,34 +103,9 @@ class ChangePasswordFragment : Fragment() {
                         binding.edtOldPassword.text.toString()
                     )
                 )
-                viewModel.changePasswordLiveData.observe(viewLifecycleOwner) {
-                    when (it) {
-                        is NetworkResult.Success -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "Password change successfully!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            findNavController().popBackStack()
-                        }
+                binding.changePasswordButton.isEnabled = false
+                binding.progressIndicator.visibility = View.VISIBLE
 
-                        is NetworkResult.Error -> {
-//                            Toast.makeText(
-//                                requireContext(),
-//                                "Password change successfully!",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-                        }
-
-                        is NetworkResult.Loading -> {
-
-                        }
-
-                        else -> {
-
-                        }
-                    }
-                }
             } else {
                 Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT)
                     .show()

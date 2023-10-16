@@ -143,6 +143,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
 
         binding.dmMeeting.updateBtn.setOnClickListener {
             if (checkDmRequiredFieldsData()) {
+                binding.progressIndicator.visibility = View.VISIBLE
                 viewModel.updatedMDetails(requireContext())
             }
         }
@@ -496,6 +497,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
+                    binding.progressIndicator.visibility = View.GONE
                     if (viewModel._dmMeetData.value?.rescheduleWithDirector != "yes" && viewModel._dmMeetData.value?.interested == "yes") {
                         printToast(getString(R.string.coordinator_meeting_details_updated_successfully))
                         showDialog()

@@ -411,6 +411,7 @@ class CostingMOADocumentFragment : Fragment() {
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
+
                     showDialog()
 //                    setPositionView()
                 }
