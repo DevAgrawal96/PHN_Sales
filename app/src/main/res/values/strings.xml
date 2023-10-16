@@ -161,6 +161,8 @@
     <string name="coordinator_meeting_details_updated_successfully">Coordinator meeting details updated successfully.</string>
     <string name="meeting_has_been_rescheduled_with_coordinator">Meeting has been rescheduled with Coordinator.</string>
     <string name="meeting_has_been_moved_to_not_interested_section">Meeting has been moved to not interested section.</string>
+    <string name="director_meeting_details_updated_successfully">Director meeting details updated successfully.</string>
+    <string name="meeting_has_been_rescheduled_with_director">Meeting has been rescheduled with Director.</string>
     <string name="other">\Other</string>
     <string name="_1st_installment_details">%s Installment Details</string>
     <string name="date_and_time">Date and Time</string>

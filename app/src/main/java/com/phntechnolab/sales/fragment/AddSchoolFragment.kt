@@ -302,7 +302,7 @@ class AddSchoolFragment : Fragment() {
                     }
 
                     if (text.isNullOrEmpty()) {
-                        til.error = "Please enter valid data"
+                        til.error = null
                     } else if (!pattern.matcher(text).matches())
                         til.error = errorMessage
                     else
@@ -886,27 +886,27 @@ class AddSchoolFragment : Fragment() {
         else
             binding.basicDetails.tilBoard.error = null
 
-        val isSchoolIntakeEmpty = binding.basicDetails.edtSchoolTotalIntake.text.toString()
-            .isNullOrEmpty() || binding.basicDetails.edtSchoolTotalIntake.text.toString()
-            .trim() == "0"
-
-        if (isSchoolIntakeEmpty)
-            binding.basicDetails.tilSchoolTotalIntake.error =
-                resources.getString(R.string.please_enter_total_school_intake)
-        else if (binding.basicDetails.edtSchoolTotalIntake.text.toString().trim().toInt() >= 20000)
+//        val isSchoolIntakeEmpty = binding.basicDetails.edtSchoolTotalIntake.text.toString()
+//            .isNullOrEmpty() || binding.basicDetails.edtSchoolTotalIntake.text.toString()
+//            .trim() == "0"
+//
+//        if (isSchoolIntakeEmpty)
 //            binding.basicDetails.tilSchoolTotalIntake.error =
-//                resources.getString(R.string.total_school_intake_less_than)
-        else binding.basicDetails.tilSchoolTotalIntake.error = null
-
-        val isNumberOfClassroomsEmpty =
-            binding.basicDetails.edtTotalNoOfClassroom.text.toString().isNullOrEmpty()
-        if (isNumberOfClassroomsEmpty)
-            binding.basicDetails.tilSchoolTotalNoOfClassroom.error =
-                resources.getString(R.string.total_no_of_classrooms_less_than)
-        else if (binding.basicDetails.edtTotalNoOfClassroom.text.toString().trim().toInt() >= 100)
+//                resources.getString(R.string.please_enter_total_school_intake)
+//        else if (binding.basicDetails.edtSchoolTotalIntake.text.toString().trim().toInt() >= 20000)
+////            binding.basicDetails.tilSchoolTotalIntake.error =
+////                resources.getString(R.string.total_school_intake_less_than)
+//        else binding.basicDetails.tilSchoolTotalIntake.error = null
+//
+//        val isNumberOfClassroomsEmpty =
+//            binding.basicDetails.edtTotalNoOfClassroom.text.toString().isNullOrEmpty()
+//        if (isNumberOfClassroomsEmpty)
 //            binding.basicDetails.tilSchoolTotalNoOfClassroom.error =
 //                resources.getString(R.string.total_no_of_classrooms_less_than)
-        else binding.basicDetails.tilSchoolTotalNoOfClassroom.error = null
+//        else if (binding.basicDetails.edtTotalNoOfClassroom.text.toString().trim().toInt() >= 100)
+////            binding.basicDetails.tilSchoolTotalNoOfClassroom.error =
+////                resources.getString(R.string.total_no_of_classrooms_less_than)
+//        else binding.basicDetails.tilSchoolTotalNoOfClassroom.error = null
 
         val isCoordinatorNameEmpty =
             binding.basicDetails.edtCoordinatorName.text.toString().isNullOrEmpty()
@@ -919,7 +919,9 @@ class AddSchoolFragment : Fragment() {
         val mPhonePattern = Pattern.compile("[0123456789]{10}")
         val isCoordinatorPhoneValid =
             mPhonePattern.matcher(binding.basicDetails.edtCoordinatorMono.text.toString()).matches()
-        if (!isCoordinatorPhoneValid)
+        if(binding.basicDetails.edtCoordinatorMono.text.toString().trim().isEmpty())
+            binding.basicDetails.tilCoordinatorMono.error = null
+        else if (!isCoordinatorPhoneValid)
             binding.basicDetails.tilCoordinatorMono.error =
                 resources.getString(R.string.please_enter_valid_phone_no)
         else
@@ -929,13 +931,16 @@ class AddSchoolFragment : Fragment() {
             Pattern.compile("[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+")
                 .matcher(binding.basicDetails.edtEmailId.text.toString())
                 .matches()
-        if (!isEmailValid)
+        if(binding.basicDetails.edtEmailId.text.toString().trim().isEmpty())
+            binding.basicDetails.tilEmailId.error = null
+        else if (!isEmailValid)
             binding.basicDetails.tilEmailId.error =
                 resources.getString(R.string.please_enter_valid_email_address)
         else
             binding.basicDetails.tilEmailId.error = null
 
-        return !(isSchoolNameEmpty || isSchoolAddressEmpty || isBoardEmpty || isSchoolIntakeEmpty || isCoordinatorNameEmpty || isCoordinatorNameEmpty || !isCoordinatorPhoneValid || !isEmailValid)
+//        return !(isSchoolNameEmpty || isSchoolAddressEmpty || isBoardEmpty || isSchoolIntakeEmpty || isCoordinatorNameEmpty || isCoordinatorNameEmpty || !isCoordinatorPhoneValid || !isEmailValid)
+        return !(isSchoolNameEmpty || isSchoolAddressEmpty || isBoardEmpty || isCoordinatorNameEmpty)
     }
 
     private fun setPositionView() {
