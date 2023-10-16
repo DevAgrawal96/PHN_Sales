@@ -252,6 +252,14 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right"/>
+
+        <action
+            android:id="@+id/action_pendingFragment_to_costingMoaDocumentFragment"
+            app:destination="@id/costingMoaDocumentFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/notificationFragment"

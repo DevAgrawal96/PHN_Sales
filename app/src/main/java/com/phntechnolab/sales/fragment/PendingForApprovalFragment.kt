@@ -18,6 +18,8 @@ import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.adapter.PendingApprovalAdapter
 import com.phntechnolab.sales.databinding.FragmentPendingBinding
 import com.phntechnolab.sales.model.InstallmentData
+import com.phntechnolab.sales.model.MOADocumentData
+import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.viewmodel.PendingForApprovalViewModel
@@ -65,7 +67,7 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setActionBar()
-        viewModel.schoolLiveData.observe(viewLifecycleOwner){
+        viewModel.schoolLiveData.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
                     Timber.e(it.message.toString())
@@ -80,7 +82,10 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
                         binding.pendingApprovalRv.visibility = View.VISIBLE
                         binding.noDataLottie.visibility = View.GONE
                         binding.progressIndicator.visibility = View.GONE
-                        adapter?.setData(ArrayList<SchoolData>().apply { addAll(it.data.filter { it.status == "MOA Pending" }.sortedByDescending { it.updatedAt }) })
+                        adapter?.setData(ArrayList<SchoolData>().apply {
+                            addAll(it.data.filter { it.status == "MOA Pending" }
+                                .sortedByDescending { it.updatedAt })
+                        })
                         binding.progressBar.visibility = View.GONE
                     }
                 }
@@ -150,10 +155,20 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
     }
 
     override fun meetingNavigation(schoolData: SchoolData) {
+//        requireView().findNavController()
+//            .navigate(
+//                PendingForApprovalFragmentDirections.actionPendingFragmentToMoaSignedFragment(
+//                    schoolData.installmentData ?: InstallmentData()
+//                )
+//            )
+
         requireView().findNavController()
             .navigate(
-                PendingForApprovalFragmentDirections.actionPendingFragmentToMoaSignedFragment(
-                    schoolData.installmentData ?: InstallmentData()
+                PendingForApprovalFragmentDirections.actionPendingFragmentToCostingMoaDocumentFragment(
+                    schoolData.proposeCostingData
+                        ?: ProposeCostingData(schoolId = schoolData.schoolId),
+                    schoolData.moaDocumentData
+                        ?: MOADocumentData(schoolId = schoolData.schoolId)
                 )
             )
     }

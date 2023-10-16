@@ -295,10 +295,12 @@ class CostingMOADocumentFragment : Fragment() {
                 viewModel.proposeCostingData.value?.quotationValidity?.split(" ")
                     ?.let { _dateAndTime ->
                         binding.proposeCostingStage.edtQuotationValidity.setText(_dateAndTime[0])
-                        _dateAndTime[0].split("/").let { _dateArray ->
-                            day = _dateArray[0].toInt()
-                            month = _dateArray[1].toInt()
-                            year = _dateArray[2].toInt()
+                        if (!_dateAndTime[0].trim().isNullOrBlank()) {
+                            _dateAndTime[0].split("/").let { _dateArray ->
+                                day = _dateArray[0].toInt()
+                                month = _dateArray[1].toInt()
+                                year = _dateArray[2].toInt()
+                            }
                         }
                     }
             }
@@ -728,10 +730,12 @@ class CostingMOADocumentFragment : Fragment() {
             if (!viewModel.proposeCostingData.value?.nextMeet.isNullOrEmpty()) {
                 viewModel.proposeCostingData.value?.nextMeet?.split(" ")?.let { _dateAndTime ->
                     binding.proposeCostingStage.edtDate.setText(_dateAndTime[0])
-                    _dateAndTime[0].split("/").let { _dateArray ->
-                        day = _dateArray[0].toInt()
-                        month = _dateArray[1].toInt()
-                        year = _dateArray[2].toInt()
+                    if (!_dateAndTime[0].trim().isNullOrBlank()) {
+                        _dateAndTime[0].split("/").let { _dateArray ->
+                            day = _dateArray[0].toInt()
+                            month = _dateArray[1].toInt()
+                            year = _dateArray[2].toInt()
+                        }
                     }
                 }
             }

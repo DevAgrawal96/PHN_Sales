@@ -590,10 +590,12 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 viewModel._coordinatorMeetData.value?.meetDateCoordinator?.split(" ")
                     ?.let { _dateAndTime ->
                         binding.coordinatorMeeting.edtRescheduleMeetingDate.setText(_dateAndTime[0])
-                        _dateAndTime[0].split("/").let { _dateArray ->
-                            day = _dateArray[0].toInt()
-                            month = _dateArray[1].toInt()
-                            year = _dateArray[2].toInt()
+                        if(!_dateAndTime[0].trim().isNullOrBlank()) {
+                            _dateAndTime[0].split("/").let { _dateArray ->
+                                day = _dateArray[0].toInt()
+                                month = _dateArray[1].toInt()
+                                year = _dateArray[2].toInt()
+                            }
                         }
                     }
             }
@@ -683,10 +685,12 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 viewModel._dmMeetData.value?.nextMeetDateDm?.split(" ")
                     ?.let { _dateAndTime ->
                         binding.dmMeeting.edtRescheduleMeetingDate.setText(_dateAndTime[0])
-                        _dateAndTime[0].split("/").let { _dateArray ->
-                            day = _dateArray[0].toInt()
-                            month = _dateArray[1].toInt()
-                            year = _dateArray[2].toInt()
+                        if (!_dateAndTime[0].trim().isNullOrBlank()) {
+                            _dateAndTime[0].split("/").let { _dateArray ->
+                                day = _dateArray[0].toInt()
+                                month = _dateArray[1].toInt()
+                                year = _dateArray[2].toInt()
+                            }
                         }
                     }
             }
@@ -720,16 +724,16 @@ class CoordinatorDmMeetingFragment : Fragment() {
             datePickerDialog.show()
         }
 
-        binding.coordinatorMeeting.edtRescheduleMeetingTime.setOnClickListener {
+        binding.dmMeeting.edtRescheduleMeetingTime.setOnClickListener {
             val c = Calendar.getInstance()
 
             var hour = c.get(Calendar.HOUR)
             var minute = c.get(Calendar.MINUTE)
-            if (!viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrEmpty()) {
-                viewModel._coordinatorMeetData.value?.meetDateCoordinator?.split(" ")
+            if (!viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrEmpty()) {
+                viewModel._dmMeetData.value?.nextMeetDateDm?.split(" ")
                     ?.let { _dateAndTime ->
                         if (_dateAndTime.size > 1) {
-                            binding.coordinatorMeeting.edtRescheduleMeetingTime.setText(_dateAndTime[1])
+                            binding.dmMeeting.edtRescheduleMeetingTime.setText(_dateAndTime[1])
                             _dateAndTime[1].split(":").let { _timeArray ->
                                 hour = _timeArray[0].toInt()
                                 minute = _timeArray[1].toInt()
@@ -742,19 +746,19 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 requireContext(),
                 { view, hourOfDay, minute ->
                     val updatedTime = "$hourOfDay:$minute"
-                    binding.coordinatorMeeting.edtRescheduleMeetingTime.setText(updatedTime)
-                    viewModel._coordinatorMeetData.value?.meetDateCoordinator?.let { _nextFollowUpDate ->
+                    binding.dmMeeting.edtRescheduleMeetingTime.setText(updatedTime)
+                    viewModel._dmMeetData.value?.nextMeetDateDm?.let { _nextFollowUpDate ->
                         if (_nextFollowUpDate.contains(" ")) {
                             val dateAndTime = _nextFollowUpDate.split(" ")
-                            viewModel._coordinatorMeetData.value?.meetDateCoordinator =
+                            viewModel._dmMeetData.value?.nextMeetDateDm =
                                 "${dateAndTime[0]} $updatedTime"
                         } else {
-                            viewModel._coordinatorMeetData.value?.meetDateCoordinator =
+                            viewModel._dmMeetData.value?.nextMeetDateDm =
                                 "$_nextFollowUpDate $updatedTime"
                         }
 
                         Timber.e("Time")
-                        Timber.e(viewModel._coordinatorMeetData.value?.meetDateCoordinator)
+                        Timber.e(viewModel._dmMeetData.value?.nextMeetDateDm)
 
                     }
                 },
@@ -776,10 +780,12 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 viewModel._coordinatorMeetData.value?.nextMeetDateDm?.split(" ")
                     ?.let { _dateAndTime ->
                         binding.coordinatorMeeting.edtNextMeetingDate.setText(_dateAndTime[0])
-                        _dateAndTime[0].split("/").let { _dateArray ->
-                            day = _dateArray[0].toInt()
-                            month = _dateArray[1].toInt()
-                            year = _dateArray[2].toInt()
+                        if (!_dateAndTime[0].trim().isNullOrBlank()) {
+                            _dateAndTime[0].split("/").let { _dateArray ->
+                                day = _dateArray[0].toInt()
+                                month = _dateArray[1].toInt()
+                                year = _dateArray[2].toInt()
+                            }
                         }
                     }
             }
@@ -868,10 +874,12 @@ class CoordinatorDmMeetingFragment : Fragment() {
             if (!viewModel._dmMeetData.value?.nextMeetDate.isNullOrEmpty()) {
                 viewModel._dmMeetData.value?.nextMeetDate?.split(" ")?.let { _dateAndTime ->
                     binding.dmMeeting.edtNextMeetingDate.setText(_dateAndTime[0])
-                    _dateAndTime[0].split("/").let { _dateArray ->
-                        day = _dateArray[0].toInt()
-                        month = _dateArray[1].toInt()
-                        year = _dateArray[2].toInt()
+                    if (!_dateAndTime[0].trim().isNullOrBlank()) {
+                        _dateAndTime[0].split("/").let { _dateArray ->
+                            day = _dateArray[0].toInt()
+                            month = _dateArray[1].toInt()
+                            year = _dateArray[2].toInt()
+                        }
                     }
                 }
             }
