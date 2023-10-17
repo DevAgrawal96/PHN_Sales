@@ -75,7 +75,17 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
         viewModel.meetingsData.observe(viewLifecycleOwner) {
             Timber.e("DATA OF FINAL")
             Timber.e(Gson().toJson(it))
-            adapter.setData(ArrayList<MeetingData>(it.filter { it.taskDateFilter == "today" }))
+            val meetingsData =
+                (viewModel.meetingsData.value
+                    ?: ArrayList()).filter { it.taskDateFilter == "today" }.sortedByDescending { it.dateTime }
+            if (meetingsData.isNullOrEmpty()) {
+                binding.noDataLottie.visibility = View.VISIBLE
+                binding.meetingRv.visibility = View.GONE
+            } else {
+                binding.noDataLottie.visibility = View.GONE
+                binding.meetingRv.visibility = View.VISIBLE
+                adapter.setData(ArrayList<MeetingData>(meetingsData))
+            }
         }
     }
 
@@ -94,7 +104,7 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                 when (checkedId) {
                     R.id.today_btn -> {
                         val meetingsData = (viewModel.meetingsData.value
-                            ?: ArrayList()).filter { it.taskDateFilter == "today" }
+                            ?: ArrayList()).filter { it.taskDateFilter == "today" }.sortedByDescending { it.dateTime }
                         if (meetingsData.isNullOrEmpty()) {
                             binding.noDataLottie.visibility = View.VISIBLE
                             binding.meetingRv.visibility = View.GONE
@@ -108,7 +118,7 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                     R.id.tomorrow_btn -> {
                         val meetingsData =
                                 (viewModel.meetingsData.value
-                                    ?: ArrayList()).filter { it.taskDateFilter == "tomorrow" }
+                                    ?: ArrayList()).filter { it.taskDateFilter == "tomorrow" }.sortedByDescending { it.dateTime }
                         if (meetingsData.isNullOrEmpty()) {
                             binding.noDataLottie.visibility = View.VISIBLE
                             binding.meetingRv.visibility = View.GONE
@@ -122,7 +132,7 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                     R.id.upcoming_btn -> {
                         val meetingsData =
                             (viewModel.meetingsData.value
-                                ?: ArrayList()).filter { it.taskDateFilter == "upcoming" }
+                                ?: ArrayList()).filter { it.taskDateFilter == "upcoming" }.sortedByDescending { it.dateTime }
                         if (meetingsData.isNullOrEmpty()) {
                             binding.noDataLottie.visibility = View.VISIBLE
                             binding.meetingRv.visibility = View.GONE
@@ -135,6 +145,11 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.todayBtn.isChecked = true
     }
 
     override fun onStop() {
