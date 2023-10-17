@@ -389,18 +389,6 @@ class CoordinatorDmMeetingFragment : Fragment() {
         if (_dmData?.productDemoHappen == "yes") binding.dmMeeting.demoHappenedGroup.check(R.id.demoHappenedYes)
         else binding.dmMeeting.demoHappenedGroup.check(R.id.demoHappenedNo)
 
-        if (_dmData?.nextFollowup == "yes") {
-            binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingYes)
-            binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.VISIBLE
-            binding.dmMeeting.tilNextMeetingDate.visibility = View.VISIBLE
-            binding.dmMeeting.tilNextMeetingTime.visibility = View.VISIBLE
-        } else {
-            binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingNo)
-            binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
-            binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
-            binding.dmMeeting.tilNextMeetingTime.visibility = View.GONE
-        }
-
         if (_dmData?.interested == "yes") binding.dmMeeting.labSetupGroup.check(R.id.labSetupYes)
         else binding.dmMeeting.labSetupGroup.check(R.id.labSetupNo)
 
@@ -411,6 +399,18 @@ class CoordinatorDmMeetingFragment : Fragment() {
         } else {
             binding.dmMeeting.rescheduleMeetingGroup.check(R.id.rescheduleMeetingNo)
             hideDMRescheduleAndShowNextMeetingDate()
+        }
+
+        if (_dmData?.nextFollowup == "yes") {
+            binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingYes)
+            binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.VISIBLE
+            binding.dmMeeting.tilNextMeetingDate.visibility = View.VISIBLE
+            binding.dmMeeting.tilNextMeetingTime.visibility = View.VISIBLE
+        } else {
+            binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingNo)
+            binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
+            binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
+            binding.dmMeeting.tilNextMeetingTime.visibility = View.GONE
         }
 
         viewModel._dmMeetData.value?.nextMeetDateDm.let {

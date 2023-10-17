@@ -51,7 +51,7 @@ interface RetrofitApi {
     suspend fun getUserProfileData(): Response<UserDataModel>
 
     @POST("api/addschool")
-    suspend fun addSchool(@Body schoolDetails: AddSchoolSchema): Response<CustomResponse>
+    suspend fun addSchool(@Body schoolDetails: MultipartBody): Response<CustomResponse>
 
     @PUT("api/updateschool/{id}")
     suspend fun updateSchoolData(
