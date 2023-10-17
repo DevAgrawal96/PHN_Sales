@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
 import androidx.core.view.get
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -129,14 +130,20 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                                 }
                             }
                         }))
-                if(!schoolData.isNullOrEmpty())
-                    adapter?.setData(schoolData as ArrayList<SchoolData>)
                 if (schoolData.isNullOrEmpty()) {
-                    binding.noDataLottie.visibility = View.VISIBLE
-                    binding.homeRecyclerView.visibility = View.GONE
-                    binding.progressBar.visibility = View.GONE
-                    binding.progressIndicator.visibility = View.GONE
+                    if (!binding.noInternetConnection.isVisible && !binding.noInternetMessage.isVisible) {
+                        binding.noDataLottie.visibility = View.VISIBLE
+                        binding.homeRecyclerView.visibility = View.GONE
+                        binding.progressBar.visibility = View.GONE
+                        binding.progressIndicator.visibility = View.GONE
+                    }else{
+                        binding.noDataLottie.visibility = View.GONE
+                        binding.homeRecyclerView.visibility = View.GONE
+                        binding.progressBar.visibility = View.GONE
+                        binding.progressIndicator.visibility = View.GONE
+                    }
                 } else {
+                    adapter?.setData(schoolData as ArrayList<SchoolData>)
                     binding.homeRecyclerView.visibility = View.VISIBLE
                     binding.noDataLottie.visibility = View.GONE
                     binding.progressIndicator.visibility = View.GONE
@@ -184,6 +191,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                             binding.noInternetMessage.visibility = View.VISIBLE
                             binding.progressIndicator.visibility = View.GONE
                         }
+
                         getString(R.string.something_went_wrong) -> {
                             Toast.makeText(
                                 requireContext(),

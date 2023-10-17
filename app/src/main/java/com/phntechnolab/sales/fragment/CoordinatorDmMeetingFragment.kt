@@ -1019,9 +1019,9 @@ class CoordinatorDmMeetingFragment : Fragment() {
         binding.dmMeeting.meetingDateAndTimeHeading.visibility = View.GONE
         binding.dmMeeting.tilRescheduleMeetingDate.visibility = View.GONE
         binding.dmMeeting.tilRescheduleMeetingTime.visibility = View.GONE
-        binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.VISIBLE
-        binding.dmMeeting.tilNextMeetingDate.visibility = View.VISIBLE
-        binding.dmMeeting.tilNextMeetingTime.visibility = View.VISIBLE
+        binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
+        binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
+        binding.dmMeeting.tilNextMeetingTime.visibility = View.GONE
     }
 
     fun printToast(message: String) {
