@@ -120,7 +120,7 @@
                         android:digits="@string/number_validation"
                         android:inputType="number"
                         android:maxLength="10"
-                        android:imeOptions="actionNext"
+                        android:imeOptions="actionDone"
                         android:maxLines="1"
                         android:text="@={viewModel.newSchoolData.avgSchoolFees}" />
                 </com.google.android.material.textfield.TextInputLayout>

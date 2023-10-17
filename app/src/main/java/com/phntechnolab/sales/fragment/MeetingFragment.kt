@@ -187,6 +187,10 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                 findNavController().navigate(R.id.action_meetingFragment_to_notificationFragment)
                 true
             }
+            R.id.menu_home -> {
+                findNavController().navigate(R.id.homeFragment)
+                true
+            }
 
             else -> {
                 false

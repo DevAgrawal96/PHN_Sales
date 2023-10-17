@@ -9,6 +9,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -17,12 +20,14 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.gson.Gson
+import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentCostingMoaDocumentBinding
 import com.phntechnolab.sales.databinding.LogoutDialogBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
@@ -36,7 +41,7 @@ import java.util.Calendar
 import java.util.Date
 
 @AndroidEntryPoint
-class CostingMOADocumentFragment : Fragment() {
+class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
     private var _binding: FragmentCostingMoaDocumentBinding? = null
     private val binding get() = _binding!!
@@ -101,6 +106,7 @@ class CostingMOADocumentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setActionBar()
 
         observers()
 
@@ -825,6 +831,34 @@ class CostingMOADocumentFragment : Fragment() {
             Timber.e(image.toString())
             viewModel.uploadDocument(it, requireContext())
             binding.moaDocument.documentFileName.text = "${viewModel.imageName}.pdf"
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (requireActivity() as MainActivity).removeMenuProvider(this)
+        activity?.removeMenuProvider(this)
+    }
+
+    private fun setActionBar() {
+        (requireActivity() as MainActivity).setSupportActionBar(binding.topAppBar)
+        activity?.addMenuProvider(this)
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(com.phntechnolab.sales.R.menu.meeting_topbar_menu, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return when (menuItem.itemId) {
+            com.phntechnolab.sales.R.id.menu_home_n -> {
+                findNavController().navigate(com.phntechnolab.sales.R.id.homeFragment)
+                true
+            }
+
+            else -> {
+                false
+            }
         }
     }
 

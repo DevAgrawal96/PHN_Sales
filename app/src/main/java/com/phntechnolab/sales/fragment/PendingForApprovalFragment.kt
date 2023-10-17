@@ -149,6 +149,11 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
                 findNavController().navigate(R.id.action_pendingFragment_to_notificationFragment)
                 true
             }
+            R.id.menu_home -> {
+                findNavController().navigate(R.id.homeFragment)
+                true
+            }
+
 
             else -> {
                 false

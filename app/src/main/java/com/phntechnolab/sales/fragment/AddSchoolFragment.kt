@@ -12,6 +12,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -20,6 +23,7 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -31,6 +35,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentAssignedSchoolsStepperBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.SchoolData
@@ -45,7 +50,7 @@ import java.util.regex.Pattern
 
 
 @AndroidEntryPoint
-class AddSchoolFragment : Fragment() {
+class AddSchoolFragment : Fragment(), MenuProvider {
 
     private var _binding: FragmentAssignedSchoolsStepperBinding? = null
     private val binding get() = _binding!!
@@ -130,7 +135,7 @@ class AddSchoolFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setActionBar()
         initializeData()
 
         onCheckedChangedListener()
@@ -475,6 +480,7 @@ class AddSchoolFragment : Fragment() {
     private fun observers() {
 
         viewModel.uploadImgResponse.observe(viewLifecycleOwner) {
+            binding.progressBar.visibility = View.GONE
             when (it) {
                 is NetworkResult.Success -> {
 
@@ -550,6 +556,7 @@ class AddSchoolFragment : Fragment() {
                 }
 
                 is NetworkResult.Error -> {
+                    binding.progressBar.visibility = View.GONE
                     Toast.makeText(
                         requireContext(),
                         resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
@@ -674,18 +681,21 @@ class AddSchoolFragment : Fragment() {
             Timber.d(Gson().toJson(viewModel.newSchoolData.value))
             addValidationWatchers()
             checkValidationsAndApiCall(1)
+            hideKeyboard()
         }
 
         binding.schoolDetails.btnNext.setOnClickListener {
             Timber.d("data binding data 2")
             Timber.d(Gson().toJson(viewModel.newSchoolData.value))
             checkValidationsAndApiCall(2)
+            hideKeyboard()
         }
 
         binding.followupDetails.btnSave.setOnClickListener {
             Timber.d("data binding data 3")
             Timber.d(Gson().toJson(viewModel.newSchoolData.value))
             checkValidationsAndApiCall(3)
+            hideKeyboard()
         }
 
         binding.basicDetails.boardSpinner.setOnItemClickListener { parent, view, position, id ->
@@ -919,7 +929,7 @@ class AddSchoolFragment : Fragment() {
         val mPhonePattern = Pattern.compile("[0123456789]{10}")
         val isCoordinatorPhoneValid =
             mPhonePattern.matcher(binding.basicDetails.edtCoordinatorMono.text.toString()).matches()
-        if(binding.basicDetails.edtCoordinatorMono.text.toString().trim().isEmpty())
+        if (binding.basicDetails.edtCoordinatorMono.text.toString().trim().isEmpty())
             binding.basicDetails.tilCoordinatorMono.error = null
         else if (!isCoordinatorPhoneValid)
             binding.basicDetails.tilCoordinatorMono.error =
@@ -931,7 +941,7 @@ class AddSchoolFragment : Fragment() {
             Pattern.compile("[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+")
                 .matcher(binding.basicDetails.edtEmailId.text.toString())
                 .matches()
-        if(binding.basicDetails.edtEmailId.text.toString().trim().isEmpty())
+        if (binding.basicDetails.edtEmailId.text.toString().trim().isEmpty())
             binding.basicDetails.tilEmailId.error = null
         else if (!isEmailValid)
             binding.basicDetails.tilEmailId.error =
@@ -974,9 +984,9 @@ class AddSchoolFragment : Fragment() {
     private fun setSchoolDetails() {
         binding.basicDetails.edtSchoolName.setText(viewModel.newSchoolData.value?.schoolName)
         binding.basicDetails.edtSchoolAddress.setText(viewModel.newSchoolData.value?.schoolAddress)
-        if(viewModel.newSchoolData.value?.intake.toString().trim() != "0")
+        if (viewModel.newSchoolData.value?.intake.toString().trim() != "0")
             binding.basicDetails.edtSchoolTotalIntake.setText("${viewModel.newSchoolData.value?.intake}")
-        if(viewModel.newSchoolData.value?.totalClassRoom.toString().trim() != "0")
+        if (viewModel.newSchoolData.value?.totalClassRoom.toString().trim() != "0")
             binding.basicDetails.edtTotalNoOfClassroom.setText("${viewModel.newSchoolData.value?.totalClassRoom}")
         binding.basicDetails.edtEmailId.setText(viewModel.newSchoolData.value?.email)
         binding.basicDetails.edtCoordinatorName.setText(viewModel.newSchoolData.value?.coName)
@@ -1017,6 +1027,34 @@ class AddSchoolFragment : Fragment() {
                 resources.getString(com.phntechnolab.sales.R.string.save)
             binding.followupDetails.btnSave.text =
                 resources.getString(com.phntechnolab.sales.R.string.save)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (requireActivity() as MainActivity).removeMenuProvider(this)
+        activity?.removeMenuProvider(this)
+    }
+
+    private fun setActionBar() {
+        (requireActivity() as MainActivity).setSupportActionBar(binding.topBar)
+        activity?.addMenuProvider(this)
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.meeting_topbar_menu, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return when (menuItem.itemId) {
+            R.id.menu_home_n -> {
+                findNavController().navigate(R.id.homeFragment)
+                true
+            }
+
+            else -> {
+                false
+            }
         }
     }
 

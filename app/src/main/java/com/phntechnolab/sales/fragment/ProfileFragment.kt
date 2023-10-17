@@ -315,6 +315,11 @@ class ProfileFragment : Fragment(), MenuProvider {
                 true
             }
 
+            R.id.menu_home -> {
+                findNavController().navigate(R.id.homeFragment)
+                true
+            }
+
             else -> {
                 false
             }
