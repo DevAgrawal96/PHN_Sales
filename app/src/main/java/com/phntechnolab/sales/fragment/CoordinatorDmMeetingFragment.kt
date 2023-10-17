@@ -210,10 +210,17 @@ class CoordinatorDmMeetingFragment : Fragment() {
 
     private fun checkDmRequiredFieldsData(): Boolean {
         val isDmAttendedMeet = viewModel._dmMeetData.value?.coAttendMeet
+        val isDemoHappened = viewModel._dmMeetData.value?.productDemoHappen == "yes"
         if (isDmAttendedMeet != "yes") {
             Toast.makeText(
                 requireContext(),
                 requireActivity().getString(R.string.please_attend_the_meeting_with_director),
+                Toast.LENGTH_LONG
+            ).show()
+        } else if(!isDemoHappened){
+            Toast.makeText(
+                requireContext(),
+                requireActivity().getString(R.string.please_mark_the_demo_happened),
                 Toast.LENGTH_LONG
             ).show()
         }
