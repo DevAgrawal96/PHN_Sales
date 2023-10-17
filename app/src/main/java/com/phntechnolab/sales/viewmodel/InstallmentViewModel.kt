@@ -27,20 +27,26 @@ import javax.inject.Inject
 @HiltViewModel
 class InstallmentViewModel @Inject constructor(private var repository: InstallmentRepository) :
     ViewModel() {
+
+    private var _position: Int = 0
+    private var _count: Int = 0
+    private val iPosition get() = _position
+    private val iCount get() = _count
+
     var _requestFile1: RequestBody? = null
-     var is_requestFile1  = false
+    var is_requestFile1 = false
     var imageData1: MultipartBody.Part? = null
     var imageName1: String? = null
     var imagesize1: Int? = null
 
     var _requestFile2: RequestBody? = null
-     var is_requestFile2  = false
+    var is_requestFile2 = false
     var imageData2: MultipartBody.Part? = null
     var imageName2: String? = null
     var imagesize2: Int? = null
 
     var _requestFile3: RequestBody? = null
-     var is_requestFile3  = false
+    var is_requestFile3 = false
     var imageData3: MultipartBody.Part? = null
     var imageName3: String? = null
     var imagesize3: Int? = null
@@ -55,14 +61,32 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
     val addInstallmentImageResponse: LiveData<NetworkResult<CustomResponse>>
         get() = repository.installmentImageResponse
 
+    fun getPosition(): Int {
+        return iPosition
+    }
+
+    fun setPosition(position: Int) {
+        _position = position
+    }
+
+    fun getCount(): Int {
+        return iCount
+    }
+
+    fun setCount(count: Int) {
+        _count = count
+    }
+
+
     fun setInstallmentData(data: SchoolData?) {
         _installmentData.postValue(data)
     }
 
-    fun setInstallmentsData(data: InstallmentData){
+    fun setInstallmentsData(data: InstallmentData) {
         _installmentData.value?.installmentData = data
         _installmentData.postValue(_installmentData.value)
     }
+
     fun uploadInstallmentDocument(
         documentUri: Uri,
         requireContext: Context,
@@ -182,31 +206,31 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
     private fun returnJsonData(): MultipartBody {
         val multipartBody = MultipartBody.Builder().setType(MultipartBody.FORM)
 //        if (is_requestFile1) {
-            Timber.e("is_requestFile1")
-            _requestFile1?.let {
-                multipartBody.addFormDataPart(
-                    "first_installment_reciept", imageName1,
-                    it
-                )
-            }
+        Timber.e("is_requestFile1")
+        _requestFile1?.let {
+            multipartBody.addFormDataPart(
+                "first_installment_reciept", imageName1,
+                it
+            )
+        }
 //        }
 //        if (is_requestFile2) {
-            Timber.e("is_requestFile2")
-            _requestFile2?.let {
-                multipartBody.addFormDataPart(
-                    "second_installment_reciept", imageName2,
-                    it
-                )
-            }
+        Timber.e("is_requestFile2")
+        _requestFile2?.let {
+            multipartBody.addFormDataPart(
+                "second_installment_reciept", imageName2,
+                it
+            )
+        }
 //        }
 //        if (is_requestFile3) {
-            Timber.e("is_requestFile3")
-            _requestFile3?.let {
-                multipartBody.addFormDataPart(
-                    "third_installment_reciept", imageName3,
-                    it
-                )
-            }
+        Timber.e("is_requestFile3")
+        _requestFile3?.let {
+            multipartBody.addFormDataPart(
+                "third_installment_reciept", imageName3,
+                it
+            )
+        }
 //        }
         return multipartBody.build()
     }
