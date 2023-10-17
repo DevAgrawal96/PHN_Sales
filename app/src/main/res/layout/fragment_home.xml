@@ -72,14 +72,6 @@
                     app:checkedIconEnabled="false" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/assigned"
-                    style="@style/CustomChipChoice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assigned"
-                    app:checkedIconEnabled="false" />
-
-                <com.google.android.material.chip.Chip
                     android:id="@+id/visited"
                     style="@style/CustomChipChoice"
                     android:layout_width="wrap_content"
@@ -109,6 +101,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/not_interested"
+                    app:checkedIconEnabled="false" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/assigned"
+                    style="@style/CustomChipChoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/assigned"
                     app:checkedIconEnabled="false" />
 
             </com.google.android.material.chip.ChipGroup>
