@@ -210,10 +210,17 @@ class CoordinatorDmMeetingFragment : Fragment() {
 
     private fun checkDmRequiredFieldsData(): Boolean {
         val isDmAttendedMeet = viewModel._dmMeetData.value?.coAttendMeet
+        val isDemoHappened = viewModel._dmMeetData.value?.productDemoHappen == "yes"
         if (isDmAttendedMeet != "yes") {
             Toast.makeText(
                 requireContext(),
                 requireActivity().getString(R.string.please_attend_the_meeting_with_director),
+                Toast.LENGTH_LONG
+            ).show()
+        } else if(!isDemoHappened){
+            Toast.makeText(
+                requireContext(),
+                requireActivity().getString(R.string.please_mark_the_demo_happened),
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -250,14 +257,14 @@ class CoordinatorDmMeetingFragment : Fragment() {
         }
 
         val isRescheduledMeetingDateAvailableWithDate =
-            !viewModel._dmMeetData.value?.rescheduleWithDirector.isNullOrBlank() && isRescheduledMeeting == "yes"
+            !viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrBlank() && isRescheduledMeeting == "yes"
         val isNextMeetingDateAvailableWithDate =
             !viewModel._dmMeetData.value?.nextMeetDate.isNullOrBlank() && isRescheduledMeeting != "yes"
 
         return if(!isInterested){
             return (isDmAttendedMeet == "yes") && !isInterested
         }else {
-            return (isDmAttendedMeet == "yes") && (!isMeetingAgenda.isNullOrBlank()) && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate || isInterested)
+            return (isDmAttendedMeet == "yes") && (!isMeetingAgenda.isNullOrBlank()) && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate)
         }
     }
 
