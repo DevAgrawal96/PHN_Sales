@@ -46,11 +46,6 @@ class LoginRepository @Inject constructor(
                 if (result.isSuccessful && result?.body() != null) {
                     loginMutableLiveData.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
-                    Toast.makeText(
-                        application,
-                        application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
-                    ).show()
                     loginMutableLiveData.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -65,11 +60,7 @@ class LoginRepository @Inject constructor(
                         )
                     )
                 } else {
-                    Toast.makeText(
-                        application,
-                        application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
-                    ).show()
+
                     loginMutableLiveData.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -92,11 +83,7 @@ class LoginRepository @Inject constructor(
                         null
                     )
                 )
-                Toast.makeText(
-                    application,
-                    application.getString(R.string.something_went_wrong),
-                    Toast.LENGTH_SHORT
-                ).show()
+
             }
         } else {
             loginMutableLiveData.postValue(
@@ -105,11 +92,7 @@ class LoginRepository @Inject constructor(
                     null
                 )
             )
-            Toast.makeText(
-                application,
-                application.resources.getString(R.string.please_connection_message),
-                Toast.LENGTH_SHORT
-            ).show()
+
         }
     }
 

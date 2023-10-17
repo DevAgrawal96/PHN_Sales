@@ -58,7 +58,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     override fun onResume() {
         super.onResume()
-
         binding.all.isChecked = true
         getData()
     }
@@ -153,7 +152,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     private fun observers() {
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
-            viewModel.refereshToken()
+//            viewModel.refereshToken()
             when (it) {
                 is NetworkResult.Success -> {
                     Timber.e(it.message.toString())

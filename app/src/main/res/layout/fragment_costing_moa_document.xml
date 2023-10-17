@@ -78,6 +78,19 @@
                 app:sv_stepViewStyle="@style/StepView"
                 app:sv_stepsNumber="2" />
 
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progress_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone"
+                app:indicatorColor="@color/regular_blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
             <include
                 android:id="@+id/proposeCostingStage"
                 layout="@layout/fragment_propose_costing_stage"

@@ -85,23 +85,11 @@ class LoginFragment : Fragment() {
                     val password = binding.tilPassword.helperText
 
                     if (email_id == null && password == null) {
-                        if (NetworkUtils.isInternetAvailable(it.context)) {
-                            val loginDetails = LoginDetails(
-                                binding.edtEmailId.text.toString(),
-                                password = binding.edtPassword.text.toString()
-                            )
-
-//                    hideKeyboard()
-//                    disableScreen()
-                            viewModel.login(loginDetails, it.context)
-
-                        } else {
-                            Snackbar.make(
-                                requireActivity().findViewById(android.R.id.content),
-                                getString(R.string.no_internet_connection),
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                        }
+                        val loginDetails = LoginDetails(
+                            binding.edtEmailId.text.toString(),
+                            password = binding.edtPassword.text.toString()
+                        )
+                        viewModel.login(loginDetails, it.context)
                     }
                 }
             } else {
@@ -138,66 +126,71 @@ class LoginFragment : Fragment() {
 
                 is NetworkResult.Success -> {
                     Timber.d("token-Tasks=${it}")
-                    when (it.data?.status_code) {
-                        200 -> {
+                    if (it.message == requireContext().resources.getString(R.string.something_went_wrong)) {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.something_went_wrong),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else if (it.message == requireContext().resources.getString(R.string.please_connection_message)) {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.please_connection_message),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }else{}
 
-                            lifecycleScope.launch(Dispatchers.IO) {
-                                setToken(
-                                    requireContext(),
-                                    dataStoreProvider,
-                                    "authToken",
-                                    it.data.access_token.toString()
-                                )
+                    if (it.data?.status_code == 200) {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            setToken(
+                                requireContext(),
+                                dataStoreProvider,
+                                "authToken",
+                                it.data.access_token.toString()
+                            )
 
-                                setIsUserLoggedIn(
-                                    requireContext(),
-                                    dataStoreProvider,
-                                    "isLoggedIn",
-                                    "true"
-                                )
+                            setIsUserLoggedIn(
+                                requireContext(),
+                                dataStoreProvider,
+                                "isLoggedIn",
+                                "true"
+                            )
 
-                                setUser(
-                                    requireContext(),
-                                    dataStoreProvider,
-                                    "user",
-                                    it.data
-                                )
-                            }.invokeOnCompletion {
-                                lifecycleScope.launch(Dispatchers.Main) {
+                            setUser(
+                                requireContext(),
+                                dataStoreProvider,
+                                "user",
+                                it.data
+                            )
+                        }.invokeOnCompletion {
+                            lifecycleScope.launch(Dispatchers.Main) {
 
-                                    requireView().findNavController()
-                                        .navigate(R.id.action_loginFragment_to_homeFragment)
-                                }
+                                requireView().findNavController()
+                                    .navigate(R.id.action_loginFragment_to_homeFragment)
                             }
                         }
+                    } else {
                     }
                 }
 
                 is NetworkResult.Error -> {
-                    when (it.data?.status_code) {
-                        401 -> {
-                            Toast.makeText(
-                                requireContext(),
-                                "unauthorized user",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            showError()
-                        }
-
-                        else -> {
-                            Timber.e("Error body else")
-                        }
+                    if (it.data?.status_code == 401) {
+                        Toast.makeText(
+                            requireContext(),
+                            "unauthorized user",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        showError()
+                    } else {
+                        Timber.e("unauthorized user Error body else")
                     }
-
                 }
 
-                else -> {
-                }
+                else -> {}
             }
         })
 
         addEmailValidation()
-        focusListener()
     }
 
     private fun showError() {
@@ -206,21 +199,6 @@ class LoginFragment : Fragment() {
             getString(R.string.enter_valid_email_and_password),
             Snackbar.LENGTH_SHORT
         ).show()
-    }
-
-    private fun focusListener() {
-        binding.edtEmailId.setOnFocusChangeListener { v, focused ->
-            if (!focused) {
-                Timber.e("hide-if")
-//                hideSoftKeyboard()
-            }
-        }
-        binding.edtPassword.setOnFocusChangeListener { v, focused ->
-            if (!focused) {
-                Timber.e("hide-if")
-//                hideSoftKeyboard()
-            }
-        }
     }
 
 

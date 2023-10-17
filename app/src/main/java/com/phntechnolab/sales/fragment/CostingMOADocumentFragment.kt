@@ -150,10 +150,12 @@ class CostingMOADocumentFragment : Fragment() {
         binding.moaDocument.updateBtn.setOnClickListener {
             Timber.e("MOA DATA POST")
             Timber.e(Gson().toJson(viewModel._moaDocumentData.value))
-            if (isMOADocumentFieldsValid())
+            if (isMOADocumentFieldsValid()) {
+                binding.progressIndicator.visibility = View.VISIBLE
                 viewModel.updateMoaDocumentDetails()
-            else
+            } else {
                 Timber.e("fill all man")
+            }
 
         }
 
@@ -266,13 +268,13 @@ class CostingMOADocumentFragment : Fragment() {
             isDesignationNotSelected ||
             isAgreementDurationNotSelected || isMoaDocumentNotUploaded
         ) {
-            if(isMoaDocumentNotUploaded){
+            if (isMoaDocumentNotUploaded) {
                 Toast.makeText(
                     requireContext(),
                     requireActivity().getString(com.phntechnolab.sales.R.string.please_upload_moa_document),
                     Toast.LENGTH_LONG
                 ).show()
-            }else {
+            } else {
                 Toast.makeText(
                     requireContext(),
                     requireActivity().getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_details),
@@ -411,16 +413,18 @@ class CostingMOADocumentFragment : Fragment() {
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
-
+                    binding.progressIndicator.visibility = View.GONE
                     showDialog()
 //                    setPositionView()
                 }
 
                 is NetworkResult.Error -> {
+                    binding.progressIndicator.visibility = View.GONE
                     Timber.e(it.toString())
                 }
 
                 else -> {
+                    binding.progressIndicator.visibility = View.GONE
                     Toast.makeText(
                         requireContext(),
                         requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
@@ -816,7 +820,7 @@ class CostingMOADocumentFragment : Fragment() {
 
     private var moaDocument = registerForActivityResult(ActivityResultContracts.GetContent()) {
         Timber.e("BACK")
-        if(it != null) {
+        if (it != null) {
             image = it
             Timber.e(image.toString())
             viewModel.uploadDocument(it, requireContext())
