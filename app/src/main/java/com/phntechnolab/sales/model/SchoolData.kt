@@ -85,7 +85,7 @@ class SchoolData : Parcelable{
             field = value ?: ""
         }
 
-    @SerializedName("interested") var interested : String = ""
+    @SerializedName("interested") var interested : String = "yes"
         set(value){
             field = value ?: ""
         }
@@ -166,7 +166,7 @@ data class CoordinatorData(
     @SerializedName("co_attend_meet") var coAttendMeet : String? = "",
     @SerializedName("product_demo_happen") var productDemoHappen : String? = "",
     @SerializedName("next_followup_dm") var nextFollowupDm : String? = "",
-    @SerializedName("interested") var interested : String? = "",
+    @SerializedName("interested") var interested : String? = "yes",
     @SerializedName("next_meet_date_dm") var nextMeetDateDm : String? = "",
     @SerializedName("reschedule_coordinator") var rescheduleWithCoordinator : String? = "",
     @SerializedName("meet_date_coordinator") var meetDateCoordinator : String? = ""
@@ -180,7 +180,7 @@ data class DMData(
     @SerializedName("co_attend_meet") var coAttendMeet : String? = "",
     @SerializedName("product_demo_happen") var productDemoHappen : String? = "",
     @SerializedName("next_followup") var nextFollowup : String? = "",
-    @SerializedName("interested") var interested : String? = "",
+    @SerializedName("interested") var interested : String? = "yes",
     @SerializedName("next_meet_date") var nextMeetDate : String? = "",
     @SerializedName("meeting_status") var meetingStatus : String? = "",
     @SerializedName("reschedule_director") var rescheduleWithDirector : String? = "",

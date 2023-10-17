@@ -60,7 +60,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
         super.onResume()
 
         binding.all.isChecked = true
-        getData()
+        viewModel.refereshToken()
     }
 
     override fun onCreateView(
@@ -153,7 +153,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     private fun observers() {
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
-//            viewModel.refereshToken()
             when (it) {
                 is NetworkResult.Success -> {
                     Timber.e(it.message.toString())
@@ -204,6 +203,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
             }
 
             viewModel.refereshToken.observe(viewLifecycleOwner) {
+                getData()
                 when (it) {
                     is NetworkResult.Success -> {
                         Log.e("TOKEN REFERESH", Gson().toJson(it))

@@ -179,6 +179,7 @@
     <string name="dm_meeting_dialog_details">You have successfully done two steps and the school has been added to your MOA Negotiation list</string>
     <string name="please_attend_the_meeting_with_coordinator">Please mark the meeting with Teacher/Principal yes for proceed.</string>
     <string name="please_attend_the_meeting_with_director">Please mark the meeting with Director yes for proceed.</string>
+    <string name="please_mark_the_demo_happened">Please mark the demo happened yes for proceed.</string>
     <string name="please_fill_rescheduled_date_for_proceed">Please fill rescheduled meeting date for proceed.</string>
     <string name="please_next_rescheduled_date_for_proceed">Please fill next meeting date for proceed.</string>
     <string name="please_fill_all_the_mendate_details">Please fill all the mandate fields to proceed.</string>
