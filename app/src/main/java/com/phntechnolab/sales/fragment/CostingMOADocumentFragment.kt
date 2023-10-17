@@ -142,20 +142,20 @@ class CostingMOADocumentFragment : Fragment() {
         binding.proposeCostingStage.updateBtn.setOnClickListener {
             Timber.e("DATA POST")
             Timber.e(Gson().toJson(viewModel._proposeCostingData.value))
-//            if (isProposeCostingFieldsValid()) {
+            if (isProposeCostingFieldsValid()) {
                 viewModel.updateProposeCostingDetails()
-//            }
+            }
         }
 
         binding.moaDocument.updateBtn.setOnClickListener {
             Timber.e("MOA DATA POST")
             Timber.e(Gson().toJson(viewModel._moaDocumentData.value))
-//            if (isMOADocumentFieldsValid()) {
+            if (isMOADocumentFieldsValid()) {
                 binding.progressIndicator.visibility = View.VISIBLE
                 viewModel.updateMoaDocumentDetails()
-//            } else {
-//                Timber.e("fill all man")
-//            }
+            } else {
+                Timber.e("fill all man")
+            }
 
         }
 
