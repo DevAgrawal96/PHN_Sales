@@ -257,14 +257,14 @@ class CoordinatorDmMeetingFragment : Fragment() {
         }
 
         val isRescheduledMeetingDateAvailableWithDate =
-            !viewModel._dmMeetData.value?.rescheduleWithDirector.isNullOrBlank() && isRescheduledMeeting == "yes"
+            !viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrBlank() && isRescheduledMeeting == "yes"
         val isNextMeetingDateAvailableWithDate =
             !viewModel._dmMeetData.value?.nextMeetDate.isNullOrBlank() && isRescheduledMeeting != "yes"
 
         return if(!isInterested){
             return (isDmAttendedMeet == "yes") && !isInterested
         }else {
-            return (isDmAttendedMeet == "yes") && (!isMeetingAgenda.isNullOrBlank()) && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate || isInterested)
+            return (isDmAttendedMeet == "yes") && (!isMeetingAgenda.isNullOrBlank()) && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate)
         }
     }
 
