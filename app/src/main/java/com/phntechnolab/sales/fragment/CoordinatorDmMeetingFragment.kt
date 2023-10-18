@@ -7,12 +7,16 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,6 +24,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentCoordinatorDmMeetingBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.CoordinatorData
@@ -33,7 +38,7 @@ import java.util.Calendar
 import java.util.Date
 
 @AndroidEntryPoint
-class CoordinatorDmMeetingFragment : Fragment() {
+class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
 
     private var _binding: FragmentCoordinatorDmMeetingBinding? = null
     private val binding get() = _binding!!
@@ -92,6 +97,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setActionBar()
 
         observers()
 
@@ -166,7 +172,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 requireActivity().getString(R.string.please_attend_the_meeting_with_coordinator),
                 Toast.LENGTH_LONG
             ).show()
-        }else if(!isDemoHappened){
+        } else if (!isDemoHappened) {
             Toast.makeText(
                 requireContext(),
                 requireActivity().getString(R.string.please_mark_the_demo_happened),
@@ -177,7 +183,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
         val isInterested = viewModel._coordinatorMeetData.value?.interested == "yes"
         val isRescheduledMeeting = viewModel._coordinatorMeetData.value?.rescheduleWithCoordinator
 
-        if(isInterested) {
+        if (isInterested) {
             if (isRescheduledMeeting == "yes") {
                 if (viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrBlank()) {
                     Toast.makeText(
@@ -201,10 +207,10 @@ class CoordinatorDmMeetingFragment : Fragment() {
             !viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrBlank() && isRescheduledMeeting == "yes"
         val isNextMeetingDateAvailableWithDate =
             !viewModel._coordinatorMeetData.value?.nextMeetDateDm.isNullOrBlank() && isRescheduledMeeting != "yes"
-        return if(!isInterested) {
+        return if (!isInterested) {
             (isCoordinatorAttendedMeet == "yes") && !isInterested
-        }else{
-            (isCoordinatorAttendedMeet == "yes") && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate)
+        } else {
+            (isCoordinatorAttendedMeet == "yes") && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate) && isDemoHappened
         }
     }
 
@@ -217,7 +223,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 requireActivity().getString(R.string.please_attend_the_meeting_with_director),
                 Toast.LENGTH_LONG
             ).show()
-        } else if(!isDemoHappened){
+        } else if (!isDemoHappened) {
             Toast.makeText(
                 requireContext(),
                 requireActivity().getString(R.string.please_mark_the_demo_happened),
@@ -236,7 +242,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
         val isRescheduledMeeting = viewModel._dmMeetData.value?.rescheduleWithDirector
         val isInterested = viewModel._dmMeetData.value?.interested == "yes"
 
-        if(isInterested) {
+        if (isInterested) {
             if (isRescheduledMeeting == "yes") {
                 if (viewModel._dmMeetData.value?.nextMeetDateDm.isNullOrBlank()) {
                     Toast.makeText(
@@ -261,10 +267,10 @@ class CoordinatorDmMeetingFragment : Fragment() {
         val isNextMeetingDateAvailableWithDate =
             !viewModel._dmMeetData.value?.nextMeetDate.isNullOrBlank() && isRescheduledMeeting != "yes"
 
-        return if(!isInterested){
+        return if (!isInterested) {
             return (isDmAttendedMeet == "yes") && !isInterested
-        }else {
-            return (isDmAttendedMeet == "yes") && (!isMeetingAgenda.isNullOrBlank()) && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate)
+        } else {
+            return (isDmAttendedMeet == "yes") && (!isMeetingAgenda.isNullOrBlank()) && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate) && isDemoHappened
         }
     }
 
@@ -621,7 +627,7 @@ class CoordinatorDmMeetingFragment : Fragment() {
                 viewModel._coordinatorMeetData.value?.meetDateCoordinator?.split(" ")
                     ?.let { _dateAndTime ->
                         binding.coordinatorMeeting.edtRescheduleMeetingDate.setText(_dateAndTime[0])
-                        if(!_dateAndTime[0].trim().isNullOrBlank()) {
+                        if (!_dateAndTime[0].trim().isNullOrBlank()) {
                             _dateAndTime[0].split("/").let { _dateArray ->
                                 day = _dateArray[0].toInt()
                                 month = _dateArray[1].toInt()
@@ -1027,6 +1033,35 @@ class CoordinatorDmMeetingFragment : Fragment() {
     fun printToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
+
+    override fun onStop() {
+        super.onStop()
+        (requireActivity() as MainActivity).removeMenuProvider(this)
+        activity?.removeMenuProvider(this)
+    }
+
+    private fun setActionBar() {
+        (requireActivity() as MainActivity).setSupportActionBar(binding.topAppBar)
+        activity?.addMenuProvider(this)
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.meeting_topbar_menu, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return when (menuItem.itemId) {
+            R.id.menu_home_n -> {
+                findNavController().navigate(R.id.homeFragment)
+                true
+            }
+
+            else -> {
+                false
+            }
+        }
+    }
+
     override fun onDestroyView() {
         _binding = null
         position = 0

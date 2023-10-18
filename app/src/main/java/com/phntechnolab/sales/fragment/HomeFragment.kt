@@ -284,6 +284,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.home_top_bar_menu, menu)
+        menu.findItem(R.id.menu_home).isVisible = false
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -295,6 +296,10 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
             R.id.menu_notification -> {
                 findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
+                true
+            }
+            R.id.menu_home -> {
+                findNavController().navigate(R.id.homeFragment)
                 true
             }
 
