@@ -276,7 +276,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
         return if (!isInterested) {
             return (isDmAttendedMeet == "yes") && !isInterested
         } else {
-            return (isDmAttendedMeet == "yes") && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate) && isDemoHappened
+            return (isDmAttendedMeet == "yes") && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate) && isDemoHappened && !isRemarkNotFilled
         }
     }
 
@@ -413,7 +413,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
         if (_dmData?.interested == "yes") binding.dmMeeting.labSetupGroup.check(R.id.labSetupYes)
         else binding.dmMeeting.labSetupGroup.check(R.id.labSetupNo)
 
-        binding.coordinatorMeeting.edtRemark.setText(_dmData?.remark)
+        binding.dmMeeting.edtRemark.setText(_dmData?.remark)
 
         if (_dmData?.rescheduleWithDirector == "yes") {
             binding.dmMeeting.rescheduleMeetingGroup.check(R.id.rescheduleMeetingYes)

@@ -364,8 +364,7 @@
                     android:digits="@string/remark_validation"
                     android:imeOptions="actionDone"
                     android:inputType="text"
-                    android:maxLines="1"
-                    android:text="@={viewModel.newSchoolData.remark}" />
+                    android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.Guideline
