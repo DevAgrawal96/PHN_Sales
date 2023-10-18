@@ -171,8 +171,39 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                     binding.noInternetConnection.visibility = View.GONE
                     binding.noInternetMessage.visibility = View.GONE
 
+                    val selectedChip = binding.chipGroup.findViewById<Chip>(binding.chipGroup.checkedChipId)
                     val filterData = ArrayList<SchoolData>().apply {
-                        addAll(it.data?.filter { it.status != "MOA Pending" }
+                        addAll(it.data?.filter { it.status != "MOA Pending" }?.filter {
+                            when (selectedChip.text) {
+                                "All" -> {
+                                    true
+                                }
+
+                                "Visited" -> {
+                                    it.status == "Visited"
+                                }
+
+                                "Assigned" -> {
+                                    it.status == "Assigned"
+                                }
+
+                                "Propose Costing" -> {
+                                    it.status == "Propose Costing"
+                                }
+
+                                "MOA Signed" -> {
+                                    it.status == "MOASigned" || it.status == "Installment"
+                                }
+
+                                "Not Interested" -> {
+                                    it.status == "Not Interested"
+                                }
+
+                                else -> {
+                                    it.status == selectedChip.text
+                                }
+                            }
+                        }
                             ?.sortedByDescending { it.updatedAt } ?: ArrayList<SchoolData>())
                     }
                     if (filterData.isEmpty()) {

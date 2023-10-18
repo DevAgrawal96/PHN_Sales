@@ -239,7 +239,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         ) {
             Toast.makeText(
                 requireContext(),
-                requireActivity().getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_details),
+                requireActivity().getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_and_mark_yes_details),
                 Toast.LENGTH_LONG
             ).show()
             false
