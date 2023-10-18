@@ -55,13 +55,13 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getData()
     }
 
     override fun onResume() {
         super.onResume()
         binding.all.isChecked = true
 //        viewModel.refereshToken()
-        getData()
     }
 
     override fun onCreateView(
@@ -84,6 +84,10 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
         observers()
 
         checkedChangeListener()
+
+        binding.swipeReferesh.setOnRefreshListener {
+            getData()
+        }
     }
 
 
@@ -160,6 +164,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     private fun observers() {
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
+            binding.swipeReferesh.isRefreshing = false
             when (it) {
                 is NetworkResult.Success -> {
                     Timber.e(it.message.toString())
@@ -245,7 +250,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     private fun getData() {
 //        binding.progressBar.visibility = View.VISIBLE
-        binding.progressIndicator.visibility = View.VISIBLE
+//        binding.progressIndicator.visibility = View.VISIBLE
         lifecycleScope.launch(Dispatchers.IO) {
             viewModel.getAllSchools()
         }
