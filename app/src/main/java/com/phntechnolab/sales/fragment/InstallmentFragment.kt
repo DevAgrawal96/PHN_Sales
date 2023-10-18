@@ -101,6 +101,8 @@ class InstallmentFragment : Fragment() {
         binding.schoolDetails.txtMono.text = data.coMobileNo
         binding.schoolDetails.locationTxt.text = data.schoolAddress
         binding.topAppBar.title = data.schoolName
+        binding.schoolDetails.chipStatus.text = data.status
+        binding.schoolDetails.chipLeadStatus.text = data.leadType
         try {
             val fileName = data.moaDocumentData.moaFile!!.substring(
                 data.moaDocumentData.moaFile!!.lastIndexOf('/') + 1
@@ -117,6 +119,10 @@ class InstallmentFragment : Fragment() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+        if (viewModel.getCount() == 2) {
+            Timber.e("2")
+            binding.updateBtn.visibility = View.GONE
         }
 
     }
@@ -136,7 +142,7 @@ class InstallmentFragment : Fragment() {
                         pdfOrImg.toString().split(".").last(),
                         viewModel.getPosition()
                     )
-//                    isFirstReceipt = true
+                    isFirstReceipt = true
 
                     binding.addInstallment1.fileInstallmentName.text =
                         "${viewModel.imageName1}.${pdfOrImg.toString().split(".").last()}"
@@ -172,7 +178,7 @@ class InstallmentFragment : Fragment() {
                         pdfOrImg.toString().split(".").last(),
                         viewModel.getPosition()
                     )
-//                    isSecondReceipt = true
+                    isSecondReceipt = true
 
                     binding.addInstallment2.fileInstallmentName.text =
                         "${viewModel.imageName2}.${pdfOrImg.toString().split(".").last()}"
@@ -207,7 +213,7 @@ class InstallmentFragment : Fragment() {
                         pdfOrImg.toString().split(".").last(),
                         viewModel.getPosition()
                     )
-//                    isThirdReceipt = true
+                    isThirdReceipt = true
 
                     binding.addInstallment3.fileInstallmentName.text =
                         "${viewModel.imageName3}.${pdfOrImg.toString().split(".").last()}"
@@ -242,6 +248,10 @@ class InstallmentFragment : Fragment() {
     }
 
     private fun initializeAddInstallmentCard() {
+
+        if (viewModel.getCount() == 0 && viewModel.getPosition() == 0) {
+            binding.updateBtn.visibility = View.VISIBLE
+        }
 
         binding.addInstallment1.uploadReceipt.setOnClickListener {
 //            Toast.makeText(requireContext(), "Coming soon!", Toast.LENGTH_SHORT).show()
@@ -440,6 +450,13 @@ class InstallmentFragment : Fragment() {
                 }
 
                 is NetworkResult.Error -> {
+                    binding.progressIndicator.visibility = View.GONE
+                    Toast.makeText(
+                        requireContext(),
+                        requireContext().getString(R.string.something_went_wrong),
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
                     Timber.e("Add installment error addInstallment upload image")
                 }
 
@@ -464,12 +481,13 @@ class InstallmentFragment : Fragment() {
                     val time: String =
                         it?.installmentData?.firstInstallmentDateTime?.split(",")?.get(1) ?: ""
                     Timber.e(date + "," + time)
+                    binding.addInstallment1.edtInstallmentDate.setText(date)
+                    binding.addInstallment1.edtInstallmentTime.setText(time)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
 
-//                binding.addInstallment1.edtInstallmentDate.setText(date)
-//                binding.addInstallment1.edtInstallmentTime.setText(time)
+
                 binding.addInstallment1.root.visibility = View.GONE
                 binding.installment1.dateAndTime.text =
                     it?.installmentData?.firstInstallmentDateTime
@@ -635,39 +653,14 @@ class InstallmentFragment : Fragment() {
 
     private fun initializeListener() {
         binding.updateBtn.setOnClickListener {
+            binding.progressIndicator.visibility = View.VISIBLE
             Timber.e(viewModel.getPosition().toString())
-            if (isFirstReceipt) {
-//                if (viewModel.is_requestFile1) {
-                Timber.e("isFirstReceipt")
+            if (isFirstReceipt || isSecondReceipt || isThirdReceipt) {
                 uploadInstallmentData()
-//                } else {
-//                    toastMsg("Please upload receipt and amount")
-//                }
             } else {
+                binding.progressIndicator.visibility = View.GONE
                 toastMsg("Please upload receipt and amount")
             }
-            if (isSecondReceipt) {
-//                if (viewModel.is_requestFile2) {
-                Timber.e("isSecondReceipt")
-                uploadInstallmentData()
-//                } else {
-//                    toastMsg("Please upload receipt and amount")
-//                }
-            } else {
-                toastMsg("Please upload receipt and amount")
-            }
-            if (isThirdReceipt) {
-//                if (viewModel.is_requestFile3) {
-                Timber.e("isThirdReceipt")
-                uploadInstallmentData()
-//                } else {
-//                    toastMsg("Please upload receipt and amount")
-//                }
-            } else {
-                toastMsg("Please upload receipt and amount")
-            }
-
-
         }
 
 
@@ -730,7 +723,7 @@ class InstallmentFragment : Fragment() {
                 0 -> {
                     binding.addInstallment2.root.visibility = View.VISIBLE
                     viewModel.setCount(1)
-                    isFirstReceipt = true
+//                    isFirstReceipt = true
                     binding.addInstallment2.installmentTxt.text =
                         getString(R.string.nd_installment, "2nd")
                 }
@@ -738,16 +731,16 @@ class InstallmentFragment : Fragment() {
                 1 -> {
                     binding.addInstallment3.root.visibility = View.VISIBLE
                     binding.addInstallmentDetails.visibility = View.GONE
-                    viewModel.setCount(1)
-                    isSecondReceipt = true
+                    viewModel.setCount(2)
+//                    isSecondReceipt = true
                     binding.addInstallment3.installmentTxt.text =
                         getString(R.string.nd_installment, "3rd")
                 }
 
                 else -> {
                     binding.addInstallment1.root.visibility = View.VISIBLE
-                    viewModel.setCount(1)
-                    isThirdReceipt = true
+                    viewModel.setCount(0)
+//                    isThirdReceipt = true
                     binding.addInstallment1.installmentTxt.text =
                         getString(R.string.nd_installment, "1st")
 
