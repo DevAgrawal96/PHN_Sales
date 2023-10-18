@@ -1,8 +1,11 @@
 package com.phntechnolab.sales.fragment
 
+import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -52,6 +56,10 @@ class InstallmentFragment : Fragment() {
     private var receipt3: String? = null
     private var id: String? = null
     private var schoolId: String? = null
+
+
+    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -114,13 +122,13 @@ class InstallmentFragment : Fragment() {
 
 
                     data.moaDocumentData.moaFile.let {
-                        if (data.moaDocumentData.moaFile!!.startsWith("/tmp/")){
+                        if (data.moaDocumentData.moaFile!!.startsWith("/tmp/")) {
                             Toast.makeText(
                                 requireContext(),
                                 getString(R.string.something_went_wrong),
                                 Toast.LENGTH_SHORT
                             ).show()
-                        }else{
+                        } else {
                             fileDownloader.downloadFile(data.moaDocumentData.moaFile!!, fileName)
                             Toast.makeText(
                                 requireContext(),
@@ -131,7 +139,7 @@ class InstallmentFragment : Fragment() {
                         }
                     }
 
-                }catch (e : Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
 
@@ -141,6 +149,20 @@ class InstallmentFragment : Fragment() {
         }
 
 
+    }
+
+    private fun requestPermission() {
+        val hasReadExternalStorage = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+        val permissionRequest = mutableListOf<String>()
+        if (!hasReadExternalStorage) {
+            permissionRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        if (permissionRequest.isNotEmpty()) {
+            permissionLauncher.launch(permissionRequest.toTypedArray())
+        }
     }
 
     private var receiptPdf = registerForActivityResult(
@@ -263,6 +285,7 @@ class InstallmentFragment : Fragment() {
 
     }
 
+
     private fun initializeAddInstallmentCard() {
 
         if (viewModel.getCount() == 0 && viewModel.getPosition() == 0) {
@@ -270,34 +293,42 @@ class InstallmentFragment : Fragment() {
         }
 
         binding.addInstallment1.uploadReceipt.setOnClickListener {
-//            Toast.makeText(requireContext(), "Coming soon!", Toast.LENGTH_SHORT).show()
-            receiptPdf.launch(
-                arrayOf(
-                    "image/*",
-                    "application/pdf"
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+            } else {
+                receiptPdf.launch(
+                    arrayOf(
+                        "image/*",
+                        "application/pdf"
+                    )
                 )
-            )
-            viewModel.setPosition(0)
+                viewModel.setPosition(0)
+            }
         }
         binding.addInstallment2.uploadReceipt.setOnClickListener {
-//            Toast.makeText(requireContext(), "Coming soon!", Toast.LENGTH_SHORT).show()
-            receiptPdf.launch(
-                arrayOf(
-                    "image/*",
-                    "application/pdf"
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+
+            } else {
+                receiptPdf.launch(
+                    arrayOf(
+                        "image/*",
+                        "application/pdf"
+                    )
                 )
-            )
-            viewModel.setPosition(1)
+                viewModel.setPosition(1)
+            }
         }
         binding.addInstallment3.uploadReceipt.setOnClickListener {
-//            Toast.makeText(requireContext(), "Coming soon!", Toast.LENGTH_SHORT).show()
-            receiptPdf.launch(
-                arrayOf(
-                    "image/*",
-                    "application/pdf"
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+
+            } else {
+                receiptPdf.launch(
+                    arrayOf(
+                        "image/*",
+                        "application/pdf"
+                    )
                 )
-            )
-            viewModel.setPosition(2)
+                viewModel.setPosition(2)
+            }
         }
 
         binding.addInstallment1.edtInstallmentTime.setOnClickListener {
@@ -650,25 +681,25 @@ class InstallmentFragment : Fragment() {
 //        if (viewModel.getCount() == 3) {
 //            binding.updateBtn.isEnabled = false
 //        } else {
-            binding.progressIndicator.visibility = View.VISIBLE
-            val data = InstallmentData(
-                firstInstallmentReciept = args.schoolData?.installmentData?.firstInstallmentReciept,
-                secondInstallmentReciept = args.schoolData?.installmentData?.secondInstallmentReciept,
-                thirdInstallmentReciept = args.schoolData?.installmentData?.thirdInstallmentReciept,
-                schoolId = args.schoolData?.schoolId,
-                totalInstallment = viewModel.getCount().toString(),
-                firstInstallment = binding.addInstallment1.installmentTxt.text.toString(),
-                firstInstallmentAmount = binding.addInstallment1.edtInstallmentAmount.text.toString(),
-                firstInstallmentDateTime = binding.addInstallment1.edtInstallmentDate.text.toString() + ", " + binding.addInstallment1.edtInstallmentTime.text.toString(),
-                secondInstallment = binding.addInstallment2.installmentTxt.text.toString(),
-                secondInstallmentAmount = binding.addInstallment2.edtInstallmentAmount.text.toString(),
-                secondInstallmentDateTime = binding.addInstallment2.edtInstallmentDate.text.toString() + ", " + binding.addInstallment2.edtInstallmentTime.text.toString(),
-                thirdInstallment = binding.addInstallment3.installmentTxt.text.toString(),
-                thirdInstallmentAmount = binding.addInstallment3.edtInstallmentAmount.text.toString(),
-                thirdInstallmentDateTime = binding.addInstallment3.edtInstallmentDate.text.toString() + ", " + binding.addInstallment3.edtInstallmentTime.text.toString()
-            )
-            viewModel.setInstallmentsData(data)
-            viewModel.addNewInstallment(data)
+        binding.progressIndicator.visibility = View.VISIBLE
+        val data = InstallmentData(
+            firstInstallmentReciept = args.schoolData?.installmentData?.firstInstallmentReciept,
+            secondInstallmentReciept = args.schoolData?.installmentData?.secondInstallmentReciept,
+            thirdInstallmentReciept = args.schoolData?.installmentData?.thirdInstallmentReciept,
+            schoolId = args.schoolData?.schoolId,
+            totalInstallment = viewModel.getCount().toString(),
+            firstInstallment = binding.addInstallment1.installmentTxt.text.toString(),
+            firstInstallmentAmount = binding.addInstallment1.edtInstallmentAmount.text.toString(),
+            firstInstallmentDateTime = binding.addInstallment1.edtInstallmentDate.text.toString() + ", " + binding.addInstallment1.edtInstallmentTime.text.toString(),
+            secondInstallment = binding.addInstallment2.installmentTxt.text.toString(),
+            secondInstallmentAmount = binding.addInstallment2.edtInstallmentAmount.text.toString(),
+            secondInstallmentDateTime = binding.addInstallment2.edtInstallmentDate.text.toString() + ", " + binding.addInstallment2.edtInstallmentTime.text.toString(),
+            thirdInstallment = binding.addInstallment3.installmentTxt.text.toString(),
+            thirdInstallmentAmount = binding.addInstallment3.edtInstallmentAmount.text.toString(),
+            thirdInstallmentDateTime = binding.addInstallment3.edtInstallmentDate.text.toString() + ", " + binding.addInstallment3.edtInstallmentTime.text.toString()
+        )
+        viewModel.setInstallmentsData(data)
+        viewModel.addNewInstallment(data)
 //        }
     }
 
