@@ -169,7 +169,8 @@ data class CoordinatorData(
     @SerializedName("interested") var interested : String? = "yes",
     @SerializedName("next_meet_date_dm") var nextMeetDateDm : String? = "",
     @SerializedName("reschedule_coordinator") var rescheduleWithCoordinator : String? = "",
-    @SerializedName("meet_date_coordinator") var meetDateCoordinator : String? = ""
+    @SerializedName("meet_date_coordinator") var meetDateCoordinator : String? = "",
+    @SerializedName("remark") var remark : String? = ""
 ): Parcelable
 
 
@@ -185,7 +186,7 @@ data class DMData(
     @SerializedName("meeting_status") var meetingStatus : String? = "",
     @SerializedName("reschedule_director") var rescheduleWithDirector : String? = "",
     @SerializedName("next_meet_date_dm") var nextMeetDateDm : String? = "",
-
+    @SerializedName("remark") var remark : String? = ""
 ):Parcelable
 
 @Parcelize

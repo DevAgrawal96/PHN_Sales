@@ -142,12 +142,15 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
         }
 
         binding.coordinatorMeeting.button.setOnClickListener {
+            viewModel._coordinatorMeetData.value?.remark = binding.coordinatorMeeting.edtRemark.text.toString()
             if (checkCoordinatorRequiredFieldsData()) {
                 viewModel.updateCoordinatorDetails()
             }
         }
 
         binding.dmMeeting.updateBtn.setOnClickListener {
+            viewModel._dmMeetData.value?.remark = binding.dmMeeting.edtRemark.text.toString()
+
             if (checkDmRequiredFieldsData()) {
                 binding.progressIndicator.visibility = View.VISIBLE
                 viewModel.updatedMDetails(requireContext())
@@ -201,7 +204,6 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                     ).show()
                 }
             }
-
         }
         val isRescheduledMeetingDateAvailableWithDate =
             !viewModel._coordinatorMeetData.value?.meetDateCoordinator.isNullOrBlank() && isRescheduledMeeting == "yes"
@@ -217,6 +219,11 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
     private fun checkDmRequiredFieldsData(): Boolean {
         val isDmAttendedMeet = viewModel._dmMeetData.value?.coAttendMeet
         val isDemoHappened = viewModel._dmMeetData.value?.productDemoHappen == "yes"
+        val isRemarkNotFilled = viewModel._dmMeetData.value?.remark.isNullOrEmpty()
+
+        val isRescheduledMeeting = viewModel._dmMeetData.value?.rescheduleWithDirector
+        val isInterested = viewModel._dmMeetData.value?.interested == "yes"
+
         if (isDmAttendedMeet != "yes") {
             Toast.makeText(
                 requireContext(),
@@ -229,18 +236,13 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                 requireActivity().getString(R.string.please_mark_the_demo_happened),
                 Toast.LENGTH_LONG
             ).show()
+        }else if(isRemarkNotFilled){
+            Toast.makeText(
+                requireContext(),
+                requireActivity().getString(R.string.please_fill_the_remark),
+                Toast.LENGTH_LONG
+            ).show()
         }
-
-        val isMeetingAgenda = viewModel._dmMeetData.value?.meetingStatus
-        if (isMeetingAgenda.isNullOrBlank()) {
-            binding.dmMeeting.tilMeetingAgenda.error =
-                requireActivity().getString(R.string.select_meeting_agenda)
-        } else {
-            binding.dmMeeting.tilMeetingAgenda.error = null
-        }
-
-        val isRescheduledMeeting = viewModel._dmMeetData.value?.rescheduleWithDirector
-        val isInterested = viewModel._dmMeetData.value?.interested == "yes"
 
         if (isInterested) {
             if (isRescheduledMeeting == "yes") {
@@ -250,6 +252,8 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                         requireActivity().getString(R.string.please_fill_rescheduled_date_for_proceed),
                         Toast.LENGTH_LONG
                     ).show()
+                }else{
+                     viewModel._dmMeetData.value?.meetingStatus = "Visited"
                 }
             } else {
                 if (viewModel._dmMeetData.value?.nextMeetDate.isNullOrBlank()) {
@@ -258,6 +262,8 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                         requireActivity().getString(R.string.please_next_rescheduled_date_for_proceed),
                         Toast.LENGTH_LONG
                     ).show()
+                }else{
+                    viewModel._dmMeetData.value?.meetingStatus = "Propose Costing"
                 }
             }
         }
@@ -270,7 +276,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
         return if (!isInterested) {
             return (isDmAttendedMeet == "yes") && !isInterested
         } else {
-            return (isDmAttendedMeet == "yes") && (!isMeetingAgenda.isNullOrBlank()) && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate) && isDemoHappened
+            return (isDmAttendedMeet == "yes") && (isRescheduledMeetingDateAvailableWithDate || isNextMeetingDateAvailableWithDate) && isDemoHappened
         }
     }
 
@@ -358,6 +364,8 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
         )
         else binding.coordinatorMeeting.attendedMeetGroup.check(R.id.attendedMeetNo)
 
+        binding.coordinatorMeeting.edtRemark.setText(_coordinatorData?.remark)
+
         if (_coordinatorData?.productDemoHappen == "yes") binding.coordinatorMeeting.demoHappenedGroup.check(
             R.id.demoHappenedYes
         )
@@ -405,6 +413,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
         if (_dmData?.interested == "yes") binding.dmMeeting.labSetupGroup.check(R.id.labSetupYes)
         else binding.dmMeeting.labSetupGroup.check(R.id.labSetupNo)
 
+        binding.coordinatorMeeting.edtRemark.setText(_dmData?.remark)
 
         if (_dmData?.rescheduleWithDirector == "yes") {
             binding.dmMeeting.rescheduleMeetingGroup.check(R.id.rescheduleMeetingYes)
@@ -454,11 +463,12 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
             add("Price discussion")
         }
 
-        if (viewModel.dmMeetData.value?.meetingStatus == "Propose Costing") {
-            binding.dmMeeting.autoMeetingAgenda.setText("Price discussion")
-        } else if (viewModel.dmMeetData.value?.meetingStatus == "Visited") {
-            binding.dmMeeting.autoMeetingAgenda.setText("Demo/Discussion")
-        }
+//        if (viewModel.dmMeetData.value?.meetingStatus == "Propose Costing") {
+//            binding.dmMeeting.autoMeetingAgenda.setText("Price discussion")
+//        } else if (viewModel.dmMeetData.value?.meetingStatus == "Visited") {
+//            binding.dmMeeting.autoMeetingAgenda.setText("Demo/Discussion")
+//        }
+
 
         val adapter: ArrayAdapter<String> =
             ArrayAdapter<String>(
