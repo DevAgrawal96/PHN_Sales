@@ -94,6 +94,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     private fun checkedChangeListener() {
         binding.chipGroup.setOnCheckedChangeListener { chipGroup, id ->
             val chip = chipGroup.findViewById<Chip>(id)
+
 //            val chip = chipGroup.getChildAt(chipGroup.checkedChipId)
             if (chip != null) {
                 for (i in 0 until chipGroup.childCount) {

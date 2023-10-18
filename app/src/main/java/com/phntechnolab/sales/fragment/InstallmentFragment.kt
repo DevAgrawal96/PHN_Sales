@@ -139,10 +139,7 @@ class InstallmentFragment : Fragment() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        if (viewModel.getCount() == 2) {
-            Timber.e("2")
-            binding.updateBtn.visibility = View.GONE
-        }
+
 
     }
 
@@ -640,6 +637,11 @@ class InstallmentFragment : Fragment() {
                 }
             } else {
                 binding.installment3.root.visibility = View.GONE
+            }
+
+            if (viewModel.getCount() == 2) {
+                Timber.e("2")
+                binding.updateBtn.visibility = View.GONE
             }
         }
     }
