@@ -170,6 +170,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                     Timber.e(it.message.toString())
                     binding.noInternetConnection.visibility = View.GONE
                     binding.noInternetMessage.visibility = View.GONE
+
                     val filterData = ArrayList<SchoolData>().apply {
                         addAll(it.data?.filter { it.status != "MOA Pending" }
                             ?.sortedByDescending { it.updatedAt } ?: ArrayList<SchoolData>())

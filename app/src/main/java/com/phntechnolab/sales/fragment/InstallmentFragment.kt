@@ -110,12 +110,31 @@ class InstallmentFragment : Fragment() {
             binding.fileName.text = fileName
             val fileDownloader = FileDownloader(requireContext())
             binding.download.setOnClickListener {
-                fileDownloader.downloadFile(data.moaDocumentData.moaFile!!, fileName)
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.start_downloading),
-                    Toast.LENGTH_SHORT
-                ).show()
+                try {
+
+
+                    data.moaDocumentData.moaFile.let {
+                        if (data.moaDocumentData.moaFile!!.startsWith("/tmp/")){
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.something_went_wrong),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }else{
+                            fileDownloader.downloadFile(data.moaDocumentData.moaFile!!, fileName)
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.start_downloading),
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                        }
+                    }
+
+                }catch (e : Exception){
+                    e.printStackTrace()
+                }
+
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -626,9 +645,9 @@ class InstallmentFragment : Fragment() {
     }
 
     private fun uploadInstallmentData() {
-        if (viewModel.getCount() == 2) {
-            binding.updateBtn.isEnabled = false
-        } else {
+//        if (viewModel.getCount() == 3) {
+//            binding.updateBtn.isEnabled = false
+//        } else {
             binding.progressIndicator.visibility = View.VISIBLE
             val data = InstallmentData(
                 firstInstallmentReciept = args.schoolData?.installmentData?.firstInstallmentReciept,
@@ -648,7 +667,7 @@ class InstallmentFragment : Fragment() {
             )
             viewModel.setInstallmentsData(data)
             viewModel.addNewInstallment(data)
-        }
+//        }
     }
 
     private fun initializeListener() {
