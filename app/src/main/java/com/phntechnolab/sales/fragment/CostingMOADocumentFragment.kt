@@ -624,6 +624,14 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
     private fun setMoaDocumentDropdowns(moaDocumentData: MOADocumentData?) {
         //Set agreement duration data
+//        try{
+//            val fileName = moaDocumentData?.moaFile!!.substring(
+//                moaDocumentData.moaFile!!.lastIndexOf('/') + 1
+//            )
+//            binding.moaDocument.documentFileName.text = fileName
+//        }catch (e:Exception){
+//            e.printStackTrace()
+//        }
 
         val dropdown: MaterialAutoCompleteTextView = binding.moaDocument.autoAgreementDuration
         val items = ArrayList<String>()

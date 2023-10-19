@@ -142,7 +142,8 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
         }
 
         binding.coordinatorMeeting.button.setOnClickListener {
-            viewModel._coordinatorMeetData.value?.remark = binding.coordinatorMeeting.edtRemark.text.toString()
+            viewModel._coordinatorMeetData.value?.remark =
+                binding.coordinatorMeeting.edtRemark.text.toString()
             if (checkCoordinatorRequiredFieldsData()) {
                 viewModel.updateCoordinatorDetails()
             }
@@ -236,7 +237,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                 requireActivity().getString(R.string.please_mark_the_demo_happened),
                 Toast.LENGTH_LONG
             ).show()
-        }else if(isRemarkNotFilled){
+        } else if (isRemarkNotFilled) {
             Toast.makeText(
                 requireContext(),
                 requireActivity().getString(R.string.please_fill_the_remark),
@@ -252,8 +253,8 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                         requireActivity().getString(R.string.please_fill_rescheduled_date_for_proceed),
                         Toast.LENGTH_LONG
                     ).show()
-                }else{
-                     viewModel._dmMeetData.value?.meetingStatus = "Visited"
+                } else {
+                    viewModel._dmMeetData.value?.meetingStatus = "Visited"
                 }
             } else {
                 if (viewModel._dmMeetData.value?.nextMeetDate.isNullOrBlank()) {
@@ -262,7 +263,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                         requireActivity().getString(R.string.please_next_rescheduled_date_for_proceed),
                         Toast.LENGTH_LONG
                     ).show()
-                }else{
+                } else {
                     viewModel._dmMeetData.value?.meetingStatus = "Propose Costing"
                 }
             }
@@ -421,18 +422,19 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
         } else {
             binding.dmMeeting.rescheduleMeetingGroup.check(R.id.rescheduleMeetingNo)
             hideDMRescheduleAndShowNextMeetingDate()
+
         }
 
         if (_dmData?.nextFollowup == "yes") {
-            binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingYes)
-            binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.VISIBLE
-            binding.dmMeeting.tilNextMeetingDate.visibility = View.VISIBLE
-            binding.dmMeeting.tilNextMeetingTime.visibility = View.VISIBLE
+//            binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingYes)
+//            binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.VISIBLE
+//            binding.dmMeeting.tilNextMeetingDate.visibility = View.VISIBLE
+//            binding.dmMeeting.tilNextMeetingTime.visibility = View.VISIBLE
         } else {
-            binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingNo)
-            binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
-            binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
-            binding.dmMeeting.tilNextMeetingTime.visibility = View.GONE
+//            binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingNo)
+//            binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
+//            binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
+//            binding.dmMeeting.tilNextMeetingTime.visibility = View.GONE
         }
 
         viewModel._dmMeetData.value?.nextMeetDateDm.let {
@@ -504,12 +506,24 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                 }
 
                 is NetworkResult.Error -> {
-                    Toast.makeText(
-                        requireContext(),
-                        resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    Timber.e(it.toString())
+                    when (it.message) {
+                        requireContext().resources.getString(R.string.something_went_wrong) -> {
+                            Toast.makeText(
+                                requireContext(),
+                                resources.getString(R.string.something_went_wrong_please),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                        requireContext().resources.getString(R.string.please_connection_message) -> {
+                            Toast.makeText(
+                                requireContext(),
+                                resources.getString(R.string.please_connection_message),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+
                 }
 
                 else -> {
@@ -549,12 +563,24 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                 }
 
                 is NetworkResult.Error -> {
-                    Toast.makeText(
-                        requireContext(),
-                        resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    Timber.e(it.toString())
+                    when (it.message) {
+                        requireContext().resources.getString(R.string.something_went_wrong) -> {
+                            Toast.makeText(
+                                requireContext(),
+                                resources.getString(R.string.something_went_wrong_please),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                        requireContext().resources.getString(R.string.please_connection_message) -> {
+                            Toast.makeText(
+                                requireContext(),
+                                resources.getString(R.string.please_connection_message),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+
                 }
 
                 else -> {
@@ -1026,6 +1052,11 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
         binding.dmMeeting.meetingDateAndTimeHeading.visibility = View.VISIBLE
         binding.dmMeeting.tilRescheduleMeetingDate.visibility = View.VISIBLE
         binding.dmMeeting.tilRescheduleMeetingTime.visibility = View.VISIBLE
+//        binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
+//        binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
+//        binding.dmMeeting.tilNextMeetingTime.visibility = View.GONE
+
+        binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingNo)
         binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
         binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
         binding.dmMeeting.tilNextMeetingTime.visibility = View.GONE
@@ -1035,9 +1066,14 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
         binding.dmMeeting.meetingDateAndTimeHeading.visibility = View.GONE
         binding.dmMeeting.tilRescheduleMeetingDate.visibility = View.GONE
         binding.dmMeeting.tilRescheduleMeetingTime.visibility = View.GONE
-        binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
-        binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
-        binding.dmMeeting.tilNextMeetingTime.visibility = View.GONE
+//        binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
+//        binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
+//        binding.dmMeeting.tilNextMeetingTime.visibility = View.GONE
+
+        binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingYes)
+        binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.VISIBLE
+        binding.dmMeeting.tilNextMeetingDate.visibility = View.VISIBLE
+        binding.dmMeeting.tilNextMeetingTime.visibility = View.VISIBLE
     }
 
     fun printToast(message: String) {
