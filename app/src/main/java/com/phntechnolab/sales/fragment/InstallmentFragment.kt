@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -43,7 +44,6 @@ class InstallmentFragment : Fragment() {
     private val binding get() = _binding!!
     private val args: InstallmentFragmentArgs by navArgs()
     private val viewModel: InstallmentViewModel by viewModels()
-
 
     private var pdfOrImg: Uri? = null
 
@@ -119,8 +119,6 @@ class InstallmentFragment : Fragment() {
             val fileDownloader = FileDownloader(requireContext())
             binding.download.setOnClickListener {
                 try {
-
-
                     data.moaDocumentData.moaFile.let {
                         if (data.moaDocumentData.moaFile!!.startsWith("/tmp/")) {
                             Toast.makeText(
@@ -172,18 +170,19 @@ class InstallmentFragment : Fragment() {
         if (uri != null) {
             pdfOrImg = uri
             val sdf = SimpleDateFormat("dd/M/yyyy")
+            val type = requireContext().contentResolver.getType(uri);
+            val fileExtention = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
             when (viewModel.getPosition()) {
                 0 -> {
                     viewModel.uploadInstallmentDocument(
                         pdfOrImg!!,
                         requireContext(),
-                        pdfOrImg.toString().split(".").last(),
                         viewModel.getPosition()
                     )
                     isFirstReceipt = true
 
                     binding.addInstallment1.fileInstallmentName.text =
-                        "${viewModel.imageName1}.${pdfOrImg.toString().split(".").last()}"
+                        "${viewModel.imageName1}.${fileExtention}"
 
                     binding.addInstallment1.fileInstallmentInfo.text =
                         getString(
@@ -193,15 +192,15 @@ class InstallmentFragment : Fragment() {
                         )
 
 
-                    if (pdfOrImg.toString().split(".").last() == "jpg") {
+                    if (fileExtention == "jpg") {
                         binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
                         )
-                    } else if (pdfOrImg.toString().split(".").last() == "png") {
+                    } else if (fileExtention == "png") {
                         binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
                         )
-                    } else if (pdfOrImg.toString().split(".").last() == "pdf") {
+                    } else if (fileExtention == "pdf") {
                         binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
                         )
@@ -213,13 +212,12 @@ class InstallmentFragment : Fragment() {
                     viewModel.uploadInstallmentDocument(
                         pdfOrImg!!,
                         requireContext(),
-                        pdfOrImg.toString().split(".").last(),
                         viewModel.getPosition()
                     )
                     isSecondReceipt = true
 
                     binding.addInstallment2.fileInstallmentName.text =
-                        "${viewModel.imageName2}.${pdfOrImg.toString().split(".").last()}"
+                        "${viewModel.imageName2}.${fileExtention}"
                     binding.addInstallment2.fileInstallmentInfo.text =
                         getString(
                             R.string.file_size_and_today_date_,
@@ -228,15 +226,15 @@ class InstallmentFragment : Fragment() {
                         )
 
 
-                    if (pdfOrImg.toString().split(".").last() == "jpg") {
+                    if (fileExtention == "jpg") {
                         binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
                         )
-                    } else if (pdfOrImg.toString().split(".").last() == "png") {
+                    } else if (fileExtention == "png") {
                         binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
                         )
-                    } else if (pdfOrImg.toString().split(".").last() == "pdf") {
+                    } else if (fileExtention == "pdf") {
                         binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
                         )
@@ -248,13 +246,12 @@ class InstallmentFragment : Fragment() {
                     viewModel.uploadInstallmentDocument(
                         pdfOrImg!!,
                         requireContext(),
-                        pdfOrImg.toString().split(".").last(),
                         viewModel.getPosition()
                     )
                     isThirdReceipt = true
 
                     binding.addInstallment3.fileInstallmentName.text =
-                        "${viewModel.imageName3}.${pdfOrImg.toString().split(".").last()}"
+                        "${viewModel.imageName3}.${fileExtention}"
 
                     binding.addInstallment3.fileInstallmentInfo.text =
                         getString(
@@ -264,15 +261,15 @@ class InstallmentFragment : Fragment() {
                         )
 
 
-                    if (pdfOrImg.toString().split(".").last() == "jpg") {
+                    if (fileExtention == "jpg") {
                         binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
                         )
-                    } else if (pdfOrImg.toString().split(".").last() == "png") {
+                    } else if (fileExtention == "png") {
                         binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
                         )
-                    } else if (pdfOrImg.toString().split(".").last() == "pdf") {
+                    } else if (fileExtention == "pdf") {
                         binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
                         )
@@ -293,8 +290,6 @@ class InstallmentFragment : Fragment() {
         }
 
         binding.addInstallment1.uploadReceipt.setOnClickListener {
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
-            } else {
                 receiptPdf.launch(
                     arrayOf(
                         "image/*",
@@ -302,12 +297,8 @@ class InstallmentFragment : Fragment() {
                     )
                 )
                 viewModel.setPosition(0)
-            }
         }
         binding.addInstallment2.uploadReceipt.setOnClickListener {
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
-
-            } else {
                 receiptPdf.launch(
                     arrayOf(
                         "image/*",
@@ -315,12 +306,8 @@ class InstallmentFragment : Fragment() {
                     )
                 )
                 viewModel.setPosition(1)
-            }
         }
         binding.addInstallment3.uploadReceipt.setOnClickListener {
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
-
-            } else {
                 receiptPdf.launch(
                     arrayOf(
                         "image/*",
@@ -328,7 +315,6 @@ class InstallmentFragment : Fragment() {
                     )
                 )
                 viewModel.setPosition(2)
-            }
         }
 
         binding.addInstallment1.edtInstallmentTime.setOnClickListener {
@@ -765,8 +751,6 @@ class InstallmentFragment : Fragment() {
                 Timber.e("receipt3 null or blank")
             }
         }
-
-
 
 
         binding.addInstallmentDetails.setOnClickListener {

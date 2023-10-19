@@ -2,6 +2,8 @@ package com.phntechnolab.sales.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
+import android.webkit.MimeTypeMap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -90,25 +92,25 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
     fun uploadInstallmentDocument(
         documentUri: Uri,
         requireContext: Context,
-        fileType: String,
         installmentNumber: Int
     ) {
         when (installmentNumber) {
             0 -> {
                 val fileDir = requireContext.filesDir
-                val file = File(fileDir, "moaDocument.$fileType")
-                Timber.e("$fileDir")
+                val type = requireContext.contentResolver.getType(documentUri);
+                val fileExtention = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
+                val file = File(fileDir, "moaDocument.${fileExtention}")
                 val inputStream = requireContext.contentResolver.openInputStream(documentUri)
                 val fileOutputStream = FileOutputStream(file)
                 inputStream?.copyTo(fileOutputStream)
 
                 var requestFile: RequestBody? = null
-                if (fileType == "jpg" || fileType == "png") {
+                if (fileExtention == "jpg" || fileExtention == "png") {
                     requestFile = RequestBody.create(
                         MediaType.parse("image/*"),
                         file
                     )
-                } else if (fileType == "pdf") {
+                } else if (fileExtention == "pdf") {
                     requestFile = RequestBody.create(
                         MediaType.parse("application/pdf"),
                         file
@@ -120,23 +122,25 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
                 imagesize1 = Integer.parseInt((file.length() / 1024).toString())
                 imageData1 = part
                 val sdf = SimpleDateFormat("ddMyyyyhhmmss")
-                imageName1 = sdf.format(Date()) + "." + fileType
+                imageName1 = sdf.format(Date()) + "." + fileExtention
             }
 
             1 -> {
                 val fileDir = requireContext.filesDir
-                val file = File(fileDir, "moaDocument.$fileType")
+                val type = requireContext.contentResolver.getType(documentUri);
+                val fileExtention = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
+                val file = File(fileDir, "moaDocument.${fileExtention}")
                 val inputStream = requireContext.contentResolver.openInputStream(documentUri)
                 val fileOutputStream = FileOutputStream(file)
                 inputStream?.copyTo(fileOutputStream)
 
                 var requestFile: RequestBody? = null
-                if (fileType == "jpg" || fileType == "png") {
+                if (fileExtention == "jpg" || fileExtention == "png") {
                     requestFile = RequestBody.create(
                         MediaType.parse("image/*"),
                         file
                     )
-                } else if (fileType == "pdf") {
+                } else if (fileExtention == "pdf") {
                     requestFile = RequestBody.create(
                         MediaType.parse("application/pdf"),
                         file
@@ -148,24 +152,25 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
                 imagesize2 = Integer.parseInt((file.length() / 1024).toString())
                 imageData2 = part
                 val sdf = SimpleDateFormat("ddMyyyyhhmmss")
-                imageName2 = sdf.format(Date()) + "." + fileType
+                imageName2 = sdf.format(Date()) + "." + fileExtention
             }
 
             2 -> {
                 val fileDir = requireContext.filesDir
-                Timber.e("$fileDir")
-                val file = File(fileDir, "moaDocument.$fileType")
+                val type = requireContext.contentResolver.getType(documentUri);
+                val fileExtention = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
+                val file = File(fileDir, "moaDocument.${fileExtention}")
                 val inputStream = requireContext.contentResolver.openInputStream(documentUri)
                 val fileOutputStream = FileOutputStream(file)
                 inputStream?.copyTo(fileOutputStream)
 
                 var requestFile: RequestBody? = null
-                if (fileType == "jpg" || fileType == "png") {
+                if (fileExtention == "jpg" || fileExtention == "png") {
                     requestFile = RequestBody.create(
                         MediaType.parse("image/*"),
                         file
                     )
-                } else if (fileType == "pdf") {
+                } else if (fileExtention == "pdf") {
                     requestFile = RequestBody.create(
                         MediaType.parse("application/pdf"),
                         file
@@ -178,7 +183,7 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
                 imagesize3 = Integer.parseInt((file.length() / 1024).toString())
                 imageData3 = part
                 val sdf = SimpleDateFormat("ddMyyyyhhmmss")
-                imageName3 = sdf.format(Date()) + "." + fileType
+                imageName3 = sdf.format(Date()) + "." + fileExtention
             }
         }
 
