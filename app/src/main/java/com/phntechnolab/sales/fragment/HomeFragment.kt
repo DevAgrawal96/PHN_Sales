@@ -164,6 +164,17 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     }
 
     private fun observers() {
+<<<<<<< Updated upstream
+=======
+        lifecycleScope.launch(Dispatchers.IO) {
+            viewModel.schoolPaginationDataLiveData.collect {pagingData->
+                pagingData
+                pagingData.map {
+                }
+            }
+        }
+
+>>>>>>> Stashed changes
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
             binding.swipeReferesh.isRefreshing = false
             when (it) {

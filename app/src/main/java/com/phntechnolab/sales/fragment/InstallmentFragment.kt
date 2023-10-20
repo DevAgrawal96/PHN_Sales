@@ -673,6 +673,23 @@ class InstallmentFragment : Fragment() {
     }
 
     private fun initializeListener() {
+        binding.addInstallment1.deleteReceipt.setOnClickListener {
+            viewModel._requestFile1 = null
+            isFirstReceipt = false
+            binding.addInstallment1.uploadReceiptContainer.visibility = View.GONE
+        }
+        binding.addInstallment2.deleteReceipt.setOnClickListener {
+            viewModel._requestFile2 = null
+            isSecondReceipt = false
+            binding.addInstallment2.uploadReceiptContainer.visibility = View.GONE
+        }
+        binding.addInstallment3.deleteReceipt.setOnClickListener {
+            viewModel._requestFile3 = null
+            isThirdReceipt = false
+            binding.addInstallment3.uploadReceiptContainer.visibility = View.GONE
+        }
+
+
         binding.updateBtn.setOnClickListener {
             binding.progressIndicator.visibility = View.VISIBLE
             Timber.e(viewModel.getPosition().toString())

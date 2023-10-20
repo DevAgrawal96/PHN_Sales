@@ -174,6 +174,7 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
             this.interested = newSchoolData.value?.interested ?: ""
             this.nextFollowup = newSchoolData.value?.nextFollowup ?: ""
             this.followupType = newSchoolData.value?.followupType ?: ""
+            this.remark = newSchoolData.value?.remark ?: ""
         }
     }
 }
