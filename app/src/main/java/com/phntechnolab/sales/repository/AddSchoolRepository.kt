@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.api.AuthApi
 import com.phntechnolab.sales.api.RetrofitApi
 import com.phntechnolab.sales.model.AddSchoolSchema
 import com.phntechnolab.sales.model.CustomResponse
@@ -18,7 +19,7 @@ import javax.inject.Inject
 
 class AddSchoolRepository @Inject constructor(
     private val application: Application,
-    private val retrofitApi: RetrofitApi
+    private val authApi: AuthApi
 ) {
 
     private val _addSchoolResponse = MutableLiveData<NetworkResult<CustomResponse>>()
@@ -47,7 +48,7 @@ class AddSchoolRepository @Inject constructor(
 //                    schoolData.status = "Not Interested"
 //                }
                 Log.e("Multipart body data 2", Gson().toJson(schoolData))
-                val result = retrofitApi.updateSchoolData(id, schoolData)
+                val result = authApi.updateSchoolData(id, schoolData)
 //                Timber.e("Result 1 update")
 //                Timber.e(id.toString())
 //                Timber.e(Gson().toJson(schoolData))
@@ -98,7 +99,7 @@ class AddSchoolRepository @Inject constructor(
     suspend fun addNewSchool(schoolData: MultipartBody) {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
-                val result = retrofitApi.addSchool(schoolData)
+                val result = authApi.addSchool(schoolData)
                 Timber.e("Result 1 add")
                 Timber.e(Gson().toJson(schoolData))
                 Timber.e(Gson().toJson(result.body()))
@@ -149,7 +150,7 @@ class AddSchoolRepository @Inject constructor(
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
                 Timber.e("School image upload start")
-                val result = retrofitApi.updateSchoolImage(id, imageData)
+                val result = authApi.updateSchoolImage(id, imageData)
                 Timber.e("School image upload end")
 //                Timber.e(Gson().toJson(result))
                 result.body()?.status_code = result.code()

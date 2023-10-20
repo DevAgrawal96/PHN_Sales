@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.api.AuthApi
 import com.phntechnolab.sales.api.RetrofitApi
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.ProposeCostingData
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 class CostingMOADocumentRepository @Inject constructor(
     private val application: Application,
-    private val retrofitApi: RetrofitApi
+    private val authApi: AuthApi
 ) {
 
     private val _proposeCostingDetails = MutableLiveData<NetworkResult<CustomResponse>>()
@@ -32,7 +33,7 @@ class CostingMOADocumentRepository @Inject constructor(
     suspend fun proposeCostingData(proposeCostingData: ProposeCostingData) {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
-                val result = retrofitApi.proposeCostingApi(proposeCostingData)
+                val result = authApi.proposeCostingApi(proposeCostingData)
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
                     _proposeCostingDetails.postValue(NetworkResult.Success(result.body()))
@@ -90,7 +91,7 @@ class CostingMOADocumentRepository @Inject constructor(
         Log.e("MOA DOCUMENT DATA", Gson().toJson(moaDocumentData))
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
-                val result = retrofitApi.moaDocumentApi(moaDocumentData)
+                val result = authApi.moaDocumentApi(moaDocumentData)
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
                     _moaDocumentDetails.postValue(NetworkResult.Success(result.body()))

@@ -1,5 +1,6 @@
 package com.phntechnolab.sales.di
 
+import com.phntechnolab.sales.api.AuthApi
 import com.phntechnolab.sales.api.AuthInterceptor
 import com.phntechnolab.sales.api.RetrofitApi
 import com.phntechnolab.sales.util.Constants.TEST_URL1
@@ -37,9 +38,16 @@ class NetworkModule {
     @Singleton
     @Provides
     fun providesLoginAPI(
+        retrofitBuilder: Retrofit.Builder,): RetrofitApi {
+        return retrofitBuilder.build().create(RetrofitApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesAuthAPIS(
         retrofitBuilder: Retrofit.Builder,
         okHttpClient: OkHttpClient
-    ): RetrofitApi {
-        return retrofitBuilder.client(okHttpClient).build().create(RetrofitApi::class.java)
+    ): AuthApi {
+        return retrofitBuilder.client(okHttpClient).build().create(AuthApi::class.java)
     }
 }

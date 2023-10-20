@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.api.AuthApi
 import com.phntechnolab.sales.api.RetrofitApi
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.CustomResponse
@@ -16,7 +17,7 @@ import javax.inject.Inject
 
 class CoordinatoreDmMeetingRepository @Inject constructor(
     private val application: Application,
-    private val retrofitApi: RetrofitApi
+    private val authApi: AuthApi
 ) {
 
     private val _updateCoordinatorLevelMeetDetails =
@@ -32,8 +33,8 @@ class CoordinatoreDmMeetingRepository @Inject constructor(
 
     suspend fun updateCoordinatorData(coordinatorData: CoordinatorData) {
         if (NetworkUtils.isInternetAvailable(application)) {
-            try {
-                val result = retrofitApi.updateCoordinaterMeet(coordinatorData)
+            try{
+                val result = authApi.updateCoordinaterMeet(coordinatorData)
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
                     _updateCoordinatorLevelMeetDetails.postValue(NetworkResult.Success(result.body()))
@@ -76,8 +77,8 @@ class CoordinatoreDmMeetingRepository @Inject constructor(
 
     suspend fun updateDMData(dmData: DMData, context: Context) {
         if (NetworkUtils.isInternetAvailable(application)) {
-            try {
-                val result = retrofitApi.updateDMMeet(dmData)
+            try{
+                val result = authApi.updateDMMeet(dmData)
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
                     _updateDMLevelMeetDetails.postValue(NetworkResult.Success(result.body()))

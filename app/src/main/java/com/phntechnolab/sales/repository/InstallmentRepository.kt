@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.api.AuthApi
 import com.phntechnolab.sales.api.RetrofitApi
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.InstallmentData
@@ -19,7 +20,7 @@ import javax.inject.Inject
 
 class InstallmentRepository @Inject constructor(
     private val application: Application,
-    private val retrofitApi: RetrofitApi
+    private val authApi: AuthApi
 ) {
     private val _installmentResponse = MutableLiveData<NetworkResult<CustomResponse>>()
 
@@ -35,7 +36,7 @@ class InstallmentRepository @Inject constructor(
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
                 Timber.e(Gson().toJson(installmentData))
-                val result = retrofitApi.uploadInstallmentData(installmentData)
+                val result = authApi.uploadInstallmentData(installmentData)
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
                     _installmentResponse.postValue(NetworkResult.Success(result.body()))
@@ -93,7 +94,7 @@ class InstallmentRepository @Inject constructor(
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
                 Timber.e(Gson().toJson(multiPart))
-                val result = retrofitApi.updateInstallmentImage(schoolId, multiPart)
+                val result = authApi.updateInstallmentImage(schoolId, multiPart)
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
                     _installmentImageResponse.postValue(NetworkResult.Success(result.body()))

@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.api.AuthApi
 import com.phntechnolab.sales.api.RetrofitApi
 import com.phntechnolab.sales.model.MeetingData
 import com.phntechnolab.sales.model.SchoolData
@@ -19,7 +20,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 class MeetingRepository @Inject constructor(
-    private val application: Application, private val retrofitApi: RetrofitApi
+    private val application: Application, private val authApi: AuthApi
 ) {
 
     private val _allSchoolMutableLiveData = MutableLiveData<NetworkResult<List<SchoolData>>>()
@@ -33,7 +34,7 @@ class MeetingRepository @Inject constructor(
     suspend fun getSchoolData() {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
-                val result = retrofitApi.getAllSchoolData()
+                val result = authApi.getAllSchoolData()
                 if (result.isSuccessful && result?.body() != null) {
 
                     _allSchoolMutableLiveData.postValue(NetworkResult.Success(result.body()))
