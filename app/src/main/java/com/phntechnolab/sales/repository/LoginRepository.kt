@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.api.AuthApi
 import com.phntechnolab.sales.api.RetrofitApi
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.LoginDetails
@@ -21,7 +22,8 @@ import javax.inject.Inject
 
 class LoginRepository @Inject constructor(
     private val application: Application,
-    private val retrofitApi: RetrofitApi
+    private val retrofitApi: RetrofitApi,
+    private val authApi: AuthApi
 ) {
 
     @Inject
@@ -102,7 +104,7 @@ class LoginRepository @Inject constructor(
         if (NetworkUtils.isInternetAvailable(application)) {
 
             try {
-                val result = retrofitApi.tokenCheck()
+                val result = authApi.tokenCheck()
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
                     _refereshToken.postValue(NetworkResult.Success(result.body()))

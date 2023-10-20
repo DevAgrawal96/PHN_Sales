@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.api.AuthApi
 import com.phntechnolab.sales.api.RetrofitApi
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.LoginDetails
@@ -20,7 +21,7 @@ import javax.inject.Inject
 
 class HomeRepository @Inject constructor(
     private val application: Application,
-    private val retrofitApi: RetrofitApi
+    private val authApi: AuthApi
 ) {
 
     private val schoolDataMutableLiveData = MutableLiveData<NetworkResult<List<SchoolData>>>()
@@ -36,7 +37,7 @@ class HomeRepository @Inject constructor(
 //        getToken()
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
-                val result = retrofitApi.getAllSchoolData()
+                val result = authApi.getAllSchoolData()
                 if (result.isSuccessful && result?.body() != null) {
 
                     schoolDataMutableLiveData.postValue(NetworkResult.Success(result.body()))
@@ -97,7 +98,7 @@ class HomeRepository @Inject constructor(
     suspend fun getToken() {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
-                val result = retrofitApi.refereshToken()
+                val result = authApi.refereshToken()
                 if (result.isSuccessful && result?.body() != null) {
 
                     _refereshToken.postValue(NetworkResult.Success(result.body()))

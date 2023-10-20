@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.api.AuthApi
 import com.phntechnolab.sales.api.RetrofitApi
 import com.phntechnolab.sales.model.ChangePasswordModel
 import com.phntechnolab.sales.model.CustomResponse
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 class UserProfileRepository @Inject constructor(
     private val application: Application,
-    private val retrofitApi: RetrofitApi
+    private val authApi: AuthApi
 ) {
 
     private var userProfileMutableLiveData = MutableLiveData<NetworkResult<UserDataModel>>()
@@ -34,7 +35,7 @@ class UserProfileRepository @Inject constructor(
     suspend fun logout(context: Context) {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
-                val result = retrofitApi.logout()
+                val result = authApi.logout()
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
                     logoutMutableLiveData.postValue(NetworkResult.Success(result.body()))
@@ -67,7 +68,7 @@ class UserProfileRepository @Inject constructor(
     suspend fun changePassword(context: Context, changePasswordModel: ChangePasswordModel) {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
-                val result = retrofitApi.changePassword(changePasswordModel)
+                val result = authApi.changePassword(changePasswordModel)
                 result.body()?.status_code = result.code()
                 if (result.isSuccessful && result.body() != null) {
                     _changePasswordMutableLiveData.postValue(NetworkResult.Success(result.body()))
@@ -100,7 +101,7 @@ class UserProfileRepository @Inject constructor(
     suspend fun userProfileData() {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
-                val result = retrofitApi.getUserProfileData()
+                val result = authApi.getUserProfileData()
                 if (result.isSuccessful && result.body() != null) {
                     userProfileMutableLiveData.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {

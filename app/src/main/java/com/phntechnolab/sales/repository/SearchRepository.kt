@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.api.AuthApi
 import com.phntechnolab.sales.api.RetrofitApi
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.util.NetworkResult
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 class SearchRepository @Inject constructor(
     private val application: Application,
-    private val retrofitApi: RetrofitApi
+    private val authApi: AuthApi
 ){
     private val schoolDataMutableLiveData = MutableLiveData<NetworkResult<List<SchoolData>>>()
 
@@ -23,7 +24,7 @@ class SearchRepository @Inject constructor(
     suspend fun getSchoolData() {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
-                val result = retrofitApi.getAllSchoolData()
+                val result = authApi.getAllSchoolData()
                 if (result.isSuccessful && result?.body() != null) {
 
                     schoolDataMutableLiveData.postValue(NetworkResult.Success(result.body()))
