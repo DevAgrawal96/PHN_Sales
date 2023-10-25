@@ -140,7 +140,6 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
         onCheckedChangedListener()
 
-        oncClickListener()
 
         observers()
     }
@@ -1033,7 +1032,10 @@ class AddSchoolFragment : Fragment(), MenuProvider {
     override fun onStart() {
         super.onStart()
         setActionBar()
+
+        oncClickListener()
     }
+
     override fun onStop() {
         super.onStop()
         (requireActivity() as MainActivity).removeMenuProvider(this)

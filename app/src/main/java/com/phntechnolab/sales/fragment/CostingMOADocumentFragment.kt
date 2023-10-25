@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -125,11 +126,10 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
         quotationValidity()
 
-        setOnClickListeners()
+//        setOnClickListeners()
     }
 
     private fun setOnClickListeners() {
-
         binding.topAppBar.setNavigationOnClickListener {
             when (position) {
                 0 -> {
@@ -246,11 +246,12 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         val isNextMeetingDateNotSelected =
             viewModel._proposeCostingData.value?.nextMeet.isNullOrBlank()
 
+//        isPriceDiscussedPending ||
+//        isQuotationSharedPending ||
 
-        return if (isPriceDiscussedPending ||
+//        isPaymentScheduledPending ||
+        return if (
             isPricepPerStudentPending ||
-            isQuotationSharedPending ||
-            isPaymentScheduledPending ||
             isAgreementDurationNotSelected ||
             isMeetingWithWhoomNotSelected ||
             isConversationRatioNotSelected ||
@@ -653,7 +654,6 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                 binding.moaDocument.documentFileName.text = fileName
             } catch (e: Exception) {
                 e.printStackTrace()
-
                 binding.moaDocument.documentFileName.text =
                     requireContext().resources.getString(com.phntechnolab.sales.R.string.select_file)
             }
@@ -890,6 +890,8 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
     override fun onStart() {
         super.onStart()
         setActionBar()
+
+        setOnClickListeners()
     }
 
     override fun onStop() {

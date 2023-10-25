@@ -69,7 +69,7 @@
     <string name="select_next_meeting_time_hint">Select next meeting time</string>
     <string name="cancelled_meeting">Cancelled Meeting</string>
     <string name="price_pitch_per_student">Price Pitch per student*</string>
-    <string name="quotation_validity">Quotation validity*</string>
+    <string name="quotation_validity">Quotation validity</string>
     <string name="agreement_duration">Agreement Duration</string>
     <string name="agreement_duration_mandate">Agreement duration*</string>
     <string name="agreement_duration_compulsary">Agreement duration*</string>
@@ -156,9 +156,9 @@
     <string name="propose_costing_stage">Propose Costing Stage</string>
     <string name="dm_attended_the_meet">DM attended the meet?</string>
     <string name="next_follow_up_meeting_scheduled">Next follow up meeting scheduled?</string>
-    <string name="price_discussed_inclusive_gst">Price discussed inclusive GST?*</string>
-    <string name="quotation_shared">Quotation shared?*</string>
-    <string name="payment_scheduled_locked">Payment scheduled locked?*</string>
+    <string name="price_discussed_inclusive_gst">Price discussed inclusive GST?</string>
+    <string name="quotation_shared">Quotation shared?</string>
+    <string name="payment_scheduled_locked">Payment scheduled locked?</string>
     <string name="coordinator_meeting_details_updated_successfully">Teacher/Principal meeting details updated successfully.</string>
     <string name="meeting_has_been_rescheduled_with_coordinator">Meeting has been rescheduled with Teacher/Principal.</string>
     <string name="meeting_has_been_moved_to_not_interested_section">School has been moved to not interested section.</string>
@@ -185,7 +185,7 @@
     <string name="please_fill_rescheduled_date_for_proceed">Please fill rescheduled meeting date for proceed.</string>
     <string name="please_next_rescheduled_date_for_proceed">Please fill next meeting date for proceed.</string>
     <string name="please_fill_all_the_mendate_details">Please fill all the mandate fields to proceed.</string>
-    <string name="please_fill_all_the_mendate_and_mark_yes_details">Please fill all the mandate fields and mark yes to proceed.</string>
+    <string name="please_fill_all_the_mendate_and_mark_yes_details">Please fill all the mandate fie02lds to proceed.</string>
     <string name="please_upload_moa_document">Please upload moa document.</string>
     <string name="school_name_validation"><![CDATA[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,.\'&]]></string>
     <string name="name_validation">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ </string>

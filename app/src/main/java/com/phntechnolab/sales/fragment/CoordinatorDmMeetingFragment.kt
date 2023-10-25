@@ -111,7 +111,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
 
         nextDMMeetingDateTimeClickListener()
 
-        initializeListener()
+
 
 
     }
@@ -1082,6 +1082,8 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
     override fun onStart() {
         super.onStart()
         setActionBar()
+
+        initializeListener()
     }
 
     override fun onStop() {
