@@ -42,6 +42,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
 
     private var _binding: FragmentCoordinatorDmMeetingBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel: CoordinatorDmMeetingViewModel by viewModels()
 
     private val args: CoordinatorDmMeetingFragmentArgs by navArgs()
@@ -77,13 +78,12 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCoordinatorDmMeetingBinding.inflate(inflater, container, false)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressHandler)
@@ -97,7 +97,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setActionBar()
+
 
         observers()
 
@@ -151,7 +151,6 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
 
         binding.dmMeeting.updateBtn.setOnClickListener {
             viewModel._dmMeetData.value?.remark = binding.dmMeeting.edtRemark.text.toString()
-
             if (checkDmRequiredFieldsData()) {
                 binding.progressIndicator.visibility = View.VISIBLE
                 viewModel.updatedMDetails(requireContext())
@@ -425,17 +424,17 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
 
         }
 
-        if (_dmData?.nextFollowup == "yes") {
+//        if (_dmData?.nextFollowup == "yes") {
 //            binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingYes)
 //            binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.VISIBLE
 //            binding.dmMeeting.tilNextMeetingDate.visibility = View.VISIBLE
 //            binding.dmMeeting.tilNextMeetingTime.visibility = View.VISIBLE
-        } else {
+//        } else {
 //            binding.dmMeeting.nextMeetingGroup.check(R.id.nextMeetingNo)
 //            binding.dmMeeting.nextMeetingDateAndTimeHeading.visibility = View.GONE
 //            binding.dmMeeting.tilNextMeetingDate.visibility = View.GONE
 //            binding.dmMeeting.tilNextMeetingTime.visibility = View.GONE
-        }
+//        }
 
         viewModel._dmMeetData.value?.nextMeetDateDm.let {
             val dateAndTime = it?.split(" ")
@@ -1078,6 +1077,11 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
 
     fun printToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setActionBar()
     }
 
     override fun onStop() {

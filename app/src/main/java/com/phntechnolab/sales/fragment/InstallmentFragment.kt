@@ -37,11 +37,16 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class InstallmentFragment : Fragment() {
     private var _binding: FragmentInstalmentBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var fileDownloader: FileDownloader
+
     private val args: InstallmentFragmentArgs by navArgs()
     private val viewModel: InstallmentViewModel by viewModels()
 
@@ -116,7 +121,7 @@ class InstallmentFragment : Fragment() {
                 data.moaDocumentData.moaFile!!.lastIndexOf('/') + 1
             )
             binding.fileName.text = fileName
-            val fileDownloader = FileDownloader(requireContext())
+
             binding.download.setOnClickListener {
                 try {
                     data.moaDocumentData.moaFile.let {
@@ -290,31 +295,31 @@ class InstallmentFragment : Fragment() {
         }
 
         binding.addInstallment1.uploadReceipt.setOnClickListener {
-                receiptPdf.launch(
-                    arrayOf(
-                        "image/*",
-                        "application/pdf"
-                    )
+            receiptPdf.launch(
+                arrayOf(
+                    "image/*",
+                    "application/pdf"
                 )
-                viewModel.setPosition(0)
+            )
+            viewModel.setPosition(0)
         }
         binding.addInstallment2.uploadReceipt.setOnClickListener {
-                receiptPdf.launch(
-                    arrayOf(
-                        "image/*",
-                        "application/pdf"
-                    )
+            receiptPdf.launch(
+                arrayOf(
+                    "image/*",
+                    "application/pdf"
                 )
-                viewModel.setPosition(1)
+            )
+            viewModel.setPosition(1)
         }
         binding.addInstallment3.uploadReceipt.setOnClickListener {
-                receiptPdf.launch(
-                    arrayOf(
-                        "image/*",
-                        "application/pdf"
-                    )
+            receiptPdf.launch(
+                arrayOf(
+                    "image/*",
+                    "application/pdf"
                 )
-                viewModel.setPosition(2)
+            )
+            viewModel.setPosition(2)
         }
 
         binding.addInstallment1.edtInstallmentTime.setOnClickListener {
@@ -719,7 +724,6 @@ class InstallmentFragment : Fragment() {
         }
 
 
-        val fileDownloader = FileDownloader(requireContext())
         binding.installment1.downloadImg.setOnClickListener {
             if (!receipt1.isNullOrBlank()) {
                 fileDownloader.downloadFile(

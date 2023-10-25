@@ -87,7 +87,7 @@
     <string name="total_interested_intake_mandate">Total interested intake*</string>
     <string name="enter_final_costing_per_student_mandate">Enter final costing per student*</string>
     <string name="discussed_with_whom">discussed with whom</string>
-    <string name="discussed_with_whom_mandate">Discussed with whom*</string>
+    <string name="discussed_with_whom_mandate">MOA Discussed with whom*</string>
     <string name="select_designation">Select designation</string>
     <string name="select_designation_mandate">Select designation*</string>
     <string name="draft_moa_file">Draft MOA File</string>
@@ -97,6 +97,7 @@
     <string name="save">Save</string>
     <string name="propose_costing">Propose Costing</string>
     <string name="blank"></string>
+    <string name="downloading_start">Downloading start…</string>
 
     <string name="my_account">My Account</string>
     <string name="please_enter_valid_email_address">Please enter valid email address!</string>
@@ -205,6 +206,8 @@
     <string name="receipt">Receipt</string>
     <string name="moa_document">MOA Document</string>
     <string name="do_you_want_to_reschedule_meeting_with_dm">Do you want to reschedule meeting with DM?</string>
+    <string name="other_">Other</string>
+    <string name="_designation">Others</string>
 
 
     <string-array name="agreement_duration">

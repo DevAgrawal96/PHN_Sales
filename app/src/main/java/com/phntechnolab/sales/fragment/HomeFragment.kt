@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
+import androidx.core.view.children
 import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -60,9 +61,11 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     override fun onResume() {
         super.onResume()
+        Timber.e("onResume")
         binding.all.isChecked = true
 //        viewModel.refereshToken()
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,14 +75,13 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         initializeAdapter()
-
         setOnBackPressed()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setActionBar()
+
 
         observers()
 
@@ -141,7 +143,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                         binding.homeRecyclerView.visibility = View.GONE
                         binding.progressBar.visibility = View.GONE
                         binding.progressIndicator.visibility = View.GONE
-                    }else{
+                    } else {
                         binding.noDataLottie.visibility = View.GONE
                         binding.homeRecyclerView.visibility = View.GONE
                         binding.progressBar.visibility = View.GONE
@@ -164,17 +166,14 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     }
 
     private fun observers() {
-<<<<<<< Updated upstream
-=======
-        lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.schoolPaginationDataLiveData.collect {pagingData->
-                pagingData
-                pagingData.map {
-                }
-            }
-        }
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            viewModel.schoolPaginationDataLiveData.collect {pagingData->
+//                pagingData
+//                pagingData.map {
+//                }
+//            }
+//        }
 
->>>>>>> Stashed changes
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
             binding.swipeReferesh.isRefreshing = false
             when (it) {
@@ -183,7 +182,8 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                     binding.noInternetConnection.visibility = View.GONE
                     binding.noInternetMessage.visibility = View.GONE
 
-                    val selectedChip = binding.chipGroup.findViewById<Chip>(binding.chipGroup.checkedChipId)
+                    val selectedChip =
+                        binding.chipGroup.findViewById<Chip>(binding.chipGroup.checkedChipId)
                     val filterData = ArrayList<SchoolData>().apply {
                         addAll(it.data?.filter { it.status != "MOA Pending" }?.filter {
                             when (selectedChip.text) {
@@ -304,6 +304,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
         _binding = null
         _adapter = null
         super.onDestroyView()
+        Timber.e("onDestroyView")
     }
 
     private fun setOnBackPressed() {
@@ -315,6 +316,11 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
         requireActivity().onBackPressedDispatcher.addCallback(callback)
     }
 
+    override fun onStart() {
+        super.onStart()
+        setActionBar()
+        Timber.e("onStart")
+    }
     override fun onStop() {
         super.onStop()
         (requireActivity() as MainActivity).removeMenuProvider(this)
@@ -322,6 +328,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
     }
 
     private fun setActionBar() {
+        Timber.e("setActionBar")
         (requireActivity() as MainActivity).setSupportActionBar(binding.homeTopBar)
         activity?.addMenuProvider(this)
     }
@@ -330,6 +337,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
         menuInflater.inflate(R.menu.home_top_bar_menu, menu)
         menu.findItem(R.id.menu_home).isVisible = false
     }
+
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
@@ -342,6 +350,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
                 findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
                 true
             }
+
             R.id.menu_home -> {
                 findNavController().navigate(R.id.homeFragment)
                 true
@@ -352,6 +361,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
             }
         }
     }
+
 
     override fun openSchoolDetails(schoolData: SchoolData) {
         findNavController()

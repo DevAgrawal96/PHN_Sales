@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -31,14 +32,19 @@ import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentCostingMoaDocumentBinding
 import com.phntechnolab.sales.databinding.LogoutDialogBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
+import com.phntechnolab.sales.di.FileDownloader
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.textChange
+import com.phntechnolab.sales.util.toastMsg
 import com.phntechnolab.sales.viewmodel.CostingMoaDocumentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CostingMOADocumentFragment : Fragment(), MenuProvider {
@@ -51,6 +57,9 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
     private val args: CostingMOADocumentFragmentArgs by navArgs()
 
     private var image: Uri? = null
+
+    @Inject
+    lateinit var download: FileDownloader
 
     private val backPressHandler = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -106,7 +115,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setActionBar()
+
 
         observers()
 
@@ -162,7 +171,6 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             } else {
                 Timber.e("fill all man")
             }
-
         }
 
         binding.proposeCostingStage.autoAgreementDuration.setOnItemClickListener { parent, view, position, id ->
@@ -188,17 +196,28 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         binding.moaDocument.autoAgreementDuration.setOnItemClickListener { parent, view, position, id ->
             val moaAgreementDuration = parent.adapter.getItem(position) as String
             viewModel._moaDocumentData.value?.agreementDuration = moaAgreementDuration
+
         }
 
-        binding.moaDocument.edtDiscussedWithWhom.setOnItemClickListener { parent, view, position, id ->
-            val moaMeetingWithWhoom = parent.adapter.getItem(position) as String
-            viewModel._moaDocumentData.value?.disscussedWithWhom = moaMeetingWithWhoom
-        }
+//        binding.moaDocument.edtDiscussedWithWhom.setOnItemClickListener { parent, view, position, id ->
+//            val moaMeetingWithWhoom = parent.adapter.getItem(position) as String
+//            viewModel._moaDocumentData.value?.disscussedWithWhom = moaMeetingWithWhoom
+//        }
 
         binding.moaDocument.autoSelectDesignation.setOnItemClickListener { parent, view, position, id ->
             val designation = parent.adapter.getItem(position) as String
             viewModel._moaDocumentData.value?.designation = designation
+            if (designation == "Others") {
+                binding.moaDocument.tilSelectDesignationOther.visibility = View.VISIBLE
+            } else {
+                binding.moaDocument.tilSelectDesignationOther.visibility = View.GONE
+            }
+
         }
+        binding.moaDocument.edtSelectDesignationOther.textChange { designation ->
+            viewModel._moaDocumentData.value?.designation = designation
+        }
+
 
         binding.moaDocument.documentConstraint.setOnClickListener {
             moaDocument.launch("application/pdf")
@@ -623,16 +642,34 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
     }
 
     private fun setMoaDocumentDropdowns(moaDocumentData: MOADocumentData?) {
-        //Set agreement duration data
-//        try{
-//            val fileName = moaDocumentData?.moaFile!!.substring(
-//                moaDocumentData.moaFile!!.lastIndexOf('/') + 1
-//            )
-//            binding.moaDocument.documentFileName.text = fileName
-//        }catch (e:Exception){
-//            e.printStackTrace()
-//        }
 
+        //set moa file name
+        if (moaDocumentData?.moaFile != null && !moaDocumentData.moaFile!!.startsWith("/tmp/")) {
+//            download.downloadFile(moaDocumentData.moaFile!!, "moaDoc.pdf")
+            try {
+                val fileName = moaDocumentData.moaFile!!.substring(
+                    moaDocumentData.moaFile!!.lastIndexOf('/') + 1
+                )
+                binding.moaDocument.documentFileName.text = fileName
+            } catch (e: Exception) {
+                e.printStackTrace()
+
+                binding.moaDocument.documentFileName.text =
+                    requireContext().resources.getString(com.phntechnolab.sales.R.string.select_file)
+            }
+            binding.moaDocument.moaDownload.visibility = View.VISIBLE
+            binding.moaDocument.moaDownload.setOnClickListener {
+                val sdf = SimpleDateFormat("ddMyyyyhhmmss")
+                toastMsg(requireContext().resources.getString(com.phntechnolab.sales.R.string.downloading_start))
+                download.downloadFile(moaDocumentData.moaFile!!, "MOAFile${sdf.format(Date())}.pdf")
+            }
+        } else {
+            binding.moaDocument.documentFileName.text =
+                requireContext().resources.getString(com.phntechnolab.sales.R.string.select_file)
+            binding.moaDocument.moaDownload.visibility = View.GONE
+        }
+
+        //Set agreement duration data
         val dropdown: MaterialAutoCompleteTextView = binding.moaDocument.autoAgreementDuration
         val items = ArrayList<String>()
         if (moaDocumentData?.agreementDuration != null && !moaDocumentData.agreementDuration.isNullOrBlank()) {
@@ -657,55 +694,63 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
         //Meeting with whoom dropdown set
 
-        val meetingWithWhoomDropdown: MaterialAutoCompleteTextView =
-            binding.moaDocument.edtDiscussedWithWhom
-        val meetingWithWhoomItem = ArrayList<String>()
-
-        if (moaDocumentData?.disscussedWithWhom != null && !moaDocumentData.disscussedWithWhom.isNullOrBlank()) {
-            meetingWithWhoomItem.add(moaDocumentData.disscussedWithWhom!!)
-            if (moaDocumentData.disscussedWithWhom == "Other") {
-                binding.moaDocument.meetingWithWhoomOthers.visibility = View.VISIBLE
-            } else {
-                binding.moaDocument.meetingWithWhoomOthers.visibility = View.GONE
-            }
-        }
-
-        arrayOf(
-            "Principal Level",
-            "Director Level",
-            "Other"
-        ).forEach {
-            if (!meetingWithWhoomItem.any { itemName -> itemName.contains(it) }) {
-                meetingWithWhoomItem.add(it)
-            } else {
-                binding.moaDocument.edtDiscussedWithWhom.setText(it)
-            }
-        }
-        val discussedWithWhoomAdapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(
-                requireContext(),
-                R.layout.simple_spinner_dropdown_item,
-                meetingWithWhoomItem
-            )
-        meetingWithWhoomDropdown.setAdapter(discussedWithWhoomAdapter)
+//        val meetingWithWhoomDropdown: MaterialAutoCompleteTextView =
+//            binding.moaDocument.edtDiscussedWithWhom
+//        val meetingWithWhoomItem = ArrayList<String>()
+//
+//        if (moaDocumentData?.disscussedWithWhom != null && !moaDocumentData.disscussedWithWhom.isNullOrBlank()) {
+//            meetingWithWhoomItem.add(moaDocumentData.disscussedWithWhom!!)
+//            if (moaDocumentData.disscussedWithWhom == "Other") {
+//                binding.moaDocument.meetingWithWhoomOthers.visibility = View.VISIBLE
+//            } else {
+//                binding.moaDocument.meetingWithWhoomOthers.visibility = View.GONE
+//            }
+//        }
+//
+//        arrayOf(
+//            "Principal Level",
+//            "Director Level",
+//            "Other"
+//        ).forEach {
+//            if (!meetingWithWhoomItem.any { itemName -> itemName.contains(it) }) {
+//                meetingWithWhoomItem.add(it)
+//            } else {
+//                binding.moaDocument.edtDiscussedWithWhom.setText(it)
+//            }
+//        }
+//        val discussedWithWhoomAdapter: ArrayAdapter<String> =
+//            ArrayAdapter<String>(
+//                requireContext(),
+//                R.layout.simple_spinner_dropdown_item,
+//                meetingWithWhoomItem
+//            )
+//        meetingWithWhoomDropdown.setAdapter(discussedWithWhoomAdapter)
 
         //select designation dropdown
 
         val designationDropdown: MaterialAutoCompleteTextView =
             binding.moaDocument.autoSelectDesignation
         val designationItems = ArrayList<String>()
-
+        val array = arrayOf(
+            "Principal", "Teacher", "Director", "Owner", "HOD", "Others"
+        )
         if (moaDocumentData?.designation != null && !moaDocumentData.designation.isNullOrBlank()) {
-            designationItems.add(moaDocumentData.designation!!)
+            if (array.contains(moaDocumentData.designation) && moaDocumentData.designation != "Others") {
+                designationItems.add(moaDocumentData.designation!!)
+                binding.moaDocument.tilSelectDesignationOther.visibility = View.GONE
+            } else {
+                designationItems.add(moaDocumentData.designation!!)
+                binding.moaDocument.autoSelectDesignation.setText(getString(com.phntechnolab.sales.R.string._designation))
+                binding.moaDocument.edtSelectDesignationOther.setText(moaDocumentData.designation)
+                binding.moaDocument.tilSelectDesignationOther.visibility = View.VISIBLE
+            }
         }
 
-        arrayOf(
-            "Principal", "Teacher", "Director", "Owner", "HOD", "Others"
-        ).forEach {
+        array.forEach {
             if (!designationItems.any { itemName -> itemName.contains(it) }) {
                 designationItems.add(it)
             } else {
-                binding.moaDocument.autoAgreementDuration.setText(it)
+                binding.moaDocument.autoSelectDesignation.setText(it)
             }
         }
         val designationAdapter: ArrayAdapter<String> =
@@ -840,6 +885,11 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             viewModel.uploadDocument(it, requireContext())
             binding.moaDocument.documentFileName.text = "${viewModel.imageName}.pdf"
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setActionBar()
     }
 
     override fun onStop() {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -107,7 +108,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_discussed_with_whom"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_16dp"
@@ -121,33 +121,35 @@
                     app:layout_constraintTop_toBottomOf="@+id/til_agreement_duration"
                     app:layout_constraintVertical_bias="0.0">
 
-                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/edt_discussed_with_whom"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edt_discussed_with_whom_mandate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none" />
+                        android:inputType="text"
+                        android:imeOptions="actionDone"
+                        android:text="@={viewModel._moaDocumentData.disscussedWithWhom}"
+                        android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/meetingWithWhoomOthers"
+                    android:id="@+id/til_select_designation_other"
                     android:layout_width="@dimen/dimen_0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_16dp"
                     android:layout_marginTop="@dimen/dimen_16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
                     android:hint="@string/other"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/til_discussed_with_whom"
+                    app:layout_constraintTop_toBottomOf="@+id/til_select_designation"
                     app:layout_constraintVertical_bias="0.0">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtMeetingWithWhoomOthers"
+                        android:id="@+id/edt_select_designation_other"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={viewModel._moaDocumentData.disscussedWithWhom}"
                         android:inputType="text"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -158,14 +160,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_16dp"
-                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
                     android:hint="@string/select_designation_mandate"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/meetingWithWhoomOthers"
+                    app:layout_constraintTop_toBottomOf="@+id/til_discussed_with_whom"
                     app:layout_constraintVertical_bias="0.0">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -180,15 +182,15 @@
                     android:layout_width="@dimen/dimen_0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_16dp"
-                    android:layout_marginTop="@dimen/dimen_16dp"
-                    android:layout_marginEnd="@dimen/dimen_16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
                     android:text="@string/draft_moa_file"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/moa_download"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/til_select_designation"
+                    app:layout_constraintTop_toBottomOf="@+id/til_select_designation_other"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -272,6 +274,22 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/til_remark"
                     app:layout_constraintVertical_bias="0.0" />
+
+                <ImageView
+                    android:id="@+id/moa_download"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:tint="@color/black"
+                    android:padding="@dimen/dimen_4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/til_select_designation_other"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:srcCompat="@drawable/ic_download" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

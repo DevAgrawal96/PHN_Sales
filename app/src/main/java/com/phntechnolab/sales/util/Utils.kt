@@ -12,6 +12,7 @@ import android.util.Patterns
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
@@ -89,7 +90,7 @@ fun Fragment.hideToolbarAndClearFullScreen() {
 }
 
 
-fun TextInputEditText.validation(afterTextChanged: (String) -> Unit) {
+fun TextInputEditText.textChange(afterTextChanged: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         }
@@ -175,4 +176,8 @@ fun View.disable() {
 fun View.enabled() {
     background.colorFilter = null
     isClickable = true
+}
+
+fun Fragment.toastMsg(msg: String) {
+    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
 }

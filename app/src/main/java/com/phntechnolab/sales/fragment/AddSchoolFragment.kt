@@ -135,7 +135,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setActionBar()
+
         initializeData()
 
         onCheckedChangedListener()
@@ -1030,6 +1030,10 @@ class AddSchoolFragment : Fragment(), MenuProvider {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        setActionBar()
+    }
     override fun onStop() {
         super.onStop()
         (requireActivity() as MainActivity).removeMenuProvider(this)

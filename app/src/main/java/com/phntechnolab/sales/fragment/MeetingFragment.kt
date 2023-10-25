@@ -60,7 +60,7 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setActionBar()
+
         initializeListener()
         observers()
     }
@@ -158,6 +158,7 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
 
     override fun onStart() {
         super.onStart()
+        setActionBar()
         binding.todayBtn.isChecked = true
     }
 

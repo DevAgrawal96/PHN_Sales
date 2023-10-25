@@ -23,7 +23,8 @@ import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class CostingMoaDocumentViewModel @Inject constructor(private val repositories: CostingMOADocumentRepository) : ViewModel() {
+class CostingMoaDocumentViewModel @Inject constructor(private val repositories: CostingMOADocumentRepository) :
+    ViewModel() {
 
     var _proposeCostingData: MutableLiveData<ProposeCostingData?> = MutableLiveData()
     val proposeCostingData: LiveData<ProposeCostingData?>
@@ -43,14 +44,14 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
     var imageName: String? = null
     var _requestFile: RequestBody? = null
 
-    fun updateProposeCostingDetails(){
+    fun updateProposeCostingDetails() {
 
         viewModelScope.launch {
-            repositories.proposeCostingData(_proposeCostingData.value?: ProposeCostingData())
+            repositories.proposeCostingData(_proposeCostingData.value ?: ProposeCostingData())
         }
     }
 
-    fun updateMoaDocumentDetails(){
+    fun updateMoaDocumentDetails() {
 
         viewModelScope.launch {
             repositories.moaDocumentData(returntoJson())
@@ -76,19 +77,24 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
         imageName = sdf.format(Date())
     }
 
-    fun returntoJson(): MultipartBody{
-        return MultipartBody.Builder().setType(MultipartBody.FORM)
-            .addFormDataPart("id", _moaDocumentData.value?.id ?: "")
-            .addFormDataPart("school_id", _moaDocumentData.value?.schoolId ?: "")
-            .addFormDataPart("interested_intake", _moaDocumentData.value?.interestedIntake ?: "")
-            .addFormDataPart("final_costing", _moaDocumentData.value?.finalCosting ?: "")
-            .addFormDataPart("agreement_duration", _moaDocumentData.value?.agreementDuration ?: "")
-            .addFormDataPart("disscussed_with_whom", _moaDocumentData.value?.disscussedWithWhom ?: "")
-            .addFormDataPart("designation", _moaDocumentData.value?.designation ?: "")
-            .addFormDataPart("remark", _moaDocumentData.value?.remark ?: "")
-            .addFormDataPart("status", _moaDocumentData.value?.status ?: "")
-            .addFormDataPart("moa_file", "$imageName.pdf", _requestFile!!)
-            .build()
-
+    fun returntoJson(): MultipartBody {
+        val body = MultipartBody.Builder().setType(MultipartBody.FORM).apply {
+            addFormDataPart("id", _moaDocumentData.value?.id ?: "")
+            addFormDataPart("school_id", _moaDocumentData.value?.schoolId ?: "")
+            addFormDataPart("interested_intake", _moaDocumentData.value?.interestedIntake ?: "")
+            addFormDataPart("final_costing", _moaDocumentData.value?.finalCosting ?: "")
+            addFormDataPart("agreement_duration", _moaDocumentData.value?.agreementDuration ?: "")
+            addFormDataPart(
+                "disscussed_with_whom",
+                _moaDocumentData.value?.disscussedWithWhom ?: ""
+            )
+            addFormDataPart("designation", _moaDocumentData.value?.designation ?: "")
+            addFormDataPart("remark", _moaDocumentData.value?.remark ?: "")
+            addFormDataPart("status", _moaDocumentData.value?.status ?: "")
+//            if(_requestFile != null){
+            addFormDataPart("moa_file", "$imageName.pdf", _requestFile!!)
+//            }
+        }.build()
+        return body
     }
 }

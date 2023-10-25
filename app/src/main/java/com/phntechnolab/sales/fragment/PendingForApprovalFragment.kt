@@ -67,7 +67,7 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setActionBar()
+
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
@@ -99,6 +99,7 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
                             binding.noInternetMessage.visibility = View.VISIBLE
                             binding.progressIndicator.visibility = View.GONE
                         }
+
                         getString(R.string.something_went_wrong) -> {
                             Toast.makeText(
                                 requireContext(),
@@ -129,6 +130,11 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
         activity?.removeMenuProvider(this)
     }
 
+    override fun onStart() {
+        super.onStart()
+        setActionBar()
+    }
+
     private fun setActionBar() {
         (requireActivity() as MainActivity).setSupportActionBar(binding.homeTopBar)
         activity?.addMenuProvider(this)
@@ -149,6 +155,7 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
                 findNavController().navigate(R.id.action_pendingFragment_to_notificationFragment)
                 true
             }
+
             R.id.menu_home -> {
                 findNavController().navigate(R.id.homeFragment)
                 true
