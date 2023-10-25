@@ -665,7 +665,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                         if (!_dateAndTime[0].trim().isNullOrBlank()) {
                             _dateAndTime[0].split("/").let { _dateArray ->
                                 day = _dateArray[0].toInt()
-                                month = _dateArray[1].toInt()
+                                month = _dateArray[1].toInt()-1
                                 year = _dateArray[2].toInt()
                             }
                         }
@@ -760,7 +760,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                         if (!_dateAndTime[0].trim().isNullOrBlank()) {
                             _dateAndTime[0].split("/").let { _dateArray ->
                                 day = _dateArray[0].toInt()
-                                month = _dateArray[1].toInt()
+                                month = _dateArray[1].toInt()-1
                                 year = _dateArray[2].toInt()
                             }
                         }
@@ -855,7 +855,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                         if (!_dateAndTime[0].trim().isNullOrBlank()) {
                             _dateAndTime[0].split("/").let { _dateArray ->
                                 day = _dateArray[0].toInt()
-                                month = _dateArray[1].toInt()
+                                month = _dateArray[1].toInt()-1
                                 year = _dateArray[2].toInt()
                             }
                         }
@@ -949,7 +949,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                     if (!_dateAndTime[0].trim().isNullOrBlank()) {
                         _dateAndTime[0].split("/").let { _dateArray ->
                             day = _dateArray[0].toInt()
-                            month = _dateArray[1].toInt()
+                            month = _dateArray[1].toInt()-1
                             year = _dateArray[2].toInt()
                         }
                     }
@@ -986,7 +986,6 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
 
         binding.dmMeeting.edtNextMeetingTime.setOnClickListener {
             val c = Calendar.getInstance()
-
             var hour = c.get(Calendar.HOUR)
             var minute = c.get(Calendar.MINUTE)
             if (!viewModel._dmMeetData.value?.nextMeetDate.isNullOrEmpty()) {

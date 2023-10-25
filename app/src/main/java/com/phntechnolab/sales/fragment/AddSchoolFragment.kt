@@ -729,7 +729,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                         binding.followupDetails.edtSchoolDate.setText(_dateAndTime[0])
                         _dateAndTime[0].split("/").let { _dateArray ->
                             day = _dateArray[0].toInt()
-                            month = _dateArray[1].toInt()
+                            month = _dateArray[1].toInt()-1
                             year = _dateArray[2].toInt()
                         }
                     }

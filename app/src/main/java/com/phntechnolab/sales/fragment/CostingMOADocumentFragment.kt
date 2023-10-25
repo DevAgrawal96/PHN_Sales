@@ -97,8 +97,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCostingMoaDocumentBinding.inflate(inflater, container, false)
 
@@ -250,13 +249,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 //        isQuotationSharedPending ||
 
 //        isPaymentScheduledPending ||
-        return if (
-            isPricepPerStudentPending ||
-            isAgreementDurationNotSelected ||
-            isMeetingWithWhoomNotSelected ||
-            isConversationRatioNotSelected ||
-            isNextMeetingDateNotSelected
-        ) {
+        return if (isPricepPerStudentPending || isAgreementDurationNotSelected || isMeetingWithWhoomNotSelected || isConversationRatioNotSelected || isNextMeetingDateNotSelected) {
             Toast.makeText(
                 requireContext(),
                 requireActivity().getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_and_mark_yes_details),
@@ -282,18 +275,12 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         val isDiscussedWithWhoomNotSelected =
             viewModel._moaDocumentData.value?.disscussedWithWhom.isNullOrBlank()
 
-        val isDesignationNotSelected =
-            viewModel._moaDocumentData.value?.designation.isNullOrBlank()
+        val isDesignationNotSelected = viewModel._moaDocumentData.value?.designation.isNullOrBlank()
 
         val isMoaDocumentNotUploaded = viewModel._requestFile == null
 
 
-        return if (isTotalInterestedIntakeNotFilled ||
-            isCostingPerStudentNotFilled ||
-            isDiscussedWithWhoomNotSelected ||
-            isDesignationNotSelected ||
-            isAgreementDurationNotSelected || isMoaDocumentNotUploaded
-        ) {
+        return if (isTotalInterestedIntakeNotFilled || isCostingPerStudentNotFilled || isDiscussedWithWhoomNotSelected || isDesignationNotSelected || isAgreementDurationNotSelected || isMoaDocumentNotUploaded) {
             if (isMoaDocumentNotUploaded) {
                 Toast.makeText(
                     requireContext(),
@@ -326,7 +313,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                         if (!_dateAndTime[0].trim().isNullOrBlank()) {
                             _dateAndTime[0].split("/").let { _dateArray ->
                                 day = _dateArray[0].toInt()
-                                month = _dateArray[1].toInt()
+                                month = (_dateArray[1].toInt()-1)
                                 year = _dateArray[2].toInt()
                             }
                         }
@@ -334,10 +321,9 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             }
 
             val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                { view, year, monthOfYear, dayOfMonth ->
+                requireContext(), { view, _year, monthOfYear, dayOfMonth ->
                     val updatedDateAndTime =
-                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
                     binding.proposeCostingStage.edtQuotationValidity.setText(updatedDateAndTime)
                     viewModel.proposeCostingData.value?.quotationValidity.let { _nextFollowUpDate ->
                         if ((_nextFollowUpDate ?: "").contains(" ")) {
@@ -372,8 +358,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                         }
 
                         val timePickerDialog = TimePickerDialog(
-                            requireContext(),
-                            { view, hourOfDay, minute ->
+                            requireContext(), { view, hourOfDay, minute ->
                                 val updatedTime = "$hourOfDay:$minute"
                                 viewModel.proposeCostingData.value?.quotationValidity.let { _nextFollowUpDate ->
                                     if ((_nextFollowUpDate ?: "").contains(" ")) {
@@ -391,18 +376,12 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                                 }
 
                                 binding.proposeCostingStage.edtQuotationValidity.setText(viewModel.proposeCostingData.value?.quotationValidity)
-                            },
-                            hour,
-                            minute,
-                            false
+                            }, hour, minute, false
                         )
                         timePickerDialog.show()
 
                     }
-                },
-                year,
-                month,
-                day
+                }, year, month, day
             )
 
             datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
@@ -519,8 +498,9 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             binding.proposeCostingStage.edtDate.setText(
                 dateAndTime?.get(0)
             )
-            if ((dateAndTime?.size ?: 0) > 1)
-                binding.proposeCostingStage.edtTime.setText(dateAndTime?.get(1) ?: "")
+            if ((dateAndTime?.size ?: 0) > 1) binding.proposeCostingStage.edtTime.setText(
+                dateAndTime?.get(1) ?: ""
+            )
         }
 
     }
@@ -570,12 +550,9 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             }
         }
 
-        val adapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(
-                requireContext(),
-                R.layout.simple_spinner_dropdown_item,
-                items
-            )
+        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            requireContext(), R.layout.simple_spinner_dropdown_item, items
+        )
         dropdown.setAdapter(adapter)
 
         //Meeting with whoom dropdown set
@@ -594,9 +571,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         }
 
         arrayOf(
-            "Principal Level",
-            "Director Level",
-            "Other"
+            "Principal Level", "Director Level", "Other"
         ).forEach {
             if (!meetingWithWhoomItem.any { itemName -> itemName.contains(it) }) {
                 meetingWithWhoomItem.add(it)
@@ -604,12 +579,9 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                 binding.proposeCostingStage.autoMeetingWithWhom.setText(it)
             }
         }
-        val labsAdapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(
-                requireContext(),
-                R.layout.simple_spinner_dropdown_item,
-                meetingWithWhoomItem
-            )
+        val labsAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            requireContext(), R.layout.simple_spinner_dropdown_item, meetingWithWhoomItem
+        )
         meetingWithWhoomDropdown.setAdapter(labsAdapter)
 
         //set conversation ratio dropdown
@@ -623,9 +595,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         }
 
         arrayOf(
-            "High",
-            "Medium",
-            "Low"
+            "High", "Medium", "Low"
         ).forEach {
             if (!conversationRationItems.any { itemName -> itemName.contains(it) }) {
                 conversationRationItems.add(it)
@@ -633,20 +603,16 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                 binding.proposeCostingStage.autoConversionRatio.setText(it)
             }
         }
-        val leadsAdapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(
-                requireContext(),
-                R.layout.simple_spinner_dropdown_item,
-                conversationRationItems
-            )
+        val leadsAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            requireContext(), R.layout.simple_spinner_dropdown_item, conversationRationItems
+        )
         conversationRationDropdown.setAdapter(leadsAdapter)
     }
 
     private fun setMoaDocumentDropdowns(moaDocumentData: MOADocumentData?) {
 
         //set moa file name
-        if (moaDocumentData?.moaFile != null && !moaDocumentData.moaFile!!.startsWith("/tmp/")) {
-//            download.downloadFile(moaDocumentData.moaFile!!, "moaDoc.pdf")
+        if (moaDocumentData?.moaFile != "" && moaDocumentData?.moaFile != null && !moaDocumentData.moaFile!!.startsWith("/tmp/")) {
             try {
                 val fileName = moaDocumentData.moaFile!!.substring(
                     moaDocumentData.moaFile!!.lastIndexOf('/') + 1
@@ -657,6 +623,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                 binding.moaDocument.documentFileName.text =
                     requireContext().resources.getString(com.phntechnolab.sales.R.string.select_file)
             }
+
             binding.moaDocument.moaDownload.visibility = View.VISIBLE
             binding.moaDocument.moaDownload.setOnClickListener {
                 val sdf = SimpleDateFormat("ddMyyyyhhmmss")
@@ -684,47 +651,10 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             }
         }
 
-        val adapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(
-                requireContext(),
-                R.layout.simple_spinner_dropdown_item,
-                items
-            )
+        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            requireContext(), R.layout.simple_spinner_dropdown_item, items
+        )
         dropdown.setAdapter(adapter)
-
-        //Meeting with whoom dropdown set
-
-//        val meetingWithWhoomDropdown: MaterialAutoCompleteTextView =
-//            binding.moaDocument.edtDiscussedWithWhom
-//        val meetingWithWhoomItem = ArrayList<String>()
-//
-//        if (moaDocumentData?.disscussedWithWhom != null && !moaDocumentData.disscussedWithWhom.isNullOrBlank()) {
-//            meetingWithWhoomItem.add(moaDocumentData.disscussedWithWhom!!)
-//            if (moaDocumentData.disscussedWithWhom == "Other") {
-//                binding.moaDocument.meetingWithWhoomOthers.visibility = View.VISIBLE
-//            } else {
-//                binding.moaDocument.meetingWithWhoomOthers.visibility = View.GONE
-//            }
-//        }
-//
-//        arrayOf(
-//            "Principal Level",
-//            "Director Level",
-//            "Other"
-//        ).forEach {
-//            if (!meetingWithWhoomItem.any { itemName -> itemName.contains(it) }) {
-//                meetingWithWhoomItem.add(it)
-//            } else {
-//                binding.moaDocument.edtDiscussedWithWhom.setText(it)
-//            }
-//        }
-//        val discussedWithWhoomAdapter: ArrayAdapter<String> =
-//            ArrayAdapter<String>(
-//                requireContext(),
-//                R.layout.simple_spinner_dropdown_item,
-//                meetingWithWhoomItem
-//            )
-//        meetingWithWhoomDropdown.setAdapter(discussedWithWhoomAdapter)
 
         //select designation dropdown
 
@@ -753,12 +683,9 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                 binding.moaDocument.autoSelectDesignation.setText(it)
             }
         }
-        val designationAdapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(
-                requireContext(),
-                R.layout.simple_spinner_dropdown_item,
-                designationItems
-            )
+        val designationAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            requireContext(), R.layout.simple_spinner_dropdown_item, designationItems
+        )
         designationDropdown.setAdapter(designationAdapter)
     }
 
@@ -797,7 +724,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                     if (!_dateAndTime[0].trim().isNullOrBlank()) {
                         _dateAndTime[0].split("/").let { _dateArray ->
                             day = _dateArray[0].toInt()
-                            month = _dateArray[1].toInt()
+                            month = _dateArray[1].toInt()-1
                             year = _dateArray[2].toInt()
                         }
                     }
@@ -805,10 +732,9 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             }
 
             val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                { view, year, monthOfYear, dayOfMonth ->
+                requireContext(), { view, _year, monthOfYear, dayOfMonth ->
                     val updatedDateAndTime =
-                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
                     binding.proposeCostingStage.edtDate.setText(updatedDateAndTime)
                     viewModel.proposeCostingData.value?.nextMeet.let { _nextFollowUpDate ->
                         if ((_nextFollowUpDate ?: "").contains(" ")) {
@@ -822,10 +748,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                         Timber.e("Date")
                         Timber.e(viewModel.proposeCostingData.value?.nextMeet)
                     }
-                },
-                year,
-                month,
-                day
+                }, year, month, day
             )
 
             datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
@@ -850,8 +773,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             }
 
             val timePickerDialog = TimePickerDialog(
-                requireContext(),
-                { view, hourOfDay, minute ->
+                requireContext(), { view, hourOfDay, minute ->
                     val updatedTime = "$hourOfDay:$minute"
                     binding.proposeCostingStage.edtTime.setText(updatedTime)
                     viewModel.proposeCostingData.value?.nextMeet.let { _nextFollowUpDate ->
@@ -868,10 +790,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                         Timber.e(viewModel.proposeCostingData.value?.nextMeet)
 
                     }
-                },
-                hour,
-                minute,
-                false
+                }, hour, minute, false
             )
             timePickerDialog.show()
         }
