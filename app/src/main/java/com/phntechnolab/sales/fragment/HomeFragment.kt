@@ -11,14 +11,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
-import androidx.core.view.children
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.filter
+import androidx.paging.insertSeparators
 import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import com.phntechnolab.sales.Modules.DataStoreProvider
@@ -28,42 +30,36 @@ import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentHomeBinding
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.DMData
-import com.phntechnolab.sales.model.InstallmentData
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
-import com.phntechnolab.sales.util.DataStoreManager
+import com.phntechnolab.sales.paging.SchoolPagingAdapter
 import com.phntechnolab.sales.util.DataStoreManager.setToken
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
+class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<HomeViewModel>()
 
-    private var _adapter: SchoolDetailAdapter? = null
-    private val adapter get() = _adapter
+    private var schoolPagingAdapter: SchoolPagingAdapter? = null
 
     @Inject
     lateinit var dataStoreProvider: DataStoreProvider
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        getData()
-    }
 
     override fun onResume() {
         super.onResume()
         Timber.e("onResume")
         binding.all.isChecked = true
-//        viewModel.refereshToken()
     }
 
 
@@ -75,87 +71,131 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         initializeAdapter()
+
         setOnBackPressed()
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        observers()
+        setActionBar()
 
         checkedChangeListener()
 
+        viewModel.getAllSchoolsPagination().observe(viewLifecycleOwner){
+            viewModel.setPagingData(it)
+            binding.swipeReferesh.isRefreshing = false
+
+            binding.noInternetConnection.visibility = View.GONE
+            binding.noInternetMessage.visibility = View.GONE
+
+            val selectedChip =
+                binding.chipGroup.findViewById<Chip>(binding.chipGroup.checkedChipId)
+            Timber.e("SELECTED CHIP TEXT" + selectedChip.text.toString())
+            schoolPagingAdapter?.updateOnlyChipText(selectedChip.text.toString())
+            schoolPagingAdapter?.submitData(lifecycle, it)
+        }
+
         binding.swipeReferesh.setOnRefreshListener {
-            getData()
+            schoolPagingAdapter?.refresh()
+        }
+
+        schoolPagingAdapter?.addLoadStateListener {loadState ->
+            Timber.e("LOAD STATE")
+            Timber.e(loadState.toString())
+            if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && schoolPagingAdapter?.itemCount?:0 < 1) {
+                hideViewShowEmptyState()
+            } else {
+                showViewHideEmptyState()
+            }
         }
     }
 
+    private fun hideViewShowEmptyState(){
+        binding.noDataLottie.visibility = View.VISIBLE
+        binding.homeRecyclerView.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+        binding.progressIndicator.visibility = View.GONE
+    }
 
+    private fun showViewHideEmptyState(){
+        binding.homeRecyclerView.visibility = View.VISIBLE
+        binding.noDataLottie.visibility = View.GONE
+        binding.progressIndicator.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+    }
+
+    private fun checkListSize(count: Int){
+        if(count <= 0)
+            hideViewShowEmptyState()
+        else
+            showViewHideEmptyState()
+    }
     private fun checkedChangeListener() {
         binding.chipGroup.setOnCheckedChangeListener { chipGroup, id ->
             val chip = chipGroup.findViewById<Chip>(id)
 
-//            val chip = chipGroup.getChildAt(chipGroup.checkedChipId)
             if (chip != null) {
                 for (i in 0 until chipGroup.childCount) {
                     chipGroup.getChildAt(i).isClickable = true
                 }
                 chip.isClickable = false
-                val schoolData =
-                    ((viewModel.schoolLiveData.value?.data?.filter { it.status != "MOA Pending" }
-                        ?.sortedByDescending { it.updatedAt }
-                        ?.filter {
-                            when (chip.text) {
-                                "All" -> {
-                                    true
-                                }
 
-                                "Visited" -> {
-                                    it.status == "Visited"
-                                }
+                Timber.e("CHIP SELECTED TEXT ${chip.text.toString()}")
+                schoolPagingAdapter?.updateOnlyChipText(chip.text.toString())
 
-                                "Assigned" -> {
-                                    it.status == "Assigned"
-                                }
-
-                                "Propose Costing" -> {
-                                    it.status == "Propose Costing"
-                                }
-
-                                "MOA Signed" -> {
-                                    it.status == "MOASigned" || it.status == "Installment"
-                                }
-
-                                "Not Interested" -> {
-                                    it.status == "Not Interested"
-                                }
-
-                                else -> {
-                                    it.status == chip.text
-                                }
-                            }
-                        }))
-                if (schoolData.isNullOrEmpty()) {
-                    if (!binding.noInternetConnection.isVisible && !binding.noInternetMessage.isVisible) {
-                        binding.noDataLottie.visibility = View.VISIBLE
-                        binding.homeRecyclerView.visibility = View.GONE
-                        binding.progressBar.visibility = View.GONE
-                        binding.progressIndicator.visibility = View.GONE
-                    } else {
-                        binding.noDataLottie.visibility = View.GONE
-                        binding.homeRecyclerView.visibility = View.GONE
-                        binding.progressBar.visibility = View.GONE
-                        binding.progressIndicator.visibility = View.GONE
+                when (chip.text) {
+                    "All" -> {
+                        viewModel._schoolPagingData.value?.let {
+                            schoolPagingAdapter?.submitData(lifecycle,
+                                it
+                            )
+                        }
                     }
-                } else {
-                    adapter?.setData(schoolData as ArrayList<SchoolData>)
-                    binding.homeRecyclerView.visibility = View.VISIBLE
-                    binding.noDataLottie.visibility = View.GONE
-                    binding.progressIndicator.visibility = View.GONE
-                    binding.progressBar.visibility = View.GONE
+
+                    "Visited" -> {
+                        viewModel._schoolPagingData.value?.filter {it.status == "Visited"}
+                            ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
+                    }
+
+                    "Assigned" -> {
+                        viewModel._schoolPagingData.value?.filter {it.status == "Assigned"}
+                            ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
+                    }
+
+                    "Propose Costing" -> {
+                        viewModel._schoolPagingData.value?.filter {it.status == "Propose Costing"}
+                            ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
+                    }
+
+                    "MOA Signed" -> {
+                        schoolPagingAdapter?.updateOnlyChipText("MOASigned")
+                        viewModel._schoolPagingData.value?.filter {it.status == "MOASigned"}
+                            ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
+                    }
+
+                    "Installment" -> {
+                        viewModel._schoolPagingData.value?.filter {it.status == "Installment"}
+                            ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
+                    }
+
+                    "Not Interested" -> {
+                        viewModel._schoolPagingData.value?.filter {it.status == "Not Interested"}
+                            ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
+                    }
+
+                    else -> {
+                        viewModel._schoolPagingData.value?.filter {it.status == chip.text.toString()}
+                            ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
+                    }
                 }
+
+
+                Timber.e("LOAD COUNT")
+                Timber.e(schoolPagingAdapter?.itemCount.toString())
+                checkListSize(schoolPagingAdapter?.itemCount?:0)
             }
         }
 
@@ -165,144 +205,15 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
         }
     }
 
-    private fun observers() {
-//        lifecycleScope.launch(Dispatchers.IO) {
-//            viewModel.schoolPaginationDataLiveData.collect {pagingData->
-//                pagingData
-//                pagingData.map {
-//                }
-//            }
-//        }
-
-        viewModel.schoolLiveData.observe(viewLifecycleOwner) {
-            binding.swipeReferesh.isRefreshing = false
-            when (it) {
-                is NetworkResult.Success -> {
-                    Timber.e(it.message.toString())
-                    binding.noInternetConnection.visibility = View.GONE
-                    binding.noInternetMessage.visibility = View.GONE
-
-                    val selectedChip =
-                        binding.chipGroup.findViewById<Chip>(binding.chipGroup.checkedChipId)
-                    val filterData = ArrayList<SchoolData>().apply {
-                        addAll(it.data?.filter { it.status != "MOA Pending" }?.filter {
-                            when (selectedChip.text) {
-                                "All" -> {
-                                    true
-                                }
-
-                                "Visited" -> {
-                                    it.status == "Visited"
-                                }
-
-                                "Assigned" -> {
-                                    it.status == "Assigned"
-                                }
-
-                                "Propose Costing" -> {
-                                    it.status == "Propose Costing"
-                                }
-
-                                "MOA Signed" -> {
-                                    it.status == "MOASigned" || it.status == "Installment"
-                                }
-
-                                "Not Interested" -> {
-                                    it.status == "Not Interested"
-                                }
-
-                                else -> {
-                                    it.status == selectedChip.text
-                                }
-                            }
-                        }
-                            ?.sortedByDescending { it.updatedAt } ?: ArrayList<SchoolData>())
-                    }
-                    if (filterData.isEmpty()) {
-                        binding.noDataLottie.visibility = View.VISIBLE
-                        binding.homeRecyclerView.visibility = View.GONE
-                        binding.progressBar.visibility = View.GONE
-                        binding.progressIndicator.visibility = View.GONE
-                    } else {
-                        binding.homeRecyclerView.visibility = View.VISIBLE
-                        binding.noDataLottie.visibility = View.GONE
-                        binding.progressIndicator.visibility = View.GONE
-                        binding.progressBar.visibility = View.GONE
-                        adapter?.setData(filterData)
-                    }
-                }
-
-                is NetworkResult.Error -> {
-                    Timber.e(it.message.toString())
-                    when (it.message) {
-                        requireContext().getString(R.string.please_connection_message) -> {
-                            binding.noInternetConnection.visibility = View.VISIBLE
-                            binding.noInternetMessage.visibility = View.VISIBLE
-                            binding.progressIndicator.visibility = View.GONE
-                        }
-
-                        getString(R.string.something_went_wrong) -> {
-                            Toast.makeText(
-                                requireContext(),
-                                getText(R.string.something_went_wrong),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        else -> {
-                        }
-                    }
-                }
-
-                else -> {
-                    Timber.e(it.message.toString())
-                }
-            }
-
-            viewModel.refereshToken.observe(viewLifecycleOwner) {
-//                getData()
-                when (it) {
-                    is NetworkResult.Success -> {
-                        Log.e("TOKEN REFERESH", Gson().toJson(it))
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            setToken(
-                                requireContext(),
-                                dataStoreProvider,
-                                "authToken",
-                                it.data?.access_token.toString()
-                            )
-                        }
-                    }
-
-                    is NetworkResult.Error -> {
-                        Timber.e(it.message.toString())
-                    }
-
-                    else -> {
-                        Timber.e(it.message.toString())
-                    }
-                }
-
-            }
-        }
-    }
-
     private fun initializeAdapter() {
-        _adapter = SchoolDetailAdapter(this)
-        binding.homeRecyclerView.adapter = _adapter
+        schoolPagingAdapter = SchoolPagingAdapter(this)
+        binding.homeRecyclerView.adapter = schoolPagingAdapter
     }
 
-    private fun getData() {
-//        binding.progressBar.visibility = View.VISIBLE
-//        binding.progressIndicator.visibility = View.VISIBLE
-        lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.getAllSchools()
-        }
-    }
 
     override fun onDestroyView() {
         _binding = null
-        _adapter = null
+        schoolPagingAdapter = null
         super.onDestroyView()
         Timber.e("onDestroyView")
     }
@@ -318,7 +229,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolDetailAdapter.CallBacks {
 
     override fun onStart() {
         super.onStart()
-        setActionBar()
         Timber.e("onStart")
     }
     override fun onStop() {

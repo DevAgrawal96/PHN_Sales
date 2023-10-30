@@ -1,22 +1,21 @@
 package com.phntechnolab.sales.repository
 
 import android.app.Application
-import android.content.Context
-import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.api.AuthApi
-import com.phntechnolab.sales.api.RetrofitApi
 import com.phntechnolab.sales.model.CustomResponse
-import com.phntechnolab.sales.model.LoginDetails
 import com.phntechnolab.sales.model.SchoolData
-import com.phntechnolab.sales.model.UserResponse
+import com.phntechnolab.sales.paging.SchoolPagingSource
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.NetworkUtils
-import timber.log.Timber
 import javax.inject.Inject
 
 class HomeRepository @Inject constructor(
@@ -32,6 +31,18 @@ class HomeRepository @Inject constructor(
     private val _refereshToken = MutableLiveData<NetworkResult<CustomResponse>>()
     val refereshToken: LiveData<NetworkResult<CustomResponse>>
         get() = _refereshToken
+
+    val pager = Pager(
+        config = PagingConfig(
+            pageSize = 15,
+            maxSize = 15 + 15*2,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = {
+            SchoolPagingSource(application, authApi)
+        }
+        , initialKey = 1
+    ).liveData
 
     suspend fun getSchoolData() {
 //        getToken()
@@ -154,5 +165,22 @@ class HomeRepository @Inject constructor(
 //                Toast.LENGTH_SHORT
 //            ).show()
         }
+    }
+
+    fun getAllSchoolsPagination(): LiveData<PagingData<SchoolData>> {
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = 15,
+                maxSize = 15 + 15*2,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                SchoolPagingSource(application, authApi)
+            }
+            , initialKey = 1
+        ).liveData
+//        schoolPaginationObservableData = pager.flow
+//        schoolPaginationDataMutableLiveData.postValue( pager)
     }
 }

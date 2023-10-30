@@ -9,6 +9,7 @@ import com.phntechnolab.sales.model.InstallmentData
 import com.phntechnolab.sales.model.LoginDetails
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
+import com.phntechnolab.sales.model.SchoolPaginationData
 import com.phntechnolab.sales.model.UserDataModel
 import com.phntechnolab.sales.model.UserResponse
 import okhttp3.MultipartBody
@@ -20,11 +21,15 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface AuthApi {
 
     @GET("api/allschools")
     suspend fun getAllSchoolData(): Response<List<SchoolData>>
+
+    @GET("api/pagination")
+    suspend fun getAllSchoolDataPage(@Query("page") page: Int): Response<SchoolPaginationData>
 
     @POST("api/refresh")
     suspend fun refereshToken(): Response<CustomResponse>

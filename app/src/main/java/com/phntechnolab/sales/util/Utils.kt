@@ -16,10 +16,13 @@ import android.widget.Toast
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
+import androidx.paging.PagingData
 import com.google.android.material.textfield.TextInputEditText
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.single
 
 
 //fun Fragment.hideSoftKeyboard() {
@@ -180,4 +183,6 @@ fun View.enabled() {
 
 fun Fragment.toastMsg(msg: String) {
     Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+
 }
+

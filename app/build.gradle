@@ -103,4 +103,9 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
+
+    // Jetpack Compose Integration
+    implementation "androidx.paging:paging-compose:3.0.0-alpha03"
+
+    implementation "androidx.paging:paging-runtime-ktx:3.2.1"
 }
