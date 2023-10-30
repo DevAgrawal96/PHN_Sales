@@ -629,15 +629,16 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
     }
 
-    private var contract = registerForActivityResult(ActivityResultContracts.GetContent()) {
+    private var contract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         Timber.e("BACK")
-        if (it != null) {
-            image = it
-            Timber.e(image.toString())
-            viewModel.uploadImage(it, requireContext())
-            binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
-        }
+//        if (it != null) {
+//            image = it
+//            Timber.e(image.toString())
+//            viewModel.uploadImage(it, requireContext())
+//            binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
+//        }
     }
+
 
     private fun oncClickListener() {
         binding.topBar.setNavigationOnClickListener {
@@ -671,7 +672,8 @@ class AddSchoolFragment : Fragment(), MenuProvider {
         }
 
         binding.schoolDetails.selectFileContainer.setOnClickListener {
-            contract.launch("image/*")
+            val intent = ImagePicker.onChooseImageButtonClick()
+            contract.launch(intent)
         }
 
 
