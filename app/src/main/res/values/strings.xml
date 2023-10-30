@@ -209,6 +209,8 @@
     <string name="other_">Other</string>
     <string name="_designation">Others</string>
     <string name="no_of_visited_schools">No. of Visited Schools</string>
+    <string name="total_revenue">Total Revenue</string>
+    <string name="total_revenue_value">₹ %s</string>
 
 
     <string-array name="agreement_duration">

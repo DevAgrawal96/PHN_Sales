@@ -198,6 +198,9 @@
         <action
             android:id="@+id/action_profileFragment_to_chartAnalysisFragment"
             app:destination="@id/chartAnalysisFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_revenueFragment"
+            app:destination="@id/revenueFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashScreenFragment"
@@ -380,4 +383,9 @@
         android:name="com.phntechnolab.sales.fragment.ChartAnalysisFragment"
         android:label="fragment_chart_analysis"
         tools:layout="@layout/fragment_chart_analysis" />
+    <fragment
+        android:id="@+id/revenueFragment"
+        android:name="com.phntechnolab.sales.fragment.RevenueFragment"
+        android:label="fragment_revenue"
+        tools:layout="@layout/fragment_revenue" />
 </navigation>

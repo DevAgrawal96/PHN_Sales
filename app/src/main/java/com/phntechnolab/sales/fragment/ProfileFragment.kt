@@ -97,7 +97,7 @@ class ProfileFragment : Fragment(), MenuProvider {
                     }
 
                     2 -> {
-                        Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
+                        findNavController().navigate(R.id.action_profileFragment_to_revenueFragment)
                     }
 
                     3 -> {
