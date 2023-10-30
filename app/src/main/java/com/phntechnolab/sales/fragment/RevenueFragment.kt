@@ -59,6 +59,13 @@ class RevenueFragment : Fragment() {
         initializeUI()
         setAdapterData()
         setDropDownData()
+        initializeListener()
+    }
+
+    private fun initializeListener() {
+        binding.autoTimeFrame.setOnItemClickListener { parent, view, position, id ->
+            binding.lastMonths.text = parent.adapter.getItem(position) as String
+        }
     }
 
     private fun setDropDownData() {
@@ -116,6 +123,8 @@ class RevenueFragment : Fragment() {
     }
 
     private fun initializeUI() {
+        binding.totalRevenueValue.text = requireContext().resources.getString(R.string.total_revenue_value,"99999999")
+        binding.totalRevenueValueOfMonth.text = requireContext().resources.getString(R.string.total_revenue_value,"9999999999")
         binding.topBar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
@@ -159,7 +168,7 @@ class RevenueFragment : Fragment() {
                     return xAxisLabel[value.toInt()]
                 }
             }
-            lineWidth = 3f
+            lineWidth = 2f
             fillColor = ContextCompat.getColor(requireContext(), R.color.light_green)
             mode = LineDataSet.Mode.CUBIC_BEZIER;
         }
@@ -176,6 +185,7 @@ class RevenueFragment : Fragment() {
             axisRight.setDrawGridLines(false)
             axisRight.setDrawAxisLine(false)
             xAxis.setDrawGridLines(false)
+            xAxis.isEnabled = false
             setBackgroundColor(
                 Color.WHITE
             )

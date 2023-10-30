@@ -12,16 +12,23 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentChartAnalysisBinding
+import com.phntechnolab.sales.util.toastMsg
+import timber.log.Timber
 
 
 class ChartAnalysisFragment : Fragment() {
@@ -66,6 +73,14 @@ class ChartAnalysisFragment : Fragment() {
         binding.autoTimeFrame.setOnItemClickListener { parent, view, position, id ->
             parent.adapter.getItem(position) as String
         }
+        binding.pieChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+            override fun onValueSelected(entry: Entry?, h: Highlight?) {
+                toastMsg("${entry?.y?.toInt()} %")
+            }
+
+            override fun onNothingSelected() {
+            }
+        })
     }
 
     private fun setDropDown() {
@@ -113,6 +128,12 @@ class ChartAnalysisFragment : Fragment() {
         val pieDataSet = PieDataSet(pieEntries, label)
         pieDataSet.valueTextSize = 12f
         pieDataSet.valueFormatter = object : ValueFormatter() {
+            override fun getPieLabel(value: Float, pieEntry: PieEntry?): String {
+                Timber.e("$value ${pieEntry?.label}")
+                return super.getPieLabel(value, pieEntry)
+//                return super.getPieLabel(value, PieEntry(value,schoolStatusAndValueMap.keys))
+            }
+
             override fun getFormattedValue(value: Float): String {
                 return "${value.toInt()} %"
             }
@@ -124,6 +145,7 @@ class ChartAnalysisFragment : Fragment() {
         binding.pieChart.isRotationEnabled = false
         binding.pieChart.setDrawEntryLabels(false)
         binding.pieChart.invalidate()
+        binding.pieChart.description.isEnabled = false
 
 
         //line chart
@@ -148,16 +170,7 @@ class ChartAnalysisFragment : Fragment() {
             circleRadius = 0f
             setDrawFilled(true)
             valueTextSize = 12F
-            valueFormatter = object : ValueFormatter() {
-                override fun getFormattedValue(value: Float): String {
-                    return value.toInt().toString()
-                }
-
-                override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-                    return xAxisLabel[value.toInt()]
-                }
-            }
-            lineWidth = 3f
+            lineWidth = 2f
             fillColor = ContextCompat.getColor(requireContext(), R.color.light_green)
             mode = LineDataSet.Mode.CUBIC_BEZIER;
         }
@@ -166,21 +179,28 @@ class ChartAnalysisFragment : Fragment() {
         binding.getTheGraph.apply {
             data = LineData(lineDataset)
             description.isEnabled = false
+
             setDrawBorders(false)
             axisLeft.isEnabled = false
             axisLeft.setDrawGridLines(false)
             axisLeft.setDrawAxisLine(false)
+
             axisRight.isEnabled = false
             axisRight.setDrawGridLines(false)
             axisRight.setDrawAxisLine(false)
             xAxis.setDrawGridLines(false)
+//            xAxis.setCenterAxisLabels(true)
+//            xAxis.granularity = 1f
+//            xAxis.valueFormatter = object : ValueFormatter(){
+//                override fun getFormattedValue(value: Float): String {
+//                    return xAxisLabel[value.toInt()]
+//                }
+//            }
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
             setBackgroundColor(
                 Color.WHITE
             )
             animateXY(2000, 2000, Easing.EaseInCubic)
         }
-
     }
-
-
 }

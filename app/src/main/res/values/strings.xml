@@ -211,7 +211,7 @@
     <string name="no_of_visited_schools">No. of Visited Schools</string>
     <string name="total_revenue">Total Revenue</string>
     <string name="total_revenue_value">₹ %s</string>
-    <string name="last_months">Last 6 Months</string>
+    <string name="last_months">Last 3 Months</string>
     <string name="recent_moa_s">Recent MOA’s</string>
 
 
