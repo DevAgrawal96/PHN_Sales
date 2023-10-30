@@ -109,4 +109,7 @@
     <color name="steps_done_color">#1D4ED8</color>
     <color name="steps_next_color">#D1D5DB</color>
 
+    <color name="dark_green">#14AF52</color>
+    <color name="light_green">#EAF8EA</color>
+
 </resources>

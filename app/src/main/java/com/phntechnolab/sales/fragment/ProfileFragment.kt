@@ -105,7 +105,8 @@ class ProfileFragment : Fragment(), MenuProvider {
                     }
 
                     4 -> {
-                        Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
+                        findNavController().navigate(R.id.action_profileFragment_to_chartAnalysisFragment)
+//                        Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
                     }
 
                     5 -> {
@@ -292,6 +293,7 @@ class ProfileFragment : Fragment(), MenuProvider {
         super.onStart()
         setActionBar()
     }
+
     override fun onStop() {
         super.onStop()
         (requireActivity() as MainActivity).removeMenuProvider(this)

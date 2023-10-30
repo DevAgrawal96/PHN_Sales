@@ -208,6 +208,7 @@
     <string name="do_you_want_to_reschedule_meeting_with_dm">Do you want to reschedule meeting with DM?</string>
     <string name="other_">Other</string>
     <string name="_designation">Others</string>
+    <string name="no_of_visited_schools">No. of Visited Schools</string>
 
 
     <string-array name="agreement_duration">

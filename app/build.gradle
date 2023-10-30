@@ -47,6 +47,7 @@ hilt {
     enableAggregatingTask = true
     enableExperimentalClasspathAggregation = true
 }
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.12.0'
@@ -103,4 +104,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
+
+    //chart
+    implementation 'com.github.PhilJay:MPAndroidChart:3.1.0'
+
 }
