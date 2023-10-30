@@ -1,18 +1,16 @@
 package com.phntechnolab.sales.activity
 
-import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Looper
 import android.view.View
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.lifecycleScope
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -35,6 +33,18 @@ class MainActivity : AppCompatActivity() {
 
         initializeListener()
         hideBottomNavAndToolbar()
+
+        if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            == PackageManager.PERMISSION_DENIED
+        ) {
+            val permission = arrayOf<String>(
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            requestPermissions(permission, 112)
+        }
     }
 
 //    private fun splashFlag() {
