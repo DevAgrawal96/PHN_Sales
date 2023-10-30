@@ -9,6 +9,7 @@
     <color name="screen_bg">#F4F7FC</color>
 
     <color name="lightGrey1">#FF959595</color>
+    <color name="lightGrey3">#64748B</color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="light_blue_900">#FF01579B</color>
     <color name="light_blue_A200">#FF40C4FF</color>
