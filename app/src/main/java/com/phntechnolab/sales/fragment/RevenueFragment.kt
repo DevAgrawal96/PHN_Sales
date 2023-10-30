@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.activity.OnBackPressedCallback
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.data.Entry
@@ -14,6 +15,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.adapter.RecentMoaSAdapter
@@ -38,13 +40,23 @@ class RevenueFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRevenueBinding.inflate(layoutInflater)
+        setBackPressed()
         return binding.root
+    }
+
+    private fun setBackPressed() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().popBackStack()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(callback)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setChartData()
-        initializeAdapter()
+        initializeUI()
         setAdapterData()
         setDropDownData()
     }
@@ -103,12 +115,13 @@ class RevenueFragment : Fragment() {
         })
     }
 
-    private fun initializeAdapter() {
+    private fun initializeUI() {
+        binding.topBar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
         val callback = object : RecentMoaSAdapter.CallBack {
             override fun recentMoaSData(data: RecentMoaSData) {
-
             }
-
         }
         _adapter = RecentMoaSAdapter(callback)
         binding.recentMoaSRv.adapter = adapter
