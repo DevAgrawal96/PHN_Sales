@@ -244,6 +244,17 @@
                     app:layout_constraintVertical_bias="0.0">
 
                     <include
+                        android:id="@+id/add_advance_payment"
+                        layout="@layout/add_advance_payment_optional"
+                        android:visibility="gone"
+                         />
+                    <include
+                        android:id="@+id/advance_payment"
+                        layout="@layout/advance_payment_optional"
+                        android:visibility="gone"
+                         />
+
+                    <include
                         android:id="@+id/installment_1"
                         layout="@layout/installment_details"
                         android:visibility="gone"

@@ -35,6 +35,8 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
     private val iPosition get() = _position
     private val iCount get() = _count
 
+    var _requestFileAdvancePayment: RequestBody? = null
+
     var _requestFile1: RequestBody? = null
     var is_requestFile1 = false
     var imageData1: MultipartBody.Part? = null

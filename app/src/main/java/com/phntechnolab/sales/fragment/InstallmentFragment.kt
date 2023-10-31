@@ -294,6 +294,15 @@ class InstallmentFragment : Fragment() {
             binding.updateBtn.visibility = View.VISIBLE
         }
 
+        binding.addAdvancePayment.uploadReceipt.setOnClickListener {
+            receiptPdf.launch(
+                arrayOf(
+                    "image/*",
+                    "application/pdf"
+                )
+            )
+        }
+
         binding.addInstallment1.uploadReceipt.setOnClickListener {
             receiptPdf.launch(
                 arrayOf(
@@ -338,6 +347,23 @@ class InstallmentFragment : Fragment() {
             )
             timePickerDialog.show()
         }
+        binding.addAdvancePayment.edtAdvancePaymentTime.setOnClickListener {
+            val c = Calendar.getInstance()
+            val hour = c.get(Calendar.HOUR)
+            val minute = c.get(Calendar.MINUTE)
+            val timePickerDialog = TimePickerDialog(
+                requireContext(),
+                { view, hourOfDay, minute ->
+                    val updatedTime = "$hourOfDay:$minute"
+                    binding.addAdvancePayment.edtAdvancePaymentTime.setText(updatedTime)
+                },
+                hour,
+                minute,
+                false
+            )
+            timePickerDialog.show()
+        }
+
         binding.addInstallment2.edtInstallmentTime.setOnClickListener {
             val c = Calendar.getInstance()
             val hour = c.get(Calendar.HOUR)
@@ -383,6 +409,27 @@ class InstallmentFragment : Fragment() {
                     val updatedDateAndTime =
                         dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                     binding.addInstallment1.edtInstallmentDate.setText(updatedDateAndTime)
+                },
+                year,
+                month,
+                day
+            )
+
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
+            datePickerDialog.show()
+        }
+        binding.addAdvancePayment.edtAdvancePaymentDate.setOnClickListener {
+            val c = Calendar.getInstance()
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+
+            val datePickerDialog = DatePickerDialog(
+                requireContext(),
+                { view, year, monthOfYear, dayOfMonth ->
+                    val updatedDateAndTime =
+                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    binding.addAdvancePayment.edtAdvancePaymentDate.setText(updatedDateAndTime)
                 },
                 year,
                 month,
@@ -506,8 +553,11 @@ class InstallmentFragment : Fragment() {
 
         viewModel.installmentData.observe(viewLifecycleOwner) {
             initializeSchoolDetails(it ?: SchoolData())
+
             id = it?.installmentData?.id ?: ""
             schoolId = it?.schoolId
+
+
             if (!it?.installmentData?.firstInstallmentAmount.isNullOrEmpty()) {
                 binding.installment1.installmentDetailsTxt.text =
                     getString(R.string._1st_installment_details, "1st")
@@ -557,8 +607,60 @@ class InstallmentFragment : Fragment() {
             } else {
                 binding.addInstallment1.root.visibility = View.VISIBLE
                 binding.installment1.root.visibility = View.GONE
+            }
+
+
+            if (!it?.installmentData?.advancePaymentAmount.isNullOrEmpty()) {
+//                binding.advancePayment.advancePaymentDetailsTxt.text =
+//                    getString(R.string._1st_installment_details, "1st")
+                binding.advancePayment.amount.text = it?.installmentData?.advancePaymentAmount
+                binding.addAdvancePayment.edtAdvancePaymentAmount.setText(it?.installmentData?.advancePaymentAmount)
+                try {
+                    val date: String =
+                        it?.installmentData?.advancePaymentDateTime?.split(",")?.get(0) ?: ""
+                    val time: String =
+                        it?.installmentData?.advancePaymentDateTime?.split(",")?.get(1) ?: ""
+                    Timber.e(date + "," + time)
+                    binding.addAdvancePayment.edtAdvancePaymentDate.setText(date)
+                    binding.addAdvancePayment.edtAdvancePaymentTime.setText(time)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+
+                binding.addAdvancePayment.root.visibility = View.GONE
+                binding.advancePayment.root.visibility = View.VISIBLE
+                binding.advancePayment.dateAndTime.text =
+                    it?.installmentData?.advancePaymentDateTime
+                if (!it?.installmentData?.advancePaymentReceipt.isNullOrEmpty()) {
+                    val fileName = it?.installmentData?.advancePaymentDateTime!!.substring(
+                        it.installmentData?.advancePaymentDateTime!!.lastIndexOf('/') + 1
+                    )
+                    if (fileName.split(".").last() == "jpg") {
+                        binding.advancePayment.fileTypeImg.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
+                        )
+                    } else if (fileName.split(".").last() == "png") {
+                        binding.advancePayment.fileTypeImg.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
+                        )
+                    } else if (fileName.split(".").last() == "pdf") {
+                        binding.advancePayment.fileTypeImg.setImageDrawable(
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
+                        )
+                    }
+                    receipt1 = it.installmentData?.advancePaymentReceipt
+                    binding.advancePayment.fileName.text = fileName
+
+                    Timber.e("$fileName")
+                }
+            } else {
+                binding.addAdvancePayment.root.visibility = View.VISIBLE
+                binding.advancePayment.root.visibility = View.GONE
 
             }
+
+
             if (!it?.installmentData?.secondInstallmentAmount.isNullOrEmpty()) {
                 binding.addInstallment2.edtInstallmentAmount.setText(it?.installmentData?.secondInstallmentAmount)
                 try {
@@ -609,6 +711,7 @@ class InstallmentFragment : Fragment() {
             } else {
                 binding.installment2.root.visibility = View.GONE
             }
+
             if (!it?.installmentData?.thirdInstallmentAmount.isNullOrEmpty()) {
                 binding.addInstallment3.edtInstallmentAmount.setText(it?.installmentData?.thirdInstallmentAmount)
                 try {
@@ -669,11 +772,13 @@ class InstallmentFragment : Fragment() {
     }
 
     private fun uploadInstallmentData() {
-//        if (viewModel.getCount() == 3) {
-//            binding.updateBtn.isEnabled = false
-//        } else {
         binding.progressIndicator.visibility = View.VISIBLE
         val data = InstallmentData(
+            advancePaymentReceipt = args.schoolData?.installmentData?.advancePaymentReceipt,
+            advancePayment = binding.addAdvancePayment.advancePaymentOptionalTxt.text.toString(),
+            advancePaymentAmount = binding.addAdvancePayment.edtAdvancePaymentAmount.text.toString(),
+            advancePaymentDateTime = binding.addAdvancePayment.edtAdvancePaymentDate.text.toString() + ", " + binding.addAdvancePayment.edtAdvancePaymentTime.text.toString(),
+
             firstInstallmentReciept = args.schoolData?.installmentData?.firstInstallmentReciept,
             secondInstallmentReciept = args.schoolData?.installmentData?.secondInstallmentReciept,
             thirdInstallmentReciept = args.schoolData?.installmentData?.thirdInstallmentReciept,
@@ -691,7 +796,6 @@ class InstallmentFragment : Fragment() {
         )
         viewModel.setInstallmentsData(data)
         viewModel.addNewInstallment(data)
-//        }
     }
 
     private fun initializeListener() {
@@ -699,6 +803,11 @@ class InstallmentFragment : Fragment() {
             viewModel._requestFile1 = null
             isFirstReceipt = false
             binding.addInstallment1.uploadReceiptContainer.visibility = View.GONE
+        }
+        binding.addAdvancePayment.deleteReceipt.setOnClickListener {
+            viewModel._requestFile1 = null
+//            isFirstReceipt = false
+            binding.addAdvancePayment.uploadReceiptContainer.visibility = View.GONE
         }
         binding.addInstallment2.deleteReceipt.setOnClickListener {
             viewModel._requestFile2 = null

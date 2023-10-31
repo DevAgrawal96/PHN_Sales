@@ -224,10 +224,17 @@ data class InstallmentData(
     @SerializedName("id") var id : String? = null,
     @SerializedName("school_id") var schoolId : String? = "",
     @SerializedName("total_installment") var totalInstallment : String? = "",
+
+    @SerializedName("advance_payment") var advancePayment : String? = "",
+    @SerializedName("advance_payment_amount") var advancePaymentAmount : String? = "",
+    @SerializedName("advance_payment_date_time") var advancePaymentDateTime : String? = "",
+    @SerializedName("advance_payment_receipt") var advancePaymentReceipt : String? = "",
+
     @SerializedName("first_installment") var firstInstallment : String? = "",
     @SerializedName("first_installment_amount") var firstInstallmentAmount : String? = "",
     @SerializedName("first_installment_date_time") var firstInstallmentDateTime : String? = "",
     @SerializedName("first_installment_reciept") var firstInstallmentReciept : String? = "",
+
     @SerializedName("second_installment") var secondInstallment : String? = "",
     @SerializedName("second_installment_amount") var secondInstallmentAmount : String? = "",
     @SerializedName("second_installment_date_time") var secondInstallmentDateTime : String? = "",
