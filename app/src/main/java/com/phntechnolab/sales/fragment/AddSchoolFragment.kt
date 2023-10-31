@@ -1,13 +1,17 @@
 package com.phntechnolab.sales.fragment
 
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.content.ContentValues
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -17,11 +21,14 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
@@ -45,7 +52,9 @@ import com.phntechnolab.sales.util.hideKeyboard
 import com.phntechnolab.sales.viewmodel.AddSchoolViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.regex.Pattern
 
 
@@ -60,6 +69,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
     private val args: AddSchoolFragmentArgs by navArgs()
 
     var position = 0
+    var _imageUri: Uri? = null
 
     private lateinit var image: Uri
 
@@ -629,15 +639,26 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
     }
 
-    private var contract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        Timber.e("BACK")
-//        if (it != null) {
-//            image = it
-//            Timber.e(image.toString())
-//            viewModel.uploadImage(it, requireContext())
-//            binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
+    private var cameraResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult(),
+            ActivityResultCallback<ActivityResult>(){result->
+                if (result.resultCode == RESULT_OK && _imageUri != null){
+//                    val fileDir = requireContext().filesDir
+                    viewModel.uploadImage(_imageUri!!, requireContext())
+                    binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
+                }
+            }
+        )
+//        {
+//            if (it != null) {
+//                Timber.e("${it.data}")
+//
+////            image = it
+////            Timber.e(image.toString())
+////            viewModel.uploadImage(it, requireContext())
+////            binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
+//            }
 //        }
-    }
 
 
     private fun oncClickListener() {
@@ -672,8 +693,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
         }
 
         binding.schoolDetails.selectFileContainer.setOnClickListener {
-            val intent = ImagePicker.onChooseImageButtonClick()
-            contract.launch(intent)
+            cameraResult.launch(openCamera())
         }
 
 
@@ -731,7 +751,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                         binding.followupDetails.edtSchoolDate.setText(_dateAndTime[0])
                         _dateAndTime[0].split("/").let { _dateArray ->
                             day = _dateArray[0].toInt()
-                            month = _dateArray[1].toInt()-1
+                            month = _dateArray[1].toInt() - 1
                             year = _dateArray[2].toInt()
                         }
                     }
@@ -810,6 +830,19 @@ class AddSchoolFragment : Fragment(), MenuProvider {
             )
             timePickerDialog.show()
         }
+    }
+    private fun openCamera(): Intent {
+        val sdf = SimpleDateFormat("ddMyyyyhhmmss")
+        val values = ContentValues().apply {
+            put(MediaStore.Images.Media.TITLE, "SchoolImage${sdf.format(Date())}")
+            put(MediaStore.Images.Media.DESCRIPTION, "From Camera")
+        }
+        _imageUri =
+            requireContext().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+            putExtra(MediaStore.EXTRA_OUTPUT,_imageUri)
+        }
+        return cameraIntent
     }
 
     private fun checkValidationsAndApiCall(stepCount: Int) {
