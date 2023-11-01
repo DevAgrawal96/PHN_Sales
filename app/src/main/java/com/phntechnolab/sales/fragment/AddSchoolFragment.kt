@@ -642,10 +642,12 @@ class AddSchoolFragment : Fragment(), MenuProvider {
     }
 
     private var cameraResult =
-        registerForActivityResult(TakePictureFromCameraOrGalley){
-//            if (it.resultCode == RESULT_OK ){
-                Timber.e("$it")
-//            }
+        registerForActivityResult(TakePictureFromCameraOrGalley){imageUri->
+            if (imageUri != null ){
+                Timber.e("$imageUri")
+//                viewModel.uploadImage(_imageUri!!, requireContext())
+//                binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
+            }
         }
 //            ActivityResultCallback<ActivityResult>(){result->
 //                if (result.resultCode == RESULT_OK && ImagePicker._imageUri != null){
