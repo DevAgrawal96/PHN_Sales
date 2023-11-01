@@ -46,7 +46,9 @@ import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentAssignedSchoolsStepperBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.SchoolData
+import com.phntechnolab.sales.util.ImagePicker
 import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.TakePictureFromCameraOrGalley
 import com.phntechnolab.sales.util.TextValidator
 import com.phntechnolab.sales.util.hideKeyboard
 import com.phntechnolab.sales.viewmodel.AddSchoolViewModel
@@ -640,15 +642,20 @@ class AddSchoolFragment : Fragment(), MenuProvider {
     }
 
     private var cameraResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult(),
-            ActivityResultCallback<ActivityResult>(){result->
-                if (result.resultCode == RESULT_OK && _imageUri != null){
-//                    val fileDir = requireContext().filesDir
-                    viewModel.uploadImage(_imageUri!!, requireContext())
-                    binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
-                }
-            }
-        )
+        registerForActivityResult(TakePictureFromCameraOrGalley){
+//            if (it.resultCode == RESULT_OK ){
+                Timber.e("$it")
+//            }
+        }
+//            ActivityResultCallback<ActivityResult>(){result->
+//                if (result.resultCode == RESULT_OK && ImagePicker._imageUri != null){
+////                    val fileDir = requireContext().filesDir
+//                    Timber.e("${ImagePicker._imageUri}")
+////                    viewModel.uploadImage(_imageUri!!, requireContext())
+////                    binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
+//                }
+//            }
+//        )
 //        {
 //            if (it != null) {
 //                Timber.e("${it.data}")
@@ -693,7 +700,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
         }
 
         binding.schoolDetails.selectFileContainer.setOnClickListener {
-            cameraResult.launch(openCamera())
+            cameraResult.launch(Unit)
         }
 
 
