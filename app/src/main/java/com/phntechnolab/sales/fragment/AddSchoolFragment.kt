@@ -46,7 +46,6 @@ import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentAssignedSchoolsStepperBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.SchoolData
-import com.phntechnolab.sales.util.ImagePicker
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.TakePictureFromCameraOrGalley
 import com.phntechnolab.sales.util.TextValidator
@@ -645,30 +644,10 @@ class AddSchoolFragment : Fragment(), MenuProvider {
         registerForActivityResult(TakePictureFromCameraOrGalley){imageUri->
             if (imageUri != null ){
                 Timber.e("$imageUri")
-//                viewModel.uploadImage(_imageUri!!, requireContext())
-//                binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
+                viewModel.uploadImage(imageUri, requireContext())
+                binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
             }
         }
-//            ActivityResultCallback<ActivityResult>(){result->
-//                if (result.resultCode == RESULT_OK && ImagePicker._imageUri != null){
-////                    val fileDir = requireContext().filesDir
-//                    Timber.e("${ImagePicker._imageUri}")
-////                    viewModel.uploadImage(_imageUri!!, requireContext())
-////                    binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
-//                }
-//            }
-//        )
-//        {
-//            if (it != null) {
-//                Timber.e("${it.data}")
-//
-////            image = it
-////            Timber.e(image.toString())
-////            viewModel.uploadImage(it, requireContext())
-////            binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
-//            }
-//        }
-
 
     private fun oncClickListener() {
         binding.topBar.setNavigationOnClickListener {

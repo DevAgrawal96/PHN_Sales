@@ -2,7 +2,6 @@ package com.phntechnolab.sales.viewmodel
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.InstallmentData
-import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.repository.InstallmentRepository
 import com.phntechnolab.sales.util.NetworkResult
@@ -54,6 +52,12 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
     var imageData3: MultipartBody.Part? = null
     var imageName3: String? = null
     var imagesize3: Int? = null
+
+    var _requestFile4: RequestBody? = null
+    var is_requestFile4 = false
+    var imageData4: MultipartBody.Part? = null
+    var imageName4: String? = null
+    var imagesize4: Int? = null
 
     private var _installmentData: MutableLiveData<SchoolData?> = MutableLiveData()
     val installmentData: LiveData<SchoolData?>
@@ -160,19 +164,19 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
             2 -> {
                 val fileDir = requireContext.filesDir
                 val type = requireContext.contentResolver.getType(documentUri);
-                val fileExtention = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
-                val file = File(fileDir, "moaDocument.${fileExtention}")
+                val fileExtension = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
+                val file = File(fileDir, "moaDocument.${fileExtension}")
                 val inputStream = requireContext.contentResolver.openInputStream(documentUri)
                 val fileOutputStream = FileOutputStream(file)
                 inputStream?.copyTo(fileOutputStream)
 
                 var requestFile: RequestBody? = null
-                if (fileExtention == "jpg" || fileExtention == "png") {
+                if (fileExtension == "jpg" || fileExtension == "png") {
                     requestFile = RequestBody.create(
                         MediaType.parse("image/*"),
                         file
                     )
-                } else if (fileExtention == "pdf") {
+                } else if (fileExtension == "pdf") {
                     requestFile = RequestBody.create(
                         MediaType.parse("application/pdf"),
                         file
@@ -185,7 +189,40 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
                 imagesize3 = Integer.parseInt((file.length() / 1024).toString())
                 imageData3 = part
                 val sdf = SimpleDateFormat("ddMyyyyhhmmss")
-                imageName3 = sdf.format(Date()) + "." + fileExtention
+                imageName3 = sdf.format(Date()) + "." + fileExtension
+            }
+
+            3 -> {
+                val fileDir = requireContext.filesDir
+                val type = requireContext.contentResolver.getType(documentUri);
+                val fileExtension = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
+                val file = File(fileDir, "advancePayment.${fileExtension}")
+                val inputStream = requireContext.contentResolver.openInputStream(documentUri)
+                val fileOutputStream = FileOutputStream(file)
+                inputStream?.copyTo(fileOutputStream)
+
+                var requestFile: RequestBody? = null
+                if (fileExtension == "jpg" || fileExtension == "png") {
+                    requestFile = RequestBody.create(
+                        MediaType.parse("image/*"),
+                        file
+                    )
+                } else if (fileExtension == "pdf") {
+                    requestFile = RequestBody.create(
+                        MediaType.parse("application/pdf"),
+                        file
+                    )
+                }
+
+                _requestFile4 = requestFile
+                is_requestFile4 = true
+                val part =
+                    MultipartBody.Part.createFormData("advance_payment", file.name, requestFile)
+                imagesize4 = Integer.parseInt((file.length() / 1024).toString())
+                imageData4 = part
+                val sdf = SimpleDateFormat("ddMyyyyhhmmss")
+                imageName4 = sdf.format(Date()) + "." + fileExtension
+
             }
         }
 

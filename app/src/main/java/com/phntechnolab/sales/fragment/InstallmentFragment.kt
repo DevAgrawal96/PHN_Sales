@@ -31,6 +31,7 @@ import com.phntechnolab.sales.di.FileDownloader
 import com.phntechnolab.sales.model.InstallmentData
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.TakePictureFromCameraOrGalley
 import com.phntechnolab.sales.viewmodel.InstallmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -168,8 +169,50 @@ class InstallmentFragment : Fragment() {
         }
     }
 
+    private var advancePaymentReceiptPdf = registerForActivityResult(
+        TakePictureFromCameraOrGalley
+    ) { uri ->
+        if (uri != null) {
+            pdfOrImg = uri
+            val sdf = SimpleDateFormat("dd/M/yyyy")
+            val type = requireContext().contentResolver.getType(uri);
+            val fileExtention = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
+            viewModel.uploadInstallmentDocument(
+                pdfOrImg!!,
+                requireContext(),
+                3
+            )
+            isFirstReceipt = true
+
+            binding.addInstallment1.fileInstallmentName.text =
+                "${viewModel.imageName1}.${fileExtention}"
+
+            binding.addInstallment1.fileInstallmentInfo.text =
+                getString(
+                    R.string.file_size_and_today_date_,
+                    viewModel.imagesize1.toString(),
+                    sdf.format(Date())
+                )
+
+
+            if (fileExtention == "jpg") {
+                binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
+                )
+            } else if (fileExtention == "png") {
+                binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
+                )
+            } else if (fileExtention == "pdf") {
+                binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
+                )
+            }
+            binding.addInstallment1.uploadReceiptContainer.visibility = View.VISIBLE
+        }
+    }
     private var receiptPdf = registerForActivityResult(
-        ActivityResultContracts.OpenDocument()
+        TakePictureFromCameraOrGalley
     ) { uri ->
         Timber.e("BACK")
         if (uri != null) {
@@ -295,39 +338,19 @@ class InstallmentFragment : Fragment() {
         }
 
         binding.addAdvancePayment.uploadReceipt.setOnClickListener {
-            receiptPdf.launch(
-                arrayOf(
-                    "image/*",
-                    "application/pdf"
-                )
-            )
+            advancePaymentReceiptPdf.launch(Unit)
         }
 
         binding.addInstallment1.uploadReceipt.setOnClickListener {
-            receiptPdf.launch(
-                arrayOf(
-                    "image/*",
-                    "application/pdf"
-                )
-            )
+            receiptPdf.launch(Unit)
             viewModel.setPosition(0)
         }
         binding.addInstallment2.uploadReceipt.setOnClickListener {
-            receiptPdf.launch(
-                arrayOf(
-                    "image/*",
-                    "application/pdf"
-                )
-            )
+            receiptPdf.launch(Unit)
             viewModel.setPosition(1)
         }
         binding.addInstallment3.uploadReceipt.setOnClickListener {
-            receiptPdf.launch(
-                arrayOf(
-                    "image/*",
-                    "application/pdf"
-                )
-            )
+            receiptPdf.launch(Unit)
             viewModel.setPosition(2)
         }
 
