@@ -2,6 +2,7 @@ package com.phntechnolab.sales.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -77,17 +78,17 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
         imageName = sdf.format(Date())
     }
 
-    fun returntoJson(): MultipartBody {
+    private fun returntoJson(): MultipartBody {
         val body = MultipartBody.Builder().setType(MultipartBody.FORM).apply {
             addFormDataPart("id", _moaDocumentData.value?.id ?: "")
             addFormDataPart("school_id", _moaDocumentData.value?.schoolId ?: "")
             addFormDataPart("interested_intake", _moaDocumentData.value?.interestedIntake ?: "")
             addFormDataPart("final_costing", _moaDocumentData.value?.finalCosting ?: "")
-            addFormDataPart("agreement_duration", _moaDocumentData.value?.agreementDuration ?: "")
-            addFormDataPart(
-                "disscussed_with_whom",
-                _moaDocumentData.value?.disscussedWithWhom ?: ""
-            )
+//            addFormDataPart("agreement_duration", _moaDocumentData.value?.agreementDuration ?: "")
+//            addFormDataPart(
+//                "disscussed_with_whom",
+//                _moaDocumentData.value?.disscussedWithWhom ?: ""
+//            )
             addFormDataPart("designation", _moaDocumentData.value?.designation ?: "")
             addFormDataPart("remark", _moaDocumentData.value?.remark ?: "")
             addFormDataPart("status", _moaDocumentData.value?.status ?: "")
@@ -96,5 +97,82 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
 //            }
         }.build()
         return body
+    }
+
+    fun isProposeCostingFieldsValid(context: Context): Boolean {
+        val isPriceDiscussedPending = _proposeCostingData.value?.priceDiscussed != "yes"
+
+        val isPricepPerStudentPending =
+            _proposeCostingData.value?.pricePerStudent.isNullOrBlank()
+
+        val isQuotationValidityPending = _proposeCostingData.value?.quotationValidity.isNullOrBlank()
+
+        val isQuotationDurationPending = _proposeCostingData.value?.quotationDuration.isNullOrBlank()
+
+        val isDesignationPending = _proposeCostingData.value?.designation.isNullOrBlank()
+
+        val isAuthorityNamePending = _proposeCostingData.value?.authorityName.isNullOrBlank()
+
+        val isConversationRatioNotSelected =
+            _proposeCostingData.value?.conversationRatio.isNullOrBlank()
+
+        val isDateAndTimeEmpty = if(_proposeCostingData.value?.meetDateTime.isNullOrBlank()){
+            Toast.makeText(context, "Please enter date and time", Toast.LENGTH_SHORT).show()
+            true
+        }else{
+            false
+        }
+
+        return if (isPricepPerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending || isDateAndTimeEmpty) {
+            Toast.makeText(
+                context,
+                context.getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_and_mark_yes_details),
+                Toast.LENGTH_LONG
+            ).show()
+            false
+        } else {
+            true
+        }
+    }
+
+    fun isMOADocumentFieldsValid(context: Context): Boolean {
+
+        val isTotalInterestedIntakeNotFilled =
+            _moaDocumentData.value?.interestedIntake.isNullOrBlank()
+
+        val isCostingPerStudentNotFilled =
+            _moaDocumentData.value?.finalCosting.isNullOrBlank()
+
+        val isAgreementDurationNotSelected =
+            _moaDocumentData.value?.quotationDuration.isNullOrBlank()
+
+        val isDiscussedWithWhoomNotSelected =
+            _moaDocumentData.value?.designation.isNullOrBlank()
+
+        val isAuthorityNameEmpty = _moaDocumentData.value?.authorityName.isNullOrBlank()
+
+        val isDesignationNotSelected = _moaDocumentData.value?.designation.isNullOrBlank()
+
+        val isMoaDocumentNotUploaded = _requestFile == null
+
+
+        return if (isTotalInterestedIntakeNotFilled || isCostingPerStudentNotFilled || isDiscussedWithWhoomNotSelected || isAuthorityNameEmpty || isDesignationNotSelected || isAgreementDurationNotSelected || isMoaDocumentNotUploaded) {
+            if (isMoaDocumentNotUploaded) {
+                Toast.makeText(
+                    context,
+                    context.getString(com.phntechnolab.sales.R.string.please_upload_moa_document),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                Toast.makeText(
+                    context,
+                    context.getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_details),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            false
+        } else {
+            true
+        }
     }
 }

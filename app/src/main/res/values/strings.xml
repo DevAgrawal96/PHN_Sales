@@ -73,6 +73,7 @@
     <string name="agreement_duration">Agreement Duration</string>
     <string name="agreement_duration_mandate">Agreement duration*</string>
     <string name="agreement_duration_compulsary">Agreement duration*</string>
+    <string name="quotation_duration_compulsary">Quotation duration*</string>
     <string name="select_meeting_agenda">Select meeting agenda</string>
     <string name="meeting_with_whom">Meeting with whom</string>
     <string name="meeting_with_whom_mandate">Meeting with whom*</string>
@@ -85,6 +86,7 @@
     <string name="no">No</string>
     <string name="total_interested_intake">Total interested intake</string>
     <string name="total_interested_intake_mandate">Total interested intake*</string>
+    <string name="final_intake_mandate">Final intake*</string>
     <string name="enter_final_costing_per_student_mandate">Enter final costing per student*</string>
     <string name="discussed_with_whom">discussed with whom</string>
     <string name="discussed_with_whom_mandate">MOA Discussed with whom*</string>
@@ -98,6 +100,7 @@
     <string name="propose_costing">Propose Costing</string>
     <string name="blank"></string>
     <string name="downloading_start">Downloading start…</string>
+    <string name="authority_name">Authority Name</string>
 
     <string name="my_account">My Account</string>
     <string name="please_enter_valid_email_address">Please enter valid email address!</string>
@@ -208,6 +211,7 @@
     <string name="do_you_want_to_reschedule_meeting_with_dm">Do you want to reschedule meeting with DM?</string>
     <string name="other_">Other</string>
     <string name="_designation">Others</string>
+    <string name="do_you_want_to_reschedule_meeting">Do you want to reschedule meeting?</string>
 
 
     <string-array name="agreement_duration">

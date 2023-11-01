@@ -195,13 +195,15 @@ data class ProposeCostingData(
     @SerializedName("school_id") var schoolId : String? = "",
     @SerializedName("price_discussed") var priceDiscussed : String? = "",
     @SerializedName("price_per_student") var pricePerStudent : String? = "",
-    @SerializedName("quotation_shared") var quotationShared : String? = "",
+    @SerializedName("intake") var intake : String? = "",
+    @SerializedName("email_id") var emailId : String? = "",
     @SerializedName("quotation_validity") var quotationValidity : String? = "",
-    @SerializedName("payment_shedule") var paymentShedule : String? = "",
-    @SerializedName("agreement_duration") var agreementDuration : String? = "",
-    @SerializedName("meeting_with_whoom") var meetingWithWhoom : String? = "",
+    @SerializedName("quotation_duration") var quotationDuration : String? = "",
+    @SerializedName("designation") var designation : String? = "",
+    @SerializedName("authority_name") var authorityName : String? = "",
     @SerializedName("conversation_ratio") var conversationRatio : String? = "",
-    @SerializedName("next_meet") var nextMeet : String? = "",
+    @SerializedName("reschedule_meeting") var rescheduleMeeting : String? = "",
+    @SerializedName("meet_date_time") var meetDateTime : String? = "",
     @SerializedName("remark") var remark : String? = ""
 ): Parcelable
 
@@ -211,9 +213,9 @@ data class MOADocumentData(
     @SerializedName("school_id") var schoolId : String? = "",
     @SerializedName("interested_intake") var interestedIntake : String? = "",
     @SerializedName("final_costing") var finalCosting : String? = "",
-    @SerializedName("agreement_duration") var agreementDuration : String? = "",
-    @SerializedName("disscussed_with_whom") var disscussedWithWhom : String? = "",
+    @SerializedName("quotation_duration") var quotationDuration : String? = "",
     @SerializedName("designation") var designation : String? = "",
+    @SerializedName("authority_name") var authorityName : String? = "",
     @SerializedName("moa_file") var moaFile : String? = "",
     @SerializedName("remark") var remark : String? = "",
     @SerializedName("status") var status : String? = ""
