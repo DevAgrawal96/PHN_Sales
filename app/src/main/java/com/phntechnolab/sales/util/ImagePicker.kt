@@ -17,41 +17,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-//object ImagePicker  {
-//    var _imageUri: Uri? = null
-//    fun onChooseImageButtonClick(context: Context): Intent {
-//
-//        // Create a new intent and set its type to image
-//        val pickIntent = Intent()
-//        pickIntent.type = "image/*"
-//        pickIntent.action = Intent.ACTION_GET_CONTENT
-//
-//        // Intent for camera activity to capture a new picture
-//        val sdf = SimpleDateFormat("ddMyyyyhhmmss")
-//
-//        val values = ContentValues().apply {
-//            put(MediaStore.Images.Media.TITLE, "SchoolImage${sdf.format(Date())}")
-//            put(MediaStore.Images.Media.DESCRIPTION, "From Camera")
-//        }
-//
-//        _imageUri =
-//            context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-//        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
-//            putExtra(MediaStore.EXTRA_OUTPUT, _imageUri)
-//        }
-//
-//
-//        // Title of the popup
-//        val pickTitle = "Choose a Picture"
-//        val chooserIntent = Intent.createChooser(pickIntent, pickTitle)
-//        chooserIntent.putExtra(
-//            Intent.EXTRA_INITIAL_INTENTS, arrayOf(pickIntent, cameraIntent)
-//        )
-//
-//        return chooserIntent
-//    }
-//}
-
 object TakePictureFromCameraOrGalley: ActivityResultContract<Unit, Uri?>() {
 
     private var _photoUri: Uri? = null
@@ -102,9 +67,9 @@ object TakePictureFromCameraOrGalley: ActivityResultContract<Unit, Uri?>() {
         val imageFileName = "IMG_" + timeStamp + "_"
         val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: throw IllegalStateException("Dir not found")
         return File.createTempFile(
-            imageFileName,  /* prefix */
-            ".jpg",  /* suffix */
-            storageDir /* directory */
+            imageFileName,
+            ".jpg",
+            storageDir
         )
     }
 
