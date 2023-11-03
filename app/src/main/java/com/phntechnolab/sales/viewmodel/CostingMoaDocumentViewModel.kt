@@ -2,11 +2,11 @@ package com.phntechnolab.sales.viewmodel
 
 import android.content.Context
 import android.net.Uri
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.phntechnolab.sales.Event
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -26,6 +27,10 @@ import javax.inject.Inject
 @HiltViewModel
 class CostingMoaDocumentViewModel @Inject constructor(private val repositories: CostingMOADocumentRepository) :
     ViewModel() {
+
+    var _oldProposeCostingData: MutableLiveData<ProposeCostingData?> = MutableLiveData()
+    val oldProposeCostingData: LiveData<ProposeCostingData?>
+        get() = _oldProposeCostingData
 
     var _proposeCostingData: MutableLiveData<ProposeCostingData?> = MutableLiveData()
     val proposeCostingData: LiveData<ProposeCostingData?>
@@ -44,6 +49,14 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
     var imageData: MultipartBody.Part? = null
     var imageName: String? = null
     var _requestFile: RequestBody? = null
+
+    private var _messageLiveData = MutableLiveData<Event<String>>()
+    val messageLiveData: LiveData<Event<String>>
+        get() = _messageLiveData
+
+    private var _progressBarLiveData = MutableLiveData<Boolean>()
+    val progressBarLiveData: LiveData<Boolean>
+        get() = _progressBarLiveData
 
     fun updateProposeCostingDetails() {
 
@@ -84,11 +97,11 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
             addFormDataPart("school_id", _moaDocumentData.value?.schoolId ?: "")
             addFormDataPart("interested_intake", _moaDocumentData.value?.interestedIntake ?: "")
             addFormDataPart("final_costing", _moaDocumentData.value?.finalCosting ?: "")
-//            addFormDataPart("agreement_duration", _moaDocumentData.value?.agreementDuration ?: "")
-//            addFormDataPart(
-//                "disscussed_with_whom",
-//                _moaDocumentData.value?.disscussedWithWhom ?: ""
-//            )
+            addFormDataPart("quotation_duration", _moaDocumentData.value?.quotationDuration ?: "")
+            addFormDataPart(
+                "authority_name",
+                _moaDocumentData.value?.authorityName ?: ""
+            )
             addFormDataPart("designation", _moaDocumentData.value?.designation ?: "")
             addFormDataPart("remark", _moaDocumentData.value?.remark ?: "")
             addFormDataPart("status", _moaDocumentData.value?.status ?: "")
@@ -99,15 +112,17 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
         return body
     }
 
-    fun isProposeCostingFieldsValid(context: Context): Boolean {
+    fun isProposeCostingFieldsValid() {
         val isPriceDiscussedPending = _proposeCostingData.value?.priceDiscussed != "yes"
 
         val isPricepPerStudentPending =
             _proposeCostingData.value?.pricePerStudent.isNullOrBlank()
 
-        val isQuotationValidityPending = _proposeCostingData.value?.quotationValidity.isNullOrBlank()
+        val isQuotationValidityPending =
+            _proposeCostingData.value?.quotationValidity.isNullOrBlank()
 
-        val isQuotationDurationPending = _proposeCostingData.value?.quotationDuration.isNullOrBlank()
+        val isQuotationDurationPending =
+            _proposeCostingData.value?.quotationDuration.isNullOrBlank()
 
         val isDesignationPending = _proposeCostingData.value?.designation.isNullOrBlank()
 
@@ -116,26 +131,30 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
         val isConversationRatioNotSelected =
             _proposeCostingData.value?.conversationRatio.isNullOrBlank()
 
-        val isDateAndTimeEmpty = if(_proposeCostingData.value?.meetDateTime.isNullOrBlank()){
-            Toast.makeText(context, "Please enter date and time", Toast.LENGTH_SHORT).show()
-            true
-        }else{
-            false
-        }
+        val isDateAndTimeEmpty = (_proposeCostingData.value?.meetDateTime.isNullOrBlank())
+        _messageLiveData.postValue(Event("Please enter date and time"))
 
+        val checkAllDataAreSame = isAllDataAreSame()
+
+        Timber.e("DATA ARE SAME OR NOT $checkAllDataAreSame")
         return if (isPricepPerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending || isDateAndTimeEmpty) {
-            Toast.makeText(
-                context,
-                context.getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_and_mark_yes_details),
-                Toast.LENGTH_LONG
-            ).show()
-            false
+            _messageLiveData.postValue(Event("Please fill all the mandate fie02lds to proceed."))
         } else {
-            true
+            //Call Api to submit the data
+            _progressBarLiveData.postValue(true)
+//            updateProposeCostingDetails()
         }
     }
 
-    fun isMOADocumentFieldsValid(context: Context): Boolean {
+    private fun isAllDataAreSame(): Boolean {
+        val oldData = _oldProposeCostingData.value
+
+        val newData = _proposeCostingData.value
+
+        return oldData?.priceDiscussed === newData?.priceDiscussed && oldData?.pricePerStudent === newData?.pricePerStudent && oldData?.intake === newData?.intake && oldData?.emailId === newData?.emailId && oldData?.quotationValidity === newData?.quotationValidity && oldData?.quotationDuration === newData?.quotationDuration && oldData?.designation === newData?.designation && oldData?.authorityName === newData?.authorityName && oldData?.conversationRatio === newData?.conversationRatio && oldData?.rescheduleMeeting === newData?.rescheduleMeeting && oldData?.meetDateTime === newData?.meetDateTime && oldData?.remark === newData?.remark
+    }
+
+    fun isMOADocumentFieldsValid() {
 
         val isTotalInterestedIntakeNotFilled =
             _moaDocumentData.value?.interestedIntake.isNullOrBlank()
@@ -156,23 +175,19 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
         val isMoaDocumentNotUploaded = _requestFile == null
 
 
-        return if (isTotalInterestedIntakeNotFilled || isCostingPerStudentNotFilled || isDiscussedWithWhoomNotSelected || isAuthorityNameEmpty || isDesignationNotSelected || isAgreementDurationNotSelected || isMoaDocumentNotUploaded) {
+        if (isTotalInterestedIntakeNotFilled || isCostingPerStudentNotFilled || isDiscussedWithWhoomNotSelected || isAuthorityNameEmpty || isDesignationNotSelected || isAgreementDurationNotSelected || isMoaDocumentNotUploaded) {
             if (isMoaDocumentNotUploaded) {
-                Toast.makeText(
-                    context,
-                    context.getString(com.phntechnolab.sales.R.string.please_upload_moa_document),
-                    Toast.LENGTH_SHORT
-                ).show()
+                _messageLiveData.postValue(Event("Please upload moa document."))
             } else {
-                Toast.makeText(
-                    context,
-                    context.getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_details),
-                    Toast.LENGTH_SHORT
-                ).show()
+                _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
             }
-            false
         } else {
-            true
+            _progressBarLiveData.postValue(true)
+            updateMoaDocumentDetails()
         }
+    }
+
+    fun changeProgressBarVisibility(mode: Boolean){
+        _progressBarLiveData.postValue(mode)
     }
 }

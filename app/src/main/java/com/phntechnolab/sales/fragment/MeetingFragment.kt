@@ -212,9 +212,13 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                     .navigate(
                         MeetingFragmentDirections.actionMeetingFragmentToCostingMoaDocumentFragment(
                             data.data?.proposeCostingData
-                                ?: ProposeCostingData(schoolId = data.data?.schoolId),
+                                ?: ProposeCostingData().apply {
+                                    this.schoolId = data.data?.schoolId?:""
+                                },
                             data.data?.moaDocumentData
-                                ?: MOADocumentData(schoolId = data.data?.schoolId)
+                                ?: MOADocumentData().apply {
+                                    this.schoolId = data.data?.schoolId?:""
+                                }
                         )
                     )
             }

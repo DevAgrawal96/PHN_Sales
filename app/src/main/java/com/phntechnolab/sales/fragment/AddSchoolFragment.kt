@@ -46,7 +46,6 @@ import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentAssignedSchoolsStepperBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.SchoolData
-import com.phntechnolab.sales.util.ImagePicker
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.TakePictureFromCameraOrGalley
 import com.phntechnolab.sales.util.TextValidator

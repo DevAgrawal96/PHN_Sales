@@ -173,7 +173,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:imeOptions="actionDone"
-                        android:text="@={viewModel._moaDocumentData.disscussedWithWhom}"
+                        android:text="@={viewModel._moaDocumentData.authorityName}"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -266,6 +266,7 @@
                     android:layout_marginTop="@dimen/dimen_16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
                     android:backgroundTint="@color/regular_blue"
+                    android:onClick="@{() -> viewModel.isMOADocumentFieldsValid()}"
                     android:text="@string/update"
                     android:digits="@string/remark_validation"
                     app:layout_constraintBottom_toBottomOf="parent"

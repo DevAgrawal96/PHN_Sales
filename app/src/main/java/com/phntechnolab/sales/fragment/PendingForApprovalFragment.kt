@@ -186,9 +186,13 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
             .navigate(
                 PendingForApprovalFragmentDirections.actionPendingFragmentToCostingMoaDocumentFragment(
                     schoolData.proposeCostingData
-                        ?: ProposeCostingData(schoolId = schoolData.schoolId),
+                        ?: ProposeCostingData().apply {
+                            this.schoolId = schoolData.schoolId?:""
+                        },
                     schoolData.moaDocumentData
-                        ?: MOADocumentData(schoolId = schoolData.schoolId)
+                        ?: MOADocumentData().apply {
+                            this.schoolId = schoolData.schoolId?:""
+                        }
                 )
             )
     }

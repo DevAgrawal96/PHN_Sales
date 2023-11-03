@@ -96,6 +96,8 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressHandler)
 
+        viewModel._oldProposeCostingData.postValue(args.proposeCostingDetails)
+
         viewModel._proposeCostingData.postValue(args.proposeCostingDetails)
 
         viewModel._moaDocumentData.postValue(args.moaDocumentDetails)
@@ -117,7 +119,6 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
         quotationValidity()
 
-//        setOnClickListeners()
     }
 
     private fun setOnClickListeners() {
@@ -145,28 +146,19 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             }
         }
 
-        binding.proposeCostingStage.updateBtn.setOnClickListener {
-            Timber.e("DATA POST")
-            Timber.e(Gson().toJson(viewModel._proposeCostingData.value))
-            if (viewModel.isProposeCostingFieldsValid(requireContext())) {
-                viewModel.updateProposeCostingDetails()
-            }
-        }
-
-        binding.moaDocument.updateBtn.setOnClickListener {
-            Timber.e("MOA DATA POST")
-            Timber.e(Gson().toJson(viewModel._moaDocumentData.value))
-            if (viewModel.isMOADocumentFieldsValid(requireContext())) {
-                binding.progressIndicator.visibility = View.VISIBLE
-                viewModel.updateMoaDocumentDetails()
-            } else {
-                Timber.e("fill all man")
-            }
-        }
-
         binding.proposeCostingStage.autoQuotationDuration.setOnItemClickListener { parent, view, position, id ->
             val agreementDuration = parent.adapter.getItem(position) as String
             viewModel._proposeCostingData.value?.quotationDuration = agreementDuration
+        }
+
+        binding.proposeCostingStage.autoSelectDesignation.setOnItemClickListener { parent, view, position, id ->
+            val designation = parent.adapter.getItem(position) as String
+            viewModel._proposeCostingData.value?.designation = designation
+            if (designation == "Others") {
+                binding.proposeCostingStage.tilSelectDesignationOther.visibility = View.VISIBLE
+            } else {
+                binding.proposeCostingStage.tilSelectDesignationOther.visibility = View.GONE
+            }
         }
 
         binding.proposeCostingStage.autoConversationRatio.setOnItemClickListener { parent, view, position, id ->
@@ -213,7 +205,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                         if (!_dateAndTime[0].trim().isNullOrBlank()) {
                             _dateAndTime[0].split("/").let { _dateArray ->
                                 day = _dateArray[0].toInt()
-                                month = (_dateArray[1].toInt()-1)
+                                month = (_dateArray[1].toInt() - 1)
                                 year = _dateArray[2].toInt()
                             }
                         }
@@ -291,6 +283,17 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
     private fun observers() {
 
+        viewModel.messageLiveData.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let { _message ->
+                Toast.makeText(requireContext(), _message, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewModel.progressBarLiveData.observe(viewLifecycleOwner) {
+            if (it == true) binding.progressIndicator.visibility =
+                View.VISIBLE else binding.progressIndicator.visibility = View.GONE
+        }
+
         viewModel.proposeCostingDetails.observe(viewLifecycleOwner) {
             Timber.e("Response dd")
             Timber.e(Gson().toJson(it))
@@ -300,6 +303,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                 }
 
                 is NetworkResult.Error -> {
+                    viewModel.changeProgressBarVisibility(false)
                     Timber.e(it.toString())
                 }
 
@@ -318,18 +322,17 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
-                    binding.progressIndicator.visibility = View.GONE
+                    viewModel.changeProgressBarVisibility(false)
                     showDialog()
-//                    setPositionView()
                 }
 
                 is NetworkResult.Error -> {
-                    binding.progressIndicator.visibility = View.GONE
+                    viewModel.changeProgressBarVisibility(false)
                     Timber.e(it.toString())
                 }
 
                 else -> {
-                    binding.progressIndicator.visibility = View.GONE
+                    viewModel.changeProgressBarVisibility(false)
                     Toast.makeText(
                         requireContext(),
                         requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
@@ -368,44 +371,39 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
     private fun initializeProposeCostingData(proposeCostingData: ProposeCostingData?) {
         if (proposeCostingData?.priceDiscussed == "yes") binding.proposeCostingStage.priceDiscussedGroup.check(
-            com.phntechnolab.sales.R.id.priceDiscussedYes
-        )
+            com.phntechnolab.sales.R.id.priceDiscussedYes)
         else binding.proposeCostingStage.priceDiscussedGroup.check(com.phntechnolab.sales.R.id.priceDiscussedNo)
 
         if (proposeCostingData?.rescheduleMeeting == "yes") binding.proposeCostingStage.rescheduleMeetingGroup.check(
-            com.phntechnolab.sales.R.id.rescheduleMeetingYes
-        )
+            com.phntechnolab.sales.R.id.rescheduleMeetingYes)
         else binding.proposeCostingStage.rescheduleMeetingGroup.check(com.phntechnolab.sales.R.id.rescheduleMeetingNo)
 
         binding.proposeCostingStage.edtQuotationValidity.setText(
             viewModel._proposeCostingData.value?.quotationValidity ?: ""
         )
-//        viewModel._proposeCostingData.value?.quotationValidity.let {
-//            val dateAndTime = it?.split(" ")
-//            binding.proposeCostingStage.edtQuotationValidity.setText(
-//                dateAndTime?.get(0))
-//            if((dateAndTime?.size ?: 0) > 1)
-//                binding.proposeCostingStage.edtQuotationValidity.setText(dateAndTime?.get(1) ?: "")
-//        }
+        viewModel._proposeCostingData.value?.quotationValidity.let {
+            val dateAndTime = it?.split(" ")
+            binding.proposeCostingStage.edtQuotationValidity.setText(
+                dateAndTime?.get(0))
+            if((dateAndTime?.size ?: 0) > 1)
+                binding.proposeCostingStage.edtQuotationValidity.setText(dateAndTime?.get(1) ?: "")
+        }
 
-//        viewModel._proposeCostingData.value?.nextMeet.let {
-//            val dateAndTime = it?.split(" ")
-//            binding.proposeCostingStage.edtDate.setText(
-//                dateAndTime?.get(0)
-//            )
-//            if ((dateAndTime?.size ?: 0) > 1) binding.proposeCostingStage.edtTime.setText(
-//                dateAndTime?.get(1) ?: ""
-//            )
-//        }
-
+        viewModel._proposeCostingData.value?.meetDateTime.let {
+            val dateAndTime = it?.split(" ")
+            binding.proposeCostingStage.edtDate.setText(
+                dateAndTime?.get(0)
+            )
+            if ((dateAndTime?.size ?: 0) > 1) binding.proposeCostingStage.edtTime.setText(
+                dateAndTime?.get(1) ?: ""
+            )
+        }
     }
 
     private fun setPositionView() {
-//        setButtonName(viewModel.oldSchoolData.value)
-
         when (position) {
             0 -> {
-                binding.proposeCostingStage.root.visibility = View.GONE
+                viewModel.changeProgressBarVisibility(false)
                 binding.moaDocument.root.visibility = View.VISIBLE
                 position = 1
                 binding.stepView.done(false)
@@ -413,7 +411,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             }
 
             1 -> {
-                binding.proposeCostingStage.root.visibility = View.GONE
+                viewModel.changeProgressBarVisibility(false)
                 binding.moaDocument.root.visibility = View.VISIBLE
                 position = 2
                 binding.stepView.done(false)
@@ -461,12 +459,12 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         if (proposeCostingData?.designation != null && !proposeCostingData.designation.isNullOrBlank()) {
             if (array.contains(proposeCostingData.designation) && proposeCostingData.designation != "Others") {
                 designationItems.add(proposeCostingData.designation!!)
-                binding.moaDocument.tilSelectDesignationOther.visibility = View.GONE
+                binding.proposeCostingStage.tilSelectDesignationOther.visibility = View.GONE
             } else {
                 designationItems.add(proposeCostingData.designation!!)
-                binding.moaDocument.autoSelectDesignation.setText(getString(com.phntechnolab.sales.R.string._designation))
-                binding.moaDocument.edtSelectDesignationOther.setText(proposeCostingData.designation)
-                binding.moaDocument.tilSelectDesignationOther.visibility = View.VISIBLE
+                binding.proposeCostingStage.autoSelectDesignation.setText(getString(com.phntechnolab.sales.R.string._designation))
+                binding.proposeCostingStage.edtSelectDesignationOther.setText(proposeCostingData.designation)
+                binding.proposeCostingStage.tilSelectDesignationOther.visibility = View.VISIBLE
             }
         }
 
@@ -510,7 +508,10 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
     private fun setMoaDocumentDropdowns(moaDocumentData: MOADocumentData?) {
 
         //set moa file name
-        if (moaDocumentData?.moaFile != "" && moaDocumentData?.moaFile != null && !moaDocumentData.moaFile!!.startsWith("/tmp/")) {
+        if (moaDocumentData?.moaFile != "" && moaDocumentData?.moaFile != null && !moaDocumentData.moaFile!!.startsWith(
+                "/tmp/"
+            )
+        ) {
             try {
                 val fileName = moaDocumentData.moaFile!!.substring(
                     moaDocumentData.moaFile!!.lastIndexOf('/') + 1
@@ -615,7 +616,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                     if (!_dateAndTime[0].trim().isNullOrBlank()) {
                         _dateAndTime[0].split("/").let { _dateArray ->
                             day = _dateArray[0].toInt()
-                            month = _dateArray[1].toInt()-1
+                            month = _dateArray[1].toInt() - 1
                             year = _dateArray[2].toInt()
                         }
                     }
@@ -699,8 +700,8 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
     override fun onStart() {
         super.onStart()
-        setActionBar()
 
+        setActionBar()
         setOnClickListeners()
     }
 
