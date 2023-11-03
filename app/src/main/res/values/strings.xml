@@ -209,6 +209,8 @@
     <string name="other_">Other</string>
     <string name="_designation">Others</string>
     <string name="advance_payment_optional">Advance Payment (Optional)</string>
+    <string name="title">Title</string>
+    <string name="this_is_message">This is message</string>
 
 
     <string-array name="agreement_duration">

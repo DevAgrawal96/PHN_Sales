@@ -222,7 +222,6 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
                 imageData4 = part
                 val sdf = SimpleDateFormat("ddMyyyyhhmmss")
                 imageName4 = sdf.format(Date()) + "." + fileExtension
-
             }
         }
 
@@ -272,6 +271,12 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
         _requestFile3?.let {
             multipartBody.addFormDataPart(
                 "third_installment_reciept", imageName3,
+                it
+            )
+        }
+        _requestFile4?.let {
+            multipartBody.addFormDataPart(
+                "advance_payment_receipt", imageName4,
                 it
             )
         }

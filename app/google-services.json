@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "621083680651",
+    "project_id": "sales-1610c",
+    "storage_bucket": "sales-1610c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621083680651:android:8f137bcaabb5aee32a998e",
+        "android_client_info": {
+          "package_name": "com.phntechnolab.sales"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCn6UGYZ8ENgrJXXaS9R2n2So2L5_QcUfM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

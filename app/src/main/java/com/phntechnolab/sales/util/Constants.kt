@@ -7,4 +7,6 @@ object Constants
     const val TEST_URL = "http://www.phntechnology.info/phn_career_test/"
 //    const val TEST_URL1 = "https://sales.paytmmoneey.com/"
     const val TEST_URL1 = "https://stagingfield.paytmmoneey.com/"
+
+    const val CHANNEL_ID = "channel id"
 }

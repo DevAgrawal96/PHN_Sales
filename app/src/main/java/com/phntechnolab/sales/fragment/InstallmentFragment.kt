@@ -61,6 +61,7 @@ class InstallmentFragment : Fragment() {
     private var receipt1: String? = null
     private var receipt2: String? = null
     private var receipt3: String? = null
+    private var receipt4: String? = null
     private var id: String? = null
     private var schoolId: String? = null
 
@@ -174,7 +175,7 @@ class InstallmentFragment : Fragment() {
     ) { uri ->
         Timber.e("$uri")
         Timber.e("${viewModel.imagesize4}")
-        if (uri != null && viewModel.imagesize4 != null) {
+        if (uri != null ) {
             pdfOrImg = uri
             val sdf = SimpleDateFormat("dd/M/yyyy")
             val type = requireContext().contentResolver.getType(uri);
@@ -224,7 +225,7 @@ class InstallmentFragment : Fragment() {
             val fileExtention = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
             when (viewModel.getPosition()) {
                 0 -> {
-                    if (viewModel.imagesize1 != null) {
+//                    if (viewModel.imagesize1 != null) {
                         viewModel.uploadInstallmentDocument(
                             pdfOrImg!!,
                             requireContext(),
@@ -257,11 +258,11 @@ class InstallmentFragment : Fragment() {
                             )
                         }
                         binding.addInstallment1.uploadReceiptContainer.visibility = View.VISIBLE
-                    }
+//                    }
                 }
 
                 1 -> {
-                    if (viewModel.imagesize2 != null) {
+//                    if (viewModel.imagesize2 != null) {
                         viewModel.uploadInstallmentDocument(
                             pdfOrImg!!,
                             requireContext(),
@@ -293,11 +294,11 @@ class InstallmentFragment : Fragment() {
                             )
                         }
                         binding.addInstallment2.uploadReceiptContainer.visibility = View.VISIBLE
-                    }
+//                    }
                 }
 
                 2 -> {
-                    if (viewModel.imagesize3 != null) {
+//                    if (viewModel.imagesize3 != null) {
                         viewModel.uploadInstallmentDocument(
                             pdfOrImg!!,
                             requireContext(),
@@ -330,7 +331,7 @@ class InstallmentFragment : Fragment() {
                             )
                         }
                         binding.addInstallment3.uploadReceiptContainer.visibility = View.VISIBLE
-                    }
+//                    }
                 }
             }
             Timber.e(pdfOrImg.toString())
@@ -664,8 +665,8 @@ class InstallmentFragment : Fragment() {
                 binding.advancePayment.dateAndTime.text =
                     it?.installmentData?.advancePaymentDateTime
                 if (!it?.installmentData?.advancePaymentReceipt.isNullOrEmpty()) {
-                    val fileName = it?.installmentData?.advancePaymentDateTime!!.substring(
-                        it.installmentData?.advancePaymentDateTime!!.lastIndexOf('/') + 1
+                    val fileName = it?.installmentData?.advancePaymentReceipt!!.substring(
+                        it.installmentData?.advancePaymentReceipt!!.lastIndexOf('/') + 1
                     )
                     if (fileName.split(".").last() == "jpg") {
                         binding.advancePayment.fileTypeImg.setImageDrawable(
@@ -680,7 +681,7 @@ class InstallmentFragment : Fragment() {
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
                         )
                     }
-                    receipt1 = it.installmentData?.advancePaymentReceipt
+                    receipt4 = it.installmentData.advancePaymentReceipt
                     binding.advancePayment.fileName.text = fileName
 
                     Timber.e("$fileName")
@@ -803,7 +804,7 @@ class InstallmentFragment : Fragment() {
     }
 
     private fun uploadInstallmentData() {
-//        binding.progressIndicator.visibility = View.VISIBLE
+        binding.progressIndicator.visibility = View.VISIBLE
         val data = InstallmentData(
             advancePaymentReceipt = args.schoolData?.installmentData?.advancePaymentReceipt,
             advancePayment = binding.addAdvancePayment.advancePaymentOptionalTxt.text.toString(),
@@ -863,6 +864,23 @@ class InstallmentFragment : Fragment() {
             }
         }
 
+
+        binding.advancePayment.downloadImg.setOnClickListener {
+            if (!receipt4.isNullOrBlank()) {
+                fileDownloader.downloadFile(
+                    receipt4!!, receipt4!!.substring(
+                        receipt4!!.lastIndexOf('/') + 1
+                    )
+                )
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.start_downloading),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                Timber.e("receipt1 null or blank")
+            }
+        }
 
         binding.installment1.downloadImg.setOnClickListener {
             if (!receipt1.isNullOrBlank()) {
