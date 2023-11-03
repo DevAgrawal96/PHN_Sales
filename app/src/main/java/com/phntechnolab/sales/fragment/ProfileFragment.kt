@@ -127,14 +127,17 @@ class ProfileFragment : Fragment(), MenuProvider {
         dialog.setCancelable(false)
         val dialogBinding = LogoutDialogBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
+
         dialogBinding.logoutNo.setOnClickListener {
             dialog.dismiss()
         }
+
         dialogBinding.logoutYes.setOnClickListener {
             binding.progressIndicator.visibility = View.VISIBLE
             dialog.dismiss()
             viewModel.logout(requireContext())
         }
+
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.show()
     }

@@ -56,6 +56,7 @@ class InstallmentFragment : Fragment() {
     private var isFirstReceipt: Boolean = false
     private var isSecondReceipt: Boolean = false
     private var isThirdReceipt: Boolean = false
+    private var isFourthReceipt: Boolean = false
 
     private var receipt1: String? = null
     private var receipt2: String? = null
@@ -126,20 +127,19 @@ class InstallmentFragment : Fragment() {
             binding.download.setOnClickListener {
                 try {
                     data.moaDocumentData.moaFile.let {
-                        if (data.moaDocumentData.moaFile!!.startsWith("/tmp/")) {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.something_went_wrong),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
+                        if (!data.moaDocumentData.moaFile!!.startsWith("/tmp/")) {
                             fileDownloader.downloadFile(data.moaDocumentData.moaFile!!, fileName)
                             Toast.makeText(
                                 requireContext(),
                                 getString(R.string.start_downloading),
                                 Toast.LENGTH_SHORT
                             ).show()
-
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.something_went_wrong),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
 
@@ -172,7 +172,9 @@ class InstallmentFragment : Fragment() {
     private var advancePaymentReceiptPdf = registerForActivityResult(
         TakePictureFromCameraOrGalley
     ) { uri ->
-        if (uri != null) {
+        Timber.e("$uri")
+        Timber.e("${viewModel.imagesize4}")
+        if (uri != null && viewModel.imagesize4 != null) {
             pdfOrImg = uri
             val sdf = SimpleDateFormat("dd/M/yyyy")
             val type = requireContext().contentResolver.getType(uri);
@@ -182,33 +184,33 @@ class InstallmentFragment : Fragment() {
                 requireContext(),
                 3
             )
-            isFirstReceipt = true
+            isFourthReceipt = true
 
-            binding.addInstallment1.fileInstallmentName.text =
-                "${viewModel.imageName1}.${fileExtention}"
+            binding.addAdvancePayment.fileAdvancePaymentName.text =
+                "${viewModel.imageName4}.${fileExtention}"
 
-            binding.addInstallment1.fileInstallmentInfo.text =
+            binding.addAdvancePayment.fileInstallmentInfo.text =
                 getString(
                     R.string.file_size_and_today_date_,
-                    viewModel.imagesize1.toString(),
+                    viewModel.imagesize4.toString(),
                     sdf.format(Date())
                 )
 
 
             if (fileExtention == "jpg") {
-                binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
+                binding.addAdvancePayment.pdfAdvancePaymentImage.setImageDrawable(
                     ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
                 )
             } else if (fileExtention == "png") {
-                binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
+                binding.addAdvancePayment.pdfAdvancePaymentImage.setImageDrawable(
                     ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
                 )
             } else if (fileExtention == "pdf") {
-                binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
+                binding.addAdvancePayment.pdfAdvancePaymentImage.setImageDrawable(
                     ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
                 )
             }
-            binding.addInstallment1.uploadReceiptContainer.visibility = View.VISIBLE
+            binding.addAdvancePayment.uploadReceiptContainer.visibility = View.VISIBLE
         }
     }
     private var receiptPdf = registerForActivityResult(
@@ -222,107 +224,113 @@ class InstallmentFragment : Fragment() {
             val fileExtention = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
             when (viewModel.getPosition()) {
                 0 -> {
-                    viewModel.uploadInstallmentDocument(
-                        pdfOrImg!!,
-                        requireContext(),
-                        viewModel.getPosition()
-                    )
-                    isFirstReceipt = true
-
-                    binding.addInstallment1.fileInstallmentName.text =
-                        "${viewModel.imageName1}.${fileExtention}"
-
-                    binding.addInstallment1.fileInstallmentInfo.text =
-                        getString(
-                            R.string.file_size_and_today_date_,
-                            viewModel.imagesize1.toString(),
-                            sdf.format(Date())
+                    if (viewModel.imagesize1 != null) {
+                        viewModel.uploadInstallmentDocument(
+                            pdfOrImg!!,
+                            requireContext(),
+                            viewModel.getPosition()
                         )
+                        isFirstReceipt = true
+
+                        binding.addInstallment1.fileInstallmentName.text =
+                            "${viewModel.imageName1}.${fileExtention}"
+
+                        binding.addInstallment1.fileInstallmentInfo.text =
+                            getString(
+                                R.string.file_size_and_today_date_,
+                                viewModel.imagesize1.toString(),
+                                sdf.format(Date())
+                            )
 
 
-                    if (fileExtention == "jpg") {
-                        binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
-                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
-                        )
-                    } else if (fileExtention == "png") {
-                        binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
-                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
-                        )
-                    } else if (fileExtention == "pdf") {
-                        binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
-                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
-                        )
+                        if (fileExtention == "jpg") {
+                            binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
+                            )
+                        } else if (fileExtention == "png") {
+                            binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
+                            )
+                        } else if (fileExtention == "pdf") {
+                            binding.addInstallment1.pdfInstallmentImage.setImageDrawable(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
+                            )
+                        }
+                        binding.addInstallment1.uploadReceiptContainer.visibility = View.VISIBLE
                     }
-                    binding.addInstallment1.uploadReceiptContainer.visibility = View.VISIBLE
                 }
 
                 1 -> {
-                    viewModel.uploadInstallmentDocument(
-                        pdfOrImg!!,
-                        requireContext(),
-                        viewModel.getPosition()
-                    )
-                    isSecondReceipt = true
+                    if (viewModel.imagesize2 != null) {
+                        viewModel.uploadInstallmentDocument(
+                            pdfOrImg!!,
+                            requireContext(),
+                            viewModel.getPosition()
+                        )
+                        isSecondReceipt = true
 
-                    binding.addInstallment2.fileInstallmentName.text =
-                        "${viewModel.imageName2}.${fileExtention}"
-                    binding.addInstallment2.fileInstallmentInfo.text =
-                        getString(
-                            R.string.file_size_and_today_date_,
-                            viewModel.imagesize2.toString(),
-                            sdf.format(Date())
-                        )
+                        binding.addInstallment2.fileInstallmentName.text =
+                            "${viewModel.imageName2}.${fileExtention}"
+                        binding.addInstallment2.fileInstallmentInfo.text =
+                            getString(
+                                R.string.file_size_and_today_date_,
+                                viewModel.imagesize2.toString(),
+                                sdf.format(Date())
+                            )
 
 
-                    if (fileExtention == "jpg") {
-                        binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
-                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
-                        )
-                    } else if (fileExtention == "png") {
-                        binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
-                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
-                        )
-                    } else if (fileExtention == "pdf") {
-                        binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
-                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
-                        )
+                        if (fileExtention == "jpg") {
+                            binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
+                            )
+                        } else if (fileExtention == "png") {
+                            binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
+                            )
+                        } else if (fileExtention == "pdf") {
+                            binding.addInstallment2.pdfInstallmentImage.setImageDrawable(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
+                            )
+                        }
+                        binding.addInstallment2.uploadReceiptContainer.visibility = View.VISIBLE
                     }
-                    binding.addInstallment2.uploadReceiptContainer.visibility = View.VISIBLE
                 }
 
                 2 -> {
-                    viewModel.uploadInstallmentDocument(
-                        pdfOrImg!!,
-                        requireContext(),
-                        viewModel.getPosition()
-                    )
-                    isThirdReceipt = true
-
-                    binding.addInstallment3.fileInstallmentName.text =
-                        "${viewModel.imageName3}.${fileExtention}"
-
-                    binding.addInstallment3.fileInstallmentInfo.text =
-                        getString(
-                            R.string.file_size_and_today_date_,
-                            viewModel.imagesize3.toString(),
-                            sdf.format(Date())
+                    if (viewModel.imagesize3 != null) {
+                        viewModel.uploadInstallmentDocument(
+                            pdfOrImg!!,
+                            requireContext(),
+                            viewModel.getPosition()
                         )
+                        isThirdReceipt = true
+
+                        binding.addInstallment3.fileInstallmentName.text =
+                            "${viewModel.imageName3}.${fileExtention}"
+
+                        binding.addInstallment3.fileInstallmentInfo.text =
+                            getString(
+                                R.string.file_size_and_today_date_,
+                                viewModel.imagesize3.toString(),
+                                sdf.format(Date())
+                            )
 
 
-                    if (fileExtention == "jpg") {
-                        binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
-                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
-                        )
-                    } else if (fileExtention == "png") {
-                        binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
-                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
-                        )
-                    } else if (fileExtention == "pdf") {
-                        binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
-                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
-                        )
+                        if (fileExtention == "jpg") {
+                            binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.ic_jpg)
+                            )
+                        } else if (fileExtention == "png") {
+                            binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.ic_png)
+                            )
+                        } else if (fileExtention == "pdf") {
+                            binding.addInstallment3.pdfInstallmentImage.setImageDrawable(
+                                ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
+                            )
+                        }
+                        binding.addInstallment3.uploadReceiptContainer.visibility = View.VISIBLE
                     }
-                    binding.addInstallment3.uploadReceiptContainer.visibility = View.VISIBLE
                 }
             }
             Timber.e(pdfOrImg.toString())
@@ -795,7 +803,7 @@ class InstallmentFragment : Fragment() {
     }
 
     private fun uploadInstallmentData() {
-        binding.progressIndicator.visibility = View.VISIBLE
+//        binding.progressIndicator.visibility = View.VISIBLE
         val data = InstallmentData(
             advancePaymentReceipt = args.schoolData?.installmentData?.advancePaymentReceipt,
             advancePayment = binding.addAdvancePayment.advancePaymentOptionalTxt.text.toString(),
@@ -828,7 +836,7 @@ class InstallmentFragment : Fragment() {
             binding.addInstallment1.uploadReceiptContainer.visibility = View.GONE
         }
         binding.addAdvancePayment.deleteReceipt.setOnClickListener {
-            viewModel._requestFile1 = null
+            viewModel._requestFile4 = null
 //            isFirstReceipt = false
             binding.addAdvancePayment.uploadReceiptContainer.visibility = View.GONE
         }

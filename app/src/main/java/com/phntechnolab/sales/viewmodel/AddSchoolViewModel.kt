@@ -51,6 +51,7 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
     var imageData: MultipartBody.Part? = null
     var _requestFile: RequestBody? = null
     var imageName: String? = null
+    var imageSize: Int? = null
 
     fun setOldSchoolData(data: SchoolData?) {
         _oldSchoolData.postValue(data)
@@ -117,6 +118,7 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
 
         val part = MultipartBody.Part.createFormData("profile", file.name, requestFile)
         imageData = part
+        imageSize = Integer.parseInt((file.length() / 1024).toString())
 
         imageName = sdf.format(Date())
     }
