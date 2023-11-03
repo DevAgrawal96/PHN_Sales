@@ -3,6 +3,7 @@ package com.phntechnolab.sales.viewmodel
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import android.webkit.MimeTypeMap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -99,8 +100,11 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
     }
 
     fun uploadImage(imageUri: Uri, context: Context) {
+        val sdf = SimpleDateFormat("ddMyyyyhhmmss")
         val fileDir = context.filesDir
-        val file = File(fileDir, "image.jpg")
+        val type = context.contentResolver.getType(imageUri)
+        val fileExtension = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
+        val file = File(fileDir, "$sdf.$fileExtension")
         val inputStream = context.contentResolver.openInputStream(imageUri)
         val fileOutputStream = FileOutputStream(file)
         inputStream?.copyTo(fileOutputStream)
@@ -113,7 +117,7 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
 
         val part = MultipartBody.Part.createFormData("profile", file.name, requestFile)
         imageData = part
-        val sdf = SimpleDateFormat("ddMyyyyhhmmss")
+
         imageName = sdf.format(Date())
     }
 

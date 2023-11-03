@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -22,7 +21,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -31,7 +29,6 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.gson.Gson
 import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentCostingMoaDocumentBinding
-import com.phntechnolab.sales.databinding.LogoutDialogBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.di.FileDownloader
 import com.phntechnolab.sales.model.MOADocumentData
@@ -91,10 +88,6 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
     }
 
     var position = 0
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -102,6 +95,8 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         _binding = FragmentCostingMoaDocumentBinding.inflate(inflater, container, false)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressHandler)
+
+        viewModel._oldProposeCostingData.postValue(args.proposeCostingDetails)
 
         viewModel._proposeCostingData.postValue(args.proposeCostingDetails)
 
@@ -116,7 +111,6 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         observers()
 
         checkedChangeListener()
@@ -125,7 +119,6 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
         quotationValidity()
 
-//        setOnClickListeners()
     }
 
     private fun setOnClickListeners() {
@@ -153,55 +146,31 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             }
         }
 
-        binding.proposeCostingStage.updateBtn.setOnClickListener {
-            Timber.e("DATA POST")
-            Timber.e(Gson().toJson(viewModel._proposeCostingData.value))
-            if (isProposeCostingFieldsValid()) {
-                viewModel.updateProposeCostingDetails()
-            }
-        }
-
-        binding.moaDocument.updateBtn.setOnClickListener {
-            Timber.e("MOA DATA POST")
-            Timber.e(Gson().toJson(viewModel._moaDocumentData.value))
-            if (isMOADocumentFieldsValid()) {
-                binding.progressIndicator.visibility = View.VISIBLE
-                viewModel.updateMoaDocumentDetails()
-            } else {
-                Timber.e("fill all man")
-            }
-        }
-
-        binding.proposeCostingStage.autoAgreementDuration.setOnItemClickListener { parent, view, position, id ->
+        binding.proposeCostingStage.autoQuotationDuration.setOnItemClickListener { parent, view, position, id ->
             val agreementDuration = parent.adapter.getItem(position) as String
-            viewModel._proposeCostingData.value?.agreementDuration = agreementDuration
+            viewModel._proposeCostingData.value?.quotationDuration = agreementDuration
         }
 
-        binding.proposeCostingStage.autoMeetingWithWhom.setOnItemClickListener { parent, view, position, id ->
-            val meetingWithWhoom = parent.adapter.getItem(position) as String
-            viewModel._proposeCostingData.value?.meetingWithWhoom = meetingWithWhoom
-            if (meetingWithWhoom == "Other") {
-                binding.proposeCostingStage.meetingWithWhoomOthers.visibility = View.VISIBLE
+        binding.proposeCostingStage.autoSelectDesignation.setOnItemClickListener { parent, view, position, id ->
+            val designation = parent.adapter.getItem(position) as String
+            viewModel._proposeCostingData.value?.designation = designation
+            if (designation == "Others") {
+                binding.proposeCostingStage.tilSelectDesignationOther.visibility = View.VISIBLE
             } else {
-                binding.proposeCostingStage.meetingWithWhoomOthers.visibility = View.GONE
+                binding.proposeCostingStage.tilSelectDesignationOther.visibility = View.GONE
             }
         }
 
-        binding.proposeCostingStage.autoConversionRatio.setOnItemClickListener { parent, view, position, id ->
+        binding.proposeCostingStage.autoConversationRatio.setOnItemClickListener { parent, view, position, id ->
             val conversationRatio = parent.adapter.getItem(position) as String
             viewModel._proposeCostingData.value?.conversationRatio = conversationRatio
         }
 
-        binding.moaDocument.autoAgreementDuration.setOnItemClickListener { parent, view, position, id ->
+        binding.moaDocument.autoQuotationDuration.setOnItemClickListener { parent, view, position, id ->
             val moaAgreementDuration = parent.adapter.getItem(position) as String
-            viewModel._moaDocumentData.value?.agreementDuration = moaAgreementDuration
+            viewModel._moaDocumentData.value?.quotationDuration = moaAgreementDuration
 
         }
-
-//        binding.moaDocument.edtDiscussedWithWhom.setOnItemClickListener { parent, view, position, id ->
-//            val moaMeetingWithWhoom = parent.adapter.getItem(position) as String
-//            viewModel._moaDocumentData.value?.disscussedWithWhom = moaMeetingWithWhoom
-//        }
 
         binding.moaDocument.autoSelectDesignation.setOnItemClickListener { parent, view, position, id ->
             val designation = parent.adapter.getItem(position) as String
@@ -223,83 +192,6 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         }
     }
 
-    private fun isProposeCostingFieldsValid(): Boolean {
-        val isPriceDiscussedPending = viewModel._proposeCostingData.value?.priceDiscussed != "yes"
-
-        val isPricepPerStudentPending =
-            viewModel._proposeCostingData.value?.pricePerStudent.isNullOrBlank()
-
-        val isQuotationSharedPending = viewModel._proposeCostingData.value?.quotationShared != "yes"
-
-        val isPaymentScheduledPending = viewModel._proposeCostingData.value?.paymentShedule != "yes"
-
-        val isAgreementDurationNotSelected =
-            viewModel._proposeCostingData.value?.agreementDuration.isNullOrBlank()
-
-        val isMeetingWithWhoomNotSelected =
-            viewModel._proposeCostingData.value?.meetingWithWhoom.isNullOrBlank()
-
-        val isConversationRatioNotSelected =
-            viewModel._proposeCostingData.value?.conversationRatio.isNullOrBlank()
-
-        val isNextMeetingDateNotSelected =
-            viewModel._proposeCostingData.value?.nextMeet.isNullOrBlank()
-
-//        isPriceDiscussedPending ||
-//        isQuotationSharedPending ||
-
-//        isPaymentScheduledPending ||
-        return if (isPricepPerStudentPending || isAgreementDurationNotSelected || isMeetingWithWhoomNotSelected || isConversationRatioNotSelected || isNextMeetingDateNotSelected) {
-            Toast.makeText(
-                requireContext(),
-                requireActivity().getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_and_mark_yes_details),
-                Toast.LENGTH_LONG
-            ).show()
-            false
-        } else {
-            true
-        }
-    }
-
-    private fun isMOADocumentFieldsValid(): Boolean {
-
-        val isTotalInterestedIntakeNotFilled =
-            viewModel._moaDocumentData.value?.interestedIntake.isNullOrBlank()
-
-        val isCostingPerStudentNotFilled =
-            viewModel._moaDocumentData.value?.finalCosting.isNullOrBlank()
-
-        val isAgreementDurationNotSelected =
-            viewModel._moaDocumentData.value?.agreementDuration.isNullOrBlank()
-
-        val isDiscussedWithWhoomNotSelected =
-            viewModel._moaDocumentData.value?.disscussedWithWhom.isNullOrBlank()
-
-        val isDesignationNotSelected = viewModel._moaDocumentData.value?.designation.isNullOrBlank()
-
-        val isMoaDocumentNotUploaded = viewModel._requestFile == null
-
-
-        return if (isTotalInterestedIntakeNotFilled || isCostingPerStudentNotFilled || isDiscussedWithWhoomNotSelected || isDesignationNotSelected || isAgreementDurationNotSelected || isMoaDocumentNotUploaded) {
-            if (isMoaDocumentNotUploaded) {
-                Toast.makeText(
-                    requireContext(),
-                    requireActivity().getString(com.phntechnolab.sales.R.string.please_upload_moa_document),
-                    Toast.LENGTH_LONG
-                ).show()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    requireActivity().getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_details),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-            false
-        } else {
-            true
-        }
-    }
-
     private fun quotationValidity() {
         binding.proposeCostingStage.edtQuotationValidity.setOnClickListener {
             val c = Calendar.getInstance()
@@ -313,7 +205,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                         if (!_dateAndTime[0].trim().isNullOrBlank()) {
                             _dateAndTime[0].split("/").let { _dateArray ->
                                 day = _dateArray[0].toInt()
-                                month = (_dateArray[1].toInt()-1)
+                                month = (_dateArray[1].toInt() - 1)
                                 year = _dateArray[2].toInt()
                             }
                         }
@@ -391,6 +283,17 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
     private fun observers() {
 
+        viewModel.messageLiveData.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let { _message ->
+                Toast.makeText(requireContext(), _message, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewModel.progressBarLiveData.observe(viewLifecycleOwner) {
+            if (it == true) binding.progressIndicator.visibility =
+                View.VISIBLE else binding.progressIndicator.visibility = View.GONE
+        }
+
         viewModel.proposeCostingDetails.observe(viewLifecycleOwner) {
             Timber.e("Response dd")
             Timber.e(Gson().toJson(it))
@@ -400,6 +303,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                 }
 
                 is NetworkResult.Error -> {
+                    viewModel.changeProgressBarVisibility(false)
                     Timber.e(it.toString())
                 }
 
@@ -418,18 +322,17 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
-                    binding.progressIndicator.visibility = View.GONE
+                    viewModel.changeProgressBarVisibility(false)
                     showDialog()
-//                    setPositionView()
                 }
 
                 is NetworkResult.Error -> {
-                    binding.progressIndicator.visibility = View.GONE
+                    viewModel.changeProgressBarVisibility(false)
                     Timber.e(it.toString())
                 }
 
                 else -> {
-                    binding.progressIndicator.visibility = View.GONE
+                    viewModel.changeProgressBarVisibility(false)
                     Toast.makeText(
                         requireContext(),
                         requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
@@ -468,32 +371,25 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
     private fun initializeProposeCostingData(proposeCostingData: ProposeCostingData?) {
         if (proposeCostingData?.priceDiscussed == "yes") binding.proposeCostingStage.priceDiscussedGroup.check(
-            com.phntechnolab.sales.R.id.priceDiscussedYes
-        )
+            com.phntechnolab.sales.R.id.priceDiscussedYes)
         else binding.proposeCostingStage.priceDiscussedGroup.check(com.phntechnolab.sales.R.id.priceDiscussedNo)
 
-        if (proposeCostingData?.quotationShared == "yes") binding.proposeCostingStage.quotationSharedGroup.check(
-            com.phntechnolab.sales.R.id.quotationSharedYes
-        )
-        else binding.proposeCostingStage.quotationSharedGroup.check(com.phntechnolab.sales.R.id.quotationSharedNo)
-
-        if (proposeCostingData?.paymentShedule == "yes") binding.proposeCostingStage.paymentScheduledLockedGroup.check(
-            com.phntechnolab.sales.R.id.paymentScheduledLockedYes
-        )
-        else binding.proposeCostingStage.paymentScheduledLockedGroup.check(com.phntechnolab.sales.R.id.paymentScheduledLockedNo)
+        if (proposeCostingData?.rescheduleMeeting == "yes") binding.proposeCostingStage.rescheduleMeetingGroup.check(
+            com.phntechnolab.sales.R.id.rescheduleMeetingYes)
+        else binding.proposeCostingStage.rescheduleMeetingGroup.check(com.phntechnolab.sales.R.id.rescheduleMeetingNo)
 
         binding.proposeCostingStage.edtQuotationValidity.setText(
             viewModel._proposeCostingData.value?.quotationValidity ?: ""
         )
-//        viewModel._proposeCostingData.value?.quotationValidity.let {
-//            val dateAndTime = it?.split(" ")
-//            binding.proposeCostingStage.edtQuotationValidity.setText(
-//                dateAndTime?.get(0))
-//            if((dateAndTime?.size ?: 0) > 1)
-//                binding.proposeCostingStage.edtQuotationValidity.setText(dateAndTime?.get(1) ?: "")
-//        }
+        viewModel._proposeCostingData.value?.quotationValidity.let {
+            val dateAndTime = it?.split(" ")
+            binding.proposeCostingStage.edtQuotationValidity.setText(
+                dateAndTime?.get(0))
+            if((dateAndTime?.size ?: 0) > 1)
+                binding.proposeCostingStage.edtQuotationValidity.setText(dateAndTime?.get(1) ?: "")
+        }
 
-        viewModel._proposeCostingData.value?.nextMeet.let {
+        viewModel._proposeCostingData.value?.meetDateTime.let {
             val dateAndTime = it?.split(" ")
             binding.proposeCostingStage.edtDate.setText(
                 dateAndTime?.get(0)
@@ -502,15 +398,12 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                 dateAndTime?.get(1) ?: ""
             )
         }
-
     }
 
     private fun setPositionView() {
-//        setButtonName(viewModel.oldSchoolData.value)
-
         when (position) {
             0 -> {
-                binding.proposeCostingStage.root.visibility = View.GONE
+                viewModel.changeProgressBarVisibility(false)
                 binding.moaDocument.root.visibility = View.VISIBLE
                 position = 1
                 binding.stepView.done(false)
@@ -518,7 +411,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             }
 
             1 -> {
-                binding.proposeCostingStage.root.visibility = View.GONE
+                viewModel.changeProgressBarVisibility(false)
                 binding.moaDocument.root.visibility = View.VISIBLE
                 position = 2
                 binding.stepView.done(false)
@@ -536,17 +429,17 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
     private fun setProposeCostingDropdowns(proposeCostingData: ProposeCostingData?) {
         //Set agreement duration data
 
-        val dropdown: AutoCompleteTextView = binding.proposeCostingStage.autoAgreementDuration
+        val dropdown: AutoCompleteTextView = binding.proposeCostingStage.autoQuotationDuration
         val items = ArrayList<String>()
-        if (proposeCostingData?.agreementDuration != null && !proposeCostingData.agreementDuration.isNullOrBlank()) {
-            items.add(proposeCostingData.agreementDuration!!)
+        if (proposeCostingData?.quotationDuration != null && !proposeCostingData.quotationDuration.isNullOrBlank()) {
+            items.add(proposeCostingData.quotationDuration!!)
         }
 
         arrayOf("1 year", "3 year", "5 year").forEach {
             if (!items.any { itemName -> itemName.contains(it) }) {
                 items.add(it)
             } else {
-                binding.proposeCostingStage.autoAgreementDuration.setText(it)
+                binding.proposeCostingStage.autoQuotationDuration.setText(it)
             }
         }
 
@@ -555,39 +448,42 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         )
         dropdown.setAdapter(adapter)
 
-        //Meeting with whoom dropdown set
+        //select designation dropdown
 
-        val meetingWithWhoomDropdown: AutoCompleteTextView =
-            binding.proposeCostingStage.autoMeetingWithWhom
-        val meetingWithWhoomItem = ArrayList<String>()
-
-        if (proposeCostingData?.meetingWithWhoom != null && !proposeCostingData.meetingWithWhoom.isNullOrBlank()) {
-            meetingWithWhoomItem.add(proposeCostingData.meetingWithWhoom!!)
-            if (proposeCostingData.meetingWithWhoom == "Other") {
-                binding.proposeCostingStage.meetingWithWhoomOthers.visibility = View.VISIBLE
-            } else {
-                binding.proposeCostingStage.meetingWithWhoomOthers.visibility = View.GONE
-            }
-        }
-
-        arrayOf(
-            "Principal Level", "Director Level", "Other"
-        ).forEach {
-            if (!meetingWithWhoomItem.any { itemName -> itemName.contains(it) }) {
-                meetingWithWhoomItem.add(it)
-            } else {
-                binding.proposeCostingStage.autoMeetingWithWhom.setText(it)
-            }
-        }
-        val labsAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
-            requireContext(), R.layout.simple_spinner_dropdown_item, meetingWithWhoomItem
+        val designationDropdown: MaterialAutoCompleteTextView =
+            binding.proposeCostingStage.autoSelectDesignation
+        val designationItems = ArrayList<String>()
+        val array = arrayOf(
+            "Principal", "Teacher", "Director", "Owner", "HOD", "Others"
         )
-        meetingWithWhoomDropdown.setAdapter(labsAdapter)
+        if (proposeCostingData?.designation != null && !proposeCostingData.designation.isNullOrBlank()) {
+            if (array.contains(proposeCostingData.designation) && proposeCostingData.designation != "Others") {
+                designationItems.add(proposeCostingData.designation!!)
+                binding.proposeCostingStage.tilSelectDesignationOther.visibility = View.GONE
+            } else {
+                designationItems.add(proposeCostingData.designation!!)
+                binding.proposeCostingStage.autoSelectDesignation.setText(getString(com.phntechnolab.sales.R.string._designation))
+                binding.proposeCostingStage.edtSelectDesignationOther.setText(proposeCostingData.designation)
+                binding.proposeCostingStage.tilSelectDesignationOther.visibility = View.VISIBLE
+            }
+        }
+
+        array.forEach {
+            if (!designationItems.any { itemName -> itemName.contains(it) }) {
+                designationItems.add(it)
+            } else {
+                binding.proposeCostingStage.autoSelectDesignation.setText(it)
+            }
+        }
+        val designationAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            requireContext(), R.layout.simple_spinner_dropdown_item, designationItems
+        )
+        designationDropdown.setAdapter(designationAdapter)
 
         //set conversation ratio dropdown
 
         val conversationRationDropdown: AutoCompleteTextView =
-            binding.proposeCostingStage.autoConversionRatio
+            binding.proposeCostingStage.autoConversationRatio
         val conversationRationItems = ArrayList<String>()
 
         if (proposeCostingData?.conversationRatio != null && !proposeCostingData.conversationRatio.isNullOrBlank()) {
@@ -600,7 +496,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             if (!conversationRationItems.any { itemName -> itemName.contains(it) }) {
                 conversationRationItems.add(it)
             } else {
-                binding.proposeCostingStage.autoConversionRatio.setText(it)
+                binding.proposeCostingStage.autoConversationRatio.setText(it)
             }
         }
         val leadsAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
@@ -612,7 +508,10 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
     private fun setMoaDocumentDropdowns(moaDocumentData: MOADocumentData?) {
 
         //set moa file name
-        if (moaDocumentData?.moaFile != "" && moaDocumentData?.moaFile != null && !moaDocumentData.moaFile!!.startsWith("/tmp/")) {
+        if (moaDocumentData?.moaFile != "" && moaDocumentData?.moaFile != null && !moaDocumentData.moaFile!!.startsWith(
+                "/tmp/"
+            )
+        ) {
             try {
                 val fileName = moaDocumentData.moaFile!!.substring(
                     moaDocumentData.moaFile!!.lastIndexOf('/') + 1
@@ -637,17 +536,17 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         }
 
         //Set agreement duration data
-        val dropdown: MaterialAutoCompleteTextView = binding.moaDocument.autoAgreementDuration
+        val dropdown: MaterialAutoCompleteTextView = binding.moaDocument.autoQuotationDuration
         val items = ArrayList<String>()
-        if (moaDocumentData?.agreementDuration != null && !moaDocumentData.agreementDuration.isNullOrBlank()) {
-            items.add(moaDocumentData.agreementDuration!!)
+        if (moaDocumentData?.quotationDuration != null && !moaDocumentData.quotationDuration.isNullOrBlank()) {
+            items.add(moaDocumentData.quotationDuration!!)
         }
 
         arrayOf("1 year", "3 year", "5 year").forEach {
             if (!items.any { itemName -> itemName.contains(it) }) {
                 items.add(it)
             } else {
-                binding.moaDocument.autoAgreementDuration.setText(it)
+                binding.moaDocument.autoQuotationDuration.setText(it)
             }
         }
 
@@ -697,17 +596,10 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                 if (checkedRadioButtonText == "Yes") "yes" else "no"
         }
 
-        //quotation shared checked box listener
-        binding.proposeCostingStage.quotationSharedGroup.setOnCheckedChangeListener { group, checkedId ->
+        //reschedule meeting checked box listener
+        binding.proposeCostingStage.rescheduleMeetingGroup.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
-            viewModel._proposeCostingData.value?.quotationShared =
-                if (checkedRadioButtonText == "Yes") "yes" else "no"
-        }
-
-        //price payment schedule checked box listener
-        binding.proposeCostingStage.paymentScheduledLockedGroup.setOnCheckedChangeListener { group, checkedId ->
-            val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
-            viewModel._proposeCostingData.value?.paymentShedule =
+            viewModel._proposeCostingData.value?.rescheduleMeeting =
                 if (checkedRadioButtonText == "Yes") "yes" else "no"
         }
     }
@@ -718,13 +610,13 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             var year = c.get(Calendar.YEAR)
             var month = c.get(Calendar.MONTH)
             var day = c.get(Calendar.DAY_OF_MONTH)
-            if (!viewModel.proposeCostingData.value?.nextMeet.isNullOrEmpty()) {
-                viewModel.proposeCostingData.value?.nextMeet?.split(" ")?.let { _dateAndTime ->
+            if (!viewModel.proposeCostingData.value?.meetDateTime.isNullOrEmpty()) {
+                viewModel.proposeCostingData.value?.meetDateTime?.split(" ")?.let { _dateAndTime ->
                     binding.proposeCostingStage.edtDate.setText(_dateAndTime[0])
                     if (!_dateAndTime[0].trim().isNullOrBlank()) {
                         _dateAndTime[0].split("/").let { _dateArray ->
                             day = _dateArray[0].toInt()
-                            month = _dateArray[1].toInt()-1
+                            month = _dateArray[1].toInt() - 1
                             year = _dateArray[2].toInt()
                         }
                     }
@@ -736,17 +628,17 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                     val updatedDateAndTime =
                         dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
                     binding.proposeCostingStage.edtDate.setText(updatedDateAndTime)
-                    viewModel.proposeCostingData.value?.nextMeet.let { _nextFollowUpDate ->
+                    viewModel.proposeCostingData.value?.meetDateTime.let { _nextFollowUpDate ->
                         if ((_nextFollowUpDate ?: "").contains(" ")) {
                             val dateAndTime = (_nextFollowUpDate ?: "").split(" ")
-                            viewModel.proposeCostingData.value?.nextMeet =
+                            viewModel.proposeCostingData.value?.meetDateTime =
                                 "$updatedDateAndTime ${dateAndTime[1]}"
                         } else {
-                            viewModel.proposeCostingData.value?.nextMeet = updatedDateAndTime
+                            viewModel.proposeCostingData.value?.meetDateTime = updatedDateAndTime
                         }
 
                         Timber.e("Date")
-                        Timber.e(viewModel.proposeCostingData.value?.nextMeet)
+                        Timber.e(viewModel.proposeCostingData.value?.meetDateTime)
                     }
                 }, year, month, day
             )
@@ -760,8 +652,8 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
             var hour = c.get(Calendar.HOUR)
             var minute = c.get(Calendar.MINUTE)
-            if (!viewModel.proposeCostingData.value?.nextMeet.isNullOrEmpty()) {
-                viewModel.proposeCostingData.value?.nextMeet?.split(" ")?.let { _dateAndTime ->
+            if (!viewModel.proposeCostingData.value?.meetDateTime.isNullOrEmpty()) {
+                viewModel.proposeCostingData.value?.meetDateTime?.split(" ")?.let { _dateAndTime ->
                     if (_dateAndTime.size > 1) {
                         binding.proposeCostingStage.edtTime.setText(_dateAndTime[1])
                         _dateAndTime[1].split(":").let { _timeArray ->
@@ -776,18 +668,18 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                 requireContext(), { view, hourOfDay, minute ->
                     val updatedTime = "$hourOfDay:$minute"
                     binding.proposeCostingStage.edtTime.setText(updatedTime)
-                    viewModel.proposeCostingData.value?.nextMeet.let { _nextFollowUpDate ->
+                    viewModel.proposeCostingData.value?.meetDateTime.let { _nextFollowUpDate ->
                         if ((_nextFollowUpDate ?: "").contains(" ")) {
                             val dateAndTime = _nextFollowUpDate?.split(" ")
-                            viewModel.proposeCostingData.value?.nextMeet =
+                            viewModel.proposeCostingData.value?.meetDateTime =
                                 "${dateAndTime?.get(0)} $updatedTime"
                         } else {
-                            viewModel.proposeCostingData.value?.nextMeet =
+                            viewModel.proposeCostingData.value?.meetDateTime =
                                 "$_nextFollowUpDate $updatedTime"
                         }
 
                         Timber.e("Time")
-                        Timber.e(viewModel.proposeCostingData.value?.nextMeet)
+                        Timber.e(viewModel.proposeCostingData.value?.meetDateTime)
 
                     }
                 }, hour, minute, false
@@ -808,8 +700,8 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
     override fun onStart() {
         super.onStart()
-        setActionBar()
 
+        setActionBar()
         setOnClickListeners()
     }
 
