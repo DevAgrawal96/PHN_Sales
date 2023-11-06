@@ -142,7 +142,7 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
         } else {
             //Call Api to submit the data
             _progressBarLiveData.postValue(true)
-//            updateProposeCostingDetails()
+            updateProposeCostingDetails()
         }
     }
 
