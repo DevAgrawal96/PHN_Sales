@@ -1,28 +1,29 @@
 package com.phntechnolab.sales.util
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Patterns
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
-import androidx.paging.PagingData
 import com.google.android.material.textfield.TextInputEditText
 import com.phntechnolab.sales.Modules.DataStoreProvider
-import com.phntechnolab.sales.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
+import java.util.Calendar
+import java.util.regex.Pattern
 
 
 //fun Fragment.hideSoftKeyboard() {
@@ -107,6 +108,58 @@ fun TextInputEditText.textChange(afterTextChanged: (String) -> Unit) {
     })
 }
 
+fun AutoCompleteTextView.textChange(afterTextChanged: (String) -> Unit) {
+    this.addTextChangedListener(object : TextWatcher {
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+
+        override fun afterTextChanged(text: Editable?) {
+            afterTextChanged.invoke(text.toString())
+        }
+    })
+}
+
+fun Fragment.pickDate(
+    _day: Int,
+    _month: Int,
+    _year: Int,
+    _date: (Int, Int, Int) -> Unit
+) {
+    val datePickerDialog = DatePickerDialog(
+        requireContext(),
+        { view, year, monthOfYear, dayOfMonth ->
+            _date.invoke(dayOfMonth, monthOfYear, year)
+        },
+        _year,
+        _month,
+        _day
+    )
+    datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
+    datePickerDialog.show()
+}
+
+fun Fragment.pickTime(
+    _hour: Int,
+    _minute: Int,
+    is24Hour: Boolean,
+    _time: (Int, Int) -> Unit
+) {
+    val timePickerDialog = TimePickerDialog(
+        requireContext(),
+        { view, hourOfDay, minute ->
+            _time.invoke(minute, hourOfDay)
+        },
+        _hour,
+        _minute,
+        is24Hour
+    )
+    timePickerDialog.show()
+}
+
+
 abstract class TextValidator(private val textView: TextInputEditText) : TextWatcher {
     abstract fun validate(textView: TextInputEditText?, text: String?)
     override fun afterTextChanged(s: Editable) {
@@ -131,35 +184,39 @@ abstract class TextValidator(private val textView: TextInputEditText) : TextWatc
     }
 }
 
-fun isValidName(name: String, context: Context): String? {
-    if (name.isBlank()) {
-        return context.getString(R.string.empty_, "name")
-    }
-    if (name.length <= 1) {
-        return context.getString(R.string.name_length)
+fun isNotNullOrZero(number: String, errorMessage: String): String? {
+    if (number.trim().isNullOrEmpty() || number.trim() == "0") {
+        return errorMessage
     }
     return null
 }
 
-fun isValidEmail(email: String, context: Context): String? {
-    if (email.isBlank()) {
-        return context.getString(R.string.empty_, "Email")
-    }
-    if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-        return context.getString(R.string.enter_valid_email)
+fun isValidName(name: String, errorMessage: String): String? {
+    if (name.trim().isNullOrEmpty()) {
+        return errorMessage
     }
     return null
 }
 
-fun isValidMobileNumber(number: String, context: Context): String? {
-    if (number.isBlank()) {
-        return context.getString(R.string.empty_, "Mobile Number")
+fun isValidEmail(email: String, errorMessage: String): String? {
+    if (email.trim().isNullOrEmpty()) {
+        return errorMessage
+    } else if (!Pattern.compile("[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+")
+            .matcher(email)
+            .matches()
+    ) {
+        return errorMessage
     }
-    if (number.length != 10) {
-        return context.getString(R.string.mobile_number_length)
-    }
-    if (!number.matches("^[6-9][0-9]{9}$".toRegex())) {
-        return context.getString(R.string.enter_valid_number)
+    return null
+}
+
+fun isValidMobileNumber(number: String, errorMessage: String): String? {
+    if (number.trim().isNullOrEmpty()) {
+        return errorMessage
+    } else if (number.trim().length != 10) {
+        return errorMessage
+    } else if (!number.trim().matches("^[6-9][0-9]{9}$".toRegex())) {
+        return errorMessage
     }
     return null
 }

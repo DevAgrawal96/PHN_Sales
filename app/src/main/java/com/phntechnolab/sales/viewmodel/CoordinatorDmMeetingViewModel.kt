@@ -46,7 +46,6 @@ class CoordinatorDmMeetingViewModel @Inject constructor(private val repositories
     }
 
     fun updatedMDetails(context: Context){
-
         defaultScope.launch {
             repositories.updateDMData(_dmMeetData.value?: DMData(), context)
         }

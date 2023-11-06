@@ -26,6 +26,8 @@ import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.NetworkUtils
 import com.phntechnolab.sales.util.TextValidator
 import com.phntechnolab.sales.util.hideKeyboard
+import com.phntechnolab.sales.util.isValidEmail
+import com.phntechnolab.sales.util.textChange
 import com.phntechnolab.sales.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -138,7 +140,8 @@ class LoginFragment : Fragment() {
                             getString(R.string.please_connection_message),
                             Toast.LENGTH_SHORT
                         ).show()
-                    }else{}
+                    } else {
+                    }
 
                     if (it.data?.status_code == 200) {
                         lifecycleScope.launch(Dispatchers.IO) {
@@ -203,20 +206,33 @@ class LoginFragment : Fragment() {
 
 
     private fun addEmailValidation() {
-        binding.edtEmailId.addTextChangedListener(object : TextValidator(binding.edtEmailId) {
 
-            override fun validate(textView: TextInputEditText?, text: String?) {
-                Timber.e(textView?.text.toString())
-                Timber.e(text)
-                if (android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches()) {
-                    binding.tilEmailId.helperText = ""
-//                    binding.tilPassword.helperText = ""
-                } else {
-                    binding.tilEmailId.helperText = getString(R.string.enter_valid_email)
-                    binding.tilPassword.helperText = ""
-                }
+        binding.edtEmailId.textChange { email ->
+            binding.tilEmailId.error = if (isValidEmail(
+                    email,
+                    resources.getString(R.string.enter_valid_email)
+                ).toString() == "null"
+            ) {
+                ""
+            } else {
+                isValidEmail(email, resources.getString(R.string.enter_valid_email)).toString()
             }
-        })
+        }
+
+//        binding.edtEmailId.addTextChangedListener(object : TextValidator(binding.edtEmailId) {
+//
+//            override fun validate(textView: TextInputEditText?, text: String?) {
+//                Timber.e(textView?.text.toString())
+//                Timber.e(text)
+//                if (android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches()) {
+//                    binding.tilEmailId.helperText = ""
+////                    binding.tilPassword.helperText = ""
+//                } else {
+//                    binding.tilEmailId.helperText = getString(R.string.enter_valid_email)
+//                    binding.tilPassword.helperText = ""
+//                }
+//            }
+//        })
     }
 
     override fun onDestroyView() {

@@ -157,13 +157,13 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
             }
         }
 
-        binding.dmMeeting.autoMeetingAgenda.setOnItemClickListener { parent, view, position, id ->
-            val meetingStatus = parent.adapter.getItem(position) as String
-            if (meetingStatus == "Price discussion")
-                viewModel._dmMeetData.value?.meetingStatus = "Propose Costing"
-            else if (meetingStatus == "Demo/Discussion")
-                viewModel._dmMeetData.value?.meetingStatus = "Visited"
-        }
+//        binding.dmMeeting.autoMeetingAgenda.setOnItemClickListener { parent, view, position, id ->
+//            val meetingStatus = parent.adapter.getItem(position) as String
+//            if (meetingStatus == "Price discussion")
+//                viewModel._dmMeetData.value?.meetingStatus = "Propose Costing"
+//            else if (meetingStatus == "Demo/Discussion")
+//                viewModel._dmMeetData.value?.meetingStatus = "Visited"
+//        }
     }
 
     private fun checkCoordinatorRequiredFieldsData(): Boolean {

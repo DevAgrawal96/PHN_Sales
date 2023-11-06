@@ -2,7 +2,6 @@ package com.phntechnolab.sales.fragment
 
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
-import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.ContentValues
@@ -12,8 +11,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -21,15 +18,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -38,19 +31,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentAssignedSchoolsStepperBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.SchoolData
-import com.phntechnolab.sales.util.ImagePicker
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.TakePictureFromCameraOrGalley
-import com.phntechnolab.sales.util.TextValidator
 import com.phntechnolab.sales.util.hideKeyboard
+import com.phntechnolab.sales.util.isNotNullOrZero
+import com.phntechnolab.sales.util.isValidEmail
+import com.phntechnolab.sales.util.isValidMobileNumber
+import com.phntechnolab.sales.util.isValidName
+import com.phntechnolab.sales.util.pickDate
+import com.phntechnolab.sales.util.pickTime
+import com.phntechnolab.sales.util.textChange
 import com.phntechnolab.sales.viewmodel.AddSchoolViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -72,8 +68,6 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
     var position = 0
     var _imageUri: Uri? = null
-
-    private lateinit var image: Uri
 
     private val backPressHandler = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -117,7 +111,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
         _binding = DataBindingUtil.inflate(
             inflater,
-            com.phntechnolab.sales.R.layout.fragment_assigned_schools_stepper,
+            R.layout.fragment_assigned_schools_stepper,
             container,
             false
         )
@@ -126,38 +120,24 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
         viewModel.setOldSchoolData(args.schoolData)
 
-        if (args.schoolData == null) {
-            binding.topBar.title = "Add School"
-            viewModel.setNewSchoolData(SchoolData())
-        } else {
-            binding.topBar.title = args.schoolData?.schoolName
-            viewModel.setNewSchoolData(args.schoolData)
-        }
-
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
-
-        Timber.d("Argument data")
-        Timber.d(Gson().toJson(viewModel.oldSchoolData))
+        setTopBarTitle()
 
         setButtonName(args.schoolData)
+
+        binding.viewModel = viewModel
+
+        binding.lifecycleOwner = this
 
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initializeData()
-
         onCheckedChangedListener()
 
-
         observers()
-    }
-
-    private fun initializeData() {
-        viewModel.newSchoolData
     }
 
     private fun onCheckedChangedListener() {
@@ -168,164 +148,166 @@ class AddSchoolFragment : Fragment(), MenuProvider {
             viewModel._newSchoolData.value?.interested?.let { Log.e("CHecked box", it) }
         }
 
-        binding.basicDetails.edtSchoolTotalIntake.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        binding.basicDetails.edtSchoolTotalIntake.textChange { intake ->
+            try {
+                viewModel._newSchoolData.value?.intake = intake.toInt()
+            } catch (ex: Exception) {
+                ex.printStackTrace()
             }
+        }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        binding.basicDetails.edtTotalNoOfClassroom.textChange { classRoom ->
+            try {
+                viewModel._newSchoolData.value?.totalClassRoom = classRoom.toInt()
+            } catch (ex: Exception) {
+                ex.printStackTrace()
             }
-
-            override fun afterTextChanged(s: Editable?) {
-                try {
-                    viewModel._newSchoolData.value?.intake = s.toString().toInt()
-                } catch (ex: Exception) {
-                    ex.printStackTrace()
-                }
-            }
-        })
-
-        binding.basicDetails.edtTotalNoOfClassroom.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                try {
-                    viewModel._newSchoolData.value?.totalClassRoom = s.toString().toInt()
-                } catch (ex: Exception) {
-                    ex.printStackTrace()
-                }
-            }
-        })
+        }
     }
 
 
     private fun addValidationWatchers() {
-
-        validationTextWatcherSchema(
-            binding.basicDetails.edtSchoolName,
-            "checkStringNullOrEmpty",
-            binding.basicDetails.tilSchoolName,
-            resources.getString(R.string.please_enter_valid_school_name)
-        )
-
-        validationTextWatcherSchema(
-            binding.basicDetails.edtSchoolAddress,
-            "checkStringNullOrEmpty",
-            binding.basicDetails.tilSchoolAddress,
-            resources.getString(R.string.please_enter_valid_school_address)
-        )
-
-        validationTextWatcherSchema(
-            binding.basicDetails.edtSchoolName,
-            "spinner",
-            binding.basicDetails.tilBoard,
-            resources.getString(R.string.please_select_board),
-            binding.basicDetails.boardSpinner
-        )
-
-        validationTextWatcherSchema(
-            binding.basicDetails.edtSchoolTotalIntake,
-            "checkIntegerNullOrZero",
-            binding.basicDetails.tilSchoolTotalIntake,
-            resources.getString(R.string.please_enter_total_school_intake)
-        )
-
-        validationTextWatcherSchema(
-            binding.basicDetails.edtTotalNoOfClassroom,
-            "checkIntegerNullOrZero",
-            binding.basicDetails.tilSchoolTotalNoOfClassroom,
-            resources.getString(R.string.please_enter_number_of_classrooms)
-        )
-
-        validationTextWatcherSchema(
-            binding.basicDetails.edtCoordinatorName,
-            "checkStringNullOrEmpty",
-            binding.basicDetails.tilCoordinatorName,
-            resources.getString(R.string.please_enter_valid_coordinator_name)
-        )
-
-        validationTextWatcherSchema(
-            binding.basicDetails.edtEmailId,
-            "email",
-            binding.basicDetails.tilEmailId,
-            resources.getString(R.string.please_enter_valid_email_address)
-        )
-
-        validationTextWatcherSchema(
-            binding.basicDetails.edtCoordinatorMono,
-            "phone",
-            binding.basicDetails.tilCoordinatorMono,
-            resources.getString(R.string.please_enter_valid_phone_no)
-        )
-
-        validationTextWatcherSchema(
-            binding.schoolDetails.edtDirectorDmPhoneNo,
-            "phone",
-            binding.schoolDetails.tilDirectorDmPhoneNo,
-            resources.getString(R.string.please_enter_valid_phone_no)
-        )
-    }
-
-    private fun validationTextWatcherSchema(
-        editText: TextInputEditText,
-        type: String,
-        til: TextInputLayout,
-        errorMessage: String,
-        spinner: AutoCompleteTextView? = null
-    ) {
-        editText.addTextChangedListener(object :
-            TextValidator(editText) {
-
-            override fun validate(textView: TextInputEditText?, text: String?) {
-
-                if (type == "checkStringNullOrEmpty" || type == "spinner") {
-                    val isNameEmpty: Boolean = if (type == "spinner")
-                        editText.text.toString().isNullOrEmpty() else spinner?.text.toString()
-                        .isNullOrEmpty()
-                    if (isNameEmpty)
-                        til.error = errorMessage
-                    else
-                        til.error = null
-
-                } else if (type == "checkIntegerNullOrZero") {
-                    val isNameEmpty: Boolean =
-                        editText.text.toString().trim().isNullOrEmpty() || editText.text.toString()
-                            .trim() == "0"
-                    if (isNameEmpty)
-                        til.error = errorMessage
-                    else
-                        til.error = null
-                } else if (type == "phone" || type == "email") {
-
-                    var pattern: Pattern = Pattern.compile("")
-
-                    when (type) {
-                        "phone" -> {
-                            pattern = Pattern.compile("[0123456789]{10}")
-                        }
-
-                        "email" -> {
-                            pattern =
-                                Pattern.compile("[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+")
-                        }
-
-                        else -> {
-
-                        }
-                    }
-
-                    if (text.isNullOrEmpty()) {
-                        til.error = null
-                    } else if (!pattern.matcher(text).matches())
-                        til.error = errorMessage
-                    else
-                        til.error = null
-                }
+        binding.basicDetails.edtSchoolName.textChange { name ->
+            binding.basicDetails.tilSchoolName.error = if (isValidName(
+                    name,
+                    resources.getString(R.string.please_enter_valid_school_name)
+                ).toString() == "null"
+            ) {
+                ""
+            } else {
+                isValidName(
+                    name,
+                    resources.getString(R.string.please_enter_valid_school_name)
+                ).toString()
             }
-        })
+
+        }
+        binding.basicDetails.edtSchoolAddress.textChange { address ->
+            binding.basicDetails.tilSchoolAddress.error = if (isValidName(
+                    address,
+                    resources.getString(R.string.please_enter_valid_school_address)
+                ).toString() == "null"
+            ) {
+                ""
+            } else {
+                isValidName(
+                    address,
+                    resources.getString(R.string.please_enter_valid_school_address)
+                ).toString()
+            }
+        }
+        binding.basicDetails.edtSchoolName.textChange { address ->
+            binding.basicDetails.tilSchoolAddress.error = if (isValidName(
+                    address,
+                    resources.getString(R.string.please_enter_valid_school_address)
+                ).toString() == "null"
+            ) {
+                ""
+            } else {
+                isValidName(
+                    address,
+                    resources.getString(R.string.please_enter_valid_school_address)
+                ).toString()
+            }
+        }
+        binding.basicDetails.boardSpinner.textChange { address ->
+            binding.basicDetails.tilBoard.error = if (isValidName(
+                    address,
+                    resources.getString(R.string.please_select_board)
+                ).toString() == "null"
+            ) {
+                ""
+            } else {
+                isValidName(
+                    address,
+                    resources.getString(R.string.please_select_board)
+                ).toString()
+            }
+        }
+        binding.basicDetails.edtSchoolTotalIntake.textChange { address ->
+            binding.basicDetails.tilSchoolTotalIntake.error = if (isNotNullOrZero(
+                    address,
+                    resources.getString(R.string.please_enter_total_school_intake)
+                ).toString() == "null"
+            ) {
+                ""
+            } else {
+                isNotNullOrZero(
+                    address,
+                    resources.getString(R.string.please_enter_total_school_intake)
+                ).toString()
+            }
+        }
+        binding.basicDetails.edtTotalNoOfClassroom.textChange { address ->
+            binding.basicDetails.tilSchoolTotalNoOfClassroom.error = if (isNotNullOrZero(
+                    address,
+                    resources.getString(R.string.please_enter_number_of_classrooms)
+                ).toString() == "null"
+            ) {
+                ""
+            } else {
+                isNotNullOrZero(
+                    address,
+                    resources.getString(R.string.please_enter_number_of_classrooms)
+                ).toString()
+            }
+        }
+        binding.basicDetails.edtCoordinatorName.textChange { address ->
+            binding.basicDetails.tilCoordinatorName.error = if (isValidName(
+                    address,
+                    resources.getString(R.string.please_enter_valid_coordinator_name)
+                ).toString() == "null"
+            ) {
+                ""
+            } else {
+                isValidName(
+                    address,
+                    resources.getString(R.string.please_enter_valid_coordinator_name)
+                ).toString()
+            }
+        }
+        binding.basicDetails.edtEmailId.textChange { address ->
+            binding.basicDetails.tilEmailId.error = if (isValidEmail(
+                    address,
+                    resources.getString(R.string.please_enter_valid_email_address)
+                ).toString() == "null"
+            ) {
+                ""
+            } else {
+                isValidEmail(
+                    address,
+                    resources.getString(R.string.please_enter_valid_email_address)
+                ).toString()
+            }
+        }
+        binding.basicDetails.edtCoordinatorMono.textChange { address ->
+            binding.basicDetails.tilCoordinatorMono.error = if (isValidMobileNumber(
+                    address,
+                    resources.getString(R.string.please_enter_valid_phone_no)
+                ).toString() == "null"
+            ) {
+                ""
+            } else {
+                isValidMobileNumber(
+                    address,
+                    resources.getString(R.string.please_enter_valid_phone_no)
+                ).toString()
+            }
+        }
+        binding.schoolDetails.edtDirectorDmPhoneNo.textChange { address ->
+            binding.schoolDetails.tilDirectorDmPhoneNo.error = if (isValidMobileNumber(
+                    address,
+                    resources.getString(R.string.please_enter_valid_phone_no)
+                ).toString() == "null"
+            ) {
+                ""
+            } else {
+                isValidMobileNumber(
+                    address,
+                    resources.getString(R.string.please_enter_valid_phone_no)
+                ).toString()
+            }
+        }
     }
 
     private fun setDropdowns(_schoolData: SchoolData?) {
@@ -642,35 +624,15 @@ class AddSchoolFragment : Fragment(), MenuProvider {
     }
 
     private var cameraResult =
-        registerForActivityResult(TakePictureFromCameraOrGalley){imageUri->
-            if (imageUri != null ){
+        registerForActivityResult(TakePictureFromCameraOrGalley) { imageUri ->
+            if (imageUri != null && viewModel.imageSize != null) {
                 Timber.e("$imageUri")
-//                viewModel.uploadImage(_imageUri!!, requireContext())
-//                binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
+                viewModel.uploadImage(imageUri, requireContext())
+                binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
             }
         }
-//            ActivityResultCallback<ActivityResult>(){result->
-//                if (result.resultCode == RESULT_OK && ImagePicker._imageUri != null){
-////                    val fileDir = requireContext().filesDir
-//                    Timber.e("${ImagePicker._imageUri}")
-////                    viewModel.uploadImage(_imageUri!!, requireContext())
-////                    binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
-//                }
-//            }
-//        )
-//        {
-//            if (it != null) {
-//                Timber.e("${it.data}")
-//
-////            image = it
-////            Timber.e(image.toString())
-////            viewModel.uploadImage(it, requireContext())
-////            binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
-//            }
-//        }
 
-
-    private fun oncClickListener() {
+    private fun initializeListener() {
         binding.topBar.setNavigationOnClickListener {
             when (position) {
                 0 -> {
@@ -766,41 +728,31 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                     }
                 }
             }
-
-            val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                { view, year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime =
-                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
-                    binding.followupDetails.edtSchoolDate.setText(updatedDateAndTime)
-                    viewModel.newSchoolData.value?.nextFollowup?.let { _nextFollowUpDate ->
-                        if (_nextFollowUpDate.contains(" ")) {
-                            val dateAndTime = _nextFollowUpDate.split(" ")
-                            viewModel.newSchoolData.value?.nextFollowup =
-                                "$updatedDateAndTime ${dateAndTime[1]}"
-                        } else {
-                            viewModel.newSchoolData.value?.nextFollowup = updatedDateAndTime
-                        }
-
-                        Timber.e("Date")
-                        Timber.e(viewModel.newSchoolData.value?.nextFollowup)
+            pickDate(day, month, year) { dayOfMonth, monthOfYear, _year ->
+                val updatedDateAndTime =
+                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
+                binding.followupDetails.edtSchoolDate.setText(updatedDateAndTime)
+                viewModel.newSchoolData.value?.nextFollowup?.let { _nextFollowUpDate ->
+                    if (_nextFollowUpDate.contains(" ")) {
+                        val dateAndTime = _nextFollowUpDate.split(" ")
+                        viewModel.newSchoolData.value?.nextFollowup =
+                            "$updatedDateAndTime ${dateAndTime[1]}"
+                    } else {
+                        viewModel.newSchoolData.value?.nextFollowup = updatedDateAndTime
                     }
-                },
-                year,
-                month,
-                day
-            )
 
-            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
-            datePickerDialog.show()
+                    Timber.e("Date")
+                    Timber.e(viewModel.newSchoolData.value?.nextFollowup)
+                }
+            }
         }
 
         binding.followupDetails.edtSchoolTime.setOnClickListener {
             hideKeyboard()
             val c = Calendar.getInstance()
+            var minute = c.get(Calendar.MINUTE)
             var hour = c.get(Calendar.HOUR)
             Timber.e(c.get(Calendar.HOUR).toString())
-            var minute = c.get(Calendar.MINUTE)
             if (!viewModel.newSchoolData.value?.nextFollowup.isNullOrEmpty()) {
                 viewModel.newSchoolData.value?.nextFollowup?.split(" ")?.let { _dateAndTime ->
                     if (_dateAndTime.size > 1) {
@@ -813,31 +765,23 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                 }
             }
 
-            val timePickerDialog = TimePickerDialog(
-                requireContext(),
-                { view, hourOfDay, minute ->
-                    val updatedTime = "$hourOfDay:$minute"
-                    binding.followupDetails.edtSchoolTime.setText(updatedTime)
-                    viewModel.newSchoolData.value?.nextFollowup?.let { _nextFollowUpDate ->
-                        if (_nextFollowUpDate.contains(" ")) {
-                            val dateAndTime = _nextFollowUpDate.split(" ")
-                            viewModel.newSchoolData.value?.nextFollowup =
-                                "${dateAndTime[0]} $updatedTime"
-                        } else {
-                            viewModel.newSchoolData.value?.nextFollowup =
-                                "$_nextFollowUpDate $updatedTime"
-                        }
-
-                        Timber.e("Time")
-                        Timber.e(viewModel.newSchoolData.value?.nextFollowup)
-
+            pickTime(hour, minute, false) { _minute, hourOfDay ->
+                val updatedTime = "$hourOfDay:$_minute"
+                binding.followupDetails.edtSchoolTime.setText(updatedTime)
+                viewModel.newSchoolData.value?.nextFollowup?.let { _nextFollowUpDate ->
+                    if (_nextFollowUpDate.contains(" ")) {
+                        val dateAndTime = _nextFollowUpDate.split(" ")
+                        viewModel.newSchoolData.value?.nextFollowup =
+                            "${dateAndTime[0]} $updatedTime"
+                    } else {
+                        viewModel.newSchoolData.value?.nextFollowup =
+                            "$_nextFollowUpDate $updatedTime"
                     }
-                },
-                hour,
-                minute,
-                false
-            )
-            timePickerDialog.show()
+
+                    Timber.e("Time")
+                    Timber.e(viewModel.newSchoolData.value?.nextFollowup)
+                }
+            }
         }
     }
     private fun openCamera(): Intent {
@@ -939,7 +883,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
         else
             binding.basicDetails.tilBoard.error = null
 
-//        val isSchoolIntakeEmpty = binding.basicDetails.edtSchoolTotalIntake.text.toString()
+        //        val isSchoolIntakeEmpty = binding.basicDetails.edtSchoolTotalIntake.text.toString()
 //            .isNullOrEmpty() || binding.basicDetails.edtSchoolTotalIntake.text.toString()
 //            .trim() == "0"
 //
@@ -960,6 +904,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 ////            binding.basicDetails.tilSchoolTotalNoOfClassroom.error =
 ////                resources.getString(R.string.total_no_of_classrooms_less_than)
 //        else binding.basicDetails.tilSchoolTotalNoOfClassroom.error = null
+
 
         val isCoordinatorNameEmpty =
             binding.basicDetails.edtCoordinatorName.text.toString().isNullOrEmpty()
@@ -991,7 +936,6 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                 resources.getString(R.string.please_enter_valid_email_address)
         else
             binding.basicDetails.tilEmailId.error = null
-
 //        return !(isSchoolNameEmpty || isSchoolAddressEmpty || isBoardEmpty || isSchoolIntakeEmpty || isCoordinatorNameEmpty || isCoordinatorNameEmpty || !isCoordinatorPhoneValid || !isEmailValid)
         return !(isSchoolNameEmpty || isSchoolAddressEmpty || isBoardEmpty || isCoordinatorNameEmpty)
     }
@@ -1073,11 +1017,23 @@ class AddSchoolFragment : Fragment(), MenuProvider {
         }
     }
 
+    private fun setTopBarTitle() {
+        if (args.schoolData == null) {
+            binding.topBar.title = "Add School"
+            viewModel.setNewSchoolData(SchoolData())
+        } else {
+            binding.topBar.title = args.schoolData?.schoolName
+            viewModel.setNewSchoolData(args.schoolData)
+        }
+    }
+
+
     override fun onStart() {
         super.onStart()
+
         setActionBar()
 
-        oncClickListener()
+        initializeListener()
     }
 
     override fun onStop() {

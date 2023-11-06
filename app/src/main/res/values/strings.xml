@@ -208,6 +208,7 @@
     <string name="do_you_want_to_reschedule_meeting_with_dm">Do you want to reschedule meeting with DM?</string>
     <string name="other_">Other</string>
     <string name="_designation">Others</string>
+    <string name="advance_payment_optional">Advance Payment (Optional)</string>
 
 
     <string-array name="agreement_duration">
