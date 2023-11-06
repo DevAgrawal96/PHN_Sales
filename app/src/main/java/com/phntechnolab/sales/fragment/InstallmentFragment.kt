@@ -664,8 +664,8 @@ class InstallmentFragment : Fragment() {
                 binding.advancePayment.dateAndTime.text =
                     it?.installmentData?.advancePaymentDateTime
                 if (!it?.installmentData?.advancePaymentReceipt.isNullOrEmpty()) {
-                    val fileName = it?.installmentData?.advancePaymentDateTime!!.substring(
-                        it.installmentData?.advancePaymentDateTime!!.lastIndexOf('/') + 1
+                    val fileName = it?.installmentData?.advancePaymentReceipt!!.substring(
+                        it.installmentData?.advancePaymentReceipt!!.lastIndexOf('/') + 1
                     )
                     if (fileName.split(".").last() == "jpg") {
                         binding.advancePayment.fileTypeImg.setImageDrawable(
@@ -680,7 +680,7 @@ class InstallmentFragment : Fragment() {
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_pdf)
                         )
                     }
-                    receipt1 = it.installmentData?.advancePaymentReceipt
+//                    receipt1 = it.installmentData?.advancePaymentReceipt
                     binding.advancePayment.fileName.text = fileName
 
                     Timber.e("$fileName")

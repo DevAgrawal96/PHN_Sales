@@ -386,7 +386,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             binding.proposeCostingStage.edtQuotationValidity.setText(
                 dateAndTime?.get(0))
             if((dateAndTime?.size ?: 0) > 1)
-                binding.proposeCostingStage.edtQuotationValidity.setText(dateAndTime?.get(1) ?: "")
+                binding.proposeCostingStage.edtQuotationValidity.setText(it ?: "")
         }
 
         viewModel._proposeCostingData.value?.meetDateTime.let {

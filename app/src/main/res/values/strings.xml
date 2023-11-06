@@ -63,13 +63,14 @@
     <string name="next_follow_date"><![CDATA[Next Follow Up Date & Time]]></string>
     <string name="follow_up_type">Select Follow Up Type</string>
     <string name="remark">Remark</string>
+    <string name="remark_mandate">Remark*</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="select_next_meeting_date_hint">Select next meeting date</string>
     <string name="select_next_meeting_time_hint">Select next meeting time</string>
     <string name="cancelled_meeting">Cancelled Meeting</string>
     <string name="price_pitch_per_student">Price Pitch per student*</string>
-    <string name="quotation_validity">Quotation validity</string>
+    <string name="quotation_validity">Quotation validity*</string>
     <string name="agreement_duration">Agreement Duration</string>
     <string name="agreement_duration_mandate">Agreement duration*</string>
     <string name="agreement_duration_compulsary">Agreement duration*</string>
@@ -100,7 +101,7 @@
     <string name="propose_costing">Propose Costing</string>
     <string name="blank"></string>
     <string name="downloading_start">Downloading start…</string>
-    <string name="authority_name">Authority Name</string>
+    <string name="authority_name">Authority Name*</string>
 
     <string name="my_account">My Account</string>
     <string name="please_enter_valid_email_address">Please enter valid email address!</string>
@@ -159,7 +160,7 @@
     <string name="propose_costing_stage">Propose Costing Stage</string>
     <string name="dm_attended_the_meet">DM attended the meet?</string>
     <string name="next_follow_up_meeting_scheduled">Next follow up meeting scheduled?</string>
-    <string name="price_discussed_inclusive_gst">Price discussed inclusive GST?</string>
+    <string name="price_discussed_inclusive_gst">Price discussed inclusive GST?*</string>
     <string name="quotation_shared">Quotation shared?</string>
     <string name="payment_scheduled_locked">Payment scheduled locked?</string>
     <string name="coordinator_meeting_details_updated_successfully">Teacher/Principal meeting details updated successfully.</string>
@@ -212,7 +213,7 @@
     <string name="other_">Other</string>
     <string name="_designation">Others</string>
     <string name="advance_payment_optional">Advance Payment (Optional)</string>
-    <string name="do_you_want_to_reschedule_meeting">Do you want to reschedule meeting?</string>
+    <string name="do_you_want_to_reschedule_meeting">Do you want to reschedule meeting?*</string>
 
     <string-array name="agreement_duration">
         <item>item 1</item>

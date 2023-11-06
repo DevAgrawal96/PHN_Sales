@@ -138,7 +138,7 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
 
         Timber.e("DATA ARE SAME OR NOT $checkAllDataAreSame")
         return if (isPricepPerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending || isDateAndTimeEmpty) {
-            _messageLiveData.postValue(Event("Please fill all the mandate fie02lds to proceed."))
+            _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
         } else {
             //Call Api to submit the data
             _progressBarLiveData.postValue(true)

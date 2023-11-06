@@ -267,6 +267,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionDone"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
                         android:text="@={viewModel._proposeCostingData.authorityName}"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -427,7 +428,7 @@
                     android:layout_marginStart="@dimen/dimen_16dp"
                     android:layout_marginTop="@dimen/dimen_16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:hint="@string/remark"
+                    android:hint="@string/remark_mandate"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
