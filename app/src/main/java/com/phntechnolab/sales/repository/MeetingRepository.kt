@@ -98,10 +98,10 @@ class MeetingRepository @Inject constructor(
     fun segregateData() {
         val data = ArrayList<MeetingData>()
         _allSchoolMutableLiveData.value?.data?.forEach {
-            if (!it.proposeCostingData?.nextMeet.isNullOrEmpty() && todayTomorrowUpcomingMeetingDateCheck(it.proposeCostingData?.nextMeet?:"") != "wrong" ) {
+            if (!it.proposeCostingData?.meetDateTime.isNullOrEmpty() && todayTomorrowUpcomingMeetingDateCheck(it.proposeCostingData?.meetDateTime?:"") != "wrong" ) {
                 val date =
-                    todayTomorrowUpcomingMeetingDateCheck(it.proposeCostingData.nextMeet?.replace("/", "-")?.split(" ")?.get(0) ?: "")
-                data.add(MeetingData("proposecosting", date, it, "MOA Document", it.proposeCostingData.nextMeet))
+                    todayTomorrowUpcomingMeetingDateCheck(it.proposeCostingData.meetDateTime?.replace("/", "-")?.split(" ")?.get(0) ?: "")
+                data.add(MeetingData("proposecosting", date, it, "MOA Document", it.proposeCostingData.meetDateTime))
 
             } else if ((!it.director?.nextMeetDateDm.isNullOrEmpty() && todayTomorrowUpcomingMeetingDateCheck(it.director?.nextMeetDateDm?:"") != "wrong") || !it.director?.nextMeetDate.isNullOrEmpty() && todayTomorrowUpcomingMeetingDateCheck(it.director?.nextMeetDate?:"") != "wrong") {
                 if(it.director?.nextMeetDate != null &&  todayTomorrowUpcomingMeetingDateCheck(it.director.nextMeetDate?.replace("/", "-")?.split(" ")?.get(0)?:"") != "wrong"){
