@@ -1,6 +1,7 @@
 package com.phntechnolab.sales.paging
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,8 @@ import com.phntechnolab.sales.R
 import com.phntechnolab.sales.adapter.SchoolDetailAdapter
 import com.phntechnolab.sales.databinding.AdapterHomeInlineBinding
 import com.phntechnolab.sales.model.SchoolData
+import com.phntechnolab.sales.util.getChipColor
+import com.phntechnolab.sales.util.getStatusChipColor
 import timber.log.Timber
 
 class SchoolPagingAdapter(private var callBacks: CallBacks) :
@@ -44,6 +47,12 @@ class SchoolPagingAdapter(private var callBacks: CallBacks) :
                 holder.binding.txtEmail.text = schoolDetail.email
                 holder.binding.txtMono.text = schoolDetail.coMobileNo
                 holder.binding.chipStatus.text = schoolDetail.status
+                getStatusChipColor(context!!, schoolDetail.status) { chipTextColor, chipColor ->
+                    holder.binding.chipStatus.apply {
+                        setTextColor(chipTextColor)
+                        chipBackgroundColor = ColorStateList.valueOf(chipColor)
+                    }
+                }
                 if (schoolDetail.email.isNullOrEmpty()) {
                     holder.binding.txtEmail.visibility = View.GONE
                     holder.binding.emailIcon.visibility = View.GONE
@@ -72,6 +81,12 @@ class SchoolPagingAdapter(private var callBacks: CallBacks) :
                 if (schoolDetail.leadType?.isNotBlank() == true && schoolDetail.leadType?.isNotEmpty() == true) {
                     holder.binding.chipLeadStatus.text = schoolDetail.leadType
                     holder.binding.chipLeadStatus.visibility = View.VISIBLE
+                    getChipColor(context!!, schoolDetail.leadType) { chipTextColor, chipColor ->
+                        holder.binding.chipLeadStatus.apply {
+                            setTextColor(chipTextColor)
+                            chipBackgroundColor = ColorStateList.valueOf(chipColor)
+                        }
+                    }
                 } else {
                     holder.binding.chipLeadStatus.visibility = View.GONE
                 }

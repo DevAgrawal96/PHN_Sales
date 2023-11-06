@@ -14,11 +14,13 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputEditText
 import com.phntechnolab.sales.Modules.DataStoreProvider
+import com.phntechnolab.sales.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
@@ -61,6 +63,90 @@ suspend fun readData(
     val dataStoreKey = booleanPreferencesKey(key)
     val preferences = dataStore.data.first()
     return preferences[dataStoreKey]
+}
+
+fun getChipColor(context: Context, chipName: String?, chipColor: (Int, Int) -> Unit) {
+    when (chipName) {
+        "Hot" -> {
+            chipColor.invoke(
+                ContextCompat.getColor(context, R.color.hot_chip_text_color),
+                ContextCompat.getColor(context, R.color.hot_chip_color)
+            )
+        }
+
+        "Cool" -> {
+            chipColor.invoke(
+                ContextCompat.getColor(context, R.color.cool_chip_text_color),
+                ContextCompat.getColor(context, R.color.cool_chip_color)
+            )
+        }
+
+        "Warm" -> {
+            chipColor.invoke(
+                ContextCompat.getColor(context, R.color.Warm_costing_chip_text_color),
+                ContextCompat.getColor(context, R.color.Warm_costing_chip_color)
+            )
+        }
+
+        "Dead" -> {
+            chipColor.invoke(
+                ContextCompat.getColor(context, R.color.dead_chip_text_color),
+                ContextCompat.getColor(context, R.color.dead_chip_color)
+            )
+        }
+
+        else -> {
+            chipColor.invoke(
+                ContextCompat.getColor(context, R.color.hot_chip_text_color),
+                ContextCompat.getColor(context, R.color.hot_chip_color)
+            )
+        }
+    }
+}
+
+fun getStatusChipColor(context: Context, chipName: String?, chipColor: (Int, Int) -> Unit) {
+    when (chipName) {
+        "Not Interested" -> {
+            chipColor.invoke(
+                ContextCompat.getColor(context, R.color.hot_chip_text_color),
+                ContextCompat.getColor(context, R.color.hot_chip_color)
+            )
+        }
+
+        "MOASigned" -> {
+            chipColor.invoke(
+                ContextCompat.getColor(context, R.color.moa_signed_chip_text_color),
+                ContextCompat.getColor(context, R.color.moa_signed_chip_color)
+            )
+        }
+
+        "Assigned" -> {
+            chipColor.invoke(
+                ContextCompat.getColor(context, R.color.cool_chip_text_color),
+                ContextCompat.getColor(context, R.color.cool_chip_color)
+            )
+        }
+
+        "Visited" -> {
+            chipColor.invoke(
+                ContextCompat.getColor(context, R.color.Warm_costing_chip_text_color),
+                ContextCompat.getColor(context, R.color.Warm_costing_chip_color)
+            )
+        }
+
+        "Propose Costing" -> {
+            chipColor.invoke(
+                ContextCompat.getColor(context, R.color.dead_chip_text_color),
+                ContextCompat.getColor(context, R.color.dead_chip_color)
+            )
+        }
+        else -> {
+            chipColor.invoke(
+                ContextCompat.getColor(context, R.color.cool_chip_text_color),
+                ContextCompat.getColor(context, R.color.cool_chip_color)
+            )
+        }
+    }
 }
 
 fun Fragment.hideKeyboard() {

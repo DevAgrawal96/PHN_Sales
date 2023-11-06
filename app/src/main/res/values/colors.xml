@@ -26,18 +26,21 @@
     <color name="regular_blue">#1D4ED8</color>
     <color name="dash_color">#64748B</color>
 
-    <color name="assigned_chip_color">#F3F7FF</color>
+
     <color name="assigned_chip_text_color">#004EEB</color>
-    <color name="hot_chip_color">#FFEEEE</color>
+    <color name="assigned_chip_color">#F3F7FF</color>
     <color name="hot_chip_text_color">#FF0000</color>
-    <color name="visited_chip_color">#FFF1E5</color>
+    <color name="hot_chip_color">#FFEEEE</color>
     <color name="visited_chip_text_color">#DE802F</color>
-    <color name="cool_chip_color">#F0F0FF</color>
+    <color name="visited_chip_color">#FFF1E5</color>
     <color name="cool_chip_text_color">#0201FD</color>
-    <color name="propose_costing_chip_color">#EFFCEF</color>
-    <color name="propose_costing_chip_text_color">#14AF52</color>
-    <color name="Warm_costing_chip_color">#FFF8EC</color>
+    <color name="cool_chip_color">#F0F0FF</color>
+    <color name="dead_chip_text_color">#14AF52</color>
+    <color name="dead_chip_color">#EFFCEF</color>
     <color name="Warm_costing_chip_text_color">#FD9A00</color>
+    <color name="Warm_costing_chip_color">#FFF8EC</color>
+    <color name="moa_signed_chip_text_color">#980998</color>
+    <color name="moa_signed_chip_color">#FFF0FF</color>
 
 
     <color name="seed">#125377</color>
