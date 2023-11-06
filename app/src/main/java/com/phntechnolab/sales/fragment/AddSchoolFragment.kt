@@ -620,7 +620,6 @@ class AddSchoolFragment : Fragment(), MenuProvider {
             dialog.dismiss()
             findNavController().popBackStack()
         }, 3000)
-
     }
 
     private var cameraResult =

@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.phntechnolab.sales.viewmodel.CostingMoaDocumentViewModel" />
@@ -32,13 +31,13 @@
                 android:layout_height="match_parent">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_total_interested_intake"
+                    android:id="@+id/til_final_intake"
                     android:layout_width="@dimen/dimen_0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_16dp"
                     android:layout_marginTop="@dimen/dimen_16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:hint="@string/total_interested_intake_mandate"
+                    android:hint="@string/final_intake_mandate"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +45,7 @@
                     app:layout_constraintVertical_bias="0.0">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edt_total_interested_intake"
+                        android:id="@+id/edt_final_intake"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
@@ -68,7 +67,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/til_total_interested_intake"
+                    app:layout_constraintTop_toBottomOf="@+id/til_final_intake"
                     app:layout_constraintVertical_bias="0.0">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -84,14 +83,14 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_agreement_duration"
+                    android:id="@+id/til_quotation_duration"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_16dp"
                     android:layout_marginTop="@dimen/dimen_16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:hint="@string/agreement_duration_mandate"
+                    android:hint="@string/quotation_duration_compulsary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -100,36 +99,35 @@
                     app:layout_constraintVertical_bias="0.0">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/auto_agreement_duration"
+                        android:id="@+id/auto_quotation_duration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_discussed_with_whom"
+                    android:id="@+id/til_select_designation"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_16dp"
-                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:hint="@string/discussed_with_whom_mandate"
+                    android:hint="@string/select_designation_mandate"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/til_agreement_duration"
+                    app:layout_constraintTop_toBottomOf="@+id/til_quotation_duration"
                     app:layout_constraintVertical_bias="0.0">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edt_discussed_with_whom_mandate"
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/auto_select_designation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:imeOptions="actionDone"
-                        android:text="@={viewModel._moaDocumentData.disscussedWithWhom}"
-                        android:maxLines="1" />
+                        android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_select_designation_other"
@@ -155,26 +153,28 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_select_designation"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:id="@+id/til_authority_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen_16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/dimen_16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:hint="@string/select_designation_mandate"
+                    android:hint="@string/authority_name"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/til_discussed_with_whom"
+                    app:layout_constraintTop_toBottomOf="@+id/til_select_designation_other"
                     app:layout_constraintVertical_bias="0.0">
 
-                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/auto_select_designation"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edt_authority_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none" />
+                        android:inputType="text"
+                        android:imeOptions="actionDone"
+                        android:text="@={viewModel._moaDocumentData.authorityName}"
+                        android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -190,7 +190,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/moa_download"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/til_select_designation_other"
+                    app:layout_constraintTop_toBottomOf="@+id/til_authority_name"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -266,6 +266,7 @@
                     android:layout_marginTop="@dimen/dimen_16dp"
                     android:layout_marginEnd="@dimen/dimen_16dp"
                     android:backgroundTint="@color/regular_blue"
+                    android:onClick="@{() -> viewModel.isMOADocumentFieldsValid()}"
                     android:text="@string/update"
                     android:digits="@string/remark_validation"
                     app:layout_constraintBottom_toBottomOf="parent"
