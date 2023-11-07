@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -21,9 +22,9 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputEditText
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.single
+import java.io.File
+import java.net.URI
 import java.util.Calendar
 import java.util.regex.Pattern
 
@@ -140,6 +141,7 @@ fun getStatusChipColor(context: Context, chipName: String?, chipColor: (Int, Int
                 ContextCompat.getColor(context, R.color.dead_chip_color)
             )
         }
+
         else -> {
             chipColor.invoke(
                 ContextCompat.getColor(context, R.color.cool_chip_text_color),
@@ -160,6 +162,13 @@ fun Activity.hideKeyboard() {
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+fun getFileSize(uri: Uri?, context: Context): Long {
+    if (uri != null) {
+        return context.contentResolver.openAssetFileDescriptor(uri, "r")!!.length
+    }
+    return 0
 }
 
 fun Fragment.oriantaionPortrait() {
@@ -217,7 +226,7 @@ fun Fragment.pickDate(
     val datePickerDialog = DatePickerDialog(
         requireContext(),
         { view, year, monthOfYear, dayOfMonth ->
-            _date.invoke(dayOfMonth, monthOfYear, year)
+            _date.invoke(year, monthOfYear, dayOfMonth)
         },
         _year,
         _month,
@@ -231,12 +240,12 @@ fun Fragment.pickTime(
     _hour: Int,
     _minute: Int,
     is24Hour: Boolean,
-    _time: (Int, Int) -> Unit
+    _time: (hourOfDay: Int, minute: Int) -> Unit
 ) {
     val timePickerDialog = TimePickerDialog(
         requireContext(),
         { view, hourOfDay, minute ->
-            _time.invoke(minute, hourOfDay)
+            _time.invoke(hourOfDay, minute)
         },
         _hour,
         _minute,

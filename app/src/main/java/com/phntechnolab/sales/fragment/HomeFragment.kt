@@ -21,6 +21,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.filter
 import androidx.paging.insertSeparators
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import com.phntechnolab.sales.Modules.DataStoreProvider
@@ -207,6 +208,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
 
     private fun initializeAdapter() {
         schoolPagingAdapter = SchoolPagingAdapter(this)
+        schoolPagingAdapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.homeRecyclerView.adapter = schoolPagingAdapter
     }
 

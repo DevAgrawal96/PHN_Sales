@@ -371,11 +371,13 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
     private fun initializeProposeCostingData(proposeCostingData: ProposeCostingData?) {
         if (proposeCostingData?.priceDiscussed == "yes") binding.proposeCostingStage.priceDiscussedGroup.check(
-            com.phntechnolab.sales.R.id.priceDiscussedYes)
+            com.phntechnolab.sales.R.id.priceDiscussedYes
+        )
         else binding.proposeCostingStage.priceDiscussedGroup.check(com.phntechnolab.sales.R.id.priceDiscussedNo)
 
         if (proposeCostingData?.rescheduleMeeting == "yes") binding.proposeCostingStage.rescheduleMeetingGroup.check(
-            com.phntechnolab.sales.R.id.rescheduleMeetingYes)
+            com.phntechnolab.sales.R.id.rescheduleMeetingYes
+        )
         else binding.proposeCostingStage.rescheduleMeetingGroup.check(com.phntechnolab.sales.R.id.rescheduleMeetingNo)
 
         binding.proposeCostingStage.edtQuotationValidity.setText(
@@ -384,8 +386,9 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         viewModel._proposeCostingData.value?.quotationValidity.let {
             val dateAndTime = it?.split(" ")
             binding.proposeCostingStage.edtQuotationValidity.setText(
-                dateAndTime?.get(0))
-            if((dateAndTime?.size ?: 0) > 1)
+                dateAndTime?.get(0)
+            )
+            if ((dateAndTime?.size ?: 0) > 1)
                 binding.proposeCostingStage.edtQuotationValidity.setText(it ?: "")
         }
 
@@ -600,7 +603,18 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         binding.proposeCostingStage.rescheduleMeetingGroup.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
             viewModel._proposeCostingData.value?.rescheduleMeeting =
-                if (checkedRadioButtonText == "Yes") "yes" else "no"
+                if (checkedRadioButtonText == "Yes") {
+                    binding.proposeCostingStage.nextMeetingDateTimeMandateTxt.visibility =
+                        View.VISIBLE
+                    binding.proposeCostingStage.tilDate.visibility = View.VISIBLE
+                    binding.proposeCostingStage.tilTime.visibility = View.VISIBLE
+                    "yes"
+                } else {
+                    binding.proposeCostingStage.nextMeetingDateTimeMandateTxt.visibility = View.GONE
+                    binding.proposeCostingStage.tilDate.visibility = View.GONE
+                    binding.proposeCostingStage.tilTime.visibility = View.GONE
+                    "no"
+                }
         }
     }
 

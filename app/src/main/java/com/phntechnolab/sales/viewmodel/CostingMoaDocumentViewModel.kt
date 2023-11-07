@@ -131,18 +131,30 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
         val isConversationRatioNotSelected =
             _proposeCostingData.value?.conversationRatio.isNullOrBlank()
 
+        val isRescheduleMeeting = _proposeCostingData.value?.rescheduleMeeting == "Yes"
+
         val isDateAndTimeEmpty = (_proposeCostingData.value?.meetDateTime.isNullOrBlank())
         _messageLiveData.postValue(Event("Please enter date and time"))
 
         val checkAllDataAreSame = isAllDataAreSame()
 
         Timber.e("DATA ARE SAME OR NOT $checkAllDataAreSame")
-        return if (isPricepPerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending || isDateAndTimeEmpty) {
-            _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
-        } else {
-            //Call Api to submit the data
-            _progressBarLiveData.postValue(true)
-            updateProposeCostingDetails()
+        if (isRescheduleMeeting) {
+            return if (isPricepPerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending || isDateAndTimeEmpty) {
+                _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
+            } else {
+                //Call Api to submit the data
+                _progressBarLiveData.postValue(true)
+                updateProposeCostingDetails()
+            }
+        }else{
+            return if (isPricepPerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending) {
+                _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
+            } else {
+                //Call Api to submit the data
+                _progressBarLiveData.postValue(true)
+                updateProposeCostingDetails()
+            }
         }
     }
 
@@ -187,7 +199,7 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
         }
     }
 
-    fun changeProgressBarVisibility(mode: Boolean){
+    fun changeProgressBarVisibility(mode: Boolean) {
         _progressBarLiveData.postValue(mode)
     }
 }

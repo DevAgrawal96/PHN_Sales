@@ -727,7 +727,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                     }
                 }
             }
-            pickDate(day, month, year) { dayOfMonth, monthOfYear, _year ->
+            pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
                 val updatedDateAndTime =
                     dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
                 binding.followupDetails.edtSchoolDate.setText(updatedDateAndTime)
@@ -764,7 +764,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                 }
             }
 
-            pickTime(hour, minute, false) { _minute, hourOfDay ->
+            pickTime(hour, minute, false) { hourOfDay, _minute ->
                 val updatedTime = "$hourOfDay:$_minute"
                 binding.followupDetails.edtSchoolTime.setText(updatedTime)
                 viewModel.newSchoolData.value?.nextFollowup?.let { _nextFollowUpDate ->
