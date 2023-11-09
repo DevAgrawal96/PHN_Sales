@@ -12,7 +12,10 @@ import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentChangePasswordBinding
 import com.phntechnolab.sales.model.ChangePasswordModel
+import com.phntechnolab.sales.util.AppEvent
 import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.setupUI
+import com.phntechnolab.sales.util.toastMsg
 import com.phntechnolab.sales.viewmodel.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,6 +37,9 @@ class ChangePasswordFragment : Fragment() {
     ): View? {
         _binding = FragmentChangePasswordBinding.inflate(inflater, container, false)
         setOnBackPressed()
+        viewModel._changePasswordData.postValue(ChangePasswordModel())
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
         return binding.root
     }
 
@@ -48,6 +54,7 @@ class ChangePasswordFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupUI(view)
         initializeListener()
         observable()
 
@@ -68,18 +75,35 @@ class ChangePasswordFragment : Fragment() {
                 }
 
                 is NetworkResult.Error -> {
-                    binding.changePasswordButton.isEnabled = true
-                    binding.progressIndicator.visibility = View.GONE
+                    hideAndShowProgress(false)
                 }
 
-                is NetworkResult.Loading -> {
+                is NetworkResult.Loading -> {}
 
+                else -> {}
+            }
+        }
+
+        viewModel.toastState.observe(viewLifecycleOwner) {
+            when (it) {
+                is AppEvent.ToastEvent -> {
+                    toastMsg(it.message)
+                    hideAndShowProgress(false)
                 }
-
-                else -> {
-
+                is AppEvent.LoadingEvent -> {
+                    hideAndShowProgress(true)
                 }
             }
+        }
+    }
+
+    private fun hideAndShowProgress(state: Boolean) {
+        if (state) {
+            binding.changePasswordButton.isEnabled = false
+            binding.progressIndicator.visibility = View.VISIBLE
+        } else {
+            binding.changePasswordButton.isEnabled = true
+            binding.progressIndicator.visibility = View.GONE
         }
     }
 
@@ -90,28 +114,28 @@ class ChangePasswordFragment : Fragment() {
         binding.topAppBar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-        binding.changePasswordButton.setOnClickListener {
-            if (binding.edtOldPassword.text?.isNotBlank()!! &&
-                binding.edtNewPassword.text?.isNotBlank()!! &&
-                binding.edtConfirmPassword.text?.isNotBlank()!!
-            ) {
-                viewModel.changePassword(
-                    requireContext(),
-                    ChangePasswordModel(
-                        binding.edtConfirmPassword.text.toString(),
-                        binding.edtNewPassword.text.toString(),
-                        binding.edtOldPassword.text.toString()
-                    )
-                )
-                binding.changePasswordButton.isEnabled = false
-                binding.progressIndicator.visibility = View.VISIBLE
-
-            } else {
-                Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
-        }
+//        binding.changePasswordButton.setOnClickListener {
+//            if (binding.edtOldPassword.text?.isNotBlank()!! &&
+//                binding.edtNewPassword.text?.isNotBlank()!! &&
+//                binding.edtConfirmPassword.text?.isNotBlank()!!
+//            ) {
+//                viewModel.changePassword(
+//                    requireContext(),
+//                    ChangePasswordModel(
+//                        binding.edtConfirmPassword.text.toString(),
+//                        binding.edtNewPassword.text.toString(),
+//                        binding.edtOldPassword.text.toString()
+//                    )
+//                )
+//                binding.changePasswordButton.isEnabled = false
+//                binding.progressIndicator.visibility = View.VISIBLE
+//
+//            } else {
+//                Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT)
+//                    .show()
+//            }
+//
+//        }
     }
 
     override fun onDestroyView() {

@@ -40,12 +40,12 @@ class LoginRepository @Inject constructor(
     val refereshToken: LiveData<NetworkResult<CustomResponse>>
         get() = _refereshToken
 
-    suspend fun login(loginDetails: LoginDetails, context: Context) {
+    suspend fun login(loginDetails: LoginDetails) {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
                 val result = retrofitApi.getLoginDetails(loginDetails)
                 result.body()?.status_code = result.code()
-                if (result.isSuccessful && result?.body() != null) {
+                if (result.isSuccessful && result.body() != null) {
                     loginMutableLiveData.postValue(NetworkResult.Success(result.body()))
                 } else if (result.errorBody() != null) {
                     loginMutableLiveData.postValue(
@@ -62,7 +62,6 @@ class LoginRepository @Inject constructor(
                         )
                     )
                 } else {
-
                     loginMutableLiveData.postValue(
                         NetworkResult.Error(
                             application.getString(R.string.something_went_wrong),
@@ -97,7 +96,6 @@ class LoginRepository @Inject constructor(
 
         }
     }
-
 
     suspend fun refereshToken() {
 

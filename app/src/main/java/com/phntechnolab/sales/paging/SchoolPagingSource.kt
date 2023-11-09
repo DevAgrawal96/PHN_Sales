@@ -43,14 +43,14 @@ class SchoolPagingSource @Inject constructor(private val application: Applicatio
                 Toast.makeText(
                     application,
                     application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_SHORT
                 ).show()
 //                LoadResult.Error(NumberFormatException())
             } else {
                 Toast.makeText(
                     application,
                     application.resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_SHORT
                 ).show()
             }
 

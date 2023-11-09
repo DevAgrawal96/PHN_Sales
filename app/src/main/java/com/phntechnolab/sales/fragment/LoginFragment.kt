@@ -1,9 +1,11 @@
 package com.phntechnolab.sales.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
@@ -11,23 +13,22 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentLoginBinding
 import com.phntechnolab.sales.model.LoginDetails
-import com.phntechnolab.sales.model.SchoolData
+import com.phntechnolab.sales.util.AppEvent
 import com.phntechnolab.sales.util.DataStoreManager.setIsUserLoggedIn
 import com.phntechnolab.sales.util.DataStoreManager.setToken
 import com.phntechnolab.sales.util.DataStoreManager.setUser
 import com.phntechnolab.sales.util.NetworkResult
-import com.phntechnolab.sales.util.NetworkUtils
-import com.phntechnolab.sales.util.TextValidator
 import com.phntechnolab.sales.util.hideKeyboard
+import com.phntechnolab.sales.util.hideSoftKeyboard
 import com.phntechnolab.sales.util.isValidEmail
+import com.phntechnolab.sales.util.setupUI
 import com.phntechnolab.sales.util.textChange
+import com.phntechnolab.sales.util.toastMsg
 import com.phntechnolab.sales.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -56,9 +57,11 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         setBackPressed()
+        viewModel._loginData.postValue(LoginDetails())
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
         return binding.root
     }
 
@@ -73,49 +76,24 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupUI(view)
+
+        observer()
+
+        addEmailValidation()
+    }
 
 
-        binding.login.setOnClickListener {
-            hideKeyboard()
-            if (!binding.edtEmailId.text.toString()
-                    .isNullOrEmpty() && !binding.edtPassword.text.toString().isNullOrEmpty()
-            ) {
-                if (android.util.Patterns.EMAIL_ADDRESS.matcher(binding.edtEmailId.text.toString())
-                        .matches()
-                ) {
-                    val email_id = binding.tilEmailId.helperText
-                    val password = binding.tilPassword.helperText
-
-                    if (email_id == null && password == null) {
-                        val loginDetails = LoginDetails(
-                            binding.edtEmailId.text.toString(),
-                            password = binding.edtPassword.text.toString()
-                        )
-                        viewModel.login(loginDetails, it.context)
-                    }
+    private fun observer() {
+        viewModel.toastState.observe(viewLifecycleOwner) {
+            when (it) {
+                is AppEvent.ToastEvent -> {
+                    toastMsg(it.message)
                 }
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Please enter email and password!",
-                    Toast.LENGTH_SHORT
-                ).show()
+                else->{
+                }
             }
         }
-
-//        viewModel.refereshToken.observe(viewLifecycleOwner){
-//            when(it){
-//                is NetworkResult.Success ->{
-//                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-//                }
-//                is NetworkResult.Error ->{
-//                    Timber.e(it.toString())
-//                }
-//                else -> {
-//                }
-//            }
-//
-//        }
 
         viewModel.loginLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
@@ -140,8 +118,7 @@ class LoginFragment : Fragment() {
                             getString(R.string.please_connection_message),
                             Toast.LENGTH_SHORT
                         ).show()
-                    } else {
-                    }
+                    } else { }
 
                     if (it.data?.status_code == 200) {
                         lifecycleScope.launch(Dispatchers.IO) {
@@ -193,7 +170,6 @@ class LoginFragment : Fragment() {
             }
         })
 
-        addEmailValidation()
     }
 
     private fun showError() {
@@ -206,7 +182,6 @@ class LoginFragment : Fragment() {
 
 
     private fun addEmailValidation() {
-
         binding.edtEmailId.textChange { email ->
             binding.tilEmailId.error = if (isValidEmail(
                     email,
@@ -218,21 +193,6 @@ class LoginFragment : Fragment() {
                 isValidEmail(email, resources.getString(R.string.enter_valid_email)).toString()
             }
         }
-
-//        binding.edtEmailId.addTextChangedListener(object : TextValidator(binding.edtEmailId) {
-//
-//            override fun validate(textView: TextInputEditText?, text: String?) {
-//                Timber.e(textView?.text.toString())
-//                Timber.e(text)
-//                if (android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches()) {
-//                    binding.tilEmailId.helperText = ""
-////                    binding.tilPassword.helperText = ""
-//                } else {
-//                    binding.tilEmailId.helperText = getString(R.string.enter_valid_email)
-//                    binding.tilPassword.helperText = ""
-//                }
-//            }
-//        })
     }
 
     override fun onDestroyView() {

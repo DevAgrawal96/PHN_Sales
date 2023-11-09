@@ -34,6 +34,8 @@ import com.phntechnolab.sales.di.FileDownloader
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.isValidEmail
+import com.phntechnolab.sales.util.setupUI
 import com.phntechnolab.sales.util.textChange
 import com.phntechnolab.sales.util.toastMsg
 import com.phntechnolab.sales.viewmodel.CostingMoaDocumentViewModel
@@ -111,6 +113,8 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupUI(view)
+
         observers()
 
         checkedChangeListener()
@@ -119,6 +123,22 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
         quotationValidity()
 
+        validation()
+
+    }
+
+    private fun validation() {
+        binding.proposeCostingStage.edtEmailId.textChange {email->
+            binding.proposeCostingStage.tilEmailId.error = if (isValidEmail(
+                    email,
+                    resources.getString(com.phntechnolab.sales.R.string.enter_valid_email)
+                ).toString() == "null"
+            ) {
+                ""
+            } else {
+                isValidEmail(email, resources.getString(com.phntechnolab.sales.R.string.enter_valid_email)).toString()
+            }
+        }
     }
 
     private fun setOnClickListeners() {
@@ -311,7 +331,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -336,7 +356,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }

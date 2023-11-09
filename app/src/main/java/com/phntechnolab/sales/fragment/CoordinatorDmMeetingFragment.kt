@@ -30,6 +30,7 @@ import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.DMData
 import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.setupUI
 import com.phntechnolab.sales.viewmodel.CoordinatorDmMeetingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.cancel
@@ -97,7 +98,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setupUI(view)
 
         observers()
 
@@ -173,13 +174,13 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
             Toast.makeText(
                 requireContext(),
                 requireActivity().getString(R.string.please_attend_the_meeting_with_coordinator),
-                Toast.LENGTH_LONG
+                Toast.LENGTH_SHORT
             ).show()
         } else if (!isDemoHappened) {
             Toast.makeText(
                 requireContext(),
                 requireActivity().getString(R.string.please_mark_the_demo_happened),
-                Toast.LENGTH_LONG
+                Toast.LENGTH_SHORT
             ).show()
         }
 
@@ -192,7 +193,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         requireActivity().getString(R.string.please_fill_rescheduled_date_for_proceed),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             } else {
@@ -200,7 +201,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         requireActivity().getString(R.string.please_next_rescheduled_date_for_proceed),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -228,19 +229,19 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
             Toast.makeText(
                 requireContext(),
                 requireActivity().getString(R.string.please_attend_the_meeting_with_director),
-                Toast.LENGTH_LONG
+                Toast.LENGTH_SHORT
             ).show()
         } else if (!isDemoHappened) {
             Toast.makeText(
                 requireContext(),
                 requireActivity().getString(R.string.please_mark_the_demo_happened),
-                Toast.LENGTH_LONG
+                Toast.LENGTH_SHORT
             ).show()
         } else if (isRemarkNotFilled) {
             Toast.makeText(
                 requireContext(),
                 requireActivity().getString(R.string.please_fill_the_remark),
-                Toast.LENGTH_LONG
+                Toast.LENGTH_SHORT
             ).show()
         }
 
@@ -250,7 +251,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         requireActivity().getString(R.string.please_fill_rescheduled_date_for_proceed),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 } else {
                     viewModel._dmMeetData.value?.meetingStatus = "Visited"
@@ -260,7 +261,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         requireActivity().getString(R.string.please_next_rescheduled_date_for_proceed),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 } else {
                     viewModel._dmMeetData.value?.meetingStatus = "Propose Costing"
@@ -510,7 +511,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                             Toast.makeText(
                                 requireContext(),
                                 resources.getString(R.string.something_went_wrong_please),
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
 
@@ -518,7 +519,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                             Toast.makeText(
                                 requireContext(),
                                 resources.getString(R.string.please_connection_message),
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
                     }
@@ -529,7 +530,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -567,7 +568,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                             Toast.makeText(
                                 requireContext(),
                                 resources.getString(R.string.something_went_wrong_please),
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
 
@@ -575,7 +576,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                             Toast.makeText(
                                 requireContext(),
                                 resources.getString(R.string.please_connection_message),
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
                     }
@@ -586,7 +587,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -1075,7 +1076,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
     }
 
     fun printToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onStart() {

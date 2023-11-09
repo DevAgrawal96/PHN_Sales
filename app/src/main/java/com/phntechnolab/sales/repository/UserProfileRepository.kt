@@ -65,7 +65,7 @@ class UserProfileRepository @Inject constructor(
         }
     }
 
-    suspend fun changePassword(context: Context, changePasswordModel: ChangePasswordModel) {
+    suspend fun changePassword(changePasswordModel: ChangePasswordModel) {
         if (NetworkUtils.isInternetAvailable(application)) {
             try {
                 val result = authApi.changePassword(changePasswordModel)

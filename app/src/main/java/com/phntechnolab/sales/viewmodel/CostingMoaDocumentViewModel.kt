@@ -133,8 +133,11 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
 
         val isRescheduleMeeting = _proposeCostingData.value?.rescheduleMeeting == "Yes"
 
-        val isDateAndTimeEmpty = (_proposeCostingData.value?.meetDateTime.isNullOrBlank())
-        _messageLiveData.postValue(Event("Please enter date and time"))
+        val isDateAndTimeEmpty = if (_proposeCostingData.value?.meetDateTime.isNullOrBlank()) {
+            _messageLiveData.postValue(Event("Please enter date and time"))
+            true
+        } else false
+
 
         val checkAllDataAreSame = isAllDataAreSame()
 
@@ -147,7 +150,7 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
                 _progressBarLiveData.postValue(true)
                 updateProposeCostingDetails()
             }
-        }else{
+        } else {
             return if (isPricepPerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending) {
                 _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
             } else {

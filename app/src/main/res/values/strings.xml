@@ -215,6 +215,7 @@
     <string name="advance_payment_optional">Advance Payment (Optional)</string>
     <string name="do_you_want_to_reschedule_meeting">Do you want to reschedule meeting?*</string>
     <string name="file_not_found">File not found!</string>
+    <string name="update_school">The school has been successfully updated!</string>
 
     <string-array name="agreement_duration">
         <item>item 1</item>

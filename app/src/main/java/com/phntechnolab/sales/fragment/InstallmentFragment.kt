@@ -31,6 +31,7 @@ import com.phntechnolab.sales.util.TakePictureFromCameraOrGalley
 import com.phntechnolab.sales.util.getFileSize
 import com.phntechnolab.sales.util.pickDate
 import com.phntechnolab.sales.util.pickTime
+import com.phntechnolab.sales.util.setupUI
 import com.phntechnolab.sales.viewmodel.InstallmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -95,6 +96,7 @@ class InstallmentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupUI(view)
         observers()
         initializeAddInstallmentCard()
         initializeListener()

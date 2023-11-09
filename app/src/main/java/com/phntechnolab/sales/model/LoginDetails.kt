@@ -1,6 +1,14 @@
 package com.phntechnolab.sales.model
 
-data class LoginDetails(
-    var email: String,
-    var password: String
-)
+class LoginDetails {
+    var email: String = ""
+        get() = field
+        set(value) {
+            field = value
+        }
+    var password: String = ""
+        get() = field
+        set(value) {
+            field = value
+        }
+}

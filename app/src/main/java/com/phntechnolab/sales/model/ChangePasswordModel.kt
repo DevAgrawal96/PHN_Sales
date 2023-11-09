@@ -1,7 +1,19 @@
 package com.phntechnolab.sales.model
 
-data class ChangePasswordModel(
-    val confirm_password: String,
-    val new_password: String,
-    val old_password: String
-)
+class ChangePasswordModel {
+    var confirm_password: String = ""
+        get() = field
+        set(value) {
+            field = value
+        }
+    var new_password: String = ""
+        get() = field
+        set(value) {
+            field = value
+        }
+    var old_password: String = ""
+        get() = field
+        set(value) {
+            field = value
+        }
+}

@@ -197,7 +197,7 @@ class ProfileFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         requireActivity().resources.getString(R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -237,7 +237,7 @@ class ProfileFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         requireActivity().resources.getString(R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }

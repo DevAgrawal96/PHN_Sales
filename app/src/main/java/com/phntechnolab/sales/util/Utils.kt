@@ -1,5 +1,6 @@
 package com.phntechnolab.sales.util
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -11,9 +12,11 @@ import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.AutoCompleteTextView
+import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -28,20 +31,6 @@ import java.net.URI
 import java.util.Calendar
 import java.util.regex.Pattern
 
-
-//fun Fragment.hideSoftKeyboard() {
-//    val inputMethodManager = activity?.getSystemService(
-//        INPUT_METHOD_SERVICE
-//    ) as InputMethodManager
-//    if (inputMethodManager.isAcceptingText) {
-//        inputMethodManager.hideSoftInputFromWindow(
-//            activity?.currentFocus!!.windowToken,
-//            0
-//        )
-//    }
-//}
-
-
 suspend fun saveData(
     context: Context,
     dataStoreProvider: DataStoreProvider,
@@ -54,7 +43,32 @@ suspend fun saveData(
         onBoarding[dataStoreKey] = value
     }
 }
+fun Fragment.hideSoftKeyboard() {
+    requireActivity().currentFocus?.let {
+        val inputMethodManager = ContextCompat.getSystemService(requireContext(), InputMethodManager::class.java)!!
+        inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
+    }
+}
 
+@SuppressLint("ClickableViewAccessibility")
+fun Fragment.setupUI(view: View) {
+
+    // Set up touch listener for non-text box views to hide keyboard.
+    if (view !is EditText) {
+        view.setOnTouchListener { v, event ->
+            hideSoftKeyboard()
+            false
+        }
+    }
+
+    //If a layout container, iterate over children and seed recursion.
+    if (view is ViewGroup) {
+        for (i in 0 until view.childCount) {
+            val innerView = view.getChildAt(i)
+            setupUI(innerView)
+        }
+    }
+}
 suspend fun readData(
     context: Context,
     dataStoreProvider: DataStoreProvider,
@@ -286,14 +300,14 @@ fun isNotNullOrZero(number: String, errorMessage: String): String? {
     return null
 }
 
-fun isValidName(name: String, errorMessage: String): String? {
+fun isValidName(name: String, errorMessage: String = ""): String? {
     if (name.trim().isNullOrEmpty()) {
         return errorMessage
     }
     return null
 }
 
-fun isValidEmail(email: String, errorMessage: String): String? {
+fun isValidEmail(email: String, errorMessage: String = ""): String? {
     if (email.trim().isNullOrEmpty()) {
         return errorMessage
     } else if (!Pattern.compile("[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+")
@@ -335,6 +349,5 @@ fun View.enabled() {
 
 fun Fragment.toastMsg(msg: String) {
     Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-
 }
 

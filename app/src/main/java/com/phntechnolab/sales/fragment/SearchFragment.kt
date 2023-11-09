@@ -27,6 +27,7 @@ import com.phntechnolab.sales.model.DMData
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
+import com.phntechnolab.sales.util.setupUI
 import com.phntechnolab.sales.viewmodel.HomeViewModel
 import com.phntechnolab.sales.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,6 +69,8 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupUI(view)
+
         initializeAdapter()
 
         observers()

@@ -37,6 +37,8 @@ import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.paging.SchoolPagingAdapter
 import com.phntechnolab.sales.util.DataStoreManager.setToken
 import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.NetworkUtils
+import com.phntechnolab.sales.util.toastMsg
 import com.phntechnolab.sales.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -85,28 +87,16 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
 
         checkedChangeListener()
 
-        viewModel.getAllSchoolsPagination().observe(viewLifecycleOwner){
-            viewModel.setPagingData(it)
-            binding.swipeReferesh.isRefreshing = false
-
-            binding.noInternetConnection.visibility = View.GONE
-            binding.noInternetMessage.visibility = View.GONE
-
-            val selectedChip =
-                binding.chipGroup.findViewById<Chip>(binding.chipGroup.checkedChipId)
-            Timber.e("SELECTED CHIP TEXT" + selectedChip.text.toString())
-            schoolPagingAdapter?.updateOnlyChipText(selectedChip.text.toString())
-            schoolPagingAdapter?.submitData(lifecycle, it)
-        }
+        initPagingData()
 
         binding.swipeReferesh.setOnRefreshListener {
             schoolPagingAdapter?.refresh()
         }
 
-        schoolPagingAdapter?.addLoadStateListener {loadState ->
+        schoolPagingAdapter?.addLoadStateListener { loadState ->
             Timber.e("LOAD STATE")
             Timber.e(loadState.toString())
-            if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && schoolPagingAdapter?.itemCount?:0 < 1) {
+            if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && schoolPagingAdapter?.itemCount ?: 0 < 1) {
                 hideViewShowEmptyState()
             } else {
                 showViewHideEmptyState()
@@ -114,26 +104,51 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
         }
     }
 
-    private fun hideViewShowEmptyState(){
+    private fun initPagingData() {
+        if (NetworkUtils.isInternetAvailable(requireContext())) {
+            viewModel.getAllSchoolsPagination().observe(viewLifecycleOwner) {
+                viewModel.setPagingData(it)
+                binding.swipeReferesh.isRefreshing = false
+
+                binding.noInternetConnection.visibility = View.GONE
+                binding.noInternetMessage.visibility = View.GONE
+                binding.progressIndicator.visibility = View.GONE
+
+                val selectedChip =
+                    binding.chipGroup.findViewById<Chip>(binding.chipGroup.checkedChipId)
+                Timber.e("SELECTED CHIP TEXT" + selectedChip.text.toString())
+                schoolPagingAdapter?.updateOnlyChipText(selectedChip.text.toString())
+                schoolPagingAdapter?.submitData(lifecycle, it)
+            }
+        } else {
+            toastMsg(requireContext().resources.getString(R.string.please_connection_message))
+            binding.noInternetMessage.visibility = View.VISIBLE
+            binding.noInternetConnection.visibility = View.VISIBLE
+            binding.progressIndicator.visibility = View.GONE
+        }
+    }
+
+    private fun hideViewShowEmptyState() {
         binding.noDataLottie.visibility = View.VISIBLE
         binding.homeRecyclerView.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
         binding.progressIndicator.visibility = View.GONE
     }
 
-    private fun showViewHideEmptyState(){
+    private fun showViewHideEmptyState() {
         binding.homeRecyclerView.visibility = View.VISIBLE
         binding.noDataLottie.visibility = View.GONE
         binding.progressIndicator.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
     }
 
-    private fun checkListSize(count: Int){
-        if(count <= 0)
+    private fun checkListSize(count: Int) {
+        if (count <= 0)
             hideViewShowEmptyState()
         else
             showViewHideEmptyState()
     }
+
     private fun checkedChangeListener() {
         binding.chipGroup.setOnCheckedChangeListener { chipGroup, id ->
             val chip = chipGroup.findViewById<Chip>(id)
@@ -150,45 +165,46 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
                 when (chip.text) {
                     "All" -> {
                         viewModel._schoolPagingData.value?.let {
-                            schoolPagingAdapter?.submitData(lifecycle,
+                            schoolPagingAdapter?.submitData(
+                                lifecycle,
                                 it
                             )
                         }
                     }
 
                     "Visited" -> {
-                        viewModel._schoolPagingData.value?.filter {it.status == "Visited"}
+                        viewModel._schoolPagingData.value?.filter { it.status == "Visited" }
                             ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
                     }
 
                     "Assigned" -> {
-                        viewModel._schoolPagingData.value?.filter {it.status == "Assigned"}
+                        viewModel._schoolPagingData.value?.filter { it.status == "Assigned" }
                             ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
                     }
 
                     "Propose Costing" -> {
-                        viewModel._schoolPagingData.value?.filter {it.status == "Propose Costing"}
+                        viewModel._schoolPagingData.value?.filter { it.status == "Propose Costing" }
                             ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
                     }
 
                     "MOA Signed" -> {
                         schoolPagingAdapter?.updateOnlyChipText("MOASigned")
-                        viewModel._schoolPagingData.value?.filter {it.status == "MOASigned"}
+                        viewModel._schoolPagingData.value?.filter { it.status == "MOASigned" }
                             ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
                     }
 
                     "Installment" -> {
-                        viewModel._schoolPagingData.value?.filter {it.status == "Installment"}
+                        viewModel._schoolPagingData.value?.filter { it.status == "Installment" }
                             ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
                     }
 
                     "Not Interested" -> {
-                        viewModel._schoolPagingData.value?.filter {it.status == "Not Interested"}
+                        viewModel._schoolPagingData.value?.filter { it.status == "Not Interested" }
                             ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
                     }
 
                     else -> {
-                        viewModel._schoolPagingData.value?.filter {it.status == chip.text.toString()}
+                        viewModel._schoolPagingData.value?.filter { it.status == chip.text.toString() }
                             ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
                     }
                 }
@@ -196,7 +212,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
 
                 Timber.e("LOAD COUNT")
                 Timber.e(schoolPagingAdapter?.itemCount.toString())
-                checkListSize(schoolPagingAdapter?.itemCount?:0)
+                checkListSize(schoolPagingAdapter?.itemCount ?: 0)
             }
         }
 
@@ -208,7 +224,8 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
 
     private fun initializeAdapter() {
         schoolPagingAdapter = SchoolPagingAdapter(this)
-        schoolPagingAdapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        schoolPagingAdapter!!.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.homeRecyclerView.adapter = schoolPagingAdapter
     }
 
@@ -233,6 +250,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
         super.onStart()
         Timber.e("onStart")
     }
+
     override fun onStop() {
         super.onStop()
         (requireActivity() as MainActivity).removeMenuProvider(this)
@@ -317,7 +335,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
                         HomeFragmentDirections.actionHomeFragmentToCostingMoaDocumentFragment(
                             schoolData.proposeCostingData
                                 ?: ProposeCostingData().apply {
-                                                              this.schoolId = schoolData.schoolId
+                                    this.schoolId = schoolData.schoolId
                                 },
                             schoolData.moaDocumentData
                                 ?: MOADocumentData().apply {

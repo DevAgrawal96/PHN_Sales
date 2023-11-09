@@ -217,7 +217,7 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
                 _requestFile4 = requestFile
                 is_requestFile4 = true
                 val part =
-                    MultipartBody.Part.createFormData("advance_payment", file.name, requestFile)
+                    MultipartBody.Part.createFormData("advance_payment", file.name, requestFile!!)
                 imagesize4 = Integer.parseInt((file.length() / 1024).toString())
                 imageData4 = part
                 val sdf = SimpleDateFormat("ddMyyyyhhmmss")

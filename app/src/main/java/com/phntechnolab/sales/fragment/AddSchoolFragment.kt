@@ -1,5 +1,6 @@
 package com.phntechnolab.sales.fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
@@ -20,6 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -39,14 +41,18 @@ import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.TakePictureFromCameraOrGalley
+import com.phntechnolab.sales.util.getFileSize
 import com.phntechnolab.sales.util.hideKeyboard
+import com.phntechnolab.sales.util.hideSoftKeyboard
 import com.phntechnolab.sales.util.isNotNullOrZero
 import com.phntechnolab.sales.util.isValidEmail
 import com.phntechnolab.sales.util.isValidMobileNumber
 import com.phntechnolab.sales.util.isValidName
 import com.phntechnolab.sales.util.pickDate
 import com.phntechnolab.sales.util.pickTime
+import com.phntechnolab.sales.util.setupUI
 import com.phntechnolab.sales.util.textChange
+import com.phntechnolab.sales.util.toastMsg
 import com.phntechnolab.sales.viewmodel.AddSchoolViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -135,10 +141,14 @@ class AddSchoolFragment : Fragment(), MenuProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupUI(view)
+
         onCheckedChangedListener()
 
         observers()
     }
+
+
 
     private fun onCheckedChangedListener() {
         binding.followupDetails.labSetupGroup.setOnCheckedChangeListener { group, checkedId ->
@@ -481,13 +491,13 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                         Toast.makeText(
                             requireContext(),
                             "School details updated successfully",
-                            Toast.LENGTH_LONG
+                            Toast.LENGTH_SHORT
                         ).show()
                     else {
                         Toast.makeText(
                             requireContext(),
                             getString(R.string.meeting_has_been_moved_to_not_interested_section),
-                            Toast.LENGTH_LONG
+                            Toast.LENGTH_SHORT
                         ).show()
                     }
                     findNavController().popBackStack()
@@ -497,7 +507,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                     Timber.e(it.toString())
                 }
@@ -506,7 +516,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -542,7 +552,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                         Toast.makeText(
                             requireContext(),
                             getString(R.string.meeting_has_been_moved_to_not_interested_section),
-                            Toast.LENGTH_LONG
+                            Toast.LENGTH_SHORT
                         ).show()
                         findNavController().popBackStack()
                     }
@@ -553,7 +563,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                     Timber.e(it.toString())
                 }
@@ -562,7 +572,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -582,9 +592,9 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                             Toast.makeText(
                                 requireContext(),
                                 getString(R.string.meeting_has_been_moved_to_not_interested_section),
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             ).show()
-
+                        toastMsg(requireContext().resources.getString(R.string.update_school))
                         findNavController().popBackStack()
                     }
                 }
@@ -593,7 +603,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                     Timber.e(it.toString())
                 }
@@ -602,7 +612,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                     Toast.makeText(
                         requireContext(),
                         requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -624,7 +634,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
     private var cameraResult =
         registerForActivityResult(TakePictureFromCameraOrGalley) { imageUri ->
-            if (imageUri != null && viewModel.imageSize != null) {
+            if (imageUri != null && getFileSize(imageUri, requireContext()) > 0) {
                 Timber.e("$imageUri")
                 viewModel.uploadImage(imageUri, requireContext())
                 binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
@@ -783,6 +793,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
             }
         }
     }
+
     private fun openCamera(): Intent {
         val sdf = SimpleDateFormat("ddMyyyyhhmmss")
         val values = ContentValues().apply {
@@ -790,9 +801,12 @@ class AddSchoolFragment : Fragment(), MenuProvider {
             put(MediaStore.Images.Media.DESCRIPTION, "From Camera")
         }
         _imageUri =
-            requireContext().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            requireContext().contentResolver.insert(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                values
+            )
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
-            putExtra(MediaStore.EXTRA_OUTPUT,_imageUri)
+            putExtra(MediaStore.EXTRA_OUTPUT, _imageUri)
         }
         return cameraIntent
     }
@@ -842,7 +856,6 @@ class AddSchoolFragment : Fragment(), MenuProvider {
             } else if (stepCount == 2) {
                 setPositionView()
             } else {
-
                 val isLeadTypeEmpty =
                     binding.followupDetails.edtLeadType.text.toString().isNullOrEmpty()
                 if (isLeadTypeEmpty)
