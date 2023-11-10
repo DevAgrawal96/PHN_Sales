@@ -149,7 +149,6 @@ class AddSchoolFragment : Fragment(), MenuProvider {
     }
 
 
-
     private fun onCheckedChangedListener() {
         binding.followupDetails.labSetupGroup.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButtonText = group.findViewById<RadioButton>(checkedId).text
@@ -741,6 +740,8 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                 val updatedDateAndTime =
                     dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
                 binding.followupDetails.edtSchoolDate.setText(updatedDateAndTime)
+                viewModel.newSchoolData.value?.nextFollowup =
+                    if (viewModel.newSchoolData.value?.nextFollowup.isNullOrEmpty()) "null" else viewModel.newSchoolData.value?.nextFollowup.toString()
                 viewModel.newSchoolData.value?.nextFollowup?.let { _nextFollowUpDate ->
                     if (_nextFollowUpDate.contains(" ")) {
                         val dateAndTime = _nextFollowUpDate.split(" ")

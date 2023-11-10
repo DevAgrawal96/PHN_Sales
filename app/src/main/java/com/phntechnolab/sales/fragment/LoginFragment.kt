@@ -163,6 +163,8 @@ class LoginFragment : Fragment() {
                         showError()
                     } else {
                         Timber.e("unauthorized user Error body else")
+                        toastMsg(requireContext().resources.getString(R.string.please_connection_message))
+                        Timber.e("${it.data?.status_code}")
                     }
                 }
 
