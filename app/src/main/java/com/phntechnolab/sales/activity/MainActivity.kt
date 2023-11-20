@@ -61,27 +61,47 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_home -> {
-                    item.isCheckable = true
-                    navController.navigate(R.id.homeFragment)
-                    true
+                    if (binding.bottomNavigation.menu.findItem(binding.bottomNavigation.selectedItemId) != item) {
+                        binding.bottomNavigation
+                        item.isCheckable = true
+                        navController.navigate(R.id.homeFragment)
+                        true
+                    } else {
+                        true
+                    }
                 }
 
                 R.id.menu_profile -> {
-                    item.isCheckable = true
-                    navController.navigate(R.id.profileFragment)
-                    true
+                    if (binding.bottomNavigation.menu.findItem(binding.bottomNavigation.selectedItemId) != item) {
+                        binding.bottomNavigation
+                        item.isCheckable = true
+                        navController.navigate(R.id.profileFragment)
+                        true
+                    } else {
+                        true
+                    }
                 }
 
                 R.id.menu_pending -> {
-                    item.isCheckable = true
-                    navController.navigate(R.id.pendingFragment)
-                    true
+                    if (binding.bottomNavigation.menu.findItem(binding.bottomNavigation.selectedItemId) != item) {
+                        binding.bottomNavigation
+                        item.isCheckable = true
+                        navController.navigate(R.id.pendingFragment)
+                        true
+                    } else {
+                        true
+                    }
                 }
 
                 R.id.menu_meeting -> {
-                    item.isCheckable = true
-                    navController.navigate(R.id.meetingFragment)
-                    true
+                    if (binding.bottomNavigation.menu.findItem(binding.bottomNavigation.selectedItemId) != item) {
+                        binding.bottomNavigation
+                        item.isCheckable = true
+                        navController.navigate(R.id.meetingFragment)
+                        true
+                    } else {
+                        true
+                    }
                 }
 
                 else -> {

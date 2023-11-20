@@ -132,11 +132,6 @@ class MeetingRepository @Inject constructor(
             }
         }
         _meetingsData.postValue(data)
-//        Timber.e("check dates")
-//        Timber.e(todayTomorrowUpcomingMeetingDateCheck("14-10-2023 22:11"))
-//        Timber.e(todayTomorrowUpcomingMeetingDateCheck("15-10-2023 22:11"))
-//        Timber.e(todayTomorrowUpcomingMeetingDateCheck("16-10-2023 22:11"))
-//        Timber.e(todayTomorrowUpcomingMeetingDateCheck("17-10-2023 22:11"))
     }
 
     private fun todayTomorrowUpcomingMeetingDateCheck(oldDate: String): String {

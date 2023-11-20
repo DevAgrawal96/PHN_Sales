@@ -37,11 +37,13 @@ object TakePictureFromCameraOrGalley: ActivityResultContract<Unit, Uri?>() {
         camIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
 
         val gallIntent = Intent(Intent.ACTION_GET_CONTENT)
-        gallIntent.type = "image/*"
+        val mimeTypes = arrayOf("image/*", "application/pdf")
+        gallIntent.type = "image/*|application/pdf"
+        gallIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
 
         val yourIntentsList = ArrayList<Intent>()
         val packageManager = context.packageManager
-
+x
         packageManager.queryIntentActivities(camIntent, 0).forEach{
             val finalIntent = Intent(camIntent)
             finalIntent.component = ComponentName(it.activityInfo.packageName, it.activityInfo.name)
