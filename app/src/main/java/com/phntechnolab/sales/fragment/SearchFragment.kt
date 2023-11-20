@@ -5,15 +5,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import androidx.activity.OnBackPressedCallback
-import androidx.core.view.MenuProvider
-import androidx.databinding.adapters.SearchViewBindingAdapter.setOnQueryTextListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -22,11 +16,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.phntechnolab.sales.R
-import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.adapter.GenericAdapter
-import com.phntechnolab.sales.adapter.SchoolDetailAdapter
 import com.phntechnolab.sales.databinding.AdapterHomeInlineBinding
-import com.phntechnolab.sales.databinding.FragmentHomeBinding
 import com.phntechnolab.sales.databinding.FragmentSearchBinding
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.DMData
@@ -34,7 +25,6 @@ import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.util.setupUI
-import com.phntechnolab.sales.viewmodel.HomeViewModel
 import com.phntechnolab.sales.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber

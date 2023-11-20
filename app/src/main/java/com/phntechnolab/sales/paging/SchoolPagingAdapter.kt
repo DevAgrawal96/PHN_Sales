@@ -2,21 +2,16 @@ package com.phntechnolab.sales.paging
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Lifecycle
-import androidx.paging.PagingData
 import androidx.paging.PagingDataAdapter
-import androidx.paging.filter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.phntechnolab.sales.R
-import com.phntechnolab.sales.adapter.SchoolDetailAdapter
 import com.phntechnolab.sales.databinding.AdapterHomeInlineBinding
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.util.getChipColor

@@ -2,8 +2,6 @@ package com.phntechnolab.sales.fragment
 
 import android.app.Dialog
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -21,11 +19,9 @@ import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.adapter.GenericAdapter
-import com.phntechnolab.sales.adapter.ProfileSettingAdapter
 import com.phntechnolab.sales.databinding.FragmentProfileBinding
 import com.phntechnolab.sales.databinding.LogoutDialogBinding
 import com.phntechnolab.sales.databinding.ProfileSettingItemBinding
-import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.SettingModel
 import com.phntechnolab.sales.model.UserDataModel
 import com.phntechnolab.sales.util.DataStoreManager.clearDataStore
@@ -75,58 +71,13 @@ class ProfileFragment : Fragment(), MenuProvider {
     }
 
     private fun initializeAdapter() {
-        val callback = object : ProfileSettingAdapter.Callback {
-            override fun openSetting(position: Int) {
-                when (position) {
-                    0 -> {
-                        findNavController().navigate(
-                            ProfileFragmentDirections.actionProfileFragmentToMyAccountFragment(
-                                UserDataModel(
-                                    userProfileData.userId,
-                                    userProfileData.id,
-                                    userProfileData.name,
-                                    userProfileData.email,
-                                    userProfileData.mobile_no,
-                                    userProfileData.password ?: "null",
-                                    userProfileData.role
-                                )
-                            )
-                        )
-                    }
-
-                    1 -> {
-                        Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
-                    }
-
-                    2 -> {
-                        Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
-                    }
-
-                    3 -> {
-                        findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
-                    }
-
-                    4 -> {
-                        Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
-                    }
-
-                    5 -> {
-                        showDialog()
-                    }
-
-                    else -> {
-
-                    }
-                }
-            }
-        }
         _adapter = GenericAdapter(ProfileSettingItemBinding::inflate, onBind = {data,adapterBinding,position,listSize->
             adapterBinding.apply {
                 settingImg.setImageResource(data.settingImg)
                 settingName.text = data.settingName
                 settingDetails.text = data.settingDetails
                 container.setOnClickListener {
-                    callback.openSetting(position)
+                    openSetting(position)
                 }
                 if (listSize == position+1) {
                     Timber.e("position :$position dataSize: ${listSize}")
@@ -138,6 +89,48 @@ class ProfileFragment : Fragment(), MenuProvider {
             }
         })
         binding.settingRv.adapter = adapter
+    }
+
+    private fun openSetting(position: Int) {
+        when (position) {
+            0 -> {
+                findNavController().navigate(
+                    ProfileFragmentDirections.actionProfileFragmentToMyAccountFragment(
+                        UserDataModel(
+                            userProfileData.userId,
+                            userProfileData.id,
+                            userProfileData.name,
+                            userProfileData.email,
+                            userProfileData.mobile_no,
+                            userProfileData.password ?: "null",
+                            userProfileData.role
+                        )
+                    )
+                )
+            }
+
+            1 -> {
+                Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
+            }
+
+            2 -> {
+                Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
+            }
+
+            3 -> {
+                findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
+            }
+
+            4 -> {
+                Toast.makeText(requireContext(), "coming soon!", Toast.LENGTH_SHORT).show()
+            }
+
+            5 -> {
+                showDialog()
+            }
+
+            else -> {}
+        }
     }
 
     private fun showDialog() {

@@ -17,7 +17,6 @@ import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.adapter.GenericAdapter
-import com.phntechnolab.sales.adapter.MeetingsAdapter
 import com.phntechnolab.sales.databinding.ActivityesItemBinding
 import com.phntechnolab.sales.databinding.FragmentMeetingBinding
 import com.phntechnolab.sales.model.CoordinatorData

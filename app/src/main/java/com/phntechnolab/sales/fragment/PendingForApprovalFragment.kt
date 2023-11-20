@@ -18,10 +18,8 @@ import com.bumptech.glide.Glide
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.adapter.GenericAdapter
-import com.phntechnolab.sales.adapter.PendingApprovalAdapter
 import com.phntechnolab.sales.databinding.FragmentPendingBinding
 import com.phntechnolab.sales.databinding.PendingAdapterItemBinding
-import com.phntechnolab.sales.model.InstallmentData
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
