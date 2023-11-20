@@ -16,7 +16,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.activity.MainActivity
+import com.phntechnolab.sales.adapter.GenericAdapter
 import com.phntechnolab.sales.adapter.MeetingsAdapter
+import com.phntechnolab.sales.databinding.ActivityesItemBinding
 import com.phntechnolab.sales.databinding.FragmentMeetingBinding
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.DMData
@@ -29,12 +31,12 @@ import timber.log.Timber
 
 
 @AndroidEntryPoint
-class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
+class MeetingFragment : Fragment(), MenuProvider {
     private var _binding: FragmentMeetingBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<MeetingViewModel>()
-    private var _adapter: MeetingsAdapter? = null
+    private var _adapter: GenericAdapter<MeetingData, ActivityesItemBinding>? = null
     private val adapter get() = _adapter!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +56,24 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
     }
 
     private fun initializeAdapter() {
-        _adapter = MeetingsAdapter(this)
+        _adapter =
+            GenericAdapter(ActivityesItemBinding::inflate, onBind = { data, adapterBinding, position,listSize ->
+                adapterBinding.apply {
+                    val meetingData = data
+                    if(meetingData.taskDateFilter != "upcoming")
+                        if((meetingData.dateTime?.split(" ")?.size ?: 0) > 1)
+                            activityName.text = "You have a follow up with ${meetingData.data?.schoolName} at ${meetingData.dateTime?.split(" ")?.get(1)} pm"
+                        else
+                            activityName.text = "You have a follow up with ${meetingData.data?.schoolName} "
+
+                    else
+                        activityName.text = "You have a follow up with ${meetingData.data?.schoolName} at ${meetingData.dateTime}"
+
+                    mainConstraint.setOnClickListener {
+                        meetingData(data)
+                    }
+                }
+            })
         binding.meetingRv.adapter = adapter
     }
 
@@ -188,6 +207,7 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                 findNavController().navigate(R.id.action_meetingFragment_to_notificationFragment)
                 true
             }
+
             R.id.menu_home -> {
                 findNavController().navigate(R.id.homeFragment)
                 true
@@ -205,7 +225,7 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
         _adapter = null
     }
 
-    override fun meetingData(data: MeetingData) {
+    private fun meetingData(data: MeetingData) {
         when (data.taskName) {
             "proposecosting" -> {
                 requireView().findNavController()
@@ -213,11 +233,11 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                         MeetingFragmentDirections.actionMeetingFragmentToCostingMoaDocumentFragment(
                             data.data?.proposeCostingData
                                 ?: ProposeCostingData().apply {
-                                    this.schoolId = data.data?.schoolId?:""
+                                    this.schoolId = data.data?.schoolId ?: ""
                                 },
                             data.data?.moaDocumentData
                                 ?: MOADocumentData().apply {
-                                    this.schoolId = data.data?.schoolId?:""
+                                    this.schoolId = data.data?.schoolId ?: ""
                                 }
                         )
                     )

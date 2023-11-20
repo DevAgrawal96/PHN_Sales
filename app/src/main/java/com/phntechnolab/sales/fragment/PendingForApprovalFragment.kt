@@ -14,10 +14,13 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.activity.MainActivity
+import com.phntechnolab.sales.adapter.GenericAdapter
 import com.phntechnolab.sales.adapter.PendingApprovalAdapter
 import com.phntechnolab.sales.databinding.FragmentPendingBinding
+import com.phntechnolab.sales.databinding.PendingAdapterItemBinding
 import com.phntechnolab.sales.model.InstallmentData
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
@@ -29,12 +32,12 @@ import timber.log.Timber
 
 
 @AndroidEntryPoint
-class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdapter.CallBacks {
+class PendingForApprovalFragment : Fragment(), MenuProvider {
     private var _binding: FragmentPendingBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<PendingForApprovalViewModel>()
 
-    private var _adapter: PendingApprovalAdapter? = null
+    private var _adapter: GenericAdapter<SchoolData, PendingAdapterItemBinding>? = null
     private val adapter get() = _adapter!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +55,14 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
     }
 
     private fun initializeAdapter() {
-        _adapter = PendingApprovalAdapter(this)
+        _adapter = GenericAdapter(PendingAdapterItemBinding::inflate, onBind = {data,adapterBinding,position,listSize->
+            adapterBinding.apply {
+                pendingTitle.text = "${ data.schoolName.capitalize() } moa approval is pending"
+                Glide.with(requireContext()).load(data.schoolImage).override(300,200).error(R.drawable.demo_img).into(schoolImg)
+                mainConstraint.setOnClickListener { meetingNavigation(data) }
+
+            }
+        })
         binding.pendingApprovalRv.adapter = adapter
     }
 
@@ -174,7 +184,7 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
         _adapter = null
     }
 
-    override fun meetingNavigation(schoolData: SchoolData) {
+    private fun meetingNavigation(schoolData: SchoolData) {
 //        requireView().findNavController()
 //            .navigate(
 //                PendingForApprovalFragmentDirections.actionPendingFragmentToMoaSignedFragment(

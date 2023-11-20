@@ -3,6 +3,7 @@ package com.phntechnolab.sales.fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -17,9 +18,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.activity.MainActivity
+import com.phntechnolab.sales.adapter.GenericAdapter
 import com.phntechnolab.sales.adapter.SchoolDetailAdapter
+import com.phntechnolab.sales.databinding.AdapterHomeInlineBinding
 import com.phntechnolab.sales.databinding.FragmentHomeBinding
 import com.phntechnolab.sales.databinding.FragmentSearchBinding
 import com.phntechnolab.sales.model.CoordinatorData
@@ -34,13 +40,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
+class SearchFragment : Fragment() {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<SearchViewModel>()
 
-    private var _adapter: SchoolDetailAdapter? = null
+    private var _adapter: GenericAdapter<SchoolData, AdapterHomeInlineBinding>? = null
     private val adapter get() = _adapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +85,60 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
     }
 
     private fun initializeAdapter() {
-        _adapter = SchoolDetailAdapter(this)
+        _adapter = GenericAdapter(AdapterHomeInlineBinding::inflate, onBind = {schoolDetail,adapterBinding,position,listSize->
+            adapterBinding.apply {
+
+                schoolName.text = schoolDetail.schoolName
+                txtEmail.text = schoolDetail.email
+                txtMono.text = schoolDetail.coMobileNo
+                chipStatus.text = schoolDetail.status
+                Log.e("Image url", schoolDetail.schoolImage ?: "")
+                if (schoolDetail.email.isNullOrEmpty()) {
+                    txtEmail.visibility = View.GONE
+                    emailIcon.visibility = View.GONE
+                } else {
+                    txtEmail.visibility = View.VISIBLE
+                    emailIcon.visibility = View.VISIBLE
+                }
+                if (schoolDetail.coMobileNo.isNullOrEmpty()) {
+                    txtMono.visibility = View.GONE
+                    callIcon.visibility = View.GONE
+
+                } else {
+                    txtMono.visibility = View.VISIBLE
+                    callIcon.visibility = View.VISIBLE
+                }
+                if (schoolDetail.schoolImage?.isNotEmpty() == true && schoolDetail.schoolImage?.isNotEmpty() == true) {
+                    val image = GlideUrl(
+                        schoolDetail.schoolImage, LazyHeaders.Builder()
+                            .addHeader("User-Agent", "5")
+                            .build()
+                    )
+                    Glide.with(requireContext()).load(image).override(300, 200)
+                        .error(R.drawable.demo_img).into(schoolImg)
+                }
+
+                if (schoolDetail.leadType?.isNotBlank() == true && schoolDetail.leadType?.isNotEmpty() == true) {
+                    chipLeadStatus.text = schoolDetail.leadType
+                    chipLeadStatus.visibility = View.VISIBLE
+                } else {
+                    chipLeadStatus.visibility = View.GONE
+                }
+                cardView.setOnClickListener {
+                    meetingNavigation(schoolDetail)
+                }
+
+                if (schoolDetail.status == "MOASigned") {
+                    editIcon.visibility = View.GONE
+                } else {
+                    editIcon.visibility = View.VISIBLE
+                }
+                editIcon.setOnClickListener {
+                    if (it != null)
+                        openSchoolDetails(schoolDetail)
+                }
+            }
+        })
         binding.recyclerView.adapter = _adapter
     }
 
@@ -156,12 +215,12 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
     }
 
 
-    override fun openSchoolDetails(schoolData: SchoolData) {
+    private fun openSchoolDetails(schoolData: SchoolData) {
         findNavController()
             .navigate(SearchFragmentDirections.actionSearchFragmentToAddSchoolFragment(schoolData))
     }
 
-    override fun meetingNavigation(schoolData: SchoolData) {
+    private  fun meetingNavigation(schoolData: SchoolData) {
         when (schoolData.status) {
             "Assigned" -> {
                 findNavController()

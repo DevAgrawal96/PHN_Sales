@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.R
-import com.phntechnolab.sales.adapter.ActivitiesAdapter
+import com.phntechnolab.sales.adapter.GenericAdapter
+import com.phntechnolab.sales.databinding.ActivityesItemBinding
 import com.phntechnolab.sales.databinding.FragmentActivitiesBinding
 
 
@@ -16,7 +17,7 @@ class ActivitiesFragment : Fragment() {
     private var _binding: FragmentActivitiesBinding? = null
     private val binding get() = _binding!!
 
-    private var _adapter: ActivitiesAdapter? = null
+    private var _adapter: GenericAdapter<String, ActivityesItemBinding>? = null
     private val adapter get() = _adapter!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,10 @@ class ActivitiesFragment : Fragment() {
     }
 
     private fun initializeAdapter() {
-        _adapter = ActivitiesAdapter()
+        _adapter =
+            GenericAdapter(ActivityesItemBinding::inflate, onBind = { data, binding, position,listSize ->
+                binding.activityName.text = data
+            })
         binding.activitiesRv.adapter = adapter
     }
 

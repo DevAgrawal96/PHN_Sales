@@ -20,9 +20,11 @@ import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.activity.MainActivity
+import com.phntechnolab.sales.adapter.GenericAdapter
 import com.phntechnolab.sales.adapter.ProfileSettingAdapter
 import com.phntechnolab.sales.databinding.FragmentProfileBinding
 import com.phntechnolab.sales.databinding.LogoutDialogBinding
+import com.phntechnolab.sales.databinding.ProfileSettingItemBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.SettingModel
 import com.phntechnolab.sales.model.UserDataModel
@@ -40,7 +42,7 @@ class ProfileFragment : Fragment(), MenuProvider {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
-    private var _adapter: ProfileSettingAdapter? = null
+    private var _adapter: GenericAdapter<SettingModel, ProfileSettingItemBinding>? = null
     private val adapter get() = _adapter!!
 
     private val viewModel: ProfileViewModel by viewModels()
@@ -118,7 +120,23 @@ class ProfileFragment : Fragment(), MenuProvider {
                 }
             }
         }
-        _adapter = ProfileSettingAdapter(callback)
+        _adapter = GenericAdapter(ProfileSettingItemBinding::inflate, onBind = {data,adapterBinding,position,listSize->
+            adapterBinding.apply {
+                settingImg.setImageResource(data.settingImg)
+                settingName.text = data.settingName
+                settingDetails.text = data.settingDetails
+                container.setOnClickListener {
+                    callback.openSetting(position)
+                }
+                if (listSize == position+1) {
+                    Timber.e("position :$position dataSize: ${listSize}")
+                    divider.visibility = View.GONE
+                } else {
+                    Timber.e("position :$position dataSize: ${listSize}")
+                    divider.visibility = View.VISIBLE
+                }
+            }
+        })
         binding.settingRv.adapter = adapter
     }
 

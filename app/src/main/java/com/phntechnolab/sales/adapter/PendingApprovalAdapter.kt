@@ -12,9 +12,10 @@ import com.phntechnolab.sales.model.PendingApprovalModel
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.viewHolder.PendingApprovalViewHolder
 
-class PendingApprovalAdapter(private var callBacks: CallBacks) : Adapter<PendingApprovalViewHolder>() {
-private var data = ArrayList<SchoolData>()
-private lateinit var context : Context
+class PendingApprovalAdapter(private var callBacks: CallBacks) :
+    Adapter<PendingApprovalViewHolder>() {
+    private var data = ArrayList<SchoolData>()
+    private lateinit var context: Context
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PendingApprovalViewHolder {
         context = parent.context
         val binding =
@@ -28,8 +29,10 @@ private lateinit var context : Context
 
     override fun onBindViewHolder(holder: PendingApprovalViewHolder, position: Int) {
         val schoolData = data[position]
-        holder.binding.pendingTitle.text = "${ data[position].schoolName.capitalize() } moa approval is pending"
-        Glide.with(context!!).load(data[position].schoolImage).override(300,200).error(R.drawable.demo_img).into(holder.binding.schoolImg)
+        holder.binding.pendingTitle.text =
+            "${data[position].schoolName.capitalize()} moa approval is pending"
+        Glide.with(context).load(data[position].schoolImage).override(300, 200)
+            .error(R.drawable.demo_img).into(holder.binding.schoolImg)
         holder.binding.mainConstraint.setOnClickListener { callBacks.meetingNavigation(schoolData) }
     }
 
@@ -41,7 +44,10 @@ private lateinit var context : Context
 
     }
 
-    class PendingApprovalDiffUtil(private val oldData: ArrayList<SchoolData>,private val newData: ArrayList<SchoolData>) :
+    class PendingApprovalDiffUtil(
+        private val oldData: ArrayList<SchoolData>,
+        private val newData: ArrayList<SchoolData>
+    ) :
         DiffUtil.Callback() {
         override fun getOldListSize(): Int {
             return oldData.size
