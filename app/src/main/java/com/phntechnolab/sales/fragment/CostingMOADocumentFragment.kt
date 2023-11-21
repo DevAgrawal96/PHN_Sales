@@ -27,6 +27,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.gson.Gson
+import com.phntechnolab.sales.Event
 import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentCostingMoaDocumentBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
@@ -628,12 +629,12 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                         View.VISIBLE
                     binding.proposeCostingStage.tilDate.visibility = View.VISIBLE
                     binding.proposeCostingStage.tilTime.visibility = View.VISIBLE
-                    "yes"
+                    "Yes"
                 } else {
                     binding.proposeCostingStage.nextMeetingDateTimeMandateTxt.visibility = View.GONE
                     binding.proposeCostingStage.tilDate.visibility = View.GONE
                     binding.proposeCostingStage.tilTime.visibility = View.GONE
-                    "no"
+                    "No"
                 }
         }
     }

@@ -149,8 +149,7 @@ class LoginFragment : Fragment() {
                                     .navigate(R.id.action_loginFragment_to_homeFragment)
                             }
                         }
-                    } else {
-                    }
+                    } else { }
                 }
 
                 is NetworkResult.Error -> {

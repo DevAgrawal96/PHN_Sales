@@ -40,6 +40,7 @@ import com.phntechnolab.sales.databinding.FragmentAssignedSchoolsStepperBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.TakePictureFromCamera
 import com.phntechnolab.sales.util.TakePictureFromCameraOrGalley
 import com.phntechnolab.sales.util.getFileSize
 import com.phntechnolab.sales.util.hideKeyboard
@@ -48,6 +49,7 @@ import com.phntechnolab.sales.util.isNotNullOrZero
 import com.phntechnolab.sales.util.isValidEmail
 import com.phntechnolab.sales.util.isValidMobileNumber
 import com.phntechnolab.sales.util.isValidName
+import com.phntechnolab.sales.util.isValidNumber
 import com.phntechnolab.sales.util.pickDate
 import com.phntechnolab.sales.util.pickTime
 import com.phntechnolab.sales.util.setupUI
@@ -205,114 +207,114 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                 ).toString()
             }
         }
-        binding.basicDetails.edtSchoolName.textChange { address ->
+        binding.basicDetails.edtSchoolName.textChange { name ->
             binding.basicDetails.tilSchoolAddress.error = if (isValidName(
-                    address,
+                    name,
                     resources.getString(R.string.please_enter_valid_school_address)
                 ).toString() == "null"
             ) {
                 ""
             } else {
                 isValidName(
-                    address,
+                    name,
                     resources.getString(R.string.please_enter_valid_school_address)
                 ).toString()
             }
         }
-        binding.basicDetails.boardSpinner.textChange { address ->
+        binding.basicDetails.boardSpinner.textChange { board ->
             binding.basicDetails.tilBoard.error = if (isValidName(
-                    address,
+                    board,
                     resources.getString(R.string.please_select_board)
                 ).toString() == "null"
             ) {
                 ""
             } else {
                 isValidName(
-                    address,
+                    board,
                     resources.getString(R.string.please_select_board)
                 ).toString()
             }
         }
-        binding.basicDetails.edtSchoolTotalIntake.textChange { address ->
+        binding.basicDetails.edtSchoolTotalIntake.textChange { intake ->
             binding.basicDetails.tilSchoolTotalIntake.error = if (isNotNullOrZero(
-                    address,
+                    intake,
                     resources.getString(R.string.please_enter_total_school_intake)
                 ).toString() == "null"
             ) {
                 ""
             } else {
                 isNotNullOrZero(
-                    address,
+                    intake,
                     resources.getString(R.string.please_enter_total_school_intake)
                 ).toString()
             }
         }
-        binding.basicDetails.edtTotalNoOfClassroom.textChange { address ->
+        binding.basicDetails.edtTotalNoOfClassroom.textChange { classroom ->
             binding.basicDetails.tilSchoolTotalNoOfClassroom.error = if (isNotNullOrZero(
-                    address,
+                    classroom,
                     resources.getString(R.string.please_enter_number_of_classrooms)
                 ).toString() == "null"
             ) {
                 ""
             } else {
                 isNotNullOrZero(
-                    address,
+                    classroom,
                     resources.getString(R.string.please_enter_number_of_classrooms)
                 ).toString()
             }
         }
-        binding.basicDetails.edtCoordinatorName.textChange { address ->
+        binding.basicDetails.edtCoordinatorName.textChange { name ->
             binding.basicDetails.tilCoordinatorName.error = if (isValidName(
-                    address,
+                    name,
                     resources.getString(R.string.please_enter_valid_coordinator_name)
                 ).toString() == "null"
             ) {
                 ""
             } else {
                 isValidName(
-                    address,
+                    name,
                     resources.getString(R.string.please_enter_valid_coordinator_name)
                 ).toString()
             }
         }
-        binding.basicDetails.edtEmailId.textChange { address ->
+        binding.basicDetails.edtEmailId.textChange { email ->
             binding.basicDetails.tilEmailId.error = if (isValidEmail(
-                    address,
+                    email,
                     resources.getString(R.string.please_enter_valid_email_address)
                 ).toString() == "null"
             ) {
                 ""
             } else {
                 isValidEmail(
-                    address,
+                    email,
                     resources.getString(R.string.please_enter_valid_email_address)
                 ).toString()
             }
         }
-        binding.basicDetails.edtCoordinatorMono.textChange { address ->
+        binding.basicDetails.edtCoordinatorMono.textChange { coordinator ->
             binding.basicDetails.tilCoordinatorMono.error = if (isValidMobileNumber(
-                    address,
+                    coordinator,
                     resources.getString(R.string.please_enter_valid_phone_no)
                 ).toString() == "null"
             ) {
                 ""
             } else {
                 isValidMobileNumber(
-                    address,
+                    coordinator,
                     resources.getString(R.string.please_enter_valid_phone_no)
                 ).toString()
             }
         }
-        binding.schoolDetails.edtDirectorDmPhoneNo.textChange { address ->
-            binding.schoolDetails.tilDirectorDmPhoneNo.error = if (isValidMobileNumber(
-                    address,
+        binding.schoolDetails.edtDirectorDmPhoneNo.textChange { number ->
+            binding.schoolDetails.tilDirectorDmPhoneNo.error = if (isValidNumber(
+                    number,
                     resources.getString(R.string.please_enter_valid_phone_no)
                 ).toString() == "null"
             ) {
                 ""
             } else {
-                isValidMobileNumber(
-                    address,
+                isValidNumber(
+                    number,
                     resources.getString(R.string.please_enter_valid_phone_no)
                 ).toString()
             }
@@ -632,7 +634,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
     }
 
     private var cameraResult =
-        registerForActivityResult(TakePictureFromCameraOrGalley) { imageUri ->
+        registerForActivityResult(TakePictureFromCamera) { imageUri ->
             if (imageUri != null && getFileSize(imageUri, requireContext()) > 0) {
                 Timber.e("$imageUri")
                 viewModel.uploadImage(imageUri, requireContext())
@@ -829,7 +831,15 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                     ).show()
                 }
             } else if (stepCount == 2) {
-                setPositionView()
+                if (checkSchoolDetailsValidation()) {
+                    setPositionView()
+                } else {
+                    Snackbar.make(
+                        requireView(),
+                        resources.getString(R.string.some_fields_are_empty_or_not_valid),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
             } else {
 
                 val isLeadTypeEmpty =
@@ -855,7 +865,15 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                     ).show()
                 }
             } else if (stepCount == 2) {
-                setPositionView()
+                if (checkSchoolDetailsValidation()) {
+                    setPositionView()
+                } else {
+                    Snackbar.make(
+                        requireView(),
+                        resources.getString(R.string.some_fields_are_empty_or_not_valid),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
             } else {
                 val isLeadTypeEmpty =
                     binding.followupDetails.edtLeadType.text.toString().isNullOrEmpty()
@@ -869,6 +887,26 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                 }
             }
         }
+    }
+
+    private fun checkSchoolDetailsValidation(): Boolean {
+        val mPhonePattern = Pattern.compile("[0123456789]{10}")
+        val isDirectorDMPhoneValid =
+            mPhonePattern.matcher(binding.schoolDetails.edtDirectorDmPhoneNo.text.toString())
+                .matches()
+        if (binding.schoolDetails.edtDirectorDmPhoneNo.text.toString().trim().isEmpty())
+            binding.schoolDetails.tilDirectorDmPhoneNo.error = null
+        else if (!isDirectorDMPhoneValid)
+            binding.schoolDetails.tilDirectorDmPhoneNo.error =
+                resources.getString(R.string.please_enter_valid_phone_no)
+        else
+            binding.schoolDetails.tilDirectorDmPhoneNo.error = null
+
+        return if (
+            binding.schoolDetails.edtDirectorDmPhoneNo.text.toString().trim().isEmpty()
+        ) {
+            true
+        } else isDirectorDMPhoneValid
     }
 
     private fun checkBasicDetailsValidations(): Boolean {
@@ -929,28 +967,40 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
         val mPhonePattern = Pattern.compile("[0123456789]{10}")
         val isCoordinatorPhoneValid =
-            mPhonePattern.matcher(binding.basicDetails.edtCoordinatorMono.text.toString()).matches()
+            !mPhonePattern.matcher(binding.basicDetails.edtCoordinatorMono.text.toString())
+                .matches()
         if (binding.basicDetails.edtCoordinatorMono.text.toString().trim().isEmpty())
             binding.basicDetails.tilCoordinatorMono.error = null
-        else if (!isCoordinatorPhoneValid)
+        else if (isCoordinatorPhoneValid)
             binding.basicDetails.tilCoordinatorMono.error =
                 resources.getString(R.string.please_enter_valid_phone_no)
         else
             binding.basicDetails.tilCoordinatorMono.error = null
 
         val isEmailValid =
-            Pattern.compile("[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+")
+            !Pattern.compile("[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+")
                 .matcher(binding.basicDetails.edtEmailId.text.toString())
                 .matches()
         if (binding.basicDetails.edtEmailId.text.toString().trim().isEmpty())
             binding.basicDetails.tilEmailId.error = null
-        else if (!isEmailValid)
+        else if (isEmailValid)
             binding.basicDetails.tilEmailId.error =
                 resources.getString(R.string.please_enter_valid_email_address)
         else
             binding.basicDetails.tilEmailId.error = null
 //        return !(isSchoolNameEmpty || isSchoolAddressEmpty || isBoardEmpty || isSchoolIntakeEmpty || isCoordinatorNameEmpty || isCoordinatorNameEmpty || !isCoordinatorPhoneValid || !isEmailValid)
-        return !(isSchoolNameEmpty || isSchoolAddressEmpty || isBoardEmpty || isCoordinatorNameEmpty)
+        return if (binding.basicDetails.edtEmailId.text.toString().trim().isNotEmpty()
+        ) {
+            if (binding.basicDetails.edtCoordinatorMono.text.toString().trim().isNotEmpty()) {
+                !(isSchoolNameEmpty || isSchoolAddressEmpty || isBoardEmpty || isCoordinatorNameEmpty || isCoordinatorPhoneValid || isEmailValid)
+            } else !(isSchoolNameEmpty || isSchoolAddressEmpty || isBoardEmpty || isCoordinatorNameEmpty || isEmailValid)
+
+        } else if (binding.basicDetails.edtCoordinatorMono.text.toString().trim().isNotEmpty()) {
+            if (binding.basicDetails.edtEmailId.text.toString().trim().isNotEmpty()
+            ) {
+                !(isSchoolNameEmpty || isSchoolAddressEmpty || isBoardEmpty || isCoordinatorNameEmpty || isCoordinatorPhoneValid || isEmailValid)
+            } else !(isSchoolNameEmpty || isSchoolAddressEmpty || isBoardEmpty || isCoordinatorNameEmpty || isCoordinatorPhoneValid)
+        } else !(isSchoolNameEmpty || isSchoolAddressEmpty || isBoardEmpty || isCoordinatorNameEmpty)
     }
 
     private fun setPositionView() {

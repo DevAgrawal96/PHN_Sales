@@ -43,9 +43,11 @@ suspend fun saveData(
         onBoarding[dataStoreKey] = value
     }
 }
+
 fun Fragment.hideSoftKeyboard() {
     requireActivity().currentFocus?.let {
-        val inputMethodManager = ContextCompat.getSystemService(requireContext(), InputMethodManager::class.java)!!
+        val inputMethodManager =
+            ContextCompat.getSystemService(requireContext(), InputMethodManager::class.java)!!
         inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
     }
 }
@@ -69,6 +71,7 @@ fun Fragment.setupUI(view: View) {
         }
     }
 }
+
 suspend fun readData(
     context: Context,
     dataStoreProvider: DataStoreProvider,
@@ -325,6 +328,15 @@ fun isValidMobileNumber(number: String, errorMessage: String): String? {
     } else if (number.trim().length != 10) {
         return errorMessage
     } else if (!number.trim().matches("^[6-9][0-9]{9}$".toRegex())) {
+        return errorMessage
+    }
+    return null
+}
+
+fun isValidNumber(number: String, errorMessage: String): String? {
+    if (number.trim().isNullOrEmpty()) {
+        return errorMessage
+    } else if (number.trim().length != 10) {
         return errorMessage
     }
     return null

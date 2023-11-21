@@ -50,7 +50,7 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
     var imageName: String? = null
     var _requestFile: RequestBody? = null
 
-    private var _messageLiveData = MutableLiveData<Event<String>>()
+    var _messageLiveData = MutableLiveData<Event<String>>()
     val messageLiveData: LiveData<Event<String>>
         get() = _messageLiveData
 
@@ -105,7 +105,7 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
             addFormDataPart("designation", _moaDocumentData.value?.designation ?: "")
             addFormDataPart("remark", _moaDocumentData.value?.remark ?: "")
             addFormDataPart("status", _moaDocumentData.value?.status ?: "")
-//            if(_requestFile != null){
+//            if(_moaDocumentData.value?.moaFile == null){
             addFormDataPart("moa_file", "$imageName.pdf", _requestFile!!)
 //            }
         }.build()
@@ -133,11 +133,7 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
 
         val isRescheduleMeeting = _proposeCostingData.value?.rescheduleMeeting == "Yes"
 
-        val isDateAndTimeEmpty = if (_proposeCostingData.value?.meetDateTime.isNullOrBlank()) {
-            _messageLiveData.postValue(Event("Please enter date and time"))
-            true
-        } else false
-
+        val isDateAndTimeEmpty = _proposeCostingData.value?.meetDateTime.isNullOrBlank() && isRescheduleMeeting
 
         val checkAllDataAreSame = isAllDataAreSame()
 
@@ -188,6 +184,7 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
         val isDesignationNotSelected = _moaDocumentData.value?.designation.isNullOrBlank()
 
         val isMoaDocumentNotUploaded = _requestFile == null
+//            if(_moaDocumentData.value?.moaFile != null) false else
 
 
         if (isTotalInterestedIntakeNotFilled || isCostingPerStudentNotFilled || isDiscussedWithWhoomNotSelected || isAuthorityNameEmpty || isDesignationNotSelected || isAgreementDurationNotSelected || isMoaDocumentNotUploaded) {
