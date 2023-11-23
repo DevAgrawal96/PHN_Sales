@@ -32,6 +32,7 @@ import com.phntechnolab.sales.util.getFileSize
 import com.phntechnolab.sales.util.pickDate
 import com.phntechnolab.sales.util.pickTime
 import com.phntechnolab.sales.util.setupUI
+import com.phntechnolab.sales.util.toastMsg
 import com.phntechnolab.sales.viewmodel.InstallmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -42,46 +43,61 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class InstallmentFragment : Fragment() {
+
     private var _binding: FragmentInstalmentBinding? = null
+
     private val binding get() = _binding!!
 
     @Inject
     lateinit var fileDownloader: FileDownloader
 
     private val args: InstallmentFragmentArgs by navArgs()
+
     private val viewModel: InstallmentViewModel by viewModels()
 
     private var pdfOrImg: Uri? = null
 
     private var isFirstReceipt: Boolean = false
+
     private var isSecondReceipt: Boolean = false
+
     private var isThirdReceipt: Boolean = false
+
     private var isFourthReceipt: Boolean = false
 
     private var receipt1: String? = null
-    private var receipt2: String? = null
-    private var receipt3: String? = null
-    private var receipt4: String? = null
-    private var id: String? = null
-    private var schoolId: String? = null
 
+    private var receipt2: String? = null
+
+    private var receipt3: String? = null
+
+    private var receipt4: String? = null
+
+    private var id: String? = null
+
+    private var schoolId: String? = null
 
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         _binding = FragmentInstalmentBinding.inflate(inflater, container, false)
+
         setOnBackPressed()
+
         viewModel.setInstallmentData(args.schoolData)
+
         binding.viewModel = viewModel
+
         binding.lifecycleOwner = this
+
         return binding.root
     }
 
@@ -96,9 +112,13 @@ class InstallmentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setupUI(view)
+
         observers()
+
         initializeAddInstallmentCard()
+
         initializeListener()
     }
 
@@ -792,8 +812,7 @@ class InstallmentFragment : Fragment() {
 
         binding.updateBtn.setOnClickListener {
             binding.progressIndicator.visibility = View.VISIBLE
-            Timber.e(viewModel.getPosition().toString())
-            if (isFirstReceipt || isSecondReceipt || isThirdReceipt) {
+            if (checkUploadFileValid()) {
                 uploadInstallmentData()
             } else {
                 binding.progressIndicator.visibility = View.GONE
@@ -807,6 +826,8 @@ class InstallmentFragment : Fragment() {
                 fileDownloader.downloadFile(
                     receipt4!!, receipt4!!.substring(
                         receipt4!!.lastIndexOf('/') + 1
+
+
                     )
                 )
                 Toast.makeText(
@@ -901,8 +922,62 @@ class InstallmentFragment : Fragment() {
         }
     }
 
-    private fun toastMsg(msg: String) {
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+    private fun checkUploadFileValid(): Boolean {
+        return when (viewModel.getCount()) {
+            0 -> {
+                if (!binding.addAdvancePayment.edtAdvancePaymentAmount.text.isNullOrEmpty()) {
+                    isFourthReceipt && isFirstReceipt
+                } else {
+                    isFirstReceipt
+                }
+            }
+
+            1 -> {
+                if (args.schoolData?.installmentData?.advancePaymentReceipt.isNullOrEmpty()) {
+                    if (args.schoolData?.installmentData?.firstInstallmentReciept.isNullOrEmpty()) {
+                        isFirstReceipt && isFourthReceipt && isSecondReceipt
+                    } else {
+                        isFourthReceipt && isSecondReceipt
+                    }
+                } else {
+                    if (args.schoolData?.installmentData?.firstInstallmentReciept.isNullOrEmpty()) {
+                        isFirstReceipt && isSecondReceipt
+                    } else {
+                        isSecondReceipt
+                    }
+                }
+            }
+
+            2 -> {
+                isFirstReceipt && isFourthReceipt && isSecondReceipt && isThirdReceipt
+                if (args.schoolData?.installmentData?.advancePaymentReceipt.isNullOrEmpty()) {
+                    if (args.schoolData?.installmentData?.firstInstallmentReciept.isNullOrEmpty()) {
+                        if (args.schoolData?.installmentData?.secondInstallmentReciept.isNullOrEmpty()) {
+                            isFirstReceipt && isFourthReceipt && isSecondReceipt && isThirdReceipt
+                        } else {
+                            isFirstReceipt && isFourthReceipt && isThirdReceipt
+                        }
+                    } else {
+                        isFourthReceipt && isSecondReceipt && isThirdReceipt
+                    }
+                } else {
+                    if (args.schoolData?.installmentData?.firstInstallmentReciept.isNullOrEmpty()) {
+                        if (args.schoolData?.installmentData?.secondInstallmentReciept.isNullOrEmpty()) {
+                            isFirstReceipt && isSecondReceipt && isThirdReceipt
+                        } else {
+                            isFirstReceipt && isThirdReceipt
+                        }
+                    } else {
+                        isSecondReceipt && isThirdReceipt
+                    }
+                }
+            }
+
+            else -> {
+                false
+            }
+        }
+
     }
 
     override fun onDestroyView() {

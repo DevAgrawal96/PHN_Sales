@@ -26,7 +26,7 @@ class AuthInterceptor @Inject constructor(@ApplicationContext val appContext: Co
         // we can write log url here
         val request = chain.request().newBuilder()
 
-        var token = runBlocking {DataStoreManager.getToken(appContext, dataStoreProvider, "authToken").toString() }
+        val token = runBlocking {DataStoreManager.getToken(appContext, dataStoreProvider, "authToken").toString() }
 
         if(token != "null") {
             Log.d("TOken", token.toString())

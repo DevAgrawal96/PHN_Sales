@@ -26,6 +26,10 @@ import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.viewmodel.MeetingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -140,8 +144,8 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                     R.id.upcoming_btn -> {
                         val meetingsData =
                             (viewModel.meetingsData.value
-                                ?: ArrayList()).filter { it.taskDateFilter == "upcoming" }
-                                .sortedByDescending { it.dateTime }
+                                ?: ArrayList()).filter { it.taskDateFilter == "upcoming" && checkUpcomingDate(it.dateTime) }
+                                .sortedBy { it.dateTime }
                         if (meetingsData.isNullOrEmpty()) {
                             binding.noDataLottie.visibility = View.VISIBLE
                             binding.meetingRv.visibility = View.GONE
@@ -154,6 +158,27 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                 }
             }
         }
+//
+    }
+
+    private fun checkUpcomingDate(dateTime: String?): Boolean {
+        val date = Date(convertDateToLong(dateTime?.split(" ")?.get(0)))
+        val currentDate = Calendar.getInstance().time
+        return date.after(currentDate) && !isYesterday(date)
+    }
+
+    private fun convertDateToLong(date: String?): Long {
+        val df = SimpleDateFormat("dd/MM/yyy")
+        return df.parse(date).time
+    }
+
+    private fun isYesterday(date: Date): Boolean {
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.DAY_OF_YEAR, -1)
+        val yesterday = cal.time
+
+        val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+        return dateFormat.format(yesterday) == dateFormat.format(date)
     }
 
     override fun onStart() {
@@ -188,6 +213,7 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                 findNavController().navigate(R.id.action_meetingFragment_to_notificationFragment)
                 true
             }
+
             R.id.menu_home -> {
                 findNavController().navigate(R.id.homeFragment)
                 true
@@ -213,11 +239,11 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                         MeetingFragmentDirections.actionMeetingFragmentToCostingMoaDocumentFragment(
                             data.data?.proposeCostingData
                                 ?: ProposeCostingData().apply {
-                                    this.schoolId = data.data?.schoolId?:""
+                                    this.schoolId = data.data?.schoolId ?: ""
                                 },
                             data.data?.moaDocumentData
                                 ?: MOADocumentData().apply {
-                                    this.schoolId = data.data?.schoolId?:""
+                                    this.schoolId = data.data?.schoolId ?: ""
                                 }
                         )
                     )

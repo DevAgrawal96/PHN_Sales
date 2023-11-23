@@ -40,75 +40,76 @@ class SchoolPagingAdapter(private var callBacks: CallBacks) :
         val status = schoolDetail?.status == selectedChip
 
         Timber.e("chip selected text apdater ${selectedChip}")
-        if (schoolDetail?.status != "MOA Pending") {
-            if (schoolDetail != null && (status || selectedChip == "All")) {
-                holder.binding.cardView.visibility = View.VISIBLE
-                holder.binding.schoolName.text = schoolDetail.schoolName
-                holder.binding.txtEmail.text = schoolDetail.email
-                holder.binding.txtMono.text = schoolDetail.coMobileNo
-                holder.binding.chipStatus.text = schoolDetail.status
-                getStatusChipColor(context!!, schoolDetail.status) { chipTextColor, chipColor ->
-                    holder.binding.chipStatus.apply {
+        Timber.e("chip selected text apdater 2,  ${schoolDetail?.status}")
+        Timber.e("chip selected text apdater 3,  ${schoolDetail?.status}")
+        if (schoolDetail?.status != "MOA Pending" && schoolDetail != null && (status || selectedChip == "All")) {
+            Timber.e("chip selected text apdater 4,  $status")
+            holder.binding.cardView.visibility = View.VISIBLE
+            holder.binding.schoolName.text = schoolDetail.schoolName
+            holder.binding.txtEmail.text = schoolDetail.email
+            holder.binding.txtMono.text = schoolDetail.coMobileNo
+            holder.binding.chipStatus.text = schoolDetail.status
+            getStatusChipColor(context!!, schoolDetail.status) { chipTextColor, chipColor ->
+                holder.binding.chipStatus.apply {
+                    setTextColor(chipTextColor)
+                    chipBackgroundColor = ColorStateList.valueOf(chipColor)
+                }
+            }
+            if (schoolDetail.email.isNullOrEmpty()) {
+                holder.binding.txtEmail.visibility = View.GONE
+                holder.binding.emailIcon.visibility = View.GONE
+            } else {
+                holder.binding.txtEmail.visibility = View.VISIBLE
+                holder.binding.emailIcon.visibility = View.VISIBLE
+            }
+            if (schoolDetail.coMobileNo.isNullOrEmpty()) {
+                holder.binding.txtMono.visibility = View.GONE
+                holder.binding.callIcon.visibility = View.GONE
+
+            } else {
+                holder.binding.txtMono.visibility = View.VISIBLE
+                holder.binding.callIcon.visibility = View.VISIBLE
+            }
+            if (schoolDetail.schoolImage?.isNotEmpty() == true && schoolDetail.schoolImage?.isNotEmpty() == true) {
+                val image = GlideUrl(
+                    schoolDetail.schoolImage, LazyHeaders.Builder()
+                        .addHeader("User-Agent", "5")
+                        .build()
+                )
+                Glide.with(context!!).load(image).override(300, 200)
+                    .error(R.drawable.demo_img).into(holder.binding.schoolImg)
+            }
+
+            if (schoolDetail.leadType?.isNotBlank() == true && schoolDetail.leadType?.isNotEmpty() == true) {
+                holder.binding.chipLeadStatus.text = schoolDetail.leadType
+                holder.binding.chipLeadStatus.visibility = View.VISIBLE
+                getChipColor(context!!, schoolDetail.leadType) { chipTextColor, chipColor ->
+                    holder.binding.chipLeadStatus.apply {
                         setTextColor(chipTextColor)
                         chipBackgroundColor = ColorStateList.valueOf(chipColor)
                     }
                 }
-                if (schoolDetail.email.isNullOrEmpty()) {
-                    holder.binding.txtEmail.visibility = View.GONE
-                    holder.binding.emailIcon.visibility = View.GONE
-                } else {
-                    holder.binding.txtEmail.visibility = View.VISIBLE
-                    holder.binding.emailIcon.visibility = View.VISIBLE
-                }
-                if (schoolDetail.coMobileNo.isNullOrEmpty()) {
-                    holder.binding.txtMono.visibility = View.GONE
-                    holder.binding.callIcon.visibility = View.GONE
-
-                } else {
-                    holder.binding.txtMono.visibility = View.VISIBLE
-                    holder.binding.callIcon.visibility = View.VISIBLE
-                }
-                if (schoolDetail.schoolImage?.isNotEmpty() == true && schoolDetail.schoolImage?.isNotEmpty() == true) {
-                    val image = GlideUrl(
-                        schoolDetail.schoolImage, LazyHeaders.Builder()
-                            .addHeader("User-Agent", "5")
-                            .build()
-                    )
-                    Glide.with(context!!).load(image).override(300, 200)
-                        .error(R.drawable.demo_img).into(holder.binding.schoolImg)
-                }
-
-                if (schoolDetail.leadType?.isNotBlank() == true && schoolDetail.leadType?.isNotEmpty() == true) {
-                    holder.binding.chipLeadStatus.text = schoolDetail.leadType
-                    holder.binding.chipLeadStatus.visibility = View.VISIBLE
-                    getChipColor(context!!, schoolDetail.leadType) { chipTextColor, chipColor ->
-                        holder.binding.chipLeadStatus.apply {
-                            setTextColor(chipTextColor)
-                            chipBackgroundColor = ColorStateList.valueOf(chipColor)
-                        }
-                    }
-                } else {
-                    holder.binding.chipLeadStatus.visibility = View.GONE
-                }
-
-                if (schoolDetail.status == "MOASigned") {
-                    holder.binding.editIcon.visibility = View.GONE
-                } else {
-                    holder.binding.editIcon.visibility = View.VISIBLE
-                }
-
-                holder.binding.cardView.setOnClickListener {
-                    callBacks.meetingNavigation(schoolDetail)
-                }
-
-                holder.binding.editIcon.setOnClickListener {
-                    if (it != null)
-                        callBacks.openSchoolDetails(schoolDetail)
-                }
             } else {
-                holder.binding.cardView.visibility = View.GONE
+                holder.binding.chipLeadStatus.visibility = View.GONE
+            }
+
+            if (schoolDetail.status == "MOASigned") {
+                holder.binding.editIcon.visibility = View.GONE
+            } else {
+                holder.binding.editIcon.visibility = View.VISIBLE
+            }
+
+            holder.binding.cardView.setOnClickListener {
+                callBacks.meetingNavigation(schoolDetail)
+            }
+
+            holder.binding.editIcon.setOnClickListener {
+                if (it != null)
+                    callBacks.openSchoolDetails(schoolDetail)
             }
         } else {
+            Timber.e("chip selected text apdater 5")
+            holder.binding.cardView.visibility = View.GONE
         }
     }
 

@@ -58,6 +58,8 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
     val progressBarLiveData: LiveData<Boolean>
         get() = _progressBarLiveData
 
+    var isRescheduleMeeting = false
+
     fun updateProposeCostingDetails() {
 
         viewModelScope.launch {
@@ -66,7 +68,6 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
     }
 
     fun updateMoaDocumentDetails() {
-
         viewModelScope.launch {
             repositories.moaDocumentData(returntoJson())
         }
@@ -131,7 +132,7 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
         val isConversationRatioNotSelected =
             _proposeCostingData.value?.conversationRatio.isNullOrBlank()
 
-        val isRescheduleMeeting = _proposeCostingData.value?.rescheduleMeeting == "Yes"
+        isRescheduleMeeting = _proposeCostingData.value?.rescheduleMeeting == "Yes"
 
         val isDateAndTimeEmpty = _proposeCostingData.value?.meetDateTime.isNullOrBlank() && isRescheduleMeeting
 
@@ -181,7 +182,11 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
 
         val isAuthorityNameEmpty = _moaDocumentData.value?.authorityName.isNullOrBlank()
 
-        val isDesignationNotSelected = _moaDocumentData.value?.designation.isNullOrBlank()
+        val array = arrayOf(
+            "Principal", "Teacher", "Director", "Owner", "HOD", "Others"
+        )
+
+        val isDesignationNotSelected = !(!_moaDocumentData.value?.designation.isNullOrBlank() || !array.contains(_moaDocumentData.value?.designation))
 
         val isMoaDocumentNotUploaded = _requestFile == null
 //            if(_moaDocumentData.value?.moaFile != null) false else

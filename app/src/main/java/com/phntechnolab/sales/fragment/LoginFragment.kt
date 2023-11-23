@@ -191,7 +191,7 @@ class LoginFragment : Fragment() {
             ) {
                 ""
             } else {
-                isValidEmail(email, resources.getString(R.string.enter_valid_email)).toString()
+                isValidEmail(email, resources.getString(R.string.enter_valid_email))
             }
         }
     }

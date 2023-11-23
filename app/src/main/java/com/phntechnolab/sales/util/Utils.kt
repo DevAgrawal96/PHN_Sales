@@ -188,12 +188,12 @@ fun getFileSize(uri: Uri?, context: Context): Long {
     return 0
 }
 
-fun Fragment.oriantaionPortrait() {
+fun Fragment.orientationPortrait() {
     requireActivity()
         .requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 }
 
-fun Fragment.oriantaionLandscape() {
+fun Fragment.orientationLandscape() {
     requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 }
 

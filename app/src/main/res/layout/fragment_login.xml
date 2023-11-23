@@ -99,21 +99,6 @@
             app:layout_constraintTop_toBottomOf="@+id/login_txt"
             app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/emailErrorMsg"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dimen_16dp"
-            android:layout_marginTop="@dimen/dimen_8dp"
-            android:layout_marginEnd="@dimen/dimen_16dp"
-            android:text="@string/please_enter_valid_email_address"
-            android:textColor="@color/design_default_color_error"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/til_email_id"
-            app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_password"
@@ -121,7 +106,7 @@
             android:layout_width="@dimen/dimen_0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_16dp"
-            android:layout_marginTop="@dimen/dimen_16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/dimen_16dp"
             android:clickable="true"
             android:focusableInTouchMode="true"
@@ -130,7 +115,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailErrorMsg"
+            app:layout_constraintTop_toBottomOf="@+id/til_email_id"
             app:layout_constraintVertical_bias="0.0">
 
             <com.google.android.material.textfield.TextInputEditText

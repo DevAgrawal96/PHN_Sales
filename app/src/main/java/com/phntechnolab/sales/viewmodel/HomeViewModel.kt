@@ -47,6 +47,8 @@ class HomeViewModel @Inject constructor(private val repositories: HomeRepository
             repositories.getToken()
         }
     }
+    fun refereshData() {
+    }
 
     fun getAllSchoolsPagination(): LiveData<PagingData<SchoolData>> {
 

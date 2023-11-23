@@ -638,7 +638,10 @@ class AddSchoolFragment : Fragment(), MenuProvider {
             if (imageUri != null && getFileSize(imageUri, requireContext()) > 0) {
                 Timber.e("$imageUri")
                 viewModel.uploadImage(imageUri, requireContext())
+                binding.schoolDetails.imgName.visibility = View.VISIBLE
+                binding.schoolDetails.imgIcon.visibility = View.VISIBLE
                 binding.schoolDetails.imgName.text = "${viewModel.imageName}.jpg"
+                binding.schoolDetails.schoolImage.visibility = View.GONE
             }
         }
 

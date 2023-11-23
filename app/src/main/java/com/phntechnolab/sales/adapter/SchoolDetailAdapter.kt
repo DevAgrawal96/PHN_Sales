@@ -43,6 +43,7 @@ class SchoolDetailAdapter(private var callBacks: CallBacks) :
 
     override fun onBindViewHolder(holder: SchoolViewHolder, position: Int) {
         val schoolDetail = data[position]
+        holder.binding.cardView.visibility = View.VISIBLE
         holder.binding.schoolName.text = schoolDetail.schoolName
         holder.binding.txtEmail.text = schoolDetail.email
         holder.binding.txtMono.text = schoolDetail.coMobileNo

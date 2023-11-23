@@ -129,7 +129,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
     }
 
     private fun validation() {
-        binding.proposeCostingStage.edtEmailId.textChange {email->
+        binding.proposeCostingStage.edtEmailId.textChange { email ->
             binding.proposeCostingStage.tilEmailId.error = if (isValidEmail(
                     email,
                     resources.getString(com.phntechnolab.sales.R.string.enter_valid_email)
@@ -137,7 +137,10 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             ) {
                 ""
             } else {
-                isValidEmail(email, resources.getString(com.phntechnolab.sales.R.string.enter_valid_email)).toString()
+                isValidEmail(
+                    email,
+                    resources.getString(com.phntechnolab.sales.R.string.enter_valid_email)
+                ).toString()
             }
         }
     }
@@ -306,7 +309,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
         viewModel.messageLiveData.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { _message ->
-                Toast.makeText(requireContext(), _message, Toast.LENGTH_SHORT).show()
+                toastMsg(_message)
             }
         }
 
@@ -320,7 +323,12 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
-                    setPositionView()
+                    if (viewModel.isRescheduleMeeting) {
+                        toastMsg(requireContext().resources.getString(com.phntechnolab.sales.R.string.meeting_has_been_rescheduled))
+                        findNavController().popBackStack()
+                    } else {
+                        setPositionView()
+                    }
                 }
 
                 is NetworkResult.Error -> {
@@ -532,6 +540,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
     private fun setMoaDocumentDropdowns(moaDocumentData: MOADocumentData?) {
 
         //set moa file name
+        Timber.e(moaDocumentData?.moaFile.toString())
         if (moaDocumentData?.moaFile != "" && moaDocumentData?.moaFile != null && !moaDocumentData.moaFile!!.startsWith(
                 "/tmp/"
             )

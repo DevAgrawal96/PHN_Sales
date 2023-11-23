@@ -109,7 +109,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
             viewModel.getAllSchoolsPagination().observe(viewLifecycleOwner) {
                 viewModel.setPagingData(it)
                 binding.swipeReferesh.isRefreshing = false
-
                 binding.noInternetConnection.visibility = View.GONE
                 binding.noInternetMessage.visibility = View.GONE
                 binding.progressIndicator.visibility = View.GONE
