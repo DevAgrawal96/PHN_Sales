@@ -111,7 +111,6 @@
             android:clickable="true"
             android:focusableInTouchMode="true"
             android:hint="@string/password"
-            app:endIconMode="password_toggle"
             app:helperTextTextColor="@color/error_red"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
