@@ -71,6 +71,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         initializeAdapter()
@@ -78,6 +79,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
         setOnBackPressed()
 
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,6 +92,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
         initPagingData()
 
         binding.swipeReferesh.setOnRefreshListener {
+            binding.swipeReferesh.isEnabled = false
             schoolPagingAdapter?.refresh()
         }
 
@@ -98,7 +101,9 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
             Timber.e(loadState.toString())
             if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && schoolPagingAdapter?.itemCount ?: 0 < 1) {
                 hideViewShowEmptyState()
+                binding.swipeReferesh.isEnabled = true
             } else {
+                binding.swipeReferesh.isEnabled = true
                 showViewHideEmptyState()
             }
         }
@@ -329,6 +334,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
             }
 
             "Propose Costing" -> {
+                Timber.e(schoolData.schoolId)
                 requireView().findNavController()
                     .navigate(
                         HomeFragmentDirections.actionHomeFragmentToCostingMoaDocumentFragment(

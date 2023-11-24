@@ -6,12 +6,11 @@ import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.DMData
 import com.phntechnolab.sales.model.InstallmentData
-import com.phntechnolab.sales.model.LoginDetails
+import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.model.SchoolPaginationData
 import com.phntechnolab.sales.model.UserDataModel
-import com.phntechnolab.sales.model.UserResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -28,7 +27,7 @@ interface AuthApi {
     @GET("api/allschools")
     suspend fun getAllSchoolData(): Response<List<SchoolData>>
 
-    @GET("api/pagination")
+    @GET("api/paginationdata")
     suspend fun getAllSchoolDataPage(@Query("page") page: Int): Response<SchoolPaginationData>
 
     @POST("api/refresh")
@@ -89,5 +88,7 @@ interface AuthApi {
     suspend fun proposeCostingApi(@Body proposeCostingData: ProposeCostingData): Response<CustomResponse>
 
     @POST("api/moadocument")
-    suspend fun moaDocumentApi(@Body moaDocumentData: MultipartBody): Response<CustomResponse>
+    suspend fun moaDocumentData(@Body moaDocumentData: MOADocumentData): Response<CustomResponse>
+    @POST("api/uploadmoa/{school_id}")
+    suspend fun moaDocumentFileUpload(@Path(value = "school_id") schoolId: String,@Body moaDocumentData: MultipartBody): Response<CustomResponse>
 }

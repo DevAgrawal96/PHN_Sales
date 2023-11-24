@@ -45,6 +45,8 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
 
     val moaDocumentDetails: LiveData<NetworkResult<CustomResponse>>
         get() = repositories.moaDocumentDetails
+    val moaDocumentFile: LiveData<NetworkResult<CustomResponse>>
+        get() = repositories.moaDocumentFile
 
     var imageData: MultipartBody.Part? = null
     var imageName: String? = null
@@ -61,16 +63,26 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
     var isRescheduleMeeting = false
 
     fun updateProposeCostingDetails() {
-
         viewModelScope.launch {
             repositories.proposeCostingData(_proposeCostingData.value ?: ProposeCostingData())
         }
     }
 
-    fun updateMoaDocumentDetails() {
+    fun updateMoaDocumentDetails(moaDocumentData: MOADocumentData) {
         viewModelScope.launch {
-            repositories.moaDocumentData(returntoJson())
+//            repositories.moaDocumentData(returnToJson())
+            repositories.moaDocumentData(moaDocumentData)
         }
+    }
+    fun updateMoaDocumentFile() {
+        viewModelScope.launch {
+            val body = MultipartBody.Builder().setType(MultipartBody.FORM).apply {
+            addFormDataPart("moa_file", "$imageName.pdf", _requestFile!!)
+            }.build()
+            Timber.e(_moaDocumentData.value?.schoolId)
+            repositories.moaDocumentFile(_moaDocumentData.value?.schoolId ?:"",body)
+        }
+
     }
 
     fun uploadDocument(documentUri: Uri, requireContext: Context) {
@@ -92,22 +104,19 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
         imageName = sdf.format(Date())
     }
 
-    private fun returntoJson(): MultipartBody {
+    private fun returnToJson(): MultipartBody {
         val body = MultipartBody.Builder().setType(MultipartBody.FORM).apply {
             addFormDataPart("id", _moaDocumentData.value?.id ?: "")
             addFormDataPart("school_id", _moaDocumentData.value?.schoolId ?: "")
             addFormDataPart("interested_intake", _moaDocumentData.value?.interestedIntake ?: "")
             addFormDataPart("final_costing", _moaDocumentData.value?.finalCosting ?: "")
             addFormDataPart("quotation_duration", _moaDocumentData.value?.quotationDuration ?: "")
-            addFormDataPart(
-                "authority_name",
-                _moaDocumentData.value?.authorityName ?: ""
-            )
+            addFormDataPart("authority_name", _moaDocumentData.value?.authorityName ?: "")
             addFormDataPart("designation", _moaDocumentData.value?.designation ?: "")
             addFormDataPart("remark", _moaDocumentData.value?.remark ?: "")
             addFormDataPart("status", _moaDocumentData.value?.status ?: "")
 //            if(_moaDocumentData.value?.moaFile == null){
-            addFormDataPart("moa_file", "$imageName.pdf", _requestFile!!)
+//            addFormDataPart("moa_file", "$imageName.pdf", _requestFile!!)
 //            }
         }.build()
         return body
@@ -116,7 +125,7 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
     fun isProposeCostingFieldsValid() {
         val isPriceDiscussedPending = _proposeCostingData.value?.priceDiscussed != "yes"
 
-        val isPricepPerStudentPending =
+        val isPricePerStudentPending =
             _proposeCostingData.value?.pricePerStudent.isNullOrBlank()
 
         val isQuotationValidityPending =
@@ -134,13 +143,14 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
 
         isRescheduleMeeting = _proposeCostingData.value?.rescheduleMeeting == "Yes"
 
-        val isDateAndTimeEmpty = _proposeCostingData.value?.meetDateTime.isNullOrBlank() && isRescheduleMeeting
+        val isDateAndTimeEmpty =
+            _proposeCostingData.value?.meetDateTime.isNullOrBlank() && isRescheduleMeeting
 
         val checkAllDataAreSame = isAllDataAreSame()
 
         Timber.e("DATA ARE SAME OR NOT $checkAllDataAreSame")
         if (isRescheduleMeeting) {
-            return if (isPricepPerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending || isDateAndTimeEmpty) {
+            return if (isPricePerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending || isDateAndTimeEmpty) {
                 _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
             } else {
                 //Call Api to submit the data
@@ -148,7 +158,7 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
                 updateProposeCostingDetails()
             }
         } else {
-            return if (isPricepPerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending) {
+            return if (isPricePerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending) {
                 _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
             } else {
                 //Call Api to submit the data
@@ -186,10 +196,9 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
             "Principal", "Teacher", "Director", "Owner", "HOD", "Others"
         )
 
-        val isDesignationNotSelected = !(!_moaDocumentData.value?.designation.isNullOrBlank() || !array.contains(_moaDocumentData.value?.designation))
+        val isDesignationNotSelected = _moaDocumentData.value?.designation.isNullOrBlank()
 
-        val isMoaDocumentNotUploaded = _requestFile == null
-//            if(_moaDocumentData.value?.moaFile != null) false else
+        val isMoaDocumentNotUploaded = if(_moaDocumentData.value?.moaFile != null) false else _requestFile == null
 
 
         if (isTotalInterestedIntakeNotFilled || isCostingPerStudentNotFilled || isDiscussedWithWhoomNotSelected || isAuthorityNameEmpty || isDesignationNotSelected || isAgreementDurationNotSelected || isMoaDocumentNotUploaded) {
@@ -200,7 +209,7 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
             }
         } else {
             _progressBarLiveData.postValue(true)
-            updateMoaDocumentDetails()
+            updateMoaDocumentDetails(_moaDocumentData.value ?: MOADocumentData())
         }
     }
 

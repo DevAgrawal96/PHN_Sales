@@ -104,6 +104,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         viewModel._proposeCostingData.postValue(args.proposeCostingDetails)
 
         viewModel._moaDocumentData.postValue(args.moaDocumentDetails)
+        Timber.e(args.moaDocumentDetails.toString())
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
@@ -116,6 +117,8 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
         setupUI(view)
 
+        initListener()
+
         observers()
 
         checkedChangeListener()
@@ -126,6 +129,15 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
         validation()
 
+    }
+
+    private fun initListener() {
+        binding.proposeCostingStage.edtSelectDesignationOther.textChange {
+            viewModel._proposeCostingData.value?.designation = it
+        }
+        binding.moaDocument.edtSelectDesignationOther.textChange {
+            viewModel._moaDocumentData.value?.designation = it
+        }
     }
 
     private fun validation() {
@@ -179,6 +191,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             val designation = parent.adapter.getItem(position) as String
             viewModel._proposeCostingData.value?.designation = designation
             if (designation == "Others") {
+                viewModel._proposeCostingData.value?.designation = ""
                 binding.proposeCostingStage.tilSelectDesignationOther.visibility = View.VISIBLE
             } else {
                 binding.proposeCostingStage.tilSelectDesignationOther.visibility = View.GONE
@@ -200,6 +213,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             val designation = parent.adapter.getItem(position) as String
             viewModel._moaDocumentData.value?.designation = designation
             if (designation == "Others") {
+                viewModel._moaDocumentData.value?.designation = ""
                 binding.moaDocument.tilSelectDesignationOther.visibility = View.VISIBLE
             } else {
                 binding.moaDocument.tilSelectDesignationOther.visibility = View.GONE
@@ -351,22 +365,57 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
-                    viewModel.changeProgressBarVisibility(false)
-                    showDialog()
+                    Timber.e("${viewModel._moaDocumentData.value?.moaFile}")
+                    if (viewModel._moaDocumentData.value?.moaFile != null && !viewModel._moaDocumentData.value?.moaFile!!.startsWith(
+                            "/tmp/"
+                        )
+                    ) {
+                        if (viewModel._requestFile != null) {
+                            viewModel.updateMoaDocumentFile()
+                        } else {
+                            viewModel.changeProgressBarVisibility(false)
+                            showDialog()
+                        }
+                    } else if (viewModel._requestFile != null) {
+                        viewModel.updateMoaDocumentFile()
+                    } else {
+                        viewModel.changeProgressBarVisibility(false)
+                        toastMsg(requireContext().resources.getString(com.phntechnolab.sales.R.string.please_upload_moa_document))
+                    }
+
                 }
 
                 is NetworkResult.Error -> {
+                    if (!it.message.isNullOrBlank()) toastMsg(it.message)
                     viewModel.changeProgressBarVisibility(false)
                     Timber.e(it.toString())
                 }
 
                 else -> {
+                    if (!it.message.isNullOrBlank()) toastMsg(it.message)
                     viewModel.changeProgressBarVisibility(false)
-                    Toast.makeText(
-                        requireContext(),
-                        requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                }
+            }
+        }
+
+        viewModel.moaDocumentFile.observe(viewLifecycleOwner) {
+            Timber.e("Response dd")
+            Timber.e(Gson().toJson(it))
+            when (it) {
+                is NetworkResult.Success -> {
+                    viewModel.changeProgressBarVisibility(false)
+                    showDialog()
+                }
+
+                is NetworkResult.Error -> {
+                    if (!it.message.isNullOrBlank()) toastMsg(it.message)
+                    viewModel.changeProgressBarVisibility(false)
+                    Timber.e(it.toString())
+                }
+
+                else -> {
+                    if (!it.message.isNullOrBlank()) toastMsg(it.message)
+                    viewModel.changeProgressBarVisibility(false)
                 }
             }
         }

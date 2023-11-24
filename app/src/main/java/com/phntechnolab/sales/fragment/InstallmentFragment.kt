@@ -76,6 +76,7 @@ class InstallmentFragment : Fragment() {
     private var id: String? = null
 
     private var schoolId: String? = null
+    private var installmentData: InstallmentData? = null
 
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
@@ -534,6 +535,8 @@ class InstallmentFragment : Fragment() {
             id = it?.installmentData?.id ?: ""
             schoolId = it?.schoolId
 
+            installmentData = it?.installmentData
+
 
             if (!it?.installmentData?.firstInstallmentAmount.isNullOrEmpty()) {
                 binding.installment1.installmentDetailsTxt.text =
@@ -816,7 +819,32 @@ class InstallmentFragment : Fragment() {
                 uploadInstallmentData()
             } else {
                 binding.progressIndicator.visibility = View.GONE
-                toastMsg("Please upload receipt and amount")
+                when (viewModel.getCount()) {
+                    0 -> {
+                        if (!installmentData?.firstInstallmentAmount.isNullOrEmpty()) {
+
+                        } else {
+                            toastMsg("Please upload receipt and amount")
+                        }
+                    }
+
+                    1 -> {
+                        if (!installmentData?.secondInstallmentAmount.isNullOrEmpty()) {
+
+                        } else {
+                            toastMsg("Please upload receipt and amount")
+                        }
+                    }
+
+                    2 -> {
+                        if (!installmentData?.thirdInstallmentAmount.isNullOrEmpty()) {
+
+                        } else {
+                            toastMsg("Please upload receipt and amount")
+                        }
+                    }
+                }
+
             }
         }
 
@@ -937,7 +965,12 @@ class InstallmentFragment : Fragment() {
                     if (args.schoolData?.installmentData?.firstInstallmentReciept.isNullOrEmpty()) {
                         isFirstReceipt && isFourthReceipt && isSecondReceipt
                     } else {
-                        isFourthReceipt && isSecondReceipt
+                        if (!binding.addAdvancePayment.edtAdvancePaymentAmount.text.isNullOrEmpty()) {
+                            isFourthReceipt && isSecondReceipt
+                        } else {
+                            isSecondReceipt
+                        }
+
                     }
                 } else {
                     if (args.schoolData?.installmentData?.firstInstallmentReciept.isNullOrEmpty()) {
@@ -949,13 +982,16 @@ class InstallmentFragment : Fragment() {
             }
 
             2 -> {
-                isFirstReceipt && isFourthReceipt && isSecondReceipt && isThirdReceipt
                 if (args.schoolData?.installmentData?.advancePaymentReceipt.isNullOrEmpty()) {
                     if (args.schoolData?.installmentData?.firstInstallmentReciept.isNullOrEmpty()) {
                         if (args.schoolData?.installmentData?.secondInstallmentReciept.isNullOrEmpty()) {
                             isFirstReceipt && isFourthReceipt && isSecondReceipt && isThirdReceipt
                         } else {
-                            isFirstReceipt && isFourthReceipt && isThirdReceipt
+                            if (!binding.addAdvancePayment.edtAdvancePaymentAmount.text.isNullOrEmpty()) {
+                                isFirstReceipt && isFourthReceipt && isThirdReceipt
+                            } else {
+                                isFirstReceipt && isThirdReceipt
+                            }
                         }
                     } else {
                         isFourthReceipt && isSecondReceipt && isThirdReceipt
