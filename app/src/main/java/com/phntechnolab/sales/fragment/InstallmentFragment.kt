@@ -987,14 +987,14 @@ class InstallmentFragment : Fragment() {
                         if (args.schoolData?.installmentData?.secondInstallmentReciept.isNullOrEmpty()) {
                             isFirstReceipt && isFourthReceipt && isSecondReceipt && isThirdReceipt
                         } else {
-                            if (!binding.addAdvancePayment.edtAdvancePaymentAmount.text.isNullOrEmpty()) {
-                                isFirstReceipt && isFourthReceipt && isThirdReceipt
-                            } else {
-                                isFirstReceipt && isThirdReceipt
-                            }
+                            isFirstReceipt && isFourthReceipt && isThirdReceipt
                         }
                     } else {
-                        isFourthReceipt && isSecondReceipt && isThirdReceipt
+                        if (!binding.addAdvancePayment.edtAdvancePaymentAmount.text.isNullOrEmpty()) {
+                            isFirstReceipt && isFourthReceipt && isThirdReceipt
+                        } else {
+                            isThirdReceipt
+                        }
                     }
                 } else {
                     if (args.schoolData?.installmentData?.firstInstallmentReciept.isNullOrEmpty()) {
