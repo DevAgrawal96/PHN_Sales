@@ -235,7 +235,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
 
 
     override fun onDestroyView() {
-        _binding = null
+//        _binding = null
         schoolPagingAdapter = null
         super.onDestroyView()
         Timber.e("onDestroyView")

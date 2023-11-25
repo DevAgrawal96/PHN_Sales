@@ -133,10 +133,40 @@ class InstallmentFragment : Fragment() {
         Glide.with(requireContext()).load(image).override(300, 200)
             .error(R.drawable.demo_img).into(binding.schoolDetails.schoolImg)
         binding.schoolDetails.editIcon.visibility = View.GONE
+
         binding.schoolDetails.schoolName.text = data.schoolName
-        binding.schoolDetails.txtEmail.text = data.email
-        binding.schoolDetails.txtMono.text = data.coMobileNo
-        binding.schoolDetails.locationTxt.text = data.schoolAddress
+        data.email.let {
+            if (it.isNullOrBlank()) {
+                binding.schoolDetails.txtEmail.visibility = View.GONE
+                binding.schoolDetails.emailIcon.visibility = View.GONE
+            } else {
+                binding.schoolDetails.txtEmail.text = it
+                binding.schoolDetails.txtEmail.visibility = View.VISIBLE
+                binding.schoolDetails.emailIcon.visibility = View.VISIBLE
+            }
+        }
+        data.coMobileNo.let {
+            if (it.isNullOrBlank()) {
+                binding.schoolDetails.txtMono.visibility = View.GONE
+                binding.schoolDetails.callIcon.visibility = View.GONE
+            } else {
+                binding.schoolDetails.txtMono.text = it
+                binding.schoolDetails.txtMono.visibility = View.VISIBLE
+                binding.schoolDetails.callIcon.visibility = View.VISIBLE
+            }
+        }
+        data.schoolAddress.let {
+            if (it.isNullOrBlank()) {
+                binding.schoolDetails.locationTxt.visibility = View.GONE
+                binding.schoolDetails.locationIcon.visibility = View.GONE
+            } else {
+                binding.schoolDetails.locationTxt.text = it
+                binding.schoolDetails.locationTxt.visibility = View.VISIBLE
+                binding.schoolDetails.locationIcon.visibility = View.VISIBLE
+            }
+        }
+
+
         binding.topAppBar.title = data.schoolName
         binding.schoolDetails.chipStatus.text = data.status
         binding.schoolDetails.chipLeadStatus.text = data.leadType
@@ -953,7 +983,7 @@ class InstallmentFragment : Fragment() {
     private fun checkUploadFileValid(): Boolean {
         return when (viewModel.getCount()) {
             0 -> {
-                if (!binding.addAdvancePayment.edtAdvancePaymentAmount.text.isNullOrEmpty()) {
+                if (!binding.addAdvancePayment.edtAdvancePaymentAmount.text.isNullOrEmpty() && !args.schoolData?.installmentData?.advancePaymentAmount.isNullOrEmpty()) {
                     isFourthReceipt && isFirstReceipt
                 } else {
                     isFirstReceipt
@@ -961,7 +991,7 @@ class InstallmentFragment : Fragment() {
             }
 
             1 -> {
-                if (args.schoolData?.installmentData?.advancePaymentReceipt.isNullOrEmpty()) {
+                if (!binding.addAdvancePayment.edtAdvancePaymentAmount.text.isNullOrEmpty() && !args.schoolData?.installmentData?.advancePaymentAmount.isNullOrEmpty()) {
                     if (args.schoolData?.installmentData?.firstInstallmentReciept.isNullOrEmpty()) {
                         isFirstReceipt && isFourthReceipt && isSecondReceipt
                     } else {
@@ -982,7 +1012,7 @@ class InstallmentFragment : Fragment() {
             }
 
             2 -> {
-                if (args.schoolData?.installmentData?.advancePaymentReceipt.isNullOrEmpty()) {
+                if (!binding.addAdvancePayment.edtAdvancePaymentAmount.text.isNullOrEmpty() && !args.schoolData?.installmentData?.advancePaymentAmount.isNullOrEmpty()) {
                     if (args.schoolData?.installmentData?.firstInstallmentReciept.isNullOrEmpty()) {
                         if (args.schoolData?.installmentData?.secondInstallmentReciept.isNullOrEmpty()) {
                             isFirstReceipt && isFourthReceipt && isSecondReceipt && isThirdReceipt
@@ -1004,7 +1034,7 @@ class InstallmentFragment : Fragment() {
                             isFirstReceipt && isThirdReceipt
                         }
                     } else {
-                        isSecondReceipt && isThirdReceipt
+                        isThirdReceipt
                     }
                 }
             }

@@ -365,23 +365,46 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
-                    Timber.e("${viewModel._moaDocumentData.value?.moaFile}")
-                    if (viewModel._moaDocumentData.value?.moaFile != null && !viewModel._moaDocumentData.value?.moaFile!!.startsWith(
+                    if (viewModel._moaDocumentData.value?.moaFile == null && viewModel._moaDocumentData.value?.moaFile!!.startsWith(
                             "/tmp/"
                         )
                     ) {
                         if (viewModel._requestFile != null) {
                             viewModel.updateMoaDocumentFile()
-                        } else {
+                        }else{
+                            viewModel.changeProgressBarVisibility(false)
+                            toastMsg(requireContext().resources.getString(com.phntechnolab.sales.R.string.please_upload_moa_document))
+
+                        }
+                    } else if(viewModel._moaDocumentData.value?.moaFile != null && !viewModel._moaDocumentData.value?.moaFile!!.startsWith(
+                            "/tmp/"
+                        )){
+                        if(viewModel._requestFile != null){
+                            viewModel.updateMoaDocumentFile()
+                        }else{
                             viewModel.changeProgressBarVisibility(false)
                             showDialog()
+
                         }
-                    } else if (viewModel._requestFile != null) {
-                        viewModel.updateMoaDocumentFile()
-                    } else {
-                        viewModel.changeProgressBarVisibility(false)
-                        toastMsg(requireContext().resources.getString(com.phntechnolab.sales.R.string.please_upload_moa_document))
                     }
+
+//                    Timber.e("${viewModel._moaDocumentData.value?.moaFile}")
+//                    if (viewModel._moaDocumentData.value?.moaFile != null && !viewModel._moaDocumentData.value?.moaFile!!.startsWith(
+//                            "/tmp/"
+//                        )
+//                    ) {
+//                        if (viewModel._requestFile != null) {
+//                            viewModel.updateMoaDocumentFile()
+//                        } else {
+//                            viewModel.changeProgressBarVisibility(false)
+//                            showDialog()
+//                        }
+//                    } else if (viewModel._requestFile != null) {
+//                        viewModel.updateMoaDocumentFile()
+//                    } else {
+//                        viewModel.changeProgressBarVisibility(false)
+//                        toastMsg(requireContext().resources.getString(com.phntechnolab.sales.R.string.please_upload_moa_document))
+//                    }
 
                 }
 
