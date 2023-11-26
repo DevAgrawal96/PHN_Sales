@@ -93,7 +93,7 @@ class SchoolPagingAdapter(private var callBacks: CallBacks) :
                 holder.binding.chipLeadStatus.visibility = View.GONE
             }
 
-            if (schoolDetail.status == "MOASigned") {
+            if (schoolDetail.status == "MOA Signed" || schoolDetail.status == "Installment") {
                 holder.binding.editIcon.visibility = View.GONE
             } else {
                 holder.binding.editIcon.visibility = View.VISIBLE

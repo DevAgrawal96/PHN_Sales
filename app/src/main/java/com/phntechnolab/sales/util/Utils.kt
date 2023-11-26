@@ -131,7 +131,7 @@ fun getStatusChipColor(context: Context, chipName: String?, chipColor: (Int, Int
             )
         }
 
-        "MOASigned" -> {
+        "MOA Signed" -> {
             chipColor.invoke(
                 ContextCompat.getColor(context, R.color.moa_signed_chip_text_color),
                 ContextCompat.getColor(context, R.color.moa_signed_chip_color)

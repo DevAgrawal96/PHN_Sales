@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.phntechnolab.sales.Event
+import com.phntechnolab.sales.R
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
@@ -22,6 +23,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
@@ -74,13 +76,14 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
             repositories.moaDocumentData(moaDocumentData)
         }
     }
+
     fun updateMoaDocumentFile() {
         viewModelScope.launch {
             val body = MultipartBody.Builder().setType(MultipartBody.FORM).apply {
-            addFormDataPart("moa_file", "$imageName.pdf", _requestFile!!)
+                addFormDataPart("moa_file", "$imageName.pdf", _requestFile!!)
             }.build()
             Timber.e(_moaDocumentData.value?.schoolId)
-            repositories.moaDocumentFile(_moaDocumentData.value?.schoolId ?:"",body)
+            repositories.moaDocumentFile(_moaDocumentData.value?.schoolId ?: "", body)
         }
 
     }
@@ -148,24 +151,54 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
 
         val checkAllDataAreSame = isAllDataAreSame()
 
+        val isEmailValid =
+            !Pattern.compile("[a-zA-Z0-9+_.-]+@[a-zA-Z0-9]+[.-][a-zA-Z][a-z.A-Z]+")
+                .matcher(_proposeCostingData.value?.emailId.toString())
+                .matches()
+
         Timber.e("DATA ARE SAME OR NOT $checkAllDataAreSame")
-        if (isRescheduleMeeting) {
-            return if (isPricePerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending || isDateAndTimeEmpty) {
-                _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
+        if (_proposeCostingData.value?.emailId.toString().trim().isNotEmpty()) {
+            return if (isRescheduleMeeting) {
+                if (isPricePerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending || isDateAndTimeEmpty || isEmailValid) {
+                    _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
+                } else {
+                    //Call Api to submit the data
+                    _messageLiveData.postValue(Event("removeError"))
+                    updateProposeCostingDetailsAndProgress(true)
+                }
             } else {
-                //Call Api to submit the data
-                _progressBarLiveData.postValue(true)
-                updateProposeCostingDetails()
+                if (isPricePerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending || isEmailValid) {
+                    _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
+                } else {
+                    //Call Api to submit the data
+                    _messageLiveData.postValue(Event("removeError"))
+                    updateProposeCostingDetailsAndProgress(true)
+                }
             }
         } else {
-            return if (isPricePerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending) {
-                _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
+            return if (isRescheduleMeeting) {
+                if (isPricePerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending || isDateAndTimeEmpty) {
+                    _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
+                } else {
+                    //Call Api to submit the data
+                    _messageLiveData.postValue(Event("removeError"))
+                    updateProposeCostingDetailsAndProgress(true)
+                }
             } else {
-                //Call Api to submit the data
-                _progressBarLiveData.postValue(true)
-                updateProposeCostingDetails()
+                if (isPricePerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending) {
+                    _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
+                } else {
+                    //Call Api to submit the data
+                    _messageLiveData.postValue(Event("removeError"))
+                    updateProposeCostingDetailsAndProgress(true)
+                }
             }
         }
+    }
+
+    private fun updateProposeCostingDetailsAndProgress(progressStatus: Boolean) {
+        _progressBarLiveData.postValue(progressStatus)
+        updateProposeCostingDetails()
     }
 
     private fun isAllDataAreSame(): Boolean {
@@ -198,7 +231,8 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
 
         val isDesignationNotSelected = _moaDocumentData.value?.designation.isNullOrBlank()
 
-        val isMoaDocumentNotUploaded = if(_moaDocumentData.value?.moaFile != null) false else _requestFile == null
+        val isMoaDocumentNotUploaded =
+            if (_moaDocumentData.value?.moaFile != null) false else _requestFile == null
 
 
         if (isTotalInterestedIntakeNotFilled || isCostingPerStudentNotFilled || isDiscussedWithWhoomNotSelected || isAuthorityNameEmpty || isDesignationNotSelected || isAgreementDurationNotSelected || isMoaDocumentNotUploaded) {

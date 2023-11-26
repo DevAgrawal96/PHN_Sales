@@ -323,7 +323,16 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
         viewModel.messageLiveData.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { _message ->
-                toastMsg(_message)
+                when (_message) {
+                    requireContext().resources.getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_details)->{
+                        toastMsg(_message)
+                    }
+                    requireContext().resources.getString(com.phntechnolab.sales.R.string.removeError)->{
+                        binding.proposeCostingStage.tilEmailId.error = null
+                    }
+
+                }
+
             }
         }
 
@@ -371,17 +380,18 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                     ) {
                         if (viewModel._requestFile != null) {
                             viewModel.updateMoaDocumentFile()
-                        }else{
+                        } else {
                             viewModel.changeProgressBarVisibility(false)
                             toastMsg(requireContext().resources.getString(com.phntechnolab.sales.R.string.please_upload_moa_document))
 
                         }
-                    } else if(viewModel._moaDocumentData.value?.moaFile != null && !viewModel._moaDocumentData.value?.moaFile!!.startsWith(
+                    } else if (viewModel._moaDocumentData.value?.moaFile != null && !viewModel._moaDocumentData.value?.moaFile!!.startsWith(
                             "/tmp/"
-                        )){
-                        if(viewModel._requestFile != null){
+                        )
+                    ) {
+                        if (viewModel._requestFile != null) {
                             viewModel.updateMoaDocumentFile()
-                        }else{
+                        } else {
                             viewModel.changeProgressBarVisibility(false)
                             showDialog()
 

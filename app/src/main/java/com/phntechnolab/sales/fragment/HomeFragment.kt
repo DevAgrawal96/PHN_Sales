@@ -192,8 +192,8 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
                     }
 
                     "MOA Signed" -> {
-                        schoolPagingAdapter?.updateOnlyChipText("MOASigned")
-                        viewModel._schoolPagingData.value?.filter { it.status == "MOASigned" }
+                        schoolPagingAdapter?.updateOnlyChipText("MOA Signed")
+                        viewModel._schoolPagingData.value?.filter { it.status == "MOA Signed" }
                             ?.let { schoolPagingAdapter?.submitData(lifecycle, it) }
                     }
 
@@ -369,7 +369,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
                     )
             }
 
-            "MOASigned" -> {
+            "MOA Signed" -> {
                 requireView().findNavController()
                     .navigate(
                         HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
