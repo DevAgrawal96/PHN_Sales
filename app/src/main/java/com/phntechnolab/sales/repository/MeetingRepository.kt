@@ -141,6 +141,9 @@ class MeetingRepository @Inject constructor(
         val formatOldDate = oldDate.replace("/", "-").split(" ")[0]
         val date = Calendar.getInstance()
         date.set(Date().year, Date().month, Date().date, 0, 0, 0)
+        if (!formatOldDate.contains("-")){
+            return "wrong"
+        }
         val formattedOldDate = formattedDate(formatOldDate)
 
         val tomorrowDate = Calendar.getInstance()

@@ -22,10 +22,15 @@ import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
+import androidx.paging.DataSource
+import androidx.paging.PagingData
 import com.google.android.material.textfield.TextInputEditText
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
+import com.phntechnolab.sales.model.SchoolData
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.single
 import java.io.File
 import java.net.URI
 import java.util.Calendar
@@ -42,6 +47,14 @@ suspend fun saveData(
     dataStore.edit { onBoarding ->
         onBoarding[dataStoreKey] = value
     }
+}
+
+fun View.setHide() {
+    this.visibility = View.GONE
+}
+
+fun View.setShow() {
+    this.visibility = View.VISIBLE
 }
 
 fun Fragment.hideSoftKeyboard() {
@@ -361,5 +374,13 @@ fun View.enabled() {
 
 fun Fragment.toastMsg(msg: String) {
     Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+}
+
+fun View.hideView() {
+    this.visibility = View.GONE
+}
+
+fun View.showView() {
+    this.visibility = View.VISIBLE
 }
 

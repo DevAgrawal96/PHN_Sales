@@ -124,7 +124,7 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
     private fun fetchData(schoolName: String) {
         if (!schoolName.isNullOrBlank()) {
             val refereshData = viewModel.schoolLiveData.value?.data?.filter {
-                (it.schoolName?.toLowerCase()?:"").contains(schoolName?.toLowerCase()?:"")
+                (it.schoolName?.toLowerCase() ?: "").contains(schoolName?.toLowerCase() ?: "")
             }?.sortedByDescending { it.updatedAt }
             refereshData?.let { ArrayList(it) }?.let { adapter?.setData(it) }
         } else {
@@ -134,7 +134,7 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
 
     private fun observers() {
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
-
+            Timber.e(it.data.toString())
             if (it.data?.isEmpty()!!) {
                 binding.noDataLottie.visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.GONE
@@ -189,11 +189,11 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
                         SearchFragmentDirections.actionSearchFragmentToCostingMoaDocumentFragment(
                             schoolData.proposeCostingData
                                 ?: ProposeCostingData().apply {
-                                    this.schoolId = schoolData.schoolId?:""
+                                    this.schoolId = schoolData.schoolId ?: ""
                                 },
                             schoolData.moaDocumentData
                                 ?: MOADocumentData().apply {
-                                    this.schoolId = schoolData.schoolId?:""
+                                    this.schoolId = schoolData.schoolId ?: ""
                                 }
                         )
                     )

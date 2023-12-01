@@ -113,6 +113,7 @@ class SchoolPagingAdapter(private var callBacks: CallBacks) :
         }
     }
 
+
     fun updateOnlyChipText(text: String) {
         this.selectedChip = text
 

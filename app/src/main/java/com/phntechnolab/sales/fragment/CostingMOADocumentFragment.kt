@@ -326,9 +326,15 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                 when (_message) {
                     requireContext().resources.getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_details)->{
                         toastMsg(_message)
+                        viewModel._messageLiveData.postValue(Event(null))
+                    }
+                    requireContext().resources.getString(com.phntechnolab.sales.R.string.please_upload_moa_document)->{
+                        toastMsg(_message)
+                        viewModel._messageLiveData.postValue(Event(null))
                     }
                     requireContext().resources.getString(com.phntechnolab.sales.R.string.removeError)->{
                         binding.proposeCostingStage.tilEmailId.error = null
+                        viewModel._messageLiveData.postValue(Event(null))
                     }
 
                 }
@@ -374,7 +380,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
-                    if (viewModel._moaDocumentData.value?.moaFile == null && viewModel._moaDocumentData.value?.moaFile!!.startsWith(
+                    if (viewModel._moaDocumentData.value?.moaFile == null && (viewModel._moaDocumentData.value?.moaFile ?: "/tmp/").startsWith(
                             "/tmp/"
                         )
                     ) {
@@ -385,7 +391,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                             toastMsg(requireContext().resources.getString(com.phntechnolab.sales.R.string.please_upload_moa_document))
 
                         }
-                    } else if (viewModel._moaDocumentData.value?.moaFile != null && !viewModel._moaDocumentData.value?.moaFile!!.startsWith(
+                    } else if (viewModel._moaDocumentData.value?.moaFile != null && !(viewModel._moaDocumentData.value?.moaFile ?: "/tmp/").startsWith(
                             "/tmp/"
                         )
                     ) {
@@ -396,6 +402,8 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                             showDialog()
 
                         }
+                    }else{
+
                     }
 
 //                    Timber.e("${viewModel._moaDocumentData.value?.moaFile}")

@@ -1,32 +1,24 @@
 package com.phntechnolab.sales.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.paging.filter
-import androidx.paging.insertSeparators
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
-import com.google.gson.Gson
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
-import com.phntechnolab.sales.adapter.SchoolDetailAdapter
 import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentHomeBinding
 import com.phntechnolab.sales.model.CoordinatorData
@@ -35,16 +27,10 @@ import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.paging.SchoolPagingAdapter
-import com.phntechnolab.sales.util.DataStoreManager.setToken
-import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.NetworkUtils
 import com.phntechnolab.sales.util.toastMsg
 import com.phntechnolab.sales.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -166,9 +152,16 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
                 Timber.e("CHIP SELECTED TEXT ${chip.text.toString()}")
                 schoolPagingAdapter?.updateOnlyChipText(chip.text.toString())
 
+//                lifecycleScope.launch(Dispatchers.IO) {
+//                    viewModel._schoolPagingData.value?.let {
+//                        Timber.e("suraj ${it.toList()}")
+//                    }
+//                }
+
                 when (chip.text) {
                     "All" -> {
                         viewModel._schoolPagingData.value?.let {
+
                             schoolPagingAdapter?.submitData(
                                 lifecycle,
                                 it

@@ -54,8 +54,8 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
     var imageName: String? = null
     var _requestFile: RequestBody? = null
 
-    var _messageLiveData = MutableLiveData<Event<String>>()
-    val messageLiveData: LiveData<Event<String>>
+    var _messageLiveData = MutableLiveData<Event<String?>>()
+    val messageLiveData: LiveData<Event<String?>>
         get() = _messageLiveData
 
     private var _progressBarLiveData = MutableLiveData<Boolean>()
@@ -157,7 +157,7 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
                 .matches()
 
         Timber.e("DATA ARE SAME OR NOT $checkAllDataAreSame")
-        if (_proposeCostingData.value?.emailId.toString().trim().isNotEmpty()) {
+        if (!_proposeCostingData.value?.emailId.isNullOrEmpty()) {
             return if (isRescheduleMeeting) {
                 if (isPricePerStudentPending || isPriceDiscussedPending || isQuotationValidityPending || isConversationRatioNotSelected || isQuotationDurationPending || isDesignationPending || isAuthorityNamePending || isDateAndTimeEmpty || isEmailValid) {
                     _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))

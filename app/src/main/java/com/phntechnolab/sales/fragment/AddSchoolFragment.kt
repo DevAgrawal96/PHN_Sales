@@ -148,6 +148,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
         onCheckedChangedListener()
 
         observers()
+
     }
 
 
@@ -937,29 +938,6 @@ class AddSchoolFragment : Fragment(), MenuProvider {
         else
             binding.basicDetails.tilBoard.error = null
 
-        //        val isSchoolIntakeEmpty = binding.basicDetails.edtSchoolTotalIntake.text.toString()
-//            .isNullOrEmpty() || binding.basicDetails.edtSchoolTotalIntake.text.toString()
-//            .trim() == "0"
-//
-//        if (isSchoolIntakeEmpty)
-//            binding.basicDetails.tilSchoolTotalIntake.error =
-//                resources.getString(R.string.please_enter_total_school_intake)
-//        else if (binding.basicDetails.edtSchoolTotalIntake.text.toString().trim().toInt() >= 20000)
-////            binding.basicDetails.tilSchoolTotalIntake.error =
-////                resources.getString(R.string.total_school_intake_less_than)
-//        else binding.basicDetails.tilSchoolTotalIntake.error = null
-//
-//        val isNumberOfClassroomsEmpty =
-//            binding.basicDetails.edtTotalNoOfClassroom.text.toString().isNullOrEmpty()
-//        if (isNumberOfClassroomsEmpty)
-//            binding.basicDetails.tilSchoolTotalNoOfClassroom.error =
-//                resources.getString(R.string.total_no_of_classrooms_less_than)
-//        else if (binding.basicDetails.edtTotalNoOfClassroom.text.toString().trim().toInt() >= 100)
-////            binding.basicDetails.tilSchoolTotalNoOfClassroom.error =
-////                resources.getString(R.string.total_no_of_classrooms_less_than)
-//        else binding.basicDetails.tilSchoolTotalNoOfClassroom.error = null
-
-
         val isCoordinatorNameEmpty =
             binding.basicDetails.edtCoordinatorName.text.toString().isNullOrEmpty()
         if (isCoordinatorNameEmpty)
@@ -991,7 +969,6 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                 resources.getString(R.string.please_enter_valid_email_address)
         else
             binding.basicDetails.tilEmailId.error = null
-//        return !(isSchoolNameEmpty || isSchoolAddressEmpty || isBoardEmpty || isSchoolIntakeEmpty || isCoordinatorNameEmpty || isCoordinatorNameEmpty || !isCoordinatorPhoneValid || !isEmailValid)
         return if (binding.basicDetails.edtEmailId.text.toString().trim().isNotEmpty()
         ) {
             if (binding.basicDetails.edtCoordinatorMono.text.toString().trim().isNotEmpty()) {

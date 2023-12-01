@@ -20,13 +20,20 @@ import com.phntechnolab.sales.repository.HomeRepository
 import com.phntechnolab.sales.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val repositories: HomeRepository, private val authApi: AuthApi, private val application: Application): ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val repositories: HomeRepository,
+    private val authApi: AuthApi,
+    private val application: Application
+) : ViewModel() {
 
-    val schoolLiveData : LiveData<NetworkResult<List<SchoolData>>>
+    val schoolLiveData: LiveData<NetworkResult<List<SchoolData>>>
         get() = repositories.schoolDataLiveData
 
     val refereshToken: LiveData<NetworkResult<CustomResponse>>
@@ -41,33 +48,45 @@ class HomeViewModel @Inject constructor(private val repositories: HomeRepository
     var _schoolPagingData = MutableLiveData<PagingData<SchoolData>>()
     val schoolPagingData: LiveData<PagingData<SchoolData>>
         get() = _schoolPagingData
+//
+//    var _schoolPaginationObservableData: Flow<PagingData<SchoolData>>? = null
+//    val schoolPaginationObservableData: Flow<PagingData<SchoolData>>? get() = _schoolPaginationObservableData!!
+//
 
-    fun refereshToken() {
-        viewModelScope.launch {
-            repositories.getToken()
-        }
-    }
-    fun refereshData() {
-    }
+//    fun refereshToken() {
+//        viewModelScope.launch {
+//            repositories.getToken()
+//        }
+//    }
+//
+//    fun refereshData() {
+//    }
+//
+//    fun getSchoolList(list : (schoolList : List<SchoolData>) -> Unit) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            list(schoolPaginationObservableData?.toList())
+//
+//        }
+//    }
 
     fun getAllSchoolsPagination(): LiveData<PagingData<SchoolData>> {
-
-        return Pager(
+        val pager = Pager(
             config = PagingConfig(
                 pageSize = 15,
-                maxSize = 15 + 15*2,
+                maxSize = 15 + 15 * 2,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
                 SchoolPagingSource(application = application, authApi)
-            }
-            , initialKey = 1
-        ).liveData.cachedIn(viewModelScope)
-//        schoolPaginationObservableData = pager.flow
+            }, initialKey = 1
+        )
+//        _schoolPaginationObservableData = pager.flow
+        return pager.liveData.cachedIn(viewModelScope)
+
 //        schoolPaginationDataMutableLiveData.postValue( pager)
     }
 
-    fun setPagingData(pagingData: PagingData<SchoolData>){
+    fun setPagingData(pagingData: PagingData<SchoolData>) {
         _schoolPagingData.postValue(pagingData)
     }
 }

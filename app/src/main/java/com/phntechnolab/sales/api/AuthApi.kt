@@ -1,5 +1,6 @@
 package com.phntechnolab.sales.api
 
+import androidx.paging.DataSource
 import com.phntechnolab.sales.model.AddSchoolSchema
 import com.phntechnolab.sales.model.ChangePasswordModel
 import com.phntechnolab.sales.model.CoordinatorData
@@ -28,7 +29,7 @@ interface AuthApi {
     suspend fun getAllSchoolData(): Response<List<SchoolData>>
 
     @GET("api/paginationdata")
-    suspend fun getAllSchoolDataPage(@Query("page") page: Int): Response<SchoolPaginationData>
+     suspend fun getAllSchoolDataPage(@Query("page") page: Int): Response<SchoolPaginationData>
 
     @POST("api/refresh")
     suspend fun refereshToken(): Response<CustomResponse>

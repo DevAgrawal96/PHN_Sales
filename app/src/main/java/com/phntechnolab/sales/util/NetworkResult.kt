@@ -1,6 +1,5 @@
 package com.phntechnolab.sales.util
 
-import com.phntechnolab.sales.model.UserDataModel
 
 sealed class NetworkResult<T>(val data: T? = null, val message: String? = null) {
     class Success<T>(data: T?) : NetworkResult<T>(data)
