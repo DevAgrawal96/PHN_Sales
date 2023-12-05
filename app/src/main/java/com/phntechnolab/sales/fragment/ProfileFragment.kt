@@ -37,6 +37,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment(), MenuProvider {
+
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
@@ -46,12 +47,14 @@ class ProfileFragment : Fragment(), MenuProvider {
     private val viewModel: ProfileViewModel by viewModels()
 
     private var _userProfileData: UserDataModel? = null
+
     private val userProfileData get() = _userProfileData!!
 
     @Inject
     lateinit var dataStoreProvider: DataStoreProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
     }
@@ -61,10 +64,15 @@ class ProfileFragment : Fragment(), MenuProvider {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
+
         fetchUserProfileData()
+
         userProfileDataObservable()
+
         initializeAdapter()
+
         setOnBackPressed()
+
         return binding.root
     }
 

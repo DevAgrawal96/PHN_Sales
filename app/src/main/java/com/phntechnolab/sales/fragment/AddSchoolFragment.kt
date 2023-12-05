@@ -162,7 +162,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
         binding.basicDetails.edtSchoolTotalIntake.textChange { intake ->
             try {
-                viewModel._newSchoolData.value?.intake = intake.toInt()
+                viewModel._newSchoolData.value?.intake = if(intake == "") 0 else intake.toInt()
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -170,7 +170,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
         binding.basicDetails.edtTotalNoOfClassroom.textChange { classRoom ->
             try {
-                viewModel._newSchoolData.value?.totalClassRoom = classRoom.toInt()
+                viewModel._newSchoolData.value?.totalClassRoom = if(classRoom == "") 0 else classRoom.toInt()
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -743,8 +743,11 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                 }
             }
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
-                val updatedDateAndTime =
-                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
+                val updatedDateAndTime = if (dayOfMonth < 10){
+                    "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                }else{
+                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                }
                 binding.followupDetails.edtSchoolDate.setText(updatedDateAndTime)
                 viewModel.newSchoolData.value?.nextFollowup =
                     if (viewModel.newSchoolData.value?.nextFollowup.isNullOrEmpty()) "null" else viewModel.newSchoolData.value?.nextFollowup.toString()
@@ -827,6 +830,8 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
                 if (checkBasicDetailsValidations()) {
                     setPositionView()
+                    binding.basicDetails.tilSchoolTotalNoOfClassroom.error = null
+                    binding.basicDetails.tilSchoolTotalIntake.error = null
                 } else {
                     Snackbar.make(
                         requireView(),
@@ -861,6 +866,8 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
                 if (checkBasicDetailsValidations()) {
                     setPositionView()
+                    binding.basicDetails.tilSchoolTotalNoOfClassroom.error = null
+                    binding.basicDetails.tilSchoolTotalIntake.error = null
                 } else {
                     Snackbar.make(
                         requireView(),

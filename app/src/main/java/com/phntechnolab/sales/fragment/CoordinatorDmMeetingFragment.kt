@@ -676,8 +676,11 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime =
+                    val updatedDateAndTime = if (dayOfMonth < 10){
+                        "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                    }else{
                         dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    }
                     binding.coordinatorMeeting.edtRescheduleMeetingDate.setText(updatedDateAndTime)
                     viewModel._coordinatorMeetData.value?.meetDateCoordinator.let { _nextFollowUpDate ->
                         if ((_nextFollowUpDate ?: "").contains(" ")) {
@@ -771,8 +774,11 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime =
+                    val updatedDateAndTime = if (dayOfMonth < 10){
+                        "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                    }else{
                         dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    }
                     binding.dmMeeting.edtRescheduleMeetingDate.setText(updatedDateAndTime)
                     viewModel._dmMeetData.value?.nextMeetDateDm.let { _nextFollowUpDate ->
                         if ((_nextFollowUpDate ?: "").contains(" ")) {
@@ -866,8 +872,11 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime =
+                    val updatedDateAndTime = if (dayOfMonth < 10){
+                        "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                    }else{
                         dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    }
                     binding.coordinatorMeeting.edtNextMeetingDate.setText(updatedDateAndTime)
                     viewModel._coordinatorMeetData.value?.nextMeetDateDm.let { _nextFollowUpDate ->
                         if ((_nextFollowUpDate ?: "").contains(" ")) {
@@ -960,8 +969,11 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime =
+                    val updatedDateAndTime = if (dayOfMonth < 10){
+                        "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                    }else{
                         dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    }
                     binding.dmMeeting.edtNextMeetingDate.setText(updatedDateAndTime)
                     viewModel._dmMeetData.value?.nextMeetDate.let { _nextFollowUpDate ->
                         if ((_nextFollowUpDate ?: "").contains(" ")) {

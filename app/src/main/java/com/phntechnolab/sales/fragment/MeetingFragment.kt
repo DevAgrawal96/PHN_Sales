@@ -144,7 +144,11 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                     R.id.upcoming_btn -> {
                         val meetingsData =
                             (viewModel.meetingsData.value
-                                ?: ArrayList()).filter { it.taskDateFilter == "upcoming" && checkUpcomingDate(it.dateTime) }
+                                ?: ArrayList()).filter {
+                                it.taskDateFilter == "upcoming" && checkUpcomingDate(
+                                    it.dateTime
+                                )
+                            }
                                 .sortedBy { it.dateTime }
                         if (meetingsData.isNullOrEmpty()) {
                             binding.noDataLottie.visibility = View.VISIBLE
@@ -168,7 +172,13 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
     }
 
     private fun convertDateToLong(date: String?): Long {
-        val df = SimpleDateFormat("dd/MM/yyy")
+        val day = (date?.split("/")?.get(0) ?: "00/00/0000").toInt()
+        if (day < 10) {
+            val _date = "0$date"
+            val df = SimpleDateFormat("dd/MM/yyyy")
+            return df.parse(_date).time
+        }
+        val df = SimpleDateFormat("dd/MM/yyyy")
         return df.parse(date).time
     }
 

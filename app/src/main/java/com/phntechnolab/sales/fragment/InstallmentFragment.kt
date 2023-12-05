@@ -455,8 +455,11 @@ class InstallmentFragment : Fragment() {
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
-                val updatedDateAndTime =
-                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
+                val updatedDateAndTime = if (dayOfMonth < 10){
+                    "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                }else{
+                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                }
                 binding.addInstallment1.edtInstallmentDate.setText(updatedDateAndTime)
             }
         }
@@ -466,8 +469,11 @@ class InstallmentFragment : Fragment() {
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
-                val updatedDateAndTime =
-                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
+                val updatedDateAndTime = if (dayOfMonth < 10){
+                    "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                }else{
+                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                }
                 binding.addAdvancePayment.edtAdvancePaymentDate.setText(updatedDateAndTime)
             }
         }
@@ -477,8 +483,11 @@ class InstallmentFragment : Fragment() {
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
-                val updatedDateAndTime =
-                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
+                val updatedDateAndTime = if (dayOfMonth < 10){
+                    "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                }else{
+                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                }
                 binding.addInstallment2.edtInstallmentDate.setText(updatedDateAndTime)
             }
         }
@@ -488,8 +497,11 @@ class InstallmentFragment : Fragment() {
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
-                val updatedDateAndTime =
-                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
+                val updatedDateAndTime = if (dayOfMonth < 10){
+                    "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                }else{
+                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                }
                 binding.addInstallment3.edtInstallmentDate.setText(updatedDateAndTime)
             }
         }

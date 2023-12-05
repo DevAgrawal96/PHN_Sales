@@ -104,9 +104,11 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         viewModel._proposeCostingData.postValue(args.proposeCostingDetails)
 
         viewModel._moaDocumentData.postValue(args.moaDocumentDetails)
+
         Timber.e(args.moaDocumentDetails.toString())
 
         binding.viewModel = viewModel
+
         binding.lifecycleOwner = this
 
         return binding.root
@@ -252,8 +254,11 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
             val datePickerDialog = DatePickerDialog(
                 requireContext(), { view, _year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime =
-                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
+                    val updatedDateAndTime = if (dayOfMonth < 10) {
+                        "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                    } else {
+                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    }
                     binding.proposeCostingStage.edtQuotationValidity.setText(updatedDateAndTime)
                     viewModel.proposeCostingData.value?.quotationValidity.let { _nextFollowUpDate ->
                         if ((_nextFollowUpDate ?: "").contains(" ")) {
@@ -324,15 +329,17 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         viewModel.messageLiveData.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { _message ->
                 when (_message) {
-                    requireContext().resources.getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_details)->{
+                    requireContext().resources.getString(com.phntechnolab.sales.R.string.please_fill_all_the_mendate_details) -> {
                         toastMsg(_message)
                         viewModel._messageLiveData.postValue(Event(null))
                     }
-                    requireContext().resources.getString(com.phntechnolab.sales.R.string.please_upload_moa_document)->{
+
+                    requireContext().resources.getString(com.phntechnolab.sales.R.string.please_upload_moa_document) -> {
                         toastMsg(_message)
                         viewModel._messageLiveData.postValue(Event(null))
                     }
-                    requireContext().resources.getString(com.phntechnolab.sales.R.string.removeError)->{
+
+                    requireContext().resources.getString(com.phntechnolab.sales.R.string.removeError) -> {
                         binding.proposeCostingStage.tilEmailId.error = null
                         viewModel._messageLiveData.postValue(Event(null))
                     }
@@ -380,7 +387,8 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             Timber.e(Gson().toJson(it))
             when (it) {
                 is NetworkResult.Success -> {
-                    if (viewModel._moaDocumentData.value?.moaFile == null && (viewModel._moaDocumentData.value?.moaFile ?: "/tmp/").startsWith(
+                    if (viewModel._moaDocumentData.value?.moaFile == null && (viewModel._moaDocumentData.value?.moaFile
+                            ?: "/tmp/").startsWith(
                             "/tmp/"
                         )
                     ) {
@@ -391,7 +399,8 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                             toastMsg(requireContext().resources.getString(com.phntechnolab.sales.R.string.please_upload_moa_document))
 
                         }
-                    } else if (viewModel._moaDocumentData.value?.moaFile != null && !(viewModel._moaDocumentData.value?.moaFile ?: "/tmp/").startsWith(
+                    } else if (viewModel._moaDocumentData.value?.moaFile != null && !(viewModel._moaDocumentData.value?.moaFile
+                            ?: "/tmp/").startsWith(
                             "/tmp/"
                         )
                     ) {
@@ -402,7 +411,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                             showDialog()
 
                         }
-                    }else{
+                    } else {
 
                     }
 
@@ -733,6 +742,9 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                     binding.proposeCostingStage.nextMeetingDateTimeMandateTxt.visibility = View.GONE
                     binding.proposeCostingStage.tilDate.visibility = View.GONE
                     binding.proposeCostingStage.tilTime.visibility = View.GONE
+//                    binding.proposeCostingStage.edtDate.setText("")
+//                    viewModel._proposeCostingData.value?.meetDateTime = ""
+//                    binding.proposeCostingStage.edtTime.setText("")
                     "No"
                 }
         }
@@ -759,8 +771,11 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
             val datePickerDialog = DatePickerDialog(
                 requireContext(), { view, _year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime =
-                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
+                    val updatedDateAndTime = if (dayOfMonth < 10) {
+                        "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                    } else {
+                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    }
                     binding.proposeCostingStage.edtDate.setText(updatedDateAndTime)
                     viewModel.proposeCostingData.value?.meetDateTime.let { _nextFollowUpDate ->
                         if ((_nextFollowUpDate ?: "").contains(" ")) {
