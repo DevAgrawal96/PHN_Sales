@@ -63,8 +63,8 @@
                         android:id="@+id/edt_school_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:imeOptions="actionNext"
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,.'&amp;"
+                        android:imeOptions="actionNext"
                         android:inputType="text"
                         android:maxLines="1"
                         android:nextFocusForward="@id/edt_school_address"
@@ -116,7 +116,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none" />
-
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -257,6 +256,7 @@
                     android:layout_marginEnd="@dimen/dimen_8dp"
                     android:layout_marginBottom="16dp"
                     android:backgroundTint="@color/regular_blue"
+                    android:onClick="@{()-> viewModel.saveBasicDetails()}"
                     android:text="@string/next"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

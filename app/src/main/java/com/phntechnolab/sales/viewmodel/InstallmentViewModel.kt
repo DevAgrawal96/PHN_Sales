@@ -7,11 +7,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.phntechnolab.sales.R
+import com.phntechnolab.sales.di.FileDownloader
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.InstallmentData
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.repository.InstallmentRepository
+import com.phntechnolab.sales.util.AppEvent
 import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.toastMsg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
@@ -35,6 +39,8 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
 
     var _requestFileAdvancePayment: RequestBody? = null
 
+    @Inject
+    lateinit var fileDownloader: FileDownloader
 
 
     var _requestFile1: RequestBody? = null
@@ -65,11 +71,44 @@ class InstallmentViewModel @Inject constructor(private var repository: Installme
     val installmentData: LiveData<SchoolData?>
         get() = _installmentData
 
+    var _appEvent: MutableLiveData<AppEvent?> = MutableLiveData()
+    val appEvent: LiveData<AppEvent?>
+        get() = _appEvent
+
     val addInstallmentResponse: LiveData<NetworkResult<CustomResponse>>
         get() = repository.installmentResponse
 
     val addInstallmentImageResponse: LiveData<NetworkResult<CustomResponse>>
         get() = repository.installmentImageResponse
+
+    fun downloadMoa() {
+        try {
+            val fileName = (_installmentData.value?.moaDocumentData?.moaFile ?: "/tmp/").substring(
+                (_installmentData.value?.moaDocumentData?.moaFile ?: "/tmp/").lastIndexOf('/') + 1
+            )
+            try {
+                _installmentData.value?.moaDocumentData?.moaFile.let {
+                    if (!(_installmentData.value?.moaDocumentData?.moaFile
+                            ?: "/tmp/").startsWith("/tmp/")
+                    ) {
+                        fileDownloader.downloadFile(
+                            _installmentData.value?.moaDocumentData?.moaFile ?: "", fileName
+                        )
+                        _appEvent.postValue(AppEvent.ToastResEvent(R.string.start_downloading))
+                    } else {
+                        _appEvent.postValue(AppEvent.ToastResEvent(R.string.something_went_wrong))
+                    }
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _appEvent.postValue(AppEvent.ToastResEvent(R.string.something_went_wrong))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _appEvent.postValue(AppEvent.ToastResEvent(R.string.file_not_found))
+        }
+    }
 
     fun getPosition(): Int {
         return iPosition

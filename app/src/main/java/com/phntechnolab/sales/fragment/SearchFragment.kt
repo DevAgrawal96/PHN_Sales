@@ -177,7 +177,9 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
                     .navigate(
                         SearchFragmentDirections.actionSearchFragmentToMeetingFragment(
                             schoolData.coordinator
-                                ?: CoordinatorData(schoolId = schoolData.schoolId),
+                                ?: CoordinatorData().apply {
+                                    this.schoolId = schoolData.schoolId
+                                },
                             schoolData.director ?: DMData(schoolId = schoolData.schoolId)
                         )
                     )

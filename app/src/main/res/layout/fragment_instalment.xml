@@ -5,7 +5,6 @@
     xmlns:bind="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.phntechnolab.sales.viewmodel.InstallmentViewModel" />
@@ -34,7 +33,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_back"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-                app:title="School Name"
+                app:title="@{viewModel.installmentData.schoolName}"
                 app:titleTextAppearance="@style/NavigationStyle" />
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -167,6 +166,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dimen_8dp"
                             android:padding="@dimen/dimen_8dp"
+                            android:onClick="@{()->viewModel.downloadMoa()}"
                             android:src="@drawable/ic_download"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"

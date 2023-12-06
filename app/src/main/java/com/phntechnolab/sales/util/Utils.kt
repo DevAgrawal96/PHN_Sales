@@ -18,12 +18,15 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.paging.DataSource
 import androidx.paging.PagingData
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
@@ -247,6 +250,18 @@ fun AutoCompleteTextView.textChange(afterTextChanged: (String) -> Unit) {
     })
 }
 
+var demoFun: (() -> Unit)? = null
+
+fun Fragment.backPressHandle(handle: () -> Unit) {
+    val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            handle()
+//            demoFun()
+        }
+    }
+    requireActivity().onBackPressedDispatcher.addCallback(callback)
+}
+
 fun Fragment.pickDate(
     _day: Int,
     _month: Int,
@@ -374,6 +389,18 @@ fun View.enabled() {
 
 fun Fragment.toastMsg(msg: String) {
     Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+}
+
+fun View.snakeMessage(msg: String) {
+    Snackbar.make(
+        this,
+        msg,
+        Snackbar.LENGTH_SHORT
+    ).show()
+}
+
+fun Activity.toastMsg(msg: String) {
+    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }
 
 fun View.hideView() {

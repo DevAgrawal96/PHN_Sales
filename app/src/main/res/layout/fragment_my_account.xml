@@ -34,6 +34,7 @@
                 app:navigationIcon="@drawable/ic_back"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
                 app:title="My Account"
+                app:navigationOnClickListener="@{()->viewModel.openPreviusScreen()}"
                 app:titleTextAppearance="@style/NavigationStyle" />
 
         </com.google.android.material.appbar.AppBarLayout>

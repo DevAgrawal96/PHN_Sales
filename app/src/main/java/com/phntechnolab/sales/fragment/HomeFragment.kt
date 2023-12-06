@@ -36,8 +36,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
+
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel by viewModels<HomeViewModel>()
 
     private var schoolPagingAdapter: SchoolPagingAdapter? = null
@@ -45,11 +47,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
     @Inject
     lateinit var dataStoreProvider: DataStoreProvider
 
-    override fun onResume() {
-        super.onResume()
-        Timber.e("onResume")
-        binding.all.isChecked = true
-    }
+
 
 
     override fun onCreateView(
@@ -77,6 +75,11 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
 
         initPagingData()
 
+        listeners()
+
+    }
+
+    private fun listeners() {
         binding.swipeReferesh.setOnRefreshListener {
             binding.swipeReferesh.isEnabled = false
             schoolPagingAdapter?.refresh()
@@ -152,12 +155,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
                 Timber.e("CHIP SELECTED TEXT ${chip.text.toString()}")
                 schoolPagingAdapter?.updateOnlyChipText(chip.text.toString())
 
-//                lifecycleScope.launch(Dispatchers.IO) {
-//                    viewModel._schoolPagingData.value?.let {
-//                        Timber.e("suraj ${it.toList()}")
-//                    }
-//                }
-
                 when (chip.text) {
                     "All" -> {
                         viewModel._schoolPagingData.value?.let {
@@ -227,13 +224,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
     }
 
 
-    override fun onDestroyView() {
-//        _binding = null
-        schoolPagingAdapter = null
-        super.onDestroyView()
-        Timber.e("onDestroyView")
-    }
-
     private fun setOnBackPressed() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -243,16 +233,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
         requireActivity().onBackPressedDispatcher.addCallback(callback)
     }
 
-    override fun onStart() {
-        super.onStart()
-        Timber.e("onStart")
-    }
 
-    override fun onStop() {
-        super.onStop()
-        (requireActivity() as MainActivity).removeMenuProvider(this)
-        activity?.removeMenuProvider(this)
-    }
 
     private fun setActionBar() {
         Timber.e("setActionBar")
@@ -320,7 +301,9 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
                     .navigate(
                         HomeFragmentDirections.actionHomeFragmentToMeetingFragment(
                             schoolData.coordinator
-                                ?: CoordinatorData(schoolId = schoolData.schoolId),
+                                ?: CoordinatorData().apply {
+                                    this.schoolId = schoolData.schoolId
+                                },
                             schoolData.director ?: DMData(schoolId = schoolData.schoolId)
                         )
                     )
@@ -343,16 +326,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
                     )
             }
 
-//            "MOA Pending" -> {
-//                requireView().findNavController()
-//                    .navigate(
-//                        HomeFragmentDirections.actionHomeFragmentToMoaSignedFragment(
-//                            schoolData.installmentData
-//                                ?: InstallmentData(schoolId = schoolData.schoolId)
-//                        )
-//                    )
-//            }
-
             "Installment" -> {
                 requireView().findNavController()
                     .navigate(
@@ -371,5 +344,23 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
                     )
             }
         }
+    }
+    override fun onStop() {
+        super.onStop()
+        (requireActivity() as MainActivity).removeMenuProvider(this)
+        activity?.removeMenuProvider(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Timber.e("onResume")
+        binding.all.isChecked = true
+    }
+
+    override fun onDestroyView() {
+//        _binding = null
+        schoolPagingAdapter = null
+        super.onDestroyView()
+        Timber.e("onDestroyView")
     }
 }

@@ -1,8 +1,8 @@
 package com.phntechnolab.sales.viewmodel
 
+import android.app.Application
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +13,7 @@ import com.phntechnolab.sales.model.AddSchoolSchema
 import com.phntechnolab.sales.model.CustomResponse
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.repository.AddSchoolRepository
+import com.phntechnolab.sales.util.AppEvent
 import com.phntechnolab.sales.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class AddSchoolViewModel @Inject constructor(private val repositories: AddSchoolRepository) :
+class AddSchoolViewModel @Inject constructor(private val application: Application,private val repositories: AddSchoolRepository) :
     ViewModel() {
 
     var _oldSchoolData: MutableLiveData<SchoolData?> = MutableLiveData()
@@ -38,6 +39,10 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
     var _newSchoolData: MutableLiveData<SchoolData?> = MutableLiveData()
     val newSchoolData: LiveData<SchoolData?>
         get() = _newSchoolData
+
+    var _appEvent: MutableLiveData<AppEvent?> = MutableLiveData()
+    val appEvent: LiveData<AppEvent?>
+        get() = _appEvent
 
     val addSchoolResponse: LiveData<NetworkResult<CustomResponse>>
         get() = repositories.addSchoolResponse
@@ -53,12 +58,26 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
     var imageName: String? = null
     var imageSize: Int? = null
 
+
+
     fun setOldSchoolData(data: SchoolData?) {
         _oldSchoolData.postValue(data)
     }
 
     fun setNewSchoolData(data: SchoolData?) {
         _newSchoolData.postValue(data)
+    }
+
+    fun saveBasicDetails() {
+        _appEvent.postValue(AppEvent.ChangeStep(1))
+    }
+
+    fun saveSchoolDetails() {
+        _appEvent.postValue(AppEvent.ChangeStep(2))
+    }
+
+    fun saveFollowUpDetails() {
+        _appEvent.postValue(AppEvent.ChangeStep(3))
     }
 
     fun addNewSchool() {
@@ -75,10 +94,9 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
 
     fun uploadImage() {
         viewModelScope.launch {
-            Log.e("Upload images", _newSchoolData.value?.id.toString())
-            Log.e("Upload images", Gson().toJson(_requestFile))
-            Log.e("Upload images", (_requestFile != null).toString())
-            repositories.uploadImage(_newSchoolData.value?.id ?: 0,
+
+            repositories.uploadImage(
+                _newSchoolData.value?.id ?: 0,
                 MultipartBody.Builder().setType(MultipartBody.FORM)
                     .addFormDataPart("school_image", "$imageName.jpg", _requestFile).build()
             )
@@ -87,12 +105,11 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
     }
 
     fun updateSchoolDetails() {
-        Log.e("view model data", Gson().toJson(newSchoolData.value))
         viewModelScope.launch {
             Timber.e(Gson().toJson(newSchoolData.value))
             withContext(this.coroutineContext) {
                 repositories.updateSchoolData(
-                    _newSchoolData.value?.id.toString()?:"" ,
+                    _newSchoolData.value?.id.toString() ?: "",
                     returnSchoolSchema(false)
                 )
             }
@@ -117,6 +134,7 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
 
         val part = MultipartBody.Part.createFormData("profile", file.name, requestFile)
         imageData = part
+
         imageSize = Integer.parseInt((file.length() / 1024).toString())
 
         imageName = sdf.format(Date())
@@ -158,7 +176,7 @@ class AddSchoolViewModel @Inject constructor(private val repositories: AddSchool
 
     private fun returnSchoolSchema(isAddSchool: Boolean): AddSchoolSchema {
         return AddSchoolSchema().apply {
-            if(!isAddSchool){
+            if (!isAddSchool) {
                 this.id = (newSchoolData.value?.id.toString() ?: "")
                 this.schoolId = newSchoolData.value?.schoolId ?: ""
             }

@@ -1,20 +1,15 @@
 package com.phntechnolab.sales.fragment
 
-import android.Manifest
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -26,6 +21,7 @@ import com.phntechnolab.sales.databinding.FragmentInstalmentBinding
 import com.phntechnolab.sales.di.FileDownloader
 import com.phntechnolab.sales.model.InstallmentData
 import com.phntechnolab.sales.model.SchoolData
+import com.phntechnolab.sales.util.AppEvent
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.TakePictureFromCameraOrGalley
 import com.phntechnolab.sales.util.getFileSize
@@ -76,9 +72,8 @@ class InstallmentFragment : Fragment() {
     private var id: String? = null
 
     private var schoolId: String? = null
-    private var installmentData: InstallmentData? = null
 
-    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
+    private var installmentData: InstallmentData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,13 +129,11 @@ class InstallmentFragment : Fragment() {
             .error(R.drawable.demo_img).into(binding.schoolDetails.schoolImg)
         binding.schoolDetails.editIcon.visibility = View.GONE
 
-        binding.schoolDetails.schoolName.text = data.schoolName
         data.email.let {
             if (it.isNullOrBlank()) {
                 binding.schoolDetails.txtEmail.visibility = View.GONE
                 binding.schoolDetails.emailIcon.visibility = View.GONE
             } else {
-                binding.schoolDetails.txtEmail.text = it
                 binding.schoolDetails.txtEmail.visibility = View.VISIBLE
                 binding.schoolDetails.emailIcon.visibility = View.VISIBLE
             }
@@ -150,7 +143,6 @@ class InstallmentFragment : Fragment() {
                 binding.schoolDetails.txtMono.visibility = View.GONE
                 binding.schoolDetails.callIcon.visibility = View.GONE
             } else {
-                binding.schoolDetails.txtMono.text = it
                 binding.schoolDetails.txtMono.visibility = View.VISIBLE
                 binding.schoolDetails.callIcon.visibility = View.VISIBLE
             }
@@ -160,70 +152,9 @@ class InstallmentFragment : Fragment() {
                 binding.schoolDetails.locationTxt.visibility = View.GONE
                 binding.schoolDetails.locationIcon.visibility = View.GONE
             } else {
-                binding.schoolDetails.locationTxt.text = it
                 binding.schoolDetails.locationTxt.visibility = View.VISIBLE
                 binding.schoolDetails.locationIcon.visibility = View.VISIBLE
             }
-        }
-
-
-        binding.topAppBar.title = data.schoolName
-        binding.schoolDetails.chipStatus.text = data.status
-        binding.schoolDetails.chipLeadStatus.text = data.leadType
-        binding.download.setOnClickListener {
-            try {
-                val fileName = data.moaDocumentData.moaFile.substring(
-                    data.moaDocumentData.moaFile.lastIndexOf('/') + 1
-                )
-//            binding.fileName.text = fileName
-                try {
-                    data.moaDocumentData.moaFile.let {
-                        if (!data.moaDocumentData.moaFile.startsWith("/tmp/")) {
-                            fileDownloader.downloadFile(data.moaDocumentData.moaFile, fileName)
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.start_downloading),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.something_went_wrong),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.something_went_wrong),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.file_not_found),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    private fun requestPermission() {
-        val hasReadExternalStorage = ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-        val permissionRequest = mutableListOf<String>()
-        if (!hasReadExternalStorage) {
-            permissionRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-        if (permissionRequest.isNotEmpty()) {
-            permissionLauncher.launch(permissionRequest.toTypedArray())
         }
     }
 
@@ -269,6 +200,11 @@ class InstallmentFragment : Fragment() {
             binding.addAdvancePayment.uploadReceiptContainer.visibility = View.VISIBLE
         }
     }
+
+    private fun uriFun() {
+
+    }
+
     private var receiptPdf = registerForActivityResult(
         TakePictureFromCameraOrGalley
     ) { uri ->
@@ -455,9 +391,9 @@ class InstallmentFragment : Fragment() {
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
-                val updatedDateAndTime = if (dayOfMonth < 10){
+                val updatedDateAndTime = if (dayOfMonth < 10) {
                     "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
-                }else{
+                } else {
                     dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                 }
                 binding.addInstallment1.edtInstallmentDate.setText(updatedDateAndTime)
@@ -469,9 +405,9 @@ class InstallmentFragment : Fragment() {
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
-                val updatedDateAndTime = if (dayOfMonth < 10){
+                val updatedDateAndTime = if (dayOfMonth < 10) {
                     "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
-                }else{
+                } else {
                     dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                 }
                 binding.addAdvancePayment.edtAdvancePaymentDate.setText(updatedDateAndTime)
@@ -483,9 +419,9 @@ class InstallmentFragment : Fragment() {
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
-                val updatedDateAndTime = if (dayOfMonth < 10){
+                val updatedDateAndTime = if (dayOfMonth < 10) {
                     "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
-                }else{
+                } else {
                     dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                 }
                 binding.addInstallment2.edtInstallmentDate.setText(updatedDateAndTime)
@@ -497,9 +433,9 @@ class InstallmentFragment : Fragment() {
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
-                val updatedDateAndTime = if (dayOfMonth < 10){
+                val updatedDateAndTime = if (dayOfMonth < 10) {
                     "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
-                }else{
+                } else {
                     dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                 }
                 binding.addInstallment3.edtInstallmentDate.setText(updatedDateAndTime)
@@ -513,27 +449,18 @@ class InstallmentFragment : Fragment() {
             when (it) {
                 is NetworkResult.Success -> {
                     Timber.e("addInstallment success")
-                    when (viewModel.getPosition()) {
-                        0 -> {
-                            if (viewModel._requestFile1 != null)
-                                viewModel.uploadInstallmentImages()
-                            else
-                                Timber.e("_requestFile1 null")
-                        }
+                    val position = viewModel.getPosition()
+                    val fileToCheck = when (position) {
+                        0 -> viewModel._requestFile1
+                        1 -> viewModel._requestFile2
+                        2 -> viewModel._requestFile3
+                        else -> null
+                    }
 
-                        1 -> {
-                            if (viewModel._requestFile2 != null)
-                                viewModel.uploadInstallmentImages()
-                            else
-                                Timber.e("_requestFile1 _requestFile2 null")
-                        }
-
-                        2 -> {
-                            if (viewModel._requestFile3 != null)
-                                viewModel.uploadInstallmentImages()
-                            else
-                                Timber.e("_requestFile1 _requestFile2 _requestFile3 null")
-                        }
+                    if (fileToCheck != null) {
+                        viewModel.uploadInstallmentImages()
+                    } else {
+                        Timber.e("_requestFile${position + 1} is null")
                     }
                 }
 
@@ -551,18 +478,12 @@ class InstallmentFragment : Fragment() {
                 is NetworkResult.Success -> {
                     binding.progressIndicator.visibility = View.GONE
                     findNavController().popBackStack()
-                    Toast.makeText(requireContext(), "Added successfully!!", Toast.LENGTH_SHORT)
-                        .show()
+                    toastMsg("Added successfully!!")
                 }
 
                 is NetworkResult.Error -> {
                     binding.progressIndicator.visibility = View.GONE
-                    Toast.makeText(
-                        requireContext(),
-                        requireContext().getString(R.string.something_went_wrong),
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    toastMsg(getString(R.string.something_went_wrong))
                     Timber.e("Add installment error addInstallment upload image")
                 }
 
@@ -803,6 +724,17 @@ class InstallmentFragment : Fragment() {
                 binding.updateBtn.visibility = View.GONE
             }
         }
+
+        viewModel.appEvent.observe(viewLifecycleOwner) {
+            when (it) {
+                is AppEvent.ToastResEvent -> {
+                    toastMsg(resources.getString(it.message))
+                    viewModel._appEvent.postValue(null)
+                }
+
+                else -> {}
+            }
+        }
     }
 
     private fun uploadInstallmentData() {
@@ -861,50 +793,38 @@ class InstallmentFragment : Fragment() {
                 uploadInstallmentData()
             } else {
                 binding.progressIndicator.visibility = View.GONE
-                when (viewModel.getCount()) {
-                    0 -> {
-                        if (!installmentData?.firstInstallmentAmount.isNullOrEmpty()) {
-
-                        } else {
-                            toastMsg("Please upload receipt and amount")
-                        }
-                    }
-
-                    1 -> {
-                        if (!installmentData?.secondInstallmentAmount.isNullOrEmpty()) {
-
-                        } else {
-                            toastMsg("Please upload receipt and amount")
-                        }
-                    }
-
-                    2 -> {
-                        if (!installmentData?.thirdInstallmentAmount.isNullOrEmpty()) {
-
-                        } else {
-                            toastMsg("Please upload receipt and amount")
-                        }
-                    }
+                val installmentAmount: String? = when (viewModel.getCount()) {
+                    0 -> installmentData?.firstInstallmentAmount
+                    1 -> installmentData?.secondInstallmentAmount
+                    2 -> installmentData?.thirdInstallmentAmount
+                    else -> null
                 }
 
+                if (!installmentAmount.isNullOrEmpty()) {
+                    // Your logic when installment amount is not null or empty
+                } else {
+                    toastMsg("Please upload receipt and amount")
+                }
             }
+
         }
+
 
 
         binding.advancePayment.downloadImg.setOnClickListener {
             if (!receipt4.isNullOrBlank()) {
-                fileDownloader.downloadFile(
-                    receipt4!!, receipt4!!.substring(
-                        receipt4!!.lastIndexOf('/') + 1
+                try {
+                    fileDownloader.downloadFile(
+                        receipt4!!, receipt4!!.substring(
+                            receipt4!!.lastIndexOf('/') + 1
 
 
+                        )
                     )
-                )
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.start_downloading),
-                    Toast.LENGTH_SHORT
-                ).show()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                toastMsg(getString(R.string.start_downloading))
             } else {
                 Timber.e("receipt1 null or blank")
             }
@@ -912,48 +832,48 @@ class InstallmentFragment : Fragment() {
 
         binding.installment1.downloadImg.setOnClickListener {
             if (!receipt1.isNullOrBlank()) {
-                fileDownloader.downloadFile(
-                    receipt1!!, receipt1!!.substring(
-                        receipt1!!.lastIndexOf('/') + 1
+                try {
+                    fileDownloader.downloadFile(
+                        receipt1!!, receipt1!!.substring(
+                            receipt1!!.lastIndexOf('/') + 1
+                        )
                     )
-                )
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.start_downloading),
-                    Toast.LENGTH_SHORT
-                ).show()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                toastMsg(getString(R.string.start_downloading))
             } else {
                 Timber.e("receipt1 null or blank")
             }
         }
         binding.installment2.downloadImg.setOnClickListener {
             if (!receipt2.isNullOrBlank()) {
-                fileDownloader.downloadFile(
-                    receipt2!!, receipt2!!.substring(
-                        receipt2!!.lastIndexOf('/') + 1
+                try {
+                    fileDownloader.downloadFile(
+                        receipt2!!, receipt2!!.substring(
+                            receipt2!!.lastIndexOf('/') + 1
+                        )
                     )
-                )
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.start_downloading),
-                    Toast.LENGTH_SHORT
-                ).show()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                toastMsg(getString(R.string.start_downloading))
             } else {
                 Timber.e("receipt2 null or blank")
             }
         }
         binding.installment3.downloadImg.setOnClickListener {
             if (!receipt3.isNullOrBlank()) {
-                fileDownloader.downloadFile(
-                    receipt3!!, receipt3!!.substring(
-                        receipt3!!.lastIndexOf('/') + 1
+                try {
+                    fileDownloader.downloadFile(
+                        receipt3!!, receipt3!!.substring(
+                            receipt3!!.lastIndexOf('/') + 1
+                        )
                     )
-                )
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.start_downloading),
-                    Toast.LENGTH_SHORT
-                ).show()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                toastMsg(getString(R.string.start_downloading))
             } else {
                 Timber.e("receipt3 null or blank")
             }

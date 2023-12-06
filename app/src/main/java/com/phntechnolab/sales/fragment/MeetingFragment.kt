@@ -264,7 +264,9 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                     .navigate(
                         MeetingFragmentDirections.actionHomeFragmentToMeetingFragment(
                             data.data?.coordinator
-                                ?: CoordinatorData(schoolId = data.data?.schoolId),
+                                ?: CoordinatorData().apply {
+                                    this.schoolId = data.data?.schoolId
+                                },
                             data.data?.director ?: DMData(schoolId = data.data?.schoolId)
                         )
                     )

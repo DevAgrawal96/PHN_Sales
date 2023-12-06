@@ -217,6 +217,7 @@
     <string name="do_you_want_to_reschedule_meeting">Do you want to reschedule meeting?*</string>
     <string name="file_not_found">File not found!</string>
     <string name="update_school">The school has been successfully updated!</string>
+    <string name="unauthorizedU_user">Unauthorized user</string>
 
     <string-array name="agreement_duration">
         <item>item 1</item>
@@ -230,5 +231,16 @@
     <string-array name="conversion_ratio">
         <item>item 1</item>
         <item>item 2</item>
+    </string-array>
+    <string-array name="labs_array">
+        <item>Science Lab</item>
+        <item>Computer Lab</item>
+        <item>Engineering and Robotics Lab</item>
+        <item>Art and Creativity Lab</item>
+        <item>Environmental Science Lab</item>
+        <item>Music and Audio Lab</item>
+        <item>Physics and Electronics Lab</item>
+        <item>Chemistry Lab</item>
+        <item>Biology Lab</item>
     </string-array>
 </resources>

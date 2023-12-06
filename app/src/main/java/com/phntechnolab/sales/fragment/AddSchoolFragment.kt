@@ -1,10 +1,7 @@
 package com.phntechnolab.sales.fragment
 
-import android.annotation.SuppressLint
-import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
-import android.app.TimePickerDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
@@ -21,9 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.EditText
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
@@ -39,12 +34,11 @@ import com.phntechnolab.sales.activity.MainActivity
 import com.phntechnolab.sales.databinding.FragmentAssignedSchoolsStepperBinding
 import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.SchoolData
+import com.phntechnolab.sales.util.AppEvent
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.TakePictureFromCamera
-import com.phntechnolab.sales.util.TakePictureFromCameraOrGalley
 import com.phntechnolab.sales.util.getFileSize
 import com.phntechnolab.sales.util.hideKeyboard
-import com.phntechnolab.sales.util.hideSoftKeyboard
 import com.phntechnolab.sales.util.isNotNullOrZero
 import com.phntechnolab.sales.util.isValidEmail
 import com.phntechnolab.sales.util.isValidMobileNumber
@@ -75,6 +69,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
     private val args: AddSchoolFragmentArgs by navArgs()
 
     var position = 0
+
     var _imageUri: Uri? = null
 
     private val backPressHandler = object : OnBackPressedCallback(true) {
@@ -162,7 +157,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
         binding.basicDetails.edtSchoolTotalIntake.textChange { intake ->
             try {
-                viewModel._newSchoolData.value?.intake = if(intake == "") 0 else intake.toInt()
+                viewModel._newSchoolData.value?.intake = if (intake == "") 0 else intake.toInt()
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -170,7 +165,8 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
         binding.basicDetails.edtTotalNoOfClassroom.textChange { classRoom ->
             try {
-                viewModel._newSchoolData.value?.totalClassRoom = if(classRoom == "") 0 else classRoom.toInt()
+                viewModel._newSchoolData.value?.totalClassRoom =
+                    if (classRoom == "") 0 else classRoom.toInt()
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -324,12 +320,11 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
     private fun setDropdowns(_schoolData: SchoolData?) {
         //Set board spinner data
-
-        val dropdown: AutoCompleteTextView = binding.basicDetails.boardSpinner
         val items = ArrayList<String>()
         if (_schoolData?.board != null && !_schoolData.board.isNullOrBlank()) {
             items.add(_schoolData.board)
         }
+
 
         arrayOf("State Board", "CBSE", "ICSE", "NIOS", "IB", "CIE").forEach {
             if (!items.any { itemName -> itemName.contains(it) }) {
@@ -345,7 +340,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                 android.R.layout.simple_spinner_dropdown_item,
                 items
             )
-        dropdown.setAdapter(adapter)
+        binding.basicDetails.boardSpinner.setAdapter(adapter)
 
         //Labs dropdown set
 
@@ -353,7 +348,6 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
         //set lead type dropdown
 
-        val leadTypeDropdown: AutoCompleteTextView = binding.followupDetails.edtLeadType
         val leadTypes = ArrayList<String>()
 
         if (_schoolData?.leadType != null && !_schoolData.leadType.isNullOrBlank()) {
@@ -378,7 +372,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                 android.R.layout.simple_spinner_dropdown_item,
                 leadTypes
             )
-        leadTypeDropdown.setAdapter(leadsAdapter)
+        binding.followupDetails.edtLeadType.setAdapter(leadsAdapter)
     }
 
     private fun setLabsDialog() {
@@ -388,17 +382,8 @@ class AddSchoolFragment : Fragment(), MenuProvider {
     }
 
     private fun openMultiSelectionDialog() {
-        val labsData = arrayOf(
-            "Science Lab",
-            "Computer Lab",
-            "Engineering and Robotics Lab",
-            "Art and Creativity Lab",
-            "Environmental Science Lab",
-            "Music and Audio Lab",
-            "Physics and Electronics Lab",
-            "Chemistry Lab",
-            "Biology Lab"
-        )
+        val labsData =
+            requireContext().resources.getStringArray(R.array.labs_array)
         val selectedLabs = BooleanArray(labsData.size)
 
         val labList = ArrayList<Int>()
@@ -484,42 +469,38 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
     private fun observers() {
 
+        viewModel.appEvent.observe(viewLifecycleOwner) {
+            when (it) {
+                is AppEvent.ChangeStep -> {
+                    addValidationWatchers()
+                    checkValidationsAndApiCall(it.step ?: 1)
+                    hideKeyboard()
+                    viewModel._appEvent.postValue(null)
+                }
+
+                else -> {}
+            }
+        }
+
         viewModel.uploadImgResponse.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.GONE
             when (it) {
                 is NetworkResult.Success -> {
 
                     if (viewModel.newSchoolData.value?.interested == "yes")
-                        Toast.makeText(
-                            requireContext(),
-                            "School details updated successfully",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        toastMsg("School details updated successfully")
                     else {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.meeting_has_been_moved_to_not_interested_section),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        toastMsg(getString(R.string.meeting_has_been_moved_to_not_interested_section))
                     }
                     findNavController().popBackStack()
                 }
 
                 is NetworkResult.Error -> {
-                    Toast.makeText(
-                        requireContext(),
-                        resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Timber.e(it.toString())
+                    toastMsg(resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please))
                 }
 
                 else -> {
-                    Toast.makeText(
-                        requireContext(),
-                        requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    toastMsg(requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please))
                 }
             }
         }
@@ -551,31 +532,18 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                     if (viewModel.newSchoolData.value?.interested == "yes")
                         showDialog()
                     else {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.meeting_has_been_moved_to_not_interested_section),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        toastMsg(getString(R.string.meeting_has_been_moved_to_not_interested_section))
                         findNavController().popBackStack()
                     }
                 }
 
                 is NetworkResult.Error -> {
                     binding.progressBar.visibility = View.GONE
-                    Toast.makeText(
-                        requireContext(),
-                        resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Timber.e(it.toString())
+                    toastMsg(resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please))
                 }
 
                 else -> {
-                    Toast.makeText(
-                        requireContext(),
-                        requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    toastMsg(requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please))
                 }
             }
         }
@@ -591,31 +559,18 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                         viewModel.uploadImage()
                     else {
                         if (viewModel.newSchoolData.value?.interested != "yes")
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.meeting_has_been_moved_to_not_interested_section),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            toastMsg(resources.getString(R.string.meeting_has_been_moved_to_not_interested_section))
                         toastMsg(requireContext().resources.getString(R.string.update_school))
                         findNavController().popBackStack()
                     }
                 }
 
                 is NetworkResult.Error -> {
-                    Toast.makeText(
-                        requireContext(),
-                        resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Timber.e(it.toString())
+                    toastMsg(resources.getString(R.string.something_went_wrong_please))
                 }
 
                 else -> {
-                    Toast.makeText(
-                        requireContext(),
-                        requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    toastMsg(resources.getString(R.string.something_went_wrong_please))
                 }
             }
         }
@@ -681,29 +636,6 @@ class AddSchoolFragment : Fragment(), MenuProvider {
             cameraResult.launch(Unit)
         }
 
-
-        binding.basicDetails.btnSave.setOnClickListener {
-            Timber.d("data binding data")
-            Timber.d(Gson().toJson(viewModel.newSchoolData.value))
-            addValidationWatchers()
-            checkValidationsAndApiCall(1)
-            hideKeyboard()
-        }
-
-        binding.schoolDetails.btnNext.setOnClickListener {
-            Timber.d("data binding data 2")
-            Timber.d(Gson().toJson(viewModel.newSchoolData.value))
-            checkValidationsAndApiCall(2)
-            hideKeyboard()
-        }
-
-        binding.followupDetails.btnSave.setOnClickListener {
-            Timber.d("data binding data 3")
-            Timber.d(Gson().toJson(viewModel.newSchoolData.value))
-            checkValidationsAndApiCall(3)
-            hideKeyboard()
-        }
-
         binding.basicDetails.boardSpinner.setOnItemClickListener { parent, view, position, id ->
             val updatedBoardName = parent.adapter.getItem(position) as String
             viewModel._newSchoolData.value?.board = updatedBoardName
@@ -743,9 +675,9 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                 }
             }
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
-                val updatedDateAndTime = if (dayOfMonth < 10){
+                val updatedDateAndTime = if (dayOfMonth < 10) {
                     "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
-                }else{
+                } else {
                     dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                 }
                 binding.followupDetails.edtSchoolDate.setText(updatedDateAndTime)
@@ -802,23 +734,6 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                 }
             }
         }
-    }
-
-    private fun openCamera(): Intent {
-        val sdf = SimpleDateFormat("ddMyyyyhhmmss")
-        val values = ContentValues().apply {
-            put(MediaStore.Images.Media.TITLE, "SchoolImage${sdf.format(Date())}")
-            put(MediaStore.Images.Media.DESCRIPTION, "From Camera")
-        }
-        _imageUri =
-            requireContext().contentResolver.insert(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                values
-            )
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
-            putExtra(MediaStore.EXTRA_OUTPUT, _imageUri)
-        }
-        return cameraIntent
     }
 
     private fun checkValidationsAndApiCall(stepCount: Int) {

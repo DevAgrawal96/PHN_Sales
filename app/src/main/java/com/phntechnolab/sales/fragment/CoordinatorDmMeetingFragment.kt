@@ -112,9 +112,6 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
 
         nextDMMeetingDateTimeClickListener()
 
-
-
-
     }
 
     private fun initializeListener() {
@@ -142,7 +139,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
             }
         }
 
-        binding.coordinatorMeeting.button.setOnClickListener {
+        binding.coordinatorMeeting.updateBtn.setOnClickListener {
             viewModel._coordinatorMeetData.value?.remark =
                 binding.coordinatorMeeting.edtRemark.text.toString()
             if (checkCoordinatorRequiredFieldsData()) {

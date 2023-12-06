@@ -195,18 +195,69 @@ class SchoolData : Parcelable {
 }
 
 @Parcelize
-data class CoordinatorData(
-    @SerializedName("id") var id: String? = null,
-    @SerializedName("school_id") var schoolId: String? = "",
-    @SerializedName("co_attend_meet") var coAttendMeet: String? = "",
-    @SerializedName("product_demo_happen") var productDemoHappen: String? = "",
-    @SerializedName("next_followup_dm") var nextFollowupDm: String? = "",
-    @SerializedName("interested") var interested: String? = "yes",
-    @SerializedName("next_meet_date_dm") var nextMeetDateDm: String? = "",
-    @SerializedName("reschedule_coordinator") var rescheduleWithCoordinator: String? = "",
-    @SerializedName("meet_date_coordinator") var meetDateCoordinator: String? = "",
-    @SerializedName("remark") var remark: String? = ""
-) : Parcelable
+class CoordinatorData(
+
+) : Parcelable {
+    @SerializedName("id")
+    var id: String? = null
+        set(value) {
+            field = value ?: ""
+        }
+
+    @SerializedName("school_id")
+    var schoolId: String? = ""
+        set(value) {
+            field = value ?: ""
+        }
+
+    @SerializedName("co_attend_meet")
+    var coAttendMeet: String? = ""
+        set(value) {
+            field = value ?: ""
+        }
+
+    @SerializedName("product_demo_happen")
+    var productDemoHappen: String? = ""
+        set(value) {
+            field = value ?: ""
+        }
+
+    @SerializedName("next_followup_dm")
+    var nextFollowupDm: String? = ""
+        set(value) {
+            field = value ?: ""
+        }
+
+    @SerializedName("interested")
+    var interested: String? = "yes"
+        set(value) {
+            field = value ?: ""
+        }
+
+    @SerializedName("next_meet_date_dm")
+    var nextMeetDateDm: String? = ""
+        set(value) {
+            field = value ?: ""
+        }
+
+    @SerializedName("reschedule_coordinator")
+    var rescheduleWithCoordinator: String? = ""
+        set(value) {
+            field = value ?: ""
+        }
+
+    @SerializedName("meet_date_coordinator")
+    var meetDateCoordinator: String? = ""
+        set(value) {
+            field = value ?: ""
+        }
+
+    @SerializedName("remark")
+    var remark: String? = ""
+        set(value) {
+            field = value ?: ""
+        }
+}
 
 
 @Parcelize
@@ -376,31 +427,31 @@ class MOADocumentData : Parcelable {
 
 @Parcelize
 data class InstallmentData(
-    @SerializedName("id") var id : String? = null,
-    @SerializedName("school_id") var schoolId : String? = "",
-    @SerializedName("total_installment") var totalInstallment : String? = "",
+    @SerializedName("id") var id: String? = null,
+    @SerializedName("school_id") var schoolId: String? = "",
+    @SerializedName("total_installment") var totalInstallment: String? = "",
 
-    @SerializedName("advance_payment") var advancePayment : String? = "",
-    @SerializedName("advance_payment_amount") var advancePaymentAmount : String? = "",
-    @SerializedName("advance_payment_date_time") var advancePaymentDateTime : String? = "",
-    @SerializedName("advance_payment_receipt") var advancePaymentReceipt : String? = "",
+    @SerializedName("advance_payment") var advancePayment: String? = "",
+    @SerializedName("advance_payment_amount") var advancePaymentAmount: String? = "",
+    @SerializedName("advance_payment_date_time") var advancePaymentDateTime: String? = "",
+    @SerializedName("advance_payment_receipt") var advancePaymentReceipt: String? = "",
 
-    @SerializedName("first_installment") var firstInstallment : String? = "",
-    @SerializedName("first_installment_amount") var firstInstallmentAmount : String? = "",
-    @SerializedName("first_installment_date_time") var firstInstallmentDateTime : String? = "",
-    @SerializedName("first_installment_reciept") var firstInstallmentReciept : String? = "",
+    @SerializedName("first_installment") var firstInstallment: String? = "",
+    @SerializedName("first_installment_amount") var firstInstallmentAmount: String? = "",
+    @SerializedName("first_installment_date_time") var firstInstallmentDateTime: String? = "",
+    @SerializedName("first_installment_reciept") var firstInstallmentReciept: String? = "",
 
-    @SerializedName("second_installment") var secondInstallment : String? = "",
-    @SerializedName("second_installment_amount") var secondInstallmentAmount : String? = "",
-    @SerializedName("second_installment_date_time") var secondInstallmentDateTime : String? = "",
-    @SerializedName("second_installment_reciept") var secondInstallmentReciept : String? = "",
-    @SerializedName("third_installment") var thirdInstallment : String? = "",
-    @SerializedName("third_installment_amount") var thirdInstallmentAmount : String? = "",
-    @SerializedName("third_installment_date_time") var thirdInstallmentDateTime : String? = "",
-    @SerializedName("third_installment_reciept") var thirdInstallmentReciept : String? = "",
-    @SerializedName("created_at") var createdAt : String? = "",
-    @SerializedName("updated_at") var updatedAt : String? = "",
-): Parcelable
+    @SerializedName("second_installment") var secondInstallment: String? = "",
+    @SerializedName("second_installment_amount") var secondInstallmentAmount: String? = "",
+    @SerializedName("second_installment_date_time") var secondInstallmentDateTime: String? = "",
+    @SerializedName("second_installment_reciept") var secondInstallmentReciept: String? = "",
+    @SerializedName("third_installment") var thirdInstallment: String? = "",
+    @SerializedName("third_installment_amount") var thirdInstallmentAmount: String? = "",
+    @SerializedName("third_installment_date_time") var thirdInstallmentDateTime: String? = "",
+    @SerializedName("third_installment_reciept") var thirdInstallmentReciept: String? = "",
+    @SerializedName("created_at") var createdAt: String? = "",
+    @SerializedName("updated_at") var updatedAt: String? = "",
+) : Parcelable
 
 //data class SchoolData (
 //    @SerializedName("id") var id : Int = 0,

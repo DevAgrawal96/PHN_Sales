@@ -246,6 +246,7 @@
                     android:layout_marginBottom="@dimen/dimen_16dp"
                     android:backgroundTint="@color/regular_blue"
                     android:text="@string/update"
+                    android:onClick="@{()->viewModel.saveFollowUpDetails()}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

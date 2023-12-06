@@ -11,6 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentMyAccountBinding
+import com.phntechnolab.sales.util.AppEvent
+import com.phntechnolab.sales.util.backPressHandle
 import com.phntechnolab.sales.viewmodel.MyAccountViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -27,7 +29,6 @@ class MyAccountFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -37,37 +38,39 @@ class MyAccountFragment : Fragment() {
         _binding = FragmentMyAccountBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        setOnBackPressed()
+        setUIData()
+        backPressHandle {
+            findNavController().popBackStack()
+        }
         return binding.root
     }
 
-    private fun setOnBackPressed() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().popBackStack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initializeListener()
-        setUIData()
+        observables()
+    }
+
+    private fun observables() {
+        viewModel.appEvent.observe(viewLifecycleOwner, ::appEvent)
+    }
+
+    private fun appEvent(appEvent: AppEvent?) {
+        when (appEvent) {
+            is AppEvent.BackScreen -> {
+                if (appEvent.screenID == 0) {
+                    findNavController().popBackStack()
+                    viewModel._appEvent.postValue(null)
+                }
+            }
+
+            else -> {}
+        }
     }
 
     private fun setUIData() {
         Timber.e(args.userData?.name)
         viewModel.setNewUserData(args.userData)
-    }
-
-    private fun initializeListener() {
-        binding.topAppBar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.topAppBar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
     }
 
     override fun onDestroyView() {

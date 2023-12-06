@@ -503,7 +503,7 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
         )
         else binding.proposeCostingStage.priceDiscussedGroup.check(com.phntechnolab.sales.R.id.priceDiscussedNo)
 
-        if (proposeCostingData?.rescheduleMeeting == "yes") binding.proposeCostingStage.rescheduleMeetingGroup.check(
+        if (proposeCostingData?.rescheduleMeeting == "Yes") binding.proposeCostingStage.rescheduleMeetingGroup.check(
             com.phntechnolab.sales.R.id.rescheduleMeetingYes
         )
         else binding.proposeCostingStage.rescheduleMeetingGroup.check(com.phntechnolab.sales.R.id.rescheduleMeetingNo)

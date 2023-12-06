@@ -1,19 +1,15 @@
 package com.phntechnolab.sales.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import com.google.android.material.snackbar.Snackbar
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentLoginBinding
@@ -23,10 +19,9 @@ import com.phntechnolab.sales.util.DataStoreManager.setIsUserLoggedIn
 import com.phntechnolab.sales.util.DataStoreManager.setToken
 import com.phntechnolab.sales.util.DataStoreManager.setUser
 import com.phntechnolab.sales.util.NetworkResult
-import com.phntechnolab.sales.util.hideKeyboard
-import com.phntechnolab.sales.util.hideSoftKeyboard
 import com.phntechnolab.sales.util.isValidEmail
 import com.phntechnolab.sales.util.setupUI
+import com.phntechnolab.sales.util.snakeMessage
 import com.phntechnolab.sales.util.textChange
 import com.phntechnolab.sales.util.toastMsg
 import com.phntechnolab.sales.viewmodel.LoginViewModel
@@ -90,35 +85,27 @@ class LoginFragment : Fragment() {
                 is AppEvent.ToastEvent -> {
                     toastMsg(it.message)
                 }
-                else->{
+
+                else -> {
                 }
             }
         }
 
         viewModel.loginLiveData.observe(viewLifecycleOwner, Observer {
             when (it) {
-                is NetworkResult.Loading -> {
-//                    showAllExceptNoInternet(
-//                        LoadingModel(isLoading = true, isCheck = false,
-//                            isInternetAvailable = true, retryNow = false)
-//                    )
-                }
-
                 is NetworkResult.Success -> {
                     Timber.d("token-Tasks=${it}")
-                    if (it.message == requireContext().resources.getString(R.string.something_went_wrong)) {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.something_went_wrong),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else if (it.message == requireContext().resources.getString(R.string.please_connection_message)) {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.please_connection_message),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else { }
+                    when (it.message) {
+                        requireContext().resources.getString(R.string.something_went_wrong) -> {
+                            toastMsg(getString(R.string.something_went_wrong))
+                        }
+
+                        requireContext().resources.getString(R.string.please_connection_message) -> {
+                            toastMsg(getString(R.string.please_connection_message))
+                        }
+
+                        else -> {}
+                    }
 
                     if (it.data?.status_code == 200) {
                         lifecycleScope.launch(Dispatchers.IO) {
@@ -149,17 +136,13 @@ class LoginFragment : Fragment() {
                                     .navigate(R.id.action_loginFragment_to_homeFragment)
                             }
                         }
-                    } else { }
+                    }
                 }
 
                 is NetworkResult.Error -> {
                     if (it.data?.status_code == 401) {
-                        Toast.makeText(
-                            requireContext(),
-                            "unauthorized user",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        showError()
+                        toastMsg(requireContext().resources.getString(R.string.unauthorizedU_user))
+                        binding.root.snakeMessage(getString(R.string.enter_valid_email_and_password))
                     } else {
                         Timber.e("unauthorized user Error body else")
                         toastMsg(requireContext().resources.getString(R.string.please_connection_message))
@@ -172,15 +155,6 @@ class LoginFragment : Fragment() {
         })
 
     }
-
-    private fun showError() {
-        Snackbar.make(
-            requireActivity().findViewById(android.R.id.content),
-            getString(R.string.enter_valid_email_and_password),
-            Snackbar.LENGTH_SHORT
-        ).show()
-    }
-
 
     private fun addEmailValidation() {
         binding.edtEmailId.textChange { email ->

@@ -93,6 +93,8 @@ class ChangePasswordFragment : Fragment() {
                 is AppEvent.LoadingEvent -> {
                     hideAndShowProgress(true)
                 }
+
+                else -> {}
             }
         }
     }
