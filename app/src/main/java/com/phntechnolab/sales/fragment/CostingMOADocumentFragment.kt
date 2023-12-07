@@ -35,6 +35,7 @@ import com.phntechnolab.sales.di.FileDownloader
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.getFileSize
 import com.phntechnolab.sales.util.isValidEmail
 import com.phntechnolab.sales.util.setupUI
 import com.phntechnolab.sales.util.textChange
@@ -839,11 +840,16 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
 
     private var moaDocument = registerForActivityResult(ActivityResultContracts.GetContent()) {
         Timber.e("BACK")
-        if (it != null) {
-            image = it
-            Timber.e(image.toString())
-            viewModel.uploadDocument(it, requireContext())
-            binding.moaDocument.documentFileName.text = "${viewModel.imageName}.pdf"
+        Timber.e(it.toString())
+        it?.let {
+            if (it.toString().contains("document%")) {
+                image = it
+                Timber.e(image.toString())
+                viewModel.uploadDocument(it, requireContext())
+                binding.moaDocument.documentFileName.text = "${viewModel.imageName}.pdf"
+            } else {
+                toastMsg("The file is corrupt and cannot be attach!")
+            }
         }
     }
 

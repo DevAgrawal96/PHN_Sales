@@ -172,6 +172,15 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
                     )
             }
 
+            "Not Interested" -> {
+                requireView().findNavController()
+                    .navigate(
+                        SearchFragmentDirections.actionSearchFragmentToAddSchoolFragment(
+                            schoolData
+                        )
+                    )
+            }
+
             "Visited" -> {
                 requireView().findNavController()
                     .navigate(

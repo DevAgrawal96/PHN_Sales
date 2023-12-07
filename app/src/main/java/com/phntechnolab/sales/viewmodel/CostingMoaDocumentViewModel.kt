@@ -232,18 +232,40 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
         val isDesignationNotSelected = _moaDocumentData.value?.designation.isNullOrBlank()
 
         val isMoaDocumentNotUploaded =
-            if (_moaDocumentData.value?.moaFile != null) false else _requestFile == null
+            if (_moaDocumentData.value?.moaFile != null) {
+                (_moaDocumentData.value?.moaFile ?: "").isBlank()
+            } else _requestFile == null
 
 
         if (isTotalInterestedIntakeNotFilled || isCostingPerStudentNotFilled || isDiscussedWithWhoomNotSelected || isAuthorityNameEmpty || isDesignationNotSelected || isAgreementDurationNotSelected || isMoaDocumentNotUploaded) {
             if (isMoaDocumentNotUploaded) {
-                _messageLiveData.postValue(Event("Please upload moa document."))
+                if (_requestFile == null) {
+                    _messageLiveData.postValue(Event("Please upload moa document."))
+                } else {
+                    if (isTotalInterestedIntakeNotFilled || isCostingPerStudentNotFilled || isDiscussedWithWhoomNotSelected || isAuthorityNameEmpty || isDesignationNotSelected || isAgreementDurationNotSelected || isMoaDocumentNotUploaded) {
+                        _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
+                    } else {
+                        _progressBarLiveData.postValue(true)
+                        updateMoaDocumentDetails(_moaDocumentData.value ?: MOADocumentData())
+                    }
+
+                }
             } else {
                 _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
             }
         } else {
-            _progressBarLiveData.postValue(true)
-            updateMoaDocumentDetails(_moaDocumentData.value ?: MOADocumentData())
+            if (_requestFile != null) {
+                _progressBarLiveData.postValue(true)
+                updateMoaDocumentDetails(_moaDocumentData.value ?: MOADocumentData())
+            } else {
+                if (_moaDocumentData.value?.moaFile != null) {
+                    _progressBarLiveData.postValue(true)
+                    updateMoaDocumentDetails(_moaDocumentData.value ?: MOADocumentData())
+                } else {
+                    _messageLiveData.postValue(Event("Please upload moa document."))
+                }
+            }
+
         }
     }
 

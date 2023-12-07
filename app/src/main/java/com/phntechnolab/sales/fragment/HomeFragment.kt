@@ -20,6 +20,7 @@ import com.google.android.material.chip.Chip
 import com.phntechnolab.sales.Modules.DataStoreProvider
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.activity.MainActivity
+import com.phntechnolab.sales.adapter.LoaderAdapter
 import com.phntechnolab.sales.databinding.FragmentHomeBinding
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.DMData
@@ -84,7 +85,7 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
 
         schoolPagingAdapter?.addLoadStateListener { loadState ->
             Timber.e("LOAD STATE")
-            Timber.e(loadState.toString())
+            Timber.e("%sload_suraj", loadState.toString())
             if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && schoolPagingAdapter?.itemCount ?: 0 < 1) {
                 hideViewShowEmptyState()
                 binding.swipeReferesh.isEnabled = true
@@ -223,7 +224,8 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
         schoolPagingAdapter = SchoolPagingAdapter(this)
         schoolPagingAdapter!!.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        binding.homeRecyclerView.adapter = schoolPagingAdapter
+        binding.homeRecyclerView.adapter =
+            schoolPagingAdapter?.withLoadStateFooter(footer = LoaderAdapter())
     }
 
 
