@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.Toast
+import androidx.compose.ui.text.toUpperCase
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -35,6 +36,10 @@ import java.io.File
 import java.net.URI
 import java.util.Calendar
 import java.util.regex.Pattern
+
+fun String.capitalize(): String {
+    return this.substring(0, 1).uppercase() + this.substring(1)
+}
 
 suspend fun saveData(
     context: Context,

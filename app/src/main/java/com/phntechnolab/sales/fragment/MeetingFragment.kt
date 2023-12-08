@@ -111,7 +111,9 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                 when (checkedId) {
                     R.id.today_btn -> {
                         val meetingsData = (viewModel.meetingsData.value
-                            ?: ArrayList()).filter { it.taskDateFilter == "today" }
+                            ?: ArrayList()).filter {
+                            it.taskDateFilter == "today"
+                            }
                             .sortedByDescending { it.dateTime }
                         if (meetingsData.isNullOrEmpty()) {
                             binding.noDataLottie.visibility = View.VISIBLE

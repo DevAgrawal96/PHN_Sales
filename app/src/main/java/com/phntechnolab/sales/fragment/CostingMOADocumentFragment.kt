@@ -256,9 +256,9 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             val datePickerDialog = DatePickerDialog(
                 requireContext(), { view, _year, monthOfYear, dayOfMonth ->
                     val updatedDateAndTime = if (dayOfMonth < 10) {
-                        "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                        "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + _year
                     } else {
-                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
                     }
                     binding.proposeCostingStage.edtQuotationValidity.setText(updatedDateAndTime)
                     viewModel.proposeCostingData.value?.quotationValidity.let { _nextFollowUpDate ->
@@ -773,9 +773,9 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
             val datePickerDialog = DatePickerDialog(
                 requireContext(), { view, _year, monthOfYear, dayOfMonth ->
                     val updatedDateAndTime = if (dayOfMonth < 10) {
-                        "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                        "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + _year
                     } else {
-                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                        dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
                     }
                     binding.proposeCostingStage.edtDate.setText(updatedDateAndTime)
                     viewModel.proposeCostingData.value?.meetDateTime.let { _nextFollowUpDate ->

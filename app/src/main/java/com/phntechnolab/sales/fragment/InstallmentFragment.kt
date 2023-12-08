@@ -456,9 +456,9 @@ class InstallmentFragment : Fragment() {
             val day = c.get(Calendar.DAY_OF_MONTH)
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
                 val updatedDateAndTime = if (dayOfMonth < 10){
-                    "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                    "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + _year
                 }else{
-                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
                 }
                 binding.addInstallment1.edtInstallmentDate.setText(updatedDateAndTime)
             }
@@ -470,9 +470,9 @@ class InstallmentFragment : Fragment() {
             val day = c.get(Calendar.DAY_OF_MONTH)
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
                 val updatedDateAndTime = if (dayOfMonth < 10){
-                    "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                    "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + _year
                 }else{
-                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
                 }
                 binding.addAdvancePayment.edtAdvancePaymentDate.setText(updatedDateAndTime)
             }
@@ -484,9 +484,9 @@ class InstallmentFragment : Fragment() {
             val day = c.get(Calendar.DAY_OF_MONTH)
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
                 val updatedDateAndTime = if (dayOfMonth < 10){
-                    "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                    "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + _year
                 }else{
-                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
                 }
                 binding.addInstallment2.edtInstallmentDate.setText(updatedDateAndTime)
             }
@@ -498,9 +498,9 @@ class InstallmentFragment : Fragment() {
             val day = c.get(Calendar.DAY_OF_MONTH)
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
                 val updatedDateAndTime = if (dayOfMonth < 10){
-                    "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
+                    "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + _year
                 }else{
-                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
+                    dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
                 }
                 binding.addInstallment3.edtInstallmentDate.setText(updatedDateAndTime)
             }

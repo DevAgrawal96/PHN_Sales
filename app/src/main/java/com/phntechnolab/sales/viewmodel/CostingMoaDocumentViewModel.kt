@@ -242,7 +242,7 @@ class CostingMoaDocumentViewModel @Inject constructor(private val repositories: 
                 if (_requestFile == null) {
                     _messageLiveData.postValue(Event("Please upload moa document."))
                 } else {
-                    if (isTotalInterestedIntakeNotFilled || isCostingPerStudentNotFilled || isDiscussedWithWhoomNotSelected || isAuthorityNameEmpty || isDesignationNotSelected || isAgreementDurationNotSelected || isMoaDocumentNotUploaded) {
+                    if (isTotalInterestedIntakeNotFilled || isCostingPerStudentNotFilled || isDiscussedWithWhoomNotSelected || isAuthorityNameEmpty || isDesignationNotSelected || isAgreementDurationNotSelected || !isMoaDocumentNotUploaded) {
                         _messageLiveData.postValue(Event("Please fill all the mandate fields to proceed."))
                     } else {
                         _progressBarLiveData.postValue(true)
