@@ -46,72 +46,89 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
-                android:layout_width="@dimen/dimen_0dp"
+            <HorizontalScrollView
+                android:id="@+id/chips_"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_8dp"
-                android:layout_marginEnd="@dimen/dimen_16dp"
+                android:scrollbars="none"
+                android:background="#FEFAFD"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:selectionRequired="true"
-                app:singleSelection="true">
+                app:layout_constraintVertical_bias="0.0">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/all"
-                    style="@style/CustomChipChoice"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/all"
-                    app:checkedIconEnabled="false" />
+                    android:layout_marginStart="@dimen/dimen_16dp"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:layout_marginEnd="@dimen/dimen_16dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/visited"
-                    style="@style/CustomChipChoice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/visited"
-                    app:checkedIconEnabled="false" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/all"
+                        style="@style/CustomChipChoice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/all"
+                        app:checkedIconEnabled="false" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/moa_negotiation"
-                    style="@style/CustomChipChoice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/propose_costing"
-                    app:checkedIconEnabled="false" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/visited"
+                        style="@style/CustomChipChoice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/visited"
+                        app:checkedIconEnabled="false" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/moa_signed"
-                    style="@style/CustomChipChoice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/moa_signed"
-                    app:checkedIconEnabled="false" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/moa_negotiation"
+                        style="@style/CustomChipChoice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/propose_costing"
+                        app:checkedIconEnabled="false" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/not_interested"
-                    style="@style/CustomChipChoice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/not_interested"
-                    app:checkedIconEnabled="false" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/moa_signed"
+                        style="@style/CustomChipChoice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/moa_signed"
+                        app:checkedIconEnabled="false" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/assigned"
-                    style="@style/CustomChipChoice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assigned"
-                    app:checkedIconEnabled="false" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/not_interested"
+                        style="@style/CustomChipChoice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/not_interested"
+                        app:checkedIconEnabled="false" />
 
-            </com.google.android.material.chip.ChipGroup>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/assigned"
+                        style="@style/CustomChipChoice"
+                        android:layout_marginEnd="@dimen/dimen_20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/assigned"
+                        app:checkedIconEnabled="false" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </HorizontalScrollView>
+
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/no_data_lottie"
@@ -121,7 +138,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/chipGroup"
+                app:layout_constraintTop_toBottomOf="@+id/chips_"
                 app:layout_constraintVertical_bias="0.3"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
@@ -134,13 +151,12 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/chipGroup">
+                app:layout_constraintTop_toBottomOf="@+id/chips_">
 
                 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                     android:id="@+id/swipeReferesh"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    >
+                    android:layout_height="match_parent">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
