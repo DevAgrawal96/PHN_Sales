@@ -31,6 +31,7 @@ import com.phntechnolab.sales.util.TakePictureFromCameraOrGalley
 import com.phntechnolab.sales.util.getFileSize
 import com.phntechnolab.sales.util.pickDate
 import com.phntechnolab.sales.util.pickTime
+import com.phntechnolab.sales.util.setBackPressed
 import com.phntechnolab.sales.util.setupUI
 import com.phntechnolab.sales.util.toastMsg
 import com.phntechnolab.sales.viewmodel.InstallmentViewModel
@@ -91,7 +92,9 @@ class InstallmentFragment : Fragment() {
 
         _binding = FragmentInstalmentBinding.inflate(inflater, container, false)
 
-        setOnBackPressed()
+        setBackPressed {
+            findNavController().popBackStack()
+        }
 
         viewModel.setInstallmentData(args.schoolData)
 
@@ -100,15 +103,6 @@ class InstallmentFragment : Fragment() {
         binding.lifecycleOwner = this
 
         return binding.root
-    }
-
-    private fun setOnBackPressed() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().popBackStack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -23,10 +23,10 @@
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_back"
             app:menu="@menu/search_menu"
-            app:title="@string/search"
+            app:navigationIcon="@drawable/ic_back"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+            app:title="@string/search"
             app:titleTextAppearance="@style/NavigationStyle" />
 
 
@@ -56,12 +56,9 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:background="@drawable/home_search_bg"
                 android:drawablePadding="24dp"
                 android:paddingVertical="8dp"
-                android:iconifiedByDefault="false"
-                app:queryHint="@string/search"
-                app:searchHintIcon="@null"
-                android:background="@drawable/home_search_bg"
                 android:paddingStart="@dimen/dimen_40dp"
                 android:queryHint="@string/search"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -69,33 +66,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
+                app:queryBackground="@android:color/transparent"
+                app:queryHint="@string/search"
+                app:searchHintIcon="@null"
                 app:searchIcon="@android:color/transparent" />
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_search"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_marginHorizontal="@dimen/dimen_8dp"
-                android:layout_marginTop="@dimen/dimen_8dp"
-                android:layout_marginBottom="@dimen/dimen_8dp"
-                android:background="@drawable/home_search_bg"
-                android:hint="@string/search"
-                app:boxStrokeWidth="@dimen/dimen_0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:startIconDrawable="@drawable/ic_back">
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/auto_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp" />
-            </com.google.android.material.textfield.TextInputLayout>
 
 
             <com.airbnb.lottie.LottieAnimationView
@@ -134,9 +108,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/ic_back"
-                android:padding="@dimen/dimen_8dp"
                 android:clickable="true"
+                android:padding="@dimen/dimen_8dp"
+                android:src="@drawable/ic_back"
                 app:layout_constraintBottom_toBottomOf="@+id/search"
                 app:layout_constraintEnd_toEndOf="@+id/search"
                 app:layout_constraintHorizontal_bias="0.0"

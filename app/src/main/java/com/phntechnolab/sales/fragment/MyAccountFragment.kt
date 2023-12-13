@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.databinding.FragmentMyAccountBinding
+import com.phntechnolab.sales.util.setBackPressed
 import com.phntechnolab.sales.viewmodel.MyAccountViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -37,18 +38,12 @@ class MyAccountFragment : Fragment() {
         _binding = FragmentMyAccountBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        setOnBackPressed()
+        setBackPressed {
+            findNavController().popBackStack()
+        }
         return binding.root
     }
 
-    private fun setOnBackPressed() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().popBackStack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

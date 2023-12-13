@@ -14,6 +14,7 @@ import com.phntechnolab.sales.databinding.FragmentChangePasswordBinding
 import com.phntechnolab.sales.model.ChangePasswordModel
 import com.phntechnolab.sales.util.AppEvent
 import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.setBackPressed
 import com.phntechnolab.sales.util.setupUI
 import com.phntechnolab.sales.util.toastMsg
 import com.phntechnolab.sales.viewmodel.ProfileViewModel
@@ -36,21 +37,20 @@ class ChangePasswordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentChangePasswordBinding.inflate(inflater, container, false)
-        setOnBackPressed()
+
+        setBackPressed {
+            findNavController().popBackStack()
+        }
+
         viewModel._changePasswordData.postValue(ChangePasswordModel())
+
         binding.viewModel = viewModel
+
         binding.lifecycleOwner = this
+
         return binding.root
     }
 
-    private fun setOnBackPressed() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().popBackStack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -90,6 +90,7 @@ class ChangePasswordFragment : Fragment() {
                     toastMsg(it.message)
                     hideAndShowProgress(false)
                 }
+
                 is AppEvent.LoadingEvent -> {
                     hideAndShowProgress(true)
                 }
@@ -114,28 +115,6 @@ class ChangePasswordFragment : Fragment() {
         binding.topAppBar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-//        binding.changePasswordButton.setOnClickListener {
-//            if (binding.edtOldPassword.text?.isNotBlank()!! &&
-//                binding.edtNewPassword.text?.isNotBlank()!! &&
-//                binding.edtConfirmPassword.text?.isNotBlank()!!
-//            ) {
-//                viewModel.changePassword(
-//                    requireContext(),
-//                    ChangePasswordModel(
-//                        binding.edtConfirmPassword.text.toString(),
-//                        binding.edtNewPassword.text.toString(),
-//                        binding.edtOldPassword.text.toString()
-//                    )
-//                )
-//                binding.changePasswordButton.isEnabled = false
-//                binding.progressIndicator.visibility = View.VISIBLE
-//
-//            } else {
-//                Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT)
-//                    .show()
-//            }
-//
-//        }
     }
 
     override fun onDestroyView() {

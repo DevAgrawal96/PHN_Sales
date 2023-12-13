@@ -9,12 +9,16 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.SearchView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
 import androidx.databinding.adapters.SearchViewBindingAdapter.setOnQueryTextListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.switchMap
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.R
@@ -27,11 +31,15 @@ import com.phntechnolab.sales.model.DMData
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
+import com.phntechnolab.sales.util.Debouncer
+import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.setBackPressed
 import com.phntechnolab.sales.util.setupUI
 import com.phntechnolab.sales.viewmodel.HomeViewModel
 import com.phntechnolab.sales.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
@@ -42,6 +50,9 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
 
     private var _adapter: SchoolDetailAdapter? = null
     private val adapter get() = _adapter
+
+    @Inject
+    lateinit var debouncer: Debouncer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,18 +65,12 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        setBackPressed()
+        setBackPressed {
+            findNavController().popBackStack()
+        }
         return binding.root
     }
 
-    private fun setBackPressed() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().popBackStack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -76,6 +81,12 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
         observers()
 
         textWatchers()
+
+        debouncer.debounce(300) {
+            requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        }
+
+
     }
 
     private fun initializeAdapter() {
@@ -87,67 +98,62 @@ class SearchFragment : Fragment(), SchoolDetailAdapter.CallBacks {
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
         }
+
         binding.search.onActionViewExpanded()
         binding.search.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (!query.isNullOrEmpty()) {
-                    fetchData(query.toString())
-                }
+                query?.let { debouncer.debounce(300) { fetchData(it) } }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (!newText.isNullOrEmpty()) {
-                    fetchData(newText.toString())
-                } else {
-                    Timber.e("null")
-                }
+                performSearch(newText)
                 return true
             }
-        })
 
-
-        binding.autoSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                fetchData(s.toString())
+            private fun performSearch(query: String?) {
+                if (!query.isNullOrBlank()) {
+                    query.let { debouncer.debounce(300) { fetchData(it) } }
+                } else {
+                    adapter?.setData(ArrayList())
+                }
             }
         })
     }
 
     private fun fetchData(schoolName: String) {
-        if (!schoolName.isNullOrBlank()) {
-            val refereshData = viewModel.schoolLiveData.value?.data?.filter {
-                (it.schoolName?.toLowerCase() ?: "").contains(schoolName?.toLowerCase() ?: "")
-            }?.sortedByDescending { it.updatedAt }
-            refereshData?.let { ArrayList(it) }?.let { adapter?.setData(it) }
+        if (schoolName.isNotBlank()) {
+            viewModel.searchQueryLiveData.postValue(schoolName)
         } else {
             adapter?.setData(java.util.ArrayList())
         }
     }
 
+
     private fun observers() {
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
-            Timber.e(it.data.toString())
+
             if (it.data?.isEmpty()!!) {
                 binding.noDataLottie.visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.GONE
                 binding.progressBar.visibility = View.GONE
             } else {
+
                 binding.recyclerView.visibility = View.VISIBLE
                 binding.noDataLottie.visibility = View.GONE
                 binding.progressIndicator.visibility = View.GONE
-//                adapter?.setData(ArrayList<SchoolData>().apply {  addAll(it.data.sortedByDescending { it.updatedAt }) })
                 binding.progressBar.visibility = View.GONE
             }
         }
+
+        viewModel.filteredSchoolsLiveData.observe(viewLifecycleOwner) { filteredSchools ->
+            adapter?.setData(ArrayList<SchoolData>().apply {
+                filteredSchools?.toList()?.let { addAll(it) }
+            })
+        }
     }
+
 
     override fun onDestroyView() {
         _binding = null

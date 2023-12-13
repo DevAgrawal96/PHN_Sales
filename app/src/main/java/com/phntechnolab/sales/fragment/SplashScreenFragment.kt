@@ -52,18 +52,22 @@ class SplashScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        isLoggedIn = runBlocking {DataStoreManager.getIsUserLoggedIn(requireContext(), dataStoreProvider, "isLoggedIn").toString() }
-
-        if(isLoggedIn == "true"){
-            Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().navigate(R.id.action_splashScreenFragment_to_homeFragment)
-            }, 3000)
-        }else{
-            Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().navigate(R.id.action_splashScreenFragment_to_loginFragment)
-            }, 3000)
+        isLoggedIn = runBlocking {
+            DataStoreManager.getIsUserLoggedIn(
+                requireContext(),
+                dataStoreProvider,
+                "isLoggedIn"
+            ).toString()
         }
-        navigateScreen()
+
+        val destinationId =
+            if (isLoggedIn == "true") R.id.action_splashScreenFragment_to_homeFragment
+            else R.id.action_splashScreenFragment_to_loginFragment
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            findNavController().navigate(destinationId)
+        }, 3000)
+
         initializeListener()
     }
 
@@ -72,44 +76,6 @@ class SplashScreenFragment : Fragment() {
             viewModel.getToken()
             binding.retryBtn.visibility = View.GONE
         }
-    }
-
-
-    private fun navigateScreen() {
-//        viewModel.refereshToken.observe(viewLifecycleOwner) {
-//            when (it) {
-//                is NetworkResult.Success -> {
-//                    Handler(Looper.getMainLooper()).postDelayed({
-//                        findNavController().navigate(R.id.action_splashScreenFragment_to_homeFragment)
-//                    }, 3000)
-//                }
-//
-//                is NetworkResult.Error -> {
-//                    when (it.message) {
-//                        getString(R.string.please_connection_message) -> {
-//                            binding.retryBtn.visibility = View.VISIBLE
-//                        }
-//
-//                        getString(R.string.something_went_wrong) -> {
-//                            Handler(Looper.getMainLooper()).postDelayed({
-//                                findNavController().navigate(R.id.action_splashScreenFragment_to_loginFragment)
-//                            }, 3000)
-//                        }
-//
-//                        else -> {
-//
-//                        }
-//                    }
-//                    Timber.e("error")
-//
-//                }
-//
-//                else -> {
-//                    Timber.e("error ")
-////                    Toast.makeText(requireContext(), requireActivity().resources.getString(com.phntechnolab.sales.R.string.something_went_wrong_please), Toast.LENGTH_LONG).show()
-//                }
-//            }
-//        }
     }
 
     override fun onDestroyView() {

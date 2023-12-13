@@ -23,6 +23,7 @@ import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.setBackPressed
 import com.phntechnolab.sales.viewmodel.PendingForApprovalViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -47,7 +48,9 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
     ): View? {
         _binding = FragmentPendingBinding.inflate(inflater, container, false)
         initializeAdapter()
-        setOnBackPressed()
+        setBackPressed{
+            findNavController().navigate(R.id.homeFragment)
+        }
         return binding.root
     }
 
@@ -56,14 +59,6 @@ class PendingForApprovalFragment : Fragment(), MenuProvider, PendingApprovalAdap
         binding.pendingApprovalRv.adapter = adapter
     }
 
-    private fun setOnBackPressed() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.homeFragment)
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

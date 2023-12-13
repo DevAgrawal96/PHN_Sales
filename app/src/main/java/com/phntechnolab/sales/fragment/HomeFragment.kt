@@ -29,6 +29,7 @@ import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.model.SchoolData
 import com.phntechnolab.sales.paging.SchoolPagingAdapter
 import com.phntechnolab.sales.util.NetworkUtils
+import com.phntechnolab.sales.util.setBackPressed
 import com.phntechnolab.sales.util.toastMsg
 import com.phntechnolab.sales.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,7 +64,9 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
 
         initializeAdapter()
 
-        setOnBackPressed()
+        setBackPressed {
+            requireActivity().finishAffinity()
+        }
 
         return binding.root
 
@@ -234,15 +237,6 @@ class HomeFragment : Fragment(), MenuProvider, SchoolPagingAdapter.CallBacks {
         schoolPagingAdapter = null
         super.onDestroyView()
         Timber.e("onDestroyView")
-    }
-
-    private fun setOnBackPressed() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                requireActivity().finishAffinity()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
     }
 
     override fun onStart() {

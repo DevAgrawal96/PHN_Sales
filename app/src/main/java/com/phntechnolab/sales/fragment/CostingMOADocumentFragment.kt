@@ -37,6 +37,7 @@ import com.phntechnolab.sales.model.ProposeCostingData
 import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.getFileSize
 import com.phntechnolab.sales.util.isValidEmail
+import com.phntechnolab.sales.util.setBackPressed
 import com.phntechnolab.sales.util.setupUI
 import com.phntechnolab.sales.util.textChange
 import com.phntechnolab.sales.util.toastMsg
@@ -63,10 +64,15 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
     @Inject
     lateinit var download: FileDownloader
 
-    private val backPressHandler = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-//            setButtonName(viewModel.oldSchoolData.value)
 
+    var position = 0
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentCostingMoaDocumentBinding.inflate(inflater, container, false)
+
+        setBackPressed {
             when (position) {
                 0 -> {
                     findNavController().popBackStack()
@@ -89,16 +95,6 @@ class CostingMOADocumentFragment : Fragment(), MenuProvider {
                 }
             }
         }
-    }
-
-    var position = 0
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentCostingMoaDocumentBinding.inflate(inflater, container, false)
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressHandler)
 
         viewModel._oldProposeCostingData.postValue(args.proposeCostingDetails)
 

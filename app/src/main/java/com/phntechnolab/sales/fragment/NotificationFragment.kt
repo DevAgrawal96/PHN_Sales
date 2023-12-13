@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.adapter.ActivitiesAdapter
 import com.phntechnolab.sales.databinding.FragmentNotificationBinding
+import com.phntechnolab.sales.util.setBackPressed
 
 
 class NotificationFragment : Fragment() {
@@ -30,17 +31,10 @@ class NotificationFragment : Fragment() {
     ): View? {
         _binding = FragmentNotificationBinding.inflate(inflater, container, false)
         initializeAdapter()
-        setbackPressed()
-        return binding.root
-    }
-
-    private fun setbackPressed() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().popBackStack()
-            }
+        setBackPressed {
+            findNavController().popBackStack()
         }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
+        return binding.root
     }
 
     private fun initializeAdapter() {

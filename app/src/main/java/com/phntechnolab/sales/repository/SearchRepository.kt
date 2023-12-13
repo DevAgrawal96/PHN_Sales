@@ -16,7 +16,7 @@ class SearchRepository @Inject constructor(
     private val application: Application,
     private val authApi: AuthApi
 ){
-    private val schoolDataMutableLiveData = MutableLiveData<NetworkResult<List<SchoolData>>>()
+    val schoolDataMutableLiveData = MutableLiveData<NetworkResult<List<SchoolData>>>()
 
     val schoolDataLiveData: LiveData<NetworkResult<List<SchoolData>>>
         get() = schoolDataMutableLiveData

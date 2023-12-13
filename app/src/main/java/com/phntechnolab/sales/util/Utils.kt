@@ -18,11 +18,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.text.toUpperCase
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.paging.DataSource
 import androidx.paging.PagingData
 import com.google.android.material.textfield.TextInputEditText
@@ -36,6 +38,24 @@ import java.io.File
 import java.net.URI
 import java.util.Calendar
 import java.util.regex.Pattern
+
+
+fun View.setHideView() {
+    this.visibility = View.GONE
+}
+
+fun View.setShowView() {
+    this.visibility = View.VISIBLE
+}
+
+fun Fragment.setBackPressed(handler: () -> Unit) {
+    val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            handler()
+        }
+    }
+    requireActivity().onBackPressedDispatcher.addCallback(callback)
+}
 
 fun String.capitalize(): String {
     return this.substring(0, 1).uppercase() + this.substring(1)

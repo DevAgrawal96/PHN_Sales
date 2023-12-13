@@ -28,6 +28,7 @@ import com.phntechnolab.sales.model.SettingModel
 import com.phntechnolab.sales.model.UserDataModel
 import com.phntechnolab.sales.util.DataStoreManager.clearDataStore
 import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.setBackPressed
 import com.phntechnolab.sales.viewmodel.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -71,7 +72,9 @@ class ProfileFragment : Fragment(), MenuProvider {
 
         initializeAdapter()
 
-        setOnBackPressed()
+        setBackPressed {
+            findNavController().navigate(R.id.homeFragment)
+        }
 
         return binding.root
     }
@@ -150,14 +153,6 @@ class ProfileFragment : Fragment(), MenuProvider {
         dialog.show()
     }
 
-    private fun setOnBackPressed() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.homeFragment)
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -303,6 +298,7 @@ class ProfileFragment : Fragment(), MenuProvider {
         super.onStart()
         setActionBar()
     }
+
     override fun onStop() {
         super.onStop()
         (requireActivity() as MainActivity).removeMenuProvider(this)

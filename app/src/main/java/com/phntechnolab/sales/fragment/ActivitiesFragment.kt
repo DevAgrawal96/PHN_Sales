@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.phntechnolab.sales.R
 import com.phntechnolab.sales.adapter.ActivitiesAdapter
 import com.phntechnolab.sales.databinding.FragmentActivitiesBinding
+import com.phntechnolab.sales.util.setBackPressed
 
 
 class ActivitiesFragment : Fragment() {
@@ -28,19 +29,16 @@ class ActivitiesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentActivitiesBinding.inflate(inflater, container, false)
+
         initializeAdapter()
-        setBackPressed()
+
+        setBackPressed {
+            findNavController().popBackStack()
+        }
+
         return binding.root
     }
 
-    private fun setBackPressed() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().popBackStack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
-    }
 
     private fun initializeAdapter() {
         _adapter = ActivitiesAdapter()

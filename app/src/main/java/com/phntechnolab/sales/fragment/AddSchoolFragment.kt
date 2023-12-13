@@ -52,6 +52,7 @@ import com.phntechnolab.sales.util.isValidName
 import com.phntechnolab.sales.util.isValidNumber
 import com.phntechnolab.sales.util.pickDate
 import com.phntechnolab.sales.util.pickTime
+import com.phntechnolab.sales.util.setBackPressed
 import com.phntechnolab.sales.util.setupUI
 import com.phntechnolab.sales.util.textChange
 import com.phntechnolab.sales.util.toastMsg
@@ -75,12 +76,25 @@ class AddSchoolFragment : Fragment(), MenuProvider {
     private val args: AddSchoolFragmentArgs by navArgs()
 
     var position = 0
+
     var _imageUri: Uri? = null
 
-    private val backPressHandler = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            setButtonName(viewModel.oldSchoolData.value)
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        _binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_assigned_schools_stepper,
+            container,
+            false
+        )
+
+        setBackPressed {
+            setButtonName(viewModel.oldSchoolData.value)
             when (position) {
                 0 -> {
                     findNavController().popBackStack()
@@ -109,22 +123,6 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                 }
             }
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        _binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_assigned_schools_stepper,
-            container,
-            false
-        )
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressHandler)
 
         viewModel.setOldSchoolData(args.schoolData)
 
@@ -162,7 +160,7 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
         binding.basicDetails.edtSchoolTotalIntake.textChange { intake ->
             try {
-                viewModel._newSchoolData.value?.intake = if(intake == "") 0 else intake.toInt()
+                viewModel._newSchoolData.value?.intake = if (intake == "") 0 else intake.toInt()
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -170,7 +168,8 @@ class AddSchoolFragment : Fragment(), MenuProvider {
 
         binding.basicDetails.edtTotalNoOfClassroom.textChange { classRoom ->
             try {
-                viewModel._newSchoolData.value?.totalClassRoom = if(classRoom == "") 0 else classRoom.toInt()
+                viewModel._newSchoolData.value?.totalClassRoom =
+                    if (classRoom == "") 0 else classRoom.toInt()
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -743,9 +742,9 @@ class AddSchoolFragment : Fragment(), MenuProvider {
                 }
             }
             pickDate(day, month, year) { _year, monthOfYear, dayOfMonth ->
-                val updatedDateAndTime = if (dayOfMonth < 10){
+                val updatedDateAndTime = if (dayOfMonth < 10) {
                     "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + _year
-                }else{
+                } else {
                     dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + _year
                 }
                 binding.followupDetails.edtSchoolDate.setText(updatedDateAndTime)

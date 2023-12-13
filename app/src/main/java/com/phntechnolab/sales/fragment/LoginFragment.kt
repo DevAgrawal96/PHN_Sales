@@ -26,6 +26,7 @@ import com.phntechnolab.sales.util.NetworkResult
 import com.phntechnolab.sales.util.hideKeyboard
 import com.phntechnolab.sales.util.hideSoftKeyboard
 import com.phntechnolab.sales.util.isValidEmail
+import com.phntechnolab.sales.util.setBackPressed
 import com.phntechnolab.sales.util.setupUI
 import com.phntechnolab.sales.util.textChange
 import com.phntechnolab.sales.util.toastMsg
@@ -58,21 +59,15 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
-        setBackPressed()
+        setBackPressed {
+            requireActivity().finishAffinity()
+        }
         viewModel._loginData.postValue(LoginDetails())
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         return binding.root
     }
 
-    private fun setBackPressed() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                requireActivity().finishAffinity()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

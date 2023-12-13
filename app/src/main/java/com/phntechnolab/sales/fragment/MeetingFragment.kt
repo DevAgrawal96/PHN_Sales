@@ -23,6 +23,7 @@ import com.phntechnolab.sales.model.DMData
 import com.phntechnolab.sales.model.MOADocumentData
 import com.phntechnolab.sales.model.MeetingData
 import com.phntechnolab.sales.model.ProposeCostingData
+import com.phntechnolab.sales.util.setBackPressed
 import com.phntechnolab.sales.viewmodel.MeetingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -53,7 +54,9 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
     ): View? {
         _binding = FragmentMeetingBinding.inflate(inflater, container, false)
         initializeAdapter()
-        setOnBackPressed()
+        setBackPressed {
+            findNavController().navigate(R.id.homeFragment)
+        }
         return binding.root
     }
 
@@ -96,14 +99,6 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
         }
     }
 
-    private fun setOnBackPressed() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.homeFragment)
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
-    }
 
     private fun initializeListener() {
         binding.materialButtonToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->

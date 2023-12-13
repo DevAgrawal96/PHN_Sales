@@ -30,6 +30,7 @@ import com.phntechnolab.sales.databinding.VisitedSuccessDialogBinding
 import com.phntechnolab.sales.model.CoordinatorData
 import com.phntechnolab.sales.model.DMData
 import com.phntechnolab.sales.util.NetworkResult
+import com.phntechnolab.sales.util.setBackPressed
 import com.phntechnolab.sales.util.setupUI
 import com.phntechnolab.sales.viewmodel.CoordinatorDmMeetingViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,9 +51,17 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
 
     var position = 0
 
-    private val backPressHandler = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentCoordinatorDmMeetingBinding.inflate(inflater, container, false)
+
+        setBackPressed {
             when (position) {
                 0 -> {
                     binding.topAppBar.title = getString(R.string.teacher_principal_meeting)
@@ -75,19 +84,6 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                 }
             }
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentCoordinatorDmMeetingBinding.inflate(inflater, container, false)
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressHandler)
 
         viewModel._coordinatorMeetData.postValue(args.coordinatorMeetingDetails)
 
@@ -111,8 +107,6 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
         nextMeetingDateTimeClickListener()
 
         nextDMMeetingDateTimeClickListener()
-
-
 
 
     }
@@ -666,7 +660,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                         if (!_dateAndTime[0].trim().isNullOrBlank()) {
                             _dateAndTime[0].split("/").let { _dateArray ->
                                 day = _dateArray[0].toInt()
-                                month = _dateArray[1].toInt()-1
+                                month = _dateArray[1].toInt() - 1
                                 year = _dateArray[2].toInt()
                             }
                         }
@@ -676,9 +670,9 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime = if (dayOfMonth < 10){
+                    val updatedDateAndTime = if (dayOfMonth < 10) {
                         "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
-                    }else{
+                    } else {
                         dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                     }
                     binding.coordinatorMeeting.edtRescheduleMeetingDate.setText(updatedDateAndTime)
@@ -764,7 +758,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                         if (!_dateAndTime[0].trim().isNullOrBlank()) {
                             _dateAndTime[0].split("/").let { _dateArray ->
                                 day = _dateArray[0].toInt()
-                                month = _dateArray[1].toInt()-1
+                                month = _dateArray[1].toInt() - 1
                                 year = _dateArray[2].toInt()
                             }
                         }
@@ -774,9 +768,9 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime = if (dayOfMonth < 10){
+                    val updatedDateAndTime = if (dayOfMonth < 10) {
                         "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
-                    }else{
+                    } else {
                         dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                     }
                     binding.dmMeeting.edtRescheduleMeetingDate.setText(updatedDateAndTime)
@@ -862,7 +856,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                         if (!_dateAndTime[0].trim().isNullOrBlank()) {
                             _dateAndTime[0].split("/").let { _dateArray ->
                                 day = _dateArray[0].toInt()
-                                month = _dateArray[1].toInt()-1
+                                month = _dateArray[1].toInt() - 1
                                 year = _dateArray[2].toInt()
                             }
                         }
@@ -872,9 +866,9 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime = if (dayOfMonth < 10){
+                    val updatedDateAndTime = if (dayOfMonth < 10) {
                         "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
-                    }else{
+                    } else {
                         dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                     }
                     binding.coordinatorMeeting.edtNextMeetingDate.setText(updatedDateAndTime)
@@ -959,7 +953,7 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
                     if (!_dateAndTime[0].trim().isNullOrBlank()) {
                         _dateAndTime[0].split("/").let { _dateArray ->
                             day = _dateArray[0].toInt()
-                            month = _dateArray[1].toInt()-1
+                            month = _dateArray[1].toInt() - 1
                             year = _dateArray[2].toInt()
                         }
                     }
@@ -969,9 +963,9 @@ class CoordinatorDmMeetingFragment : Fragment(), MenuProvider {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val updatedDateAndTime = if (dayOfMonth < 10){
+                    val updatedDateAndTime = if (dayOfMonth < 10) {
                         "0$dayOfMonth" + "/" + (monthOfYear + 1) + "/" + year
-                    }else{
+                    } else {
                         dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year
                     }
                     binding.dmMeeting.edtNextMeetingDate.setText(updatedDateAndTime)
