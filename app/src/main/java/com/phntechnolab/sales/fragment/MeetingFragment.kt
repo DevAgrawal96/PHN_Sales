@@ -113,7 +113,7 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                         val meetingsData = (viewModel.meetingsData.value
                             ?: ArrayList()).filter {
                             it.taskDateFilter == "today"
-                            }
+                        }
                             .sortedByDescending { it.dateTime }
                         if (meetingsData.isNullOrEmpty()) {
                             binding.noDataLottie.visibility = View.VISIBLE
@@ -144,14 +144,15 @@ class MeetingFragment : Fragment(), MenuProvider, MeetingsAdapter.CallBacks {
                     }
 
                     R.id.upcoming_btn -> {
+                        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
                         val meetingsData =
                             (viewModel.meetingsData.value
                                 ?: ArrayList()).filter {
                                 it.taskDateFilter == "upcoming" && checkUpcomingDate(
                                     it.dateTime
                                 )
-                            }
-                                .sortedBy { it.dateTime }
+                            }.sortedBy { dateFormat.parse(it.dateTime?.split(" ")?.get(0) ?: "00/00/0000") }
                         if (meetingsData.isNullOrEmpty()) {
                             binding.noDataLottie.visibility = View.VISIBLE
                             binding.meetingRv.visibility = View.GONE

@@ -930,7 +930,6 @@ class AddSchoolFragment : Fragment(), MenuProvider {
         else
             binding.basicDetails.tilSchoolName.error = null
 
-
         val isSchoolAddressEmpty =
             binding.basicDetails.edtSchoolAddress.text.toString().isNullOrEmpty()
         if (isSchoolAddressEmpty)
